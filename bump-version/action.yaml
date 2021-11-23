@@ -1,6 +1,10 @@
 name: "Bump version"
 description: "Bump version with python bump2version using .bumpversion.cfg"
 inputs:
+  templatesPath:
+    description: "The local path to the root of the ci templates repo."
+    default: "./ci-templates"
+    required: false
   githubToken:
     description: "The personal access token for pushing."
     required: true
@@ -27,7 +31,7 @@ runs:
       shell: bash
 
     - name: Bump version
-      run: ./ci-templates/bump-version/bumpversion.sh ${{ inputs.releaseType }}
+      run: ${{ inputs.templatesPath }}/bump-version/bumpversion.sh ${{ inputs.releaseType }}
       shell: bash
 
     - name: Git push

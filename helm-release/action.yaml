@@ -1,17 +1,21 @@
 name: "Release helm chart"
 description: "Release all changed helm charts in this repository"
 inputs:
-  githubToken:
-    description: "The personal access token for pushing."
-    required: true
-  releaseType:
-    description: "The type of the release."
-    default: "patch"
+  templatesPath:
+    description: "The local path to the root of the ci templates repo."
+    default: "./ci-templates"
     required: false
   lintConfig:
     description: "The path to the lint configuration file."
     default: ".github/lint-config.yaml"
     required: false
+  releaseType:
+    description: "The type of the release."
+    default: "patch"
+    required: false
+  githubToken:
+    description: "The personal access token for pushing."
+    required: true
 runs:
   using: "composite"
   steps:
@@ -21,13 +25,14 @@ runs:
         version: v3.4.0
 
     - name: Lint helm chart
-      uses: ./ci-templates/helm-lint
+      uses: ${{ inputs.templatesPath }}/helm-lint
       with:
         lintConfig: ${{ inputs.lintCoinfig }}
 
     - name: Bump version
-      uses: ./ci-templates/bump-version
+      uses: ${{ inputs.templatesPath }}/bump-version
       with:
+        templatesPath: ${{ inputs.templatesPath }}
         githubToken: ${{ inputs.githubToken }}
         releaseType: ${{ inputs.releaseType }}
 
