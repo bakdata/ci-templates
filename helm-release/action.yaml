@@ -25,12 +25,12 @@ runs:
         version: v3.4.0
 
     - name: Lint helm chart
-      uses: ${{ inputs.templatesPath }}/helm-lint
+      uses: "${{ inputs.templatesPath }}/helm-lint"
       with:
         lintConfig: ${{ inputs.lintCoinfig }}
 
     - name: Bump version
-      uses: ${{ inputs.templatesPath }}/bump-version
+      uses: "${{ inputs.templatesPath }}/bump-version"
       with:
         templatesPath: ${{ inputs.templatesPath }}
         githubToken: ${{ inputs.githubToken }}
