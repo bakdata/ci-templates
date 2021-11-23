@@ -23,7 +23,7 @@ runs:
     - name: Lint helm chart
       uses: ./ci-templates/helm-lint
       with:
-        lintConfig: ${{ inputs.lintCoinfig }}
+        lintConfig: ${{ inputs.lintConfig }}
 
     - name: Bump version
       uses: ./ci-templates/bump-version
