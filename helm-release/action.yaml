@@ -15,10 +15,10 @@ runs:
       uses: ./ci-templates/helm-setup
 
     - name: Lint helm chart
-      uses: ./.github/actions/helm-lint
+      uses: ./ci-templates/helm-lint
 
     - name: Bump version
-      uses: ./.github/actions/bump-version
+      uses: ./ci-templates/bump-version
       with:
         githubToken: ${{ inputs.githubToken }}
         releaseType: ${{ inputs.releaseType }}
