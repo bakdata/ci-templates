@@ -10,6 +10,15 @@ runs:
     - name: Set up git and helm
       uses: ./ci-templates/helm-setup
 
+    - name: Lint helm chart
+      uses: ./.github/actions/helm-lint
+
+    - name: Bump version
+      uses: ./.github/actions/bump-version
+      with:
+        githubToken: ${{ secrets.CR_TOKEN }}
+        releaseType: ${{ github.event.inputs.releaseType }}
+
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.2.1
       env:
