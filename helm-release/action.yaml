@@ -8,6 +8,10 @@ inputs:
     description: "The type of the release."
     default: "patch"
     required: false
+  lintConfig:
+    description: "The path to the lint configuration file."
+    default: ".github/lint-config.yaml"
+    required: false
 runs:
   using: "composite"
   steps:
@@ -18,6 +22,8 @@ runs:
 
     - name: Lint helm chart
       uses: ./ci-templates/helm-lint
+      with:
+        lintConfig: ${{ inputs.lintCoinfig }}
 
     - name: Bump version
       uses: ./ci-templates/bump-version

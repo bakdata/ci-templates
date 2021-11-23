@@ -1,5 +1,10 @@
 name: "Lint helm chart"
 description: "Lint all helm charts in this repository"
+inputs:
+  lintConfig:
+    description: "The path to the lint configuration file."
+    default: ".github/lint-config.yaml"
+    required: false
 runs:
   using: "composite"
   steps:
@@ -17,5 +22,5 @@ runs:
       uses: helm/chart-testing-action@v2.0.1
 
     - name: Run chart-testing (lint)
-      run: ct lint --config .github/lint-config.yaml
+      run: ct lint --config ${{ inputs.lintConfig }}
       shell: bash
