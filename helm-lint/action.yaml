@@ -1,0 +1,19 @@
+name: "Lint helm chart"
+description: "Lint all helm charts in this repository"
+runs:
+  using: "composite"
+  steps:
+    - name: Set up git and helm
+      uses: ./.github/actions/helm-setup
+
+    - name: Set up python
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.8"
+
+    - name: Set up chart-testing
+      uses: helm/chart-testing-action@v2.0.1
+
+    - name: Run chart-testing (lint)
+      run: ct lint --config .github/lint-config.yaml
+      shell: bash

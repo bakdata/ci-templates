@@ -1,0 +1,17 @@
+name: "Setup Git"
+description: "Checks out the repository and sets up git"
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        # do not persist credentials to be able to push with a CR_TOKEN later
+        persist-credentials: false
+
+    - name: Configure git and pull
+      run: |
+        git config user.name "bakdata-bot"
+        git config user.email "bakdata-bot@users.noreply.github.com"
+      shell: bash

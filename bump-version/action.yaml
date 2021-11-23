@@ -1,0 +1,33 @@
+name: "Bump version"
+description: "Bump version with python bump2version using .bumpversion.cfg"
+inputs:
+  githubToken:
+    description: "The personal access token for pushing."
+    required: true
+  releaseType:
+    description: "The type of the release."
+    default: "patch"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Set up git
+      uses: ./.github/actions/git-setup
+    
+    - name: Set up python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Set up bumpversion
+      run: pip install --no-cache-dir bump2version
+      shell: bash
+    
+    - name: Bump version
+      run: .github/actions/bump-version/bumpversion.sh ${{ inputs.releaseType }}
+      shell: bash
+    
+    - name: Git push
+      uses: ad-m/github-push-action@8407731efefc0d8f72af254c74276b7a90be36e1
+      with:
+        github_token: ${{ inputs.githubToken }}
