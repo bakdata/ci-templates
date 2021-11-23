@@ -24,7 +24,7 @@ runs:
     - name: Set up python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.8'
+        python-version: "3.8"
 
     - name: Set up bump2version
       run: pip install --no-cache-dir bump2version
