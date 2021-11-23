@@ -20,7 +20,7 @@ runs:
     - name: Bump version
       uses: ./.github/actions/bump-version
       with:
-        githubToken: ${{ secrets.CR_TOKEN }}
+        githubToken: ${{ inputs.githubToken }}
         releaseType: ${{ inputs.releaseType }}
 
     - name: Run chart-releaser
