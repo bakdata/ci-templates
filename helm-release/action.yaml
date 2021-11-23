@@ -4,6 +4,10 @@ inputs:
   githubToken:
     description: "The personal access token for pushing."
     required: true
+  releaseType:
+    description: "The type of the release."
+    default: "patch"
+    required: false
 runs:
   using: "composite"
   steps:
@@ -17,7 +21,7 @@ runs:
       uses: ./.github/actions/bump-version
       with:
         githubToken: ${{ secrets.CR_TOKEN }}
-        releaseType: ${{ github.event.inputs.releaseType }}
+        releaseType: ${{ inputs.releaseType }}
 
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.2.1
