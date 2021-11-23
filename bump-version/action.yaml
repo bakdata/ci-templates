@@ -11,8 +11,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Set up git
-      uses: ./ci-templates/git-setup
+    # - name: Set up git
+    #   uses: ./ci-templates/git-setup
     
     - name: Set up python
       uses: actions/setup-python@v2

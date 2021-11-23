@@ -3,8 +3,8 @@ description: "Lint all helm charts in this repository"
 runs:
   using: "composite"
   steps:
-    - name: Set up git and helm
-      uses: ./ci-templates/helm-setup
+    # - name: Set up git and helm
+    #   uses: ./ci-templates/helm-setup
 
     - name: Set up python
       uses: actions/setup-python@v2
