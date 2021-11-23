@@ -12,7 +12,7 @@ runs:
   using: "composite"
   steps:
     - name: Set up git
-      uses: ./.github/actions/git-setup
+      uses: ./ci-templates/git-setup
     
     - name: Set up python
       uses: actions/setup-python@v2
@@ -24,7 +24,7 @@ runs:
       shell: bash
     
     - name: Bump version
-      run: .github/actions/bump-version/bumpversion.sh ${{ inputs.releaseType }}
+      run: ./ci-templates/bump-version/bumpversion.sh ${{ inputs.releaseType }}
       shell: bash
     
     - name: Git push
