@@ -4,7 +4,7 @@ runs:
   using: "composite"
   steps:
     - name: Set up git
-      uses: ./ci-templates/git-setup
+      uses: ./.github/actions/git-setup
 
     - name: Set up Helm
       uses: azure/setup-helm@v1

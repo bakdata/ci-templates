@@ -8,7 +8,7 @@ runs:
   using: "composite"
   steps:
     - name: Set up git and helm
-      uses: ./ci-templates/helm-setup
+      uses: ./.github/actions/helm-setup
 
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.2.1
