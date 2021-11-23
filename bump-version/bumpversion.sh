@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # set default to patch and convert to lowercase
-releaseType=$(echo "${1:-patch}" | awk "{print tolower($0)}")
+releaseType=$(echo "${1:-patch}" | awk '{print tolower($0)}')
 
 if [[ "${releaseType}" == "major" || "${releaseType}" == "minor" || "${releaseType}" == "patch" ]]; then
     echo "Bumping version with release type ${releaseType}"
