@@ -18,18 +18,18 @@ runs:
     - name: Set up Helm
       uses: azure/setup-helm@v1
       with:
-        version: v3.4.0
+        version: "v3.4.0"
 
     - name: Lint helm chart
       uses: ./ci-templates/helm-lint
       with:
-        lintConfig: ${{ inputs.lintConfig }}
+        lintConfig: "${{ inputs.lintConfig }}"
 
     - name: Bump version
       uses: ./ci-templates/bump-version
       with:
-        githubToken: ${{ inputs.githubToken }}
-        releaseType: ${{ inputs.releaseType }}
+        githubToken: "${{ inputs.githubToken }}"
+        releaseType: "${{ inputs.releaseType }}"
 
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.2.1

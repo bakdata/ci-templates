@@ -33,4 +33,4 @@ runs:
     - name: Git push
       uses: ad-m/github-push-action@8407731efefc0d8f72af254c74276b7a90be36e1
       with:
-        github_token: ${{ inputs.githubToken }}
+        github_token: "${{ inputs.githubToken }}"
