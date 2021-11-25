@@ -4,6 +4,12 @@ inputs:
   githubToken:
     description: "The personal access token for pushing."
     required: true
+  githubUsername:
+    description: "The github username for pushing."
+    required: true
+  githubEmail:
+    description: "The github email for pushing."
+    required: true
   releaseType:
     description: "The type of the release."
     default: "patch"
@@ -29,6 +35,8 @@ runs:
       uses: ./ci-templates/bump-version
       with:
         githubToken: "${{ inputs.githubToken }}"
+        githubUsername: "${{ inputs.githubUsername }}"
+        githubEmail: "${{ inputs.githubEmail }}"
         releaseType: "${{ inputs.releaseType }}"
 
     - name: Run chart-releaser
