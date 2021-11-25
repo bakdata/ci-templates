@@ -34,6 +34,8 @@ steps:
         githubEmail: "${{ secrets.GH_EMAIL }}"
 ```
 
+4. Choose a Github user that is going to push the tags and version updates. Create a repository secret for the Github username (`GH_USERNAME`), the Github Email (`GH_EMAIL`) and a personal access token (`GH_TOKEN`) of the user. For the email you can use the no reply github email: `[username]@users.noreply.github.com`. Make sure to configure admin access to the repository for the selected user because admins can still push on the default branch even if there is a protection rule in place.
+
 ## Optional parameters
 You can optionally set the `releaseType` to `major`, `minor` or `patch`. This can also be done via a workflow input:
 ```yaml

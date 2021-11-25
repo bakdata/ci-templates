@@ -7,7 +7,7 @@ This action will lint all charts, bump the version according to the `.bumpversio
 target-branch: "main"
 ```
 
-2. Add an empty branch `gh-pages` for the index.yaml to be hostet publically:
+2. Add an empty branch `gh-pages` for the index.yaml to be hosted publically:
 ```
 git checkout --orphan gh-pages
 git rm --cached .
@@ -27,7 +27,9 @@ search = version: {current_version}
 replace = version: {new_version}
 ```
 
-4. Add the following steps to your workflow:
+4. Choose a Github user that is going to push the tags and version updates. Create a repository secret for the Github username (`GH_USERNAME`), the Github Email (`GH_EMAIL`) and a personal access token (`GH_TOKEN`) of the user. For the email you can use the no reply github email: `[username]@users.noreply.github.com`. Make sure to configure admin access to the repository for the selected user because admins can still push on the default branch even if there is a protection rule in place.
+
+6. Add the following steps to your workflow:
 ```yaml
 ...
 steps:
