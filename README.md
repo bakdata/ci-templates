@@ -1,5 +1,5 @@
 # ci-templates
-This is a colleciton of github actions bakdata uses for open source projects.
+This is a collection of Github actions that Bakdata uses for open source projects.
 
 
 ## Checkout repository
