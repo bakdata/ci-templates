@@ -2,7 +2,7 @@ name: "Release helm chart"
 description: "Release all changed helm charts in this repository"
 inputs:
   githubToken:
-    description: "The personal access token for pushing."
+    description: "The github access token for pushing."
     required: true
   githubUsername:
     description: "The github username for pushing."
