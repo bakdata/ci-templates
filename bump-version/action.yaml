@@ -4,6 +4,12 @@ inputs:
   githubToken:
     description: "The personal access token for pushing."
     required: true
+  githubUsername:
+    description: "The github username for pushing."
+    required: true
+  githubEmail:
+    description: "The github email for pushing."
+    required: true
   releaseType:
     description: "The type of the release."
     default: "patch"
@@ -12,9 +18,7 @@ runs:
   using: "composite"
   steps:
     - name: Configure git
-      run: |
-        git config user.name "bakdata-bot"
-        git config user.email "bakdata-bot@users.noreply.github.com"
+      run: ./ci-templates/git-setup.sh "${{ inputs.githubUsername }}" "${{ inputs.githubEmail }}"
       shell: bash
 
     - name: Set up python
@@ -27,7 +31,7 @@ runs:
       shell: bash
 
     - name: Bump version
-      run: ./ci-templates/bump-version/bumpversion.sh ${{ inputs.releaseType }}
+      run: ./ci-templates/bump-version/bumpversion.sh "${{ inputs.releaseType }}"
       shell: bash
 
     - name: Git push
