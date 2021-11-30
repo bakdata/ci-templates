@@ -1,0 +1,26 @@
+name: "Lint helm chart"
+description: "Lint all helm charts in this repository"
+inputs:
+  lintConfig:
+    description: "The path to the lint configuration file."
+    default: ".github/lint-config.yaml"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Helm
+      uses: azure/setup-helm@v1
+      with:
+        version: "v3.4.0"
+
+    - name: Set up python
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.8"
+
+    - name: Set up chart-testing
+      uses: helm/chart-testing-action@v2.0.1
+
+    - name: Run chart-testing (lint)
+      run: ct lint --config ${{ inputs.lintConfig }}
+      shell: bash

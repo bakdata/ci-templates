@@ -1,0 +1,45 @@
+name: "Release helm chart"
+description: "Release all changed helm charts in this repository"
+inputs:
+  githubToken:
+    description: "The github access token for pushing."
+    required: true
+  githubUsername:
+    description: "The github username for pushing."
+    required: true
+  githubEmail:
+    description: "The github email for pushing."
+    required: true
+  releaseType:
+    description: "The type of the release."
+    default: "patch"
+    required: false
+  lintConfig:
+    description: "The path to the lint configuration file."
+    default: ".github/lint-config.yaml"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Helm
+      uses: azure/setup-helm@v1
+      with:
+        version: "v3.4.0"
+
+    - name: Lint helm chart
+      uses: ./ci-templates/helm-lint
+      with:
+        lintConfig: "${{ inputs.lintConfig }}"
+
+    - name: Bump version
+      uses: ./ci-templates/bump-version
+      with:
+        githubToken: "${{ inputs.githubToken }}"
+        githubUsername: "${{ inputs.githubUsername }}"
+        githubEmail: "${{ inputs.githubEmail }}"
+        releaseType: "${{ inputs.releaseType }}"
+
+    - name: Run chart-releaser
+      uses: helm/chart-releaser-action@v1.2.1
+      env:
+        CR_TOKEN: "${{ inputs.githubToken }}"
