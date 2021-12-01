@@ -17,6 +17,9 @@ runs:
       uses: actions/setup-python@v2
       with:
         python-version: "3.8"
+
+    - name: Set up chart-testing
+      uses: helm/chart-testing-action@v2.0.1
     
     - name: Run chart-testing (list-changed)
       id: list-changed
@@ -26,9 +29,6 @@ runs:
           echo "::set-output name=changed::true"
         fi
       shell: bash
-
-    - name: Set up chart-testing
-      uses: helm/chart-testing-action@v2.0.1
 
     - name: Run chart-testing (lint)
       run: ct lint --config ${{ inputs.lintConfig }}
