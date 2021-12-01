@@ -23,12 +23,9 @@ runs:
 
     - name: Run chart-testing (lint)
       run: |
-        echo "${GITHUB_REF#refs/heads/}"
         if [[ "${GITHUB_REF#refs/heads/}" == "main" || "${GITHUB_REF#refs/heads/}" == "master" ]]; then
-          echo "1"
           ct lint --config ${{ inputs.lintConfig }} --since HEAD^
         else
-          echo "2"
           ct lint --config ${{ inputs.lintConfig }} --since HEAD
         fi
       shell: bash
