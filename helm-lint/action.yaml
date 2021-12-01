@@ -1,5 +1,5 @@
 name: "Lint helm chart"
-description: "Lint all helm charts in this repository"
+description: "Lint all helm charts in the chart directory (default: charts)"
 inputs:
   lintConfig:
     description: "The path to the lint configuration file."
