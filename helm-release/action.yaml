@@ -1,5 +1,5 @@
 name: "Release helm chart"
-description: "Release all changed helm charts in this repository"
+description: "Release all changed helm charts in the chart directory (default: charts)"
 inputs:
   githubToken:
     description: "The github access token for pushing."
@@ -17,6 +17,10 @@ inputs:
   lintConfig:
     description: "The path to the lint configuration file."
     default: ".github/lint-config.yaml"
+    required: false
+  chartDirectory:
+    description: "The parent directory of all charts in this repository."
+    default: "charts"
     required: false
 runs:
   using: "composite"
@@ -41,5 +45,7 @@ runs:
 
     - name: Run chart-releaser
       uses: helm/chart-releaser-action@v1.2.1
+      with:
+        charts_dir: "${{ inputs.chartDirectory}}"
       env:
         CR_TOKEN: "${{ inputs.githubToken }}"

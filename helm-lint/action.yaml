@@ -1,5 +1,5 @@
 name: "Lint helm chart"
-description: "Lint all helm charts in this repository"
+description: "Lint all helm charts in the chart directory (default: charts)"
 inputs:
   lintConfig:
     description: "The path to the lint configuration file."
@@ -22,5 +22,10 @@ runs:
       uses: helm/chart-testing-action@v2.0.1
 
     - name: Run chart-testing (lint)
-      run: ct lint --config ${{ inputs.lintConfig }}
+      run: |
+        if [[ "${GITHUB_REF#refs/heads/}" == "main" || "${GITHUB_REF#refs/heads/}" == "master" ]]; then
+          ct lint --config ${{ inputs.lintConfig }} --since HEAD^
+        else
+          ct lint --config ${{ inputs.lintConfig }} --since HEAD
+        fi
       shell: bash
