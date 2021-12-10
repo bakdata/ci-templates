@@ -1,0 +1,140 @@
+name: Reusable workflow for building and publishing python packages to TestPyPI or PyPI
+
+on:
+  workflow_call:
+    inputs:
+      scope:
+        description: "Scope of the release; See: https://python-poetry.org/docs/cli/#version"
+        required: true
+        type: string
+      python-version:
+        description: "The python version for setting up poetry."
+        required: false
+        default: 3.7
+        type: number
+      publish-to-test:
+        description: "If set to true, the packages are published to test.pypi.org"
+        required: false
+        default: false
+        type: boolean
+      ref:
+        description: "The ref name to checkout the repository."
+        required: true
+        type: string
+    secrets:
+      github-username:
+        description: "The github username for pushing."
+        required: true
+      github-email:
+        description: "The github email for pushing."
+        required: true
+      github-token:
+        description: "The github token for pushing."
+        required: true
+      pypi-token:
+        description: "The pypi token for pushing packages."
+        required: true
+
+    # Map the workflow outputs to job outputs
+    outputs:
+      release-tag:
+        description: "The release tag."
+        value: ${{ jobs.create-release.outputs.release-tag }}
+      old-tag:
+        description: "The old tag."
+        value: ${{ jobs.create-release.outputs.old-tag }}
+
+jobs:
+  create-release:
+    runs-on: ubuntu-20.04
+    env:
+      PYTHON_VERSION: ${{ inputs.python-version }}
+    # Map the job outputs to step outputs
+    outputs:
+      release-tag: ${{ steps.release-tag.outputs.tag }}
+      old-tag: ${{ steps.release-tag.outputs.oldTag }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Get full Python version
+        id: full-python-version
+        run: echo ::set-output name=version::$(python -c "import sys; print('-'.join(str(v) for v in sys.version_info))")
+        shell: bash
+
+      - name: Bootstrap poetry
+        shell: bash
+        run: |
+          python -m ensurepip
+          python -m pip install --upgrade pip
+          python -m pip install poetry
+      - name: Configure poetry
+        run: python -m poetry config virtualenvs.in-project true
+        shell: bash
+
+      - name: Set up cache
+        uses: actions/cache@v2
+        id: cache
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.full-python-version.outputs.version }}-${{ hashFiles('poetry.lock') }}
+
+      - name: Ensure cache is healthy
+        if: steps.cache.outputs.cache-hit == 'true'
+        run: timeout 10s python -m poetry run pip --version || rm -rf .venv
+        shell: bash
+
+      - name: Install dependencies
+        run: poetry install
+        shell: bash
+
+      # Update the pyproject.toml version. Versioning format for dev packages: X.Y.Z
+      # For more information visit: https://www.python.org/dev/peps/pep-0440/#semantic-versioning
+      # https://python-poetry.org/docs/cli/#version
+      - name: Bump version with poetry
+        id: release-tag
+        run: |
+          echo ::set-output name=oldTag::$(poetry version -s)
+          poetry version ${{ inputs.scope }}
+          echo ::set-output name=tag::$(poetry version -s)
+        shell: bash
+
+      # For more information to create a commit with GitHub action bot go to:
+      # https://github.com/ad-m/github-push-action
+      - name: Commit pyproject.toml file
+        run: |
+          git config user.email ${{ secrets.github-email }}
+          git config user.name ${{ secrets.github-username }}
+          git commit -m "Bump version ${{ steps.release-tag.outputs.oldTag }} → ${{ steps.release-tag.outputs.tag }}" -a
+        shell: bash
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.github-token }}
+          branch: refs/heads/${{ inputs.ref }}
+
+      - name: Build and Publish package to PyPI
+        if: ${{ ! inputs.publish-to-test }}
+        run: |
+          # first build the project then publish to PyPI
+          # If the repository is not specified, by default poetry pushes the packages to PyPI
+          poetry publish --build --username __token__ --password ${{ secrets.pypi-token }}
+        shell: bash
+
+      - name: Build and Publish package to Test PyPI
+        if: ${{ inputs.publish-to-test }}
+        run: |
+          # set the repository to TestPyPI
+          poetry config repositories.testpypi https://test.pypi.org/legacy/
+          # first build the project then publish to TestPyPI
+          poetry publish --build --repository testpypi --username __token__ --password ${{ secrets.pypi-token }}
+        shell: bash
