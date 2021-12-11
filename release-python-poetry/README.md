@@ -14,12 +14,12 @@ is a protection rule in place.
 
 ## Input Parameters
 
-| Name            |  Required  |  Default Value  | Description                                                                                                                       |
-|-----------------|:----------:|:---------------:|-----------------------------------------------------------------------------------------------------------------------------------|
-| scope           |     ✅      |        -        | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values |
-| ref             |     ✅      |        -        | The ref name to checkout the repository                                                                                           |
-| publish-to-test |     ❌      |      false      | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                     |
-| python-version  |     ❌      |       3.7       | The python version for setting up poetry                                                                                          |
+| Name            |  Required  |  Default Value  |  Type   | Description                                                                                                                       |
+|-----------------|:----------:|:---------------:|:-------:|-----------------------------------------------------------------------------------------------------------------------------------|
+| scope           |     ✅      |        -        | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values |
+| ref             |     ✅      |        -        | string  | The ref name to checkout the repository                                                                                           |
+| publish-to-test |     ❌      |      false      | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                     |
+| python-version  |     ❌      |       3.7       | number  | The python version for setting up poetry                                                                                          |
 
 ## Secret Parameters
 
