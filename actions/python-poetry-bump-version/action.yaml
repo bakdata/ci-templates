@@ -26,7 +26,7 @@ runs:
   using: "composite"
   steps:
     - name: Set up Poetry version ${{ inputs.poetry-version }}
-      uses: ./.github/actions/python-setup-poetry
+      uses: bakdata/ci-templates/actions/python-setup-poetry@feature/add-python-release-with-poetry
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: ${{ inputs.poetry-version }}
