@@ -75,18 +75,8 @@ jobs:
           python-version: ${{ inputs.python-version }}
           poetry-version: ${{ inputs.poetry-version }}
 
-      # For more information to create a commit with GitHub action bot go to:
-      # https://github.com/ad-m/github-push-action
-      - name: Commit and push pyproject.toml file
-        uses: ./actions/commit-and-push
-        with:
-          ref: ${{ inputs.ref }}
-          commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
-          github-username: ${{ secrets.github-username }}
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
-
       - name: Release to PyPI
+        if: success()
         uses: ./actions/python-poetry-release
         with:
           pypi-token: ${{ secrets.pypi-token }}
@@ -94,3 +84,13 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
           python-version: ${{ inputs.python-version }}
           poetry-version: ${{ inputs.poetry-version }}
+
+      - name: Commit and push pyproject.toml file
+        if: success()
+        uses: ./actions/commit-and-push
+        with:
+          ref: ${{ inputs.ref }}
+          commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
