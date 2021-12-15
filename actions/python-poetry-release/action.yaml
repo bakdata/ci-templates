@@ -1,0 +1,57 @@
+name: "Commit and push"
+description: "Commits all the changed files and pushes them to the repository"
+
+inputs:
+  pypi-token:
+    description: "The pypi token for pushing packages."
+    required: true
+  working-directory:
+    description: "The working directory of your Python packages. (Default is root directory)"
+    required: false
+    default: "./"
+  publish-to-test:
+    description: "If set to false, the packages are published to pypi.org. (Default is true)"
+    required: false
+    default: "true"
+  python-version:
+    description: "The python version for setting up poetry. (Default is 3.7)"
+    required: false
+    default: "3.7"
+  poetry-version:
+    description: "The poetry version to be installed. (Default is 1.1.12)"
+    required: false
+    default: "1.1.12"
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Poetry with version ${{ inputs.poetry-version }}
+      uses: ./.github/actions/python-setup-poetry
+      with:
+        python-version: ${{ inputs.python-version }}
+        poetry-version: ${{ inputs.poetry-version }}
+
+    - name: Install dependencies
+      run: poetry install --no-dev --no-interaction
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: Build and Publish package to PyPI
+      if: ${{ inputs.publish-to-test == 'false' }}
+      run: |
+        echo Publishing to PyPI
+#        # first build the project then publish to PyPI
+#        # If the repository is not specified, by default poetry pushes the packages to PyPI
+#        poetry publish --build --username __token__ --password ${{ inputs.pypi-token }}
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: Build and Publish package to Test PyPI
+      if: ${{ inputs.publish-to-test == 'true' }}
+      run: |
+        echo Publishing to Test PyPI
+#        # set the repository to TestPyPI
+#        poetry config repositories.testpypi https://test.pypi.org/legacy/
+#        # first build the project then publish to TestPyPI
+#        poetry publish --build --repository testpypi --username __token__ --password ${{ inputs.pypi-token }}
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}

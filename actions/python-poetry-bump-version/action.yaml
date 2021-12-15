@@ -1,0 +1,43 @@
+name: "Commit and push"
+description: "Commits all the changed files and pushes them to the repository"
+
+inputs:
+  release-type:
+    description: "Scope of the release; See: https://python-poetry.org/docs/cli/#version"
+    required: true
+  python-version:
+    description: "The python version for setting up poetry."
+    required: false
+    default: "3.7"
+  poetry-version:
+    description: "The poetry version to be installed."
+    required: false
+    default: "1.1.12"
+
+outputs:
+  release-tag:
+    description: "The bumped version of your package."
+    value: ${{ steps.release-tag.outputs.newTag }}
+  old-tag:
+    description: "The old version of your package"
+    value: ${{ steps.release-tag.outputs.oldTag }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Poetry version ${{ inputs.poetry-version }}
+      uses: ./.github/actions/python-setup-poetry
+      with:
+        python-version: ${{ inputs.python-version }}
+        poetry-version: ${{ inputs.poetry-version }}
+
+    # Update the pyproject.toml version. Versioning format for dev packages: X.Y.Z
+    # For more information visit: https://www.python.org/dev/peps/pep-0440/#semantic-versioning
+    # https://python-poetry.org/docs/cli/#version
+    - name: Bump version with poetry
+      id: release-tag
+      run: |
+        echo ::set-output name=oldTag::$(poetry version -s)
+        poetry version ${{ inputs.release-type }}
+        echo ::set-output name=newTag::$(poetry version -s)
+      shell: bash

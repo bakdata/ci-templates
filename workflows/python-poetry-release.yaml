@@ -3,24 +3,24 @@ name: Reusable workflow for building and publishing python packages to TestPyPI 
 on:
   workflow_call:
     inputs:
-      scope:
+      release-type:
         description: "Scope of the release; See: https://python-poetry.org/docs/cli/#version"
         required: true
         type: string
-      python-version:
-        description: "The python version for setting up poetry."
-        required: false
-        default: 3.7
-        type: number
-      publish-to-test:
-        description: "If set to true, the packages are published to test.pypi.org"
-        required: false
-        default: false
-        type: boolean
       ref:
         description: "The ref name to checkout the repository."
         required: true
         type: string
+      python-version:
+        description: "The python version for setting up poetry. (Default is 3.7)"
+        required: false
+        default: 3.7
+        type: number
+      publish-to-test:
+        description: "If set to false, the packages are published to pypi.org. (Default is true)"
+        required: false
+        default: true
+        type: boolean
     secrets:
       github-username:
         description: "The github username for pushing."
@@ -47,12 +47,10 @@ on:
 jobs:
   create-release:
     runs-on: ubuntu-20.04
-    env:
-      PYTHON_VERSION: ${{ inputs.python-version }}
     # Map the job outputs to step outputs
     outputs:
-      release-tag: ${{ steps.release-tag.outputs.tag }}
-      old-tag: ${{ steps.release-tag.outputs.oldTag }}
+      release-tag: ${{ steps.release-tag.outputs.release-tag }}
+      old-tag: ${{ steps.release-tag.outputs.old-tag }}
 
     steps:
       - name: Check out repository
@@ -60,77 +58,25 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
-      - name: Set up Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Get full Python version
-        id: full-python-version
-        run: echo ::set-output name=version::$(python -c "import sys; print('-'.join(str(v) for v in sys.version_info))")
-        shell: bash
-
-      - name: Bootstrap poetry
-        shell: bash
-        run: |
-          python -m ensurepip
-          python -m pip install --upgrade pip
-          python -m pip install poetry
-      - name: Configure poetry
-        run: python -m poetry config virtualenvs.in-project true
-        shell: bash
-
-      - name: Set up cache
-        uses: actions/cache@v2
-        id: cache
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.full-python-version.outputs.version }}-${{ hashFiles('poetry.lock') }}
-
-      - name: Ensure cache is healthy
-        if: steps.cache.outputs.cache-hit == 'true'
-        run: timeout 10s python -m poetry run pip --version || rm -rf .venv
-        shell: bash
-
-      - name: Install dependencies
-        run: poetry install
-        shell: bash
-
-      # Update the pyproject.toml version. Versioning format for dev packages: X.Y.Z
-      # For more information visit: https://www.python.org/dev/peps/pep-0440/#semantic-versioning
-      # https://python-poetry.org/docs/cli/#version
-      - name: Bump version with poetry
+      - name: Bump version
         id: release-tag
-        run: |
-          echo ::set-output name=oldTag::$(poetry version -s)
-          poetry version ${{ inputs.scope }}
-          echo ::set-output name=tag::$(poetry version -s)
-        shell: bash
+        uses: ./.github/actions/python-poetry-bump-version
+        with:
+          release-type: ${{ inputs.release-type }}
 
       # For more information to create a commit with GitHub action bot go to:
       # https://github.com/ad-m/github-push-action
       - name: Commit and push pyproject.toml file
-        uses: ./actions/commit-and-push
+        uses: ./.github/actions/commit-and-push
         with:
           ref: ${{ inputs.ref }}
-          commit-message: "Bump version ${{ steps.release-tag.outputs.oldTag }} → ${{ steps.release-tag.outputs.tag }}"
+          commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
 
-      - name: Build and Publish package to PyPI
-        if: ${{ ! inputs.publish-to-test }}
-        run: |
-          # first build the project then publish to PyPI
-          # If the repository is not specified, by default poetry pushes the packages to PyPI
-          poetry publish --build --username __token__ --password ${{ secrets.pypi-token }}
-        shell: bash
-
-      - name: Build and Publish package to Test PyPI
-        if: ${{ inputs.publish-to-test }}
-        run: |
-          # set the repository to TestPyPI
-          poetry config repositories.testpypi https://test.pypi.org/legacy/
-          # first build the project then publish to TestPyPI
-          poetry publish --build --repository testpypi --username __token__ --password ${{ secrets.pypi-token }}
-        shell: bash
+      - name: Release to PyPI
+        uses: ./.github/actions/python-poetry-release
+        with:
+          pypi-token: ${{ secrets.pypi-token }}
+          publish-to-test: ${{ inputs.publish-to-test }}
