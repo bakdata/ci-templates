@@ -10,6 +10,7 @@ inputs:
     description: "The poetry version to be installed."
     required: false
     default: "1.1.12"
+
 runs:
   using: "composite"
   steps:

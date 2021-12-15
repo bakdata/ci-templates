@@ -22,14 +22,14 @@ This workflow is build from multiple composite actions listed bellow:
 
 ## Input Parameters
 
-| Name              | Required | Default Value |  Type   | Description                                                                                                                        |
-|-------------------|:--------:|:-------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------|
-| release-type      |    ✅     |       -       | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values  |
-| ref               |    ✅     |       -       | string  | The ref name to checkout the repository                                                                                            |
-| publish-to-test   |    ❌     |     true      | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                      |
-| python-version    |    ❌     |      3.7      | number  | The python version for setting up poetry.                                                                                          |
-| poetry-version    |    ❌     |    1.1.12     | number  | The poetry version to be installed.                                                                                                |
-| working-directory |    ❌     |     "./"      | string  | The working directory of your Python package.                                                                                      |
+| Name              | Required | Default Value  |  Type   | Description                                                                                                                        |
+|-------------------|:--------:|:--------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------|
+| release-type      |    ✅     |       -        | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values  |
+| ref               |    ✅     |       -        | string  | The ref name to checkout the repository                                                                                            |
+| publish-to-test   |    ❌     |      true      | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                      |
+| python-version    |    ❌     |     "3.7"      | string  | The python version for setting up poetry.                                                                                          |
+| poetry-version    |    ❌     |    "1.1.12"    | string  | The poetry version to be installed.                                                                                                |
+| working-directory |    ❌     |      "./"      | string  | The working directory of your Python package.                                                                                      |
 
 ## Secret Parameters
 

@@ -17,6 +17,7 @@ inputs:
   github-token:
     description: "The personal access token for pushing."
     required: true
+
 runs:
   using: "composite"
   steps:

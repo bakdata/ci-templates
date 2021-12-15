@@ -14,13 +14,13 @@ on:
       python-version:
         description: "The python version for setting up poetry. (Default is 3.7)"
         required: false
-        default: 3.7
-        type: number
+        default: "3.7"
+        type: string
       poetry-version:
         description: "The python version for setting up poetry. (Default is 1.1.12)"
         required: false
-        default: 1.1.12
-        type: number
+        default: "1.1.12"
+        type: string
       publish-to-test:
         description: "If set to false, the packages are published to pypi.org. (Default is true)"
         required: false
@@ -67,7 +67,7 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
-      - name: Bump version
+      - name: Bump version with poetry
         id: release-tag
         uses: ./actions/python-poetry-bump-version
         with:
