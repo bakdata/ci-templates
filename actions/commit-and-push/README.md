@@ -1,8 +1,8 @@
 # commit-and-push
 
-his is a composite action committing the changes of your repository, with an arbitrary commit message, and then pushing
-them using an authenticated GitHub user by passing the username, email, and a valid GitHub token to the composite
-action. Below you will find the input values.
+This composite action commits the changes of your repository with an arbitrary commit message and then pushes
+them using an authenticated GitHub user. The GitHub user is set by passing the username, email, and a valid GitHub token to the composite
+action.
 
 ## Input Parameters
 

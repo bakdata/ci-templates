@@ -1,7 +1,7 @@
 # python-setup-poetry
 
-This is a composite action setting up poetry. First it installs Python for the given version and then Poetry with the
-respect to the given input version. Bellow you find the inputs.
+This composite action setups poetry. First, it installs Python for the given version and then Poetry for the given input
+version.
 
 ## Input Parameters
 
@@ -14,14 +14,14 @@ respect to the given input version. Bellow you find the inputs.
 
 ```yaml
   steps:
-    
+
     # Other Steps in your workflow
-    
+
     - name: Set up Poetry version ${{ inputs.poetry-version }}
       uses: ./ci-templates/actions/python-setup-poetry
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: ${{ inputs.poetry-version }}
-    
+
     # Rest of your workflow
 ```

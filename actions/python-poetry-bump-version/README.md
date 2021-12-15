@@ -1,8 +1,8 @@
 # python-poetry-bump-version
 
-This is a composite action bumps the python package version depending on the release type. This action
+This composite action bumps the python package version depending on the release type. This action
 uses [poetry version](https://python-poetry.org/docs/cli/#version) command to bump the version and changes the version
-in the `pyproject.toml` file. It will also output the old and new bumped version.
+in the `pyproject.toml` file. It will also output the old and new bumped versions.
 
 ## Dependencies
 

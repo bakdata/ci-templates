@@ -1,6 +1,6 @@
 # python-poetry-release
 
-This is a composite action uses poetry to build and push your Python packages either to TestPyPI or PyPI.
+This composite action uses poetry to build and push your Python packages either to TestPyPI or PyPI.
 
 ## Dependencies
 
