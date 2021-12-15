@@ -25,7 +25,7 @@ steps:
   # Other steps in your workflow
 
   - name: Release to (Test)PyPI
-    uses: ./ci-templates/actions/python-poetry-release
+    uses: bakdata/ci-templates/actions/python-poetry-release
     with:
       pypi-token: ${{ secrets.pypi-token }}
       publish-to-test: ${{ inputs.publish-to-test }}

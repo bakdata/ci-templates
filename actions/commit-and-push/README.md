@@ -23,7 +23,7 @@ action.
       # Imagine that the previous steps bumped the version and changed wrote it to the pyproject.toml file
 
       - name: Commit and push pyproject.toml file
-        uses: ./ci-templates/actions/commit-and-push
+        uses: bakdata/ci-templates/actions/commit-and-push
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
