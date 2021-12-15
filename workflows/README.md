@@ -1,4 +1,4 @@
-# release-python-poetry
+# python-poetry-release
 
 This action will bump the version of your python project and publish the built project to either TestPyPI or PyPI. In
 the following, you will first find the necessary prerequisite to set up the workflow. Next, you will find the
@@ -12,14 +12,24 @@ choose a GitHub user who will change, commit, and push the version in your `pypr
 admin access to the repository for the selected user because admins can still push on the default branch even if there
 is a protection rule in place.
 
+## Dependencies
+
+This workflow is build from multiple composite actions listed bellow:
+
+* [python-poetry-bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-bump-version)
+* [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
+* [python-poetry-release](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-release)
+
 ## Input Parameters
 
-| Name            |  Required  |  Default Value  |  Type   | Description                                                                                                                       |
-|-----------------|:----------:|:---------------:|:-------:|-----------------------------------------------------------------------------------------------------------------------------------|
-| scope           |     ✅      |        -        | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values |
-| ref             |     ✅      |        -        | string  | The ref name to checkout the repository                                                                                           |
-| publish-to-test |     ❌      |      false      | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                     |
-| python-version  |     ❌      |       3.7       | number  | The python version for setting up poetry                                                                                          |
+| Name              | Required | Default Value |  Type   | Description                                                                                                                        |
+|-------------------|:--------:|:-------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------|
+| release-type      |    ✅     |       -       | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values  |
+| ref               |    ✅     |       -       | string  | The ref name to checkout the repository                                                                                            |
+| publish-to-test   |    ❌     |     true      | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                      |
+| python-version    |    ❌     |      3.7      | number  | The python version for setting up poetry.                                                                                          |
+| poetry-version    |    ❌     |    1.1.12     | number  | The poetry version to be installed.                                                                                                |
+| working-directory |    ❌     |     "./"      | string  | The working directory of your Python package.                                                                                      |
 
 ## Secret Parameters
 
@@ -28,12 +38,12 @@ repository secret for the GitHub username (`GH_USERNAME`), the GitHub Email (`GH
 token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the
 email: `[username]@users.noreply.github.com`.
 
-| Name            |  Required  | Default Value | Description                                    |
-|-----------------|:----------:|:-------------:|------------------------------------------------|
-| github-username |     ✅      |       -       | The GitHub username for pushing                |
-| github-email    |     ✅      |       -       | The GitHub email for pushing                   |
-| github-token    |     ✅      |       -       | The GitHub token for pushing                   |
-| pypi-token      |     ✅      |       -       | The (test) pypi api token for pushing packages |
+| Name            |  Required  | Description                                    |
+|-----------------|:----------:|------------------------------------------------|
+| github-username |     ✅      | The GitHub username for pushing                |
+| github-email    |     ✅      | The GitHub email for pushing                   |
+| github-token    |     ✅      | The GitHub token for pushing                   |
+| pypi-token      |     ✅      | The (test) pypi api token for pushing packages |
 
 ## Outputs
 
@@ -56,12 +66,14 @@ on:
 
 jobs:
   call-workflow-passing-data:
-    uses: bakdata/ci-template/python-poetry-release/python-poetry-release.yaml@main
+    uses: bakdata/ci-template/python-poetry-release.yaml@main
     with:
-      scope: patch # (Required) See more values at: https://python-poetry.org/docs/cli/#version
+      release-type: patch # (Required) See more values at: https://python-poetry.org/docs/cli/#version
       ref: main # (Required) Some repositories still use master as a ref
-      publish-to-test: true # (Optional) Default value false. In this case the packages are pushed to TestPyPI
+      publish-to-test: false # (Optional) Default value true. In this case the packages are pushed to PyPI
       python-version: 3.8 # (Optional) Default value is 3.7. In this case poetry is installed with Python 3.8
+      poetry-version: 1.1.11 # (Optional) Default value is 1.1.12. In this case poetry version 1.1.11 is installed
+      working-directory: "./my-awsome-python-project" # (Optional) Default value is the root directory of your repository. In this case all the files to the given path are published
     secrets:
       github-email: ${{ secrets.GH_EMAIL }}
       github-username: ${{ secrets.GH_USERNAME }}

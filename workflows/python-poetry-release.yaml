@@ -16,11 +16,20 @@ on:
         required: false
         default: 3.7
         type: number
+      poetry-version:
+        description: "The python version for setting up poetry. (Default is 1.1.12)"
+        required: false
+        default: 1.1.12
+        type: number
       publish-to-test:
         description: "If set to false, the packages are published to pypi.org. (Default is true)"
         required: false
         default: true
         type: boolean
+      working-directory:
+        description: "The working directory of your Python package. (Default is root directory)"
+        required: false
+        default: "./"
     secrets:
       github-username:
         description: "The github username for pushing."
@@ -60,14 +69,16 @@ jobs:
 
       - name: Bump version
         id: release-tag
-        uses: ./.github/actions/python-poetry-bump-version
+        uses: ./actions/python-poetry-bump-version
         with:
           release-type: ${{ inputs.release-type }}
+          python-version: ${{ inputs.python-version }}
+          poetry-version: ${{ inputs.poetry-version }}
 
       # For more information to create a commit with GitHub action bot go to:
       # https://github.com/ad-m/github-push-action
       - name: Commit and push pyproject.toml file
-        uses: ./.github/actions/commit-and-push
+        uses: ./actions/commit-and-push
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
@@ -76,7 +87,10 @@ jobs:
           github-token: ${{ secrets.github-token }}
 
       - name: Release to PyPI
-        uses: ./.github/actions/python-poetry-release
+        uses: ./actions/python-poetry-release
         with:
           pypi-token: ${{ secrets.pypi-token }}
           publish-to-test: ${{ inputs.publish-to-test }}
+          working-directory: ${{ inputs.working-directory }}
+          python-version: ${{ inputs.python-version }}
+          poetry-version: ${{ inputs.poetry-version }}

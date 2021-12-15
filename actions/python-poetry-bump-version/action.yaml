@@ -1,5 +1,5 @@
-name: "Commit and push"
-description: "Commits all the changed files and pushes them to the repository"
+name: "Bump python project version using poetry"
+description: "The version defined in the pyproject.toml file gets bump with the respect to the release-type using poetry"
 
 inputs:
   release-type:

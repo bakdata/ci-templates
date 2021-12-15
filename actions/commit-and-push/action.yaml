@@ -3,7 +3,7 @@ description: "Commits all the changed files and pushes them to the repository"
 
 inputs:
   ref:
-    description: "The ref name to checkout the repository."
+    description: "The ref name to commit and push the files on."
     required: true
   commit-message:
     description: "The commit message."

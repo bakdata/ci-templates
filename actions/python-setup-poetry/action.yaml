@@ -1,5 +1,5 @@
-name: "Commit and push"
-description: "Commits all the changed files and pushes them to the repository"
+name: "Setup poetry"
+description: "Install Python and then poetry for a given version"
 
 inputs:
   python-version:
