@@ -56,7 +56,7 @@ on:
 
 jobs:
   call-workflow-passing-data:
-    uses: bakdata/ci-template/release-python-poetry/action.yaml@main
+    uses: bakdata/ci-template/python-poetry-release/python-poetry-release.yaml@main
     with:
       scope: patch # (Required) See more values at: https://python-poetry.org/docs/cli/#version
       ref: main # (Required) Some repositories still use master as a ref

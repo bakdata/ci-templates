@@ -1,0 +1,36 @@
+name: "Commit and push"
+description: "Commits all the changed files and pushes them to the repository"
+
+inputs:
+  ref:
+    description: "The ref name to checkout the repository."
+    required: true
+  commit-message:
+    description: "The commit message."
+    required: true
+  github-username:
+    description: "The github username for pushing."
+    required: true
+  github-email:
+    description: "The github email for pushing."
+    required: true
+  github-token:
+    description: "The personal access token for pushing."
+    required: true
+runs:
+  using: "composite"
+  steps:
+    # For more information to create a commit with GitHub action bot go to:
+    # https://github.com/ad-m/github-push-action
+    - name: Commit all files
+      run: |
+        git config user.email ${{ inputs.github-email }}
+        git config user.name ${{ inputs.github-username }}
+        git commit -m "${{ inputs.commit-message }}" -a
+      shell: bash
+
+    - name: Push changes
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${{ inputs.github-token }}
+        branch: refs/heads/${{ inputs.ref }}
