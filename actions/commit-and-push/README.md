@@ -22,7 +22,7 @@ action.
       # Other Steps ...
       # Imagine that the previous steps bumped the version and changed wrote it to the pyproject.toml file
 
-      - name: Commit and push pyproject.toml file
+      - name: Commit and push changes
         uses: bakdata/ci-templates/actions/commit-and-push
         with:
           ref: ${{ inputs.ref }}
