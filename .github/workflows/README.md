@@ -2,7 +2,7 @@
 
 This action will bump the version of your python project and publish the built project to either TestPyPI or PyPI. In
 the following, you will first find the necessary prerequisite to set up the workflow. Next, you will find the
-documentation of the input, secret, and output parameters documentation. In the end, you find a small example of how to
+documentation of the input, secret, and output parameters. In the end, you find a small example of how to
 use this workflow.
 
 ## Prerequisite
