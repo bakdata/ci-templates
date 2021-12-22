@@ -14,7 +14,7 @@ is a protection rule in place.
 
 ## Dependencies
 
-This workflow is build from multiple composite actions listed bellow:
+This workflow is build from multiple composite actions listed below:
 
 * [python-poetry-bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-bump-version)
 * [python-poetry-release](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-release)
