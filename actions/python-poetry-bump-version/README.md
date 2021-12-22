@@ -32,7 +32,7 @@ steps:
   # Other steps in your workflow
   - name: Bump version
     id: bump-version
-    uses: bakdata/ci-templates/actions/python-poetry-bump-version
+    uses: bakdata/ci-templates/actions/python-poetry-bump-version@main
     with:
       release-type: ${{ inputs.release-type }}
       python-version: ${{ inputs.python-version }}

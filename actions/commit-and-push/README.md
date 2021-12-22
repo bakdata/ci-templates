@@ -23,7 +23,7 @@ action.
       # Imagine that the previous steps bumped the version and changed wrote it to the pyproject.toml file
 
       - name: Commit and push changes
-        uses: bakdata/ci-templates/actions/commit-and-push
+        uses: bakdata/ci-templates/actions/commit-and-push@main
         with:
           ref: "my-awesome-ref-name" # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value
           commit-message: "Committing all the awesome changes in my repository!"

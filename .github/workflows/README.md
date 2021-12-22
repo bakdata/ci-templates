@@ -66,7 +66,7 @@ on:
 
 jobs:
   call-workflow-passing-data:
-    uses: bakdata/ci-template/python-poetry-release.yaml@feature/add-python-release-with-poetry
+    uses: bakdata/ci-template/python-poetry-release.yaml@main
     with:
       release-type: patch # (Required) See more values at: https://python-poetry.org/docs/cli/#version
       ref: my-awesome-ref # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value. In this case the changes will be pushed to my-awesome-ref

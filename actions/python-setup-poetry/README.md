@@ -18,7 +18,7 @@ version.
     # Other Steps in your workflow
 
     - name: Set up Poetry version ${{ inputs.poetry-version }}
-      uses: bakdata/ci-templates/actions/python-setup-poetry
+      uses: bakdata/ci-templates/actions/python-setup-poetry@main
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: ${{ inputs.poetry-version }}
