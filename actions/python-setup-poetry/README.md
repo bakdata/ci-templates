@@ -1,6 +1,6 @@
 # python-setup-poetry
 
-This composite action setups poetry. First, it installs Python for the given version and then Poetry for the given input
+This composite action sets up poetry. First, it installs Python for the given version and then Poetry for the given input
 version.
 
 ## Input Parameters
