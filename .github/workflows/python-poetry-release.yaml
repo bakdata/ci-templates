@@ -23,7 +23,7 @@ on:
         default: "1.1.12"
         type: string
       publish-to-test:
-        description: "If set to false, the packages are published to pypi.org. (Default is true)"
+        description: "If set to false, the package is published to PyPI. (Default is true)"
         required: false
         default: true
         type: boolean
