@@ -6,13 +6,13 @@ action.
 
 ## Input Parameters
 
-| Name            | Required | Description                                   |
-|-----------------|:--------:|-----------------------------------------------|
-| ref             |    ✅     | The ref name to commit and push the files on  |
-| commit-message  |    ✅     | The commit message                            |
-| github-username |    ✅     | The GitHub username for pushing               |
-| github-email    |    ✅     | The GitHub email for pushing                  |
-| github-token    |    ✅     | The GitHub token for pushing                  |
+| Name            | Required |           Default Value           | Description                                   |
+|-----------------|:--------:|:---------------------------------:|-----------------------------------------------|
+| github-username |    ✅     |                 -                 | The GitHub username for pushing               |
+| github-email    |    ✅     |                 -                 | The GitHub email for pushing                  |
+| github-token    |    ✅     |                 -                 | The GitHub token for pushing                  |
+| commit-message  |    ✅     |                 -                 | The commit message                            |
+| ref             |    ❌     | Default branch of your repository | The ref name to commit and push the files on  |
 
 ## Usage
 
@@ -25,8 +25,8 @@ action.
       - name: Commit and push changes
         uses: bakdata/ci-templates/actions/commit-and-push
         with:
-          ref: ${{ inputs.ref }}
-          commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
+          ref: "my-awesome-ref-name" # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value
+          commit-message: "Committing all the awesome changes in my repository!"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}

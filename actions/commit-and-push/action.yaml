@@ -2,13 +2,6 @@ name: "Commit and push"
 description: "Commits all the changed files and pushes them to the repository"
 
 inputs:
-  ref:
-    description: "The ref name to commit and push the files on."
-    required: false
-    default: ${{ github.event.repository.default_branch }}
-  commit-message:
-    description: "The commit message."
-    required: true
   github-username:
     description: "The github username for pushing."
     required: true
@@ -18,6 +11,13 @@ inputs:
   github-token:
     description: "The personal access token for pushing."
     required: true
+  commit-message:
+    description: "The commit message."
+    required: true
+  ref:
+    description: "The ref name to commit and push the files on."
+    required: false
+    default: ${{ github.event.repository.default_branch }}
 
 runs:
   using: "composite"

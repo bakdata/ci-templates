@@ -2,8 +2,8 @@
 
 This action will bump the version of your python project and publish the built project to either TestPyPI or PyPI. In
 the following, you will first find the necessary prerequisite to set up the workflow. Next, you will find the
-documentation of the input, secret, and output parameters. In the end, you find a small example of how to
-use this workflow.
+documentation of the input, secret, and output parameters. In the end, you find a small example of how to use this
+workflow.
 
 ## Prerequisite
 
@@ -17,19 +17,19 @@ is a protection rule in place.
 This workflow is build from multiple composite actions listed bellow:
 
 * [python-poetry-bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-bump-version)
-* [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
 * [python-poetry-release](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-release)
+* [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
 
 ## Input Parameters
 
-| Name              | Required | Default Value  |  Type   | Description                                                                                                                        |
-|-------------------|:--------:|:--------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------|
-| release-type      |    ✅     |       -        | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values  |
-| ref               |    ✅     |       -        | string  | The ref name to checkout the repository                                                                                            |
-| publish-to-test   |    ❌     |      true      | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                      |
-| python-version    |    ❌     |     "3.7"      | string  | The python version for setting up poetry.                                                                                          |
-| poetry-version    |    ❌     |    "1.1.12"    | string  | The poetry version to be installed.                                                                                                |
-| working-directory |    ❌     |      "./"      | string  | The working directory of your Python package.                                                                                      |
+| Name              | Required |             Default Value             |  Type   | Description                                                                                                                        |
+|-------------------|:--------:|:-------------------------------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------|
+| release-type      |    ✅     |                   -                   | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values  |
+| ref               |    ❌     | The default branch of your repository | string  | The ref name to checkout the repository                                                                                            |
+| publish-to-test   |    ❌     |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                      |
+| python-version    |    ❌     |                 "3.7"                 | string  | The python version for setting up poetry.                                                                                          |
+| poetry-version    |    ❌     |               "1.1.12"                | string  | The poetry version to be installed.                                                                                                |
+| working-directory |    ❌     |                 "./"                  | string  | The working directory of your Python package.                                                                                      |
 
 ## Secret Parameters
 
@@ -66,14 +66,14 @@ on:
 
 jobs:
   call-workflow-passing-data:
-    uses: bakdata/ci-template/python-poetry-release.yaml@main
+    uses: bakdata/ci-template/python-poetry-release.yaml@feature/add-python-release-with-poetry
     with:
       release-type: patch # (Required) See more values at: https://python-poetry.org/docs/cli/#version
-      ref: main # (Required) Some repositories still use master as a ref
+      ref: my-awesome-ref # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value. In this case the changes will be pushed to my-awesome-ref
       publish-to-test: false # (Optional) Default value true. In this case the packages are pushed to PyPI
       python-version: 3.8 # (Optional) Default value is 3.7. In this case poetry is installed with Python 3.8
       poetry-version: 1.1.11 # (Optional) Default value is 1.1.12. In this case poetry version 1.1.11 is installed
-      working-directory: "./my-awsome-python-project" # (Optional) Default value is the root directory of your repository. In this case all the files to the given path are published
+      working-directory: "./my-awesome-python-project" # (Optional) Default value is the root directory of your repository. In this case all the files to the given path are published
     secrets:
       github-email: ${{ secrets.GH_EMAIL }}
       github-username: ${{ secrets.GH_USERNAME }}
