@@ -3,13 +3,13 @@ description: "Commits all the changed files and pushes them to the repository"
 
 inputs:
   github-username:
-    description: "The github username for pushing."
+    description: "The GitHub username for committing the changes."
     required: true
   github-email:
-    description: "The github email for pushing."
+    description: "The GitHub email for committing the changes."
     required: true
   github-token:
-    description: "The personal access token for pushing."
+    description: "The GitHub token for committing the changes."
     required: true
   commit-message:
     description: "The commit message."

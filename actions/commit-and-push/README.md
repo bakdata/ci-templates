@@ -6,13 +6,13 @@ action.
 
 ## Input Parameters
 
-| Name            | Required |           Default Value           | Description                                   |
-|-----------------|:--------:|:---------------------------------:|-----------------------------------------------|
-| github-username |    ✅     |                 -                 | The GitHub username for pushing               |
-| github-email    |    ✅     |                 -                 | The GitHub email for pushing                  |
-| github-token    |    ✅     |                 -                 | The GitHub token for pushing                  |
-| commit-message  |    ✅     |                 -                 | The commit message                            |
-| ref             |    ❌     | Default branch of your repository | The ref name to commit and push the files on  |
+| Name            | Required |           Default Value           | Description                                    |
+|-----------------|:--------:|:---------------------------------:|------------------------------------------------|
+| github-username |    ✅     |                 -                 | The GitHub username for committing the changes |
+| github-email    |    ✅     |                 -                 | The GitHub email for committing the changes    |
+| github-token    |    ✅     |                 -                 | The GitHub token for committing the changes    |
+| commit-message  |    ✅     |                 -                 | The commit message                             |
+| ref             |    ❌     | Default branch of your repository | The ref name to commit and push the files on   |
 
 ## Usage
 

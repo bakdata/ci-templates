@@ -38,12 +38,12 @@ repository secret for the GitHub username (`GH_USERNAME`), the GitHub Email (`GH
 token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the
 email: `[username]@users.noreply.github.com`.
 
-| Name            |  Required  | Description                                    |
-|-----------------|:----------:|------------------------------------------------|
-| github-username |     ✅      | The GitHub username for pushing                |
-| github-email    |     ✅      | The GitHub email for pushing                   |
-| github-token    |     ✅      | The GitHub token for pushing                   |
-| pypi-token      |     ✅      | The (test) pypi api token for pushing packages |
+| Name            | Required | Description                                       |
+|-----------------|:--------:|---------------------------------------------------|
+| github-username |    ✅     | The GitHub username for committing the changes    |
+| github-email    |    ✅     | The GitHub email for committing the changes       |
+| github-token    |    ✅     | The GitHub token for committing the changes       |
+| pypi-token      |    ✅     | The (test) PyPI api token for publishing packages |
 
 ## Outputs
 
@@ -70,7 +70,7 @@ jobs:
     with:
       release-type: patch # (Required) See more values at: https://python-poetry.org/docs/cli/#version
       ref: my-awesome-ref # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value. In this case the changes will be pushed to my-awesome-ref
-      publish-to-test: false # (Optional) Default value true. In this case the packages are pushed to PyPI
+      publish-to-test: false # (Optional) By default the packages are published to TestPyPI. In this case the packages are published to PyPI
       python-version: 3.8 # (Optional) Default value is 3.10. In this case poetry is installed with Python 3.8
       poetry-version: 1.1.11 # (Optional) Default value is 1.1.12. In this case poetry version 1.1.11 is installed
       working-directory: "./my-awesome-python-project" # (Optional) Default value is the root directory of your repository. In this case all the files to the given path are published

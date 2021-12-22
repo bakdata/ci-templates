@@ -3,10 +3,10 @@ description: "Release Python packages using poetry to TestPyPI or PyPI"
 
 inputs:
   pypi-token:
-    description: "The pypi token for pushing packages."
+    description: "The PyPI token for publishing packages."
     required: true
   publish-to-test:
-    description: "If set to false, the packages are published to pypi.org. (Default is TestPyPI)"
+    description: "If set to false, the packages are published to PyPI. (Default is true)"
     required: false
     default: "true"
   python-version:

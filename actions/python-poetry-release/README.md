@@ -10,13 +10,13 @@ This action uses another composite action listed below:
 
 ## Input Parameters
 
-| Name              | Required | Default Value | Description                                                                                                                        |
-|-------------------|:--------:|:-------------:|------------------------------------------------------------------------------------------------------------------------------------|
-| pypi-token        |    ✅     |       -       | The (test) pypi api token for pushing packages                                                                                     |
-| publish-to-test   |    ❌     |     true      | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                      |
-| python-version    |    ❌     |     3.10      | The python version for setting up poetry.                                                                                          |
-| poetry-version    |    ❌     |    1.1.12     | The poetry version to be installed.                                                                                                |
-| working-directory |    ❌     |     "./"      | The working directory of your Python package.                                                                                      |
+| Name              | Required | Default Value | Description                                                                                          |
+|-------------------|:--------:|:-------------:|------------------------------------------------------------------------------------------------------|
+| pypi-token        |    ✅     |       -       | The (test) PyPI api token for publishing packages                                                    |
+| publish-to-test   |    ❌     |     true      | If set to true, the packages are published to TestPyPI other wise the packages are published to PyPI |
+| python-version    |    ❌     |     3.10      | The python version for setting up poetry.                                                            |
+| poetry-version    |    ❌     |    1.1.12     | The poetry version to be installed.                                                                  |
+| working-directory |    ❌     |     "./"      | The working directory of your Python package.                                                        |
 
 ## Usage
 
