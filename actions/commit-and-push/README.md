@@ -20,7 +20,7 @@ action.
 
     steps:
       # Other Steps ...
-      # Imagine that the previous steps bumped the version and changed wrote it to the pyproject.toml file
+      # Imagine that the previous steps change some files and the changes need to be committed
 
       - name: Commit and push changes
         uses: bakdata/ci-templates/actions/commit-and-push@main

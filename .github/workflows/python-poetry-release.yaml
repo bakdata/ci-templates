@@ -34,13 +34,13 @@ on:
         type: string
     secrets:
       github-username:
-        description: "The github username for pushing."
+        description: "The GitHub username for committing the changes."
         required: true
       github-email:
-        description: "The github email for pushing."
+        description: "The GitHub email for committing the changes."
         required: true
       github-token:
-        description: "The github token for pushing."
+        description: "The GitHub token for committing the changes."
         required: true
       pypi-token:
         description: "The PyPI token for publishing packages."
