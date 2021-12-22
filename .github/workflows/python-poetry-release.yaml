@@ -43,7 +43,7 @@ on:
         description: "The github token for pushing."
         required: true
       pypi-token:
-        description: "The pypi token for pushing packages."
+        description: "The PyPI token for publishing packages."
         required: true
 
     # Map the workflow outputs to job outputs
