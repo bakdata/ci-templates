@@ -7,7 +7,7 @@ workflow.
 
 ## Prerequisite
 
-Your Python project needs to be set up with poetry and contains a `pyproject.toml` file to use this workflow. Moreover,
+Your Python project needs to be set up with poetry and contain a `pyproject.toml` file to use this workflow. Moreover,
 choose a GitHub user who will change, commit, and push the version in your `pyproject.toml` file. Make sure to configure
 admin access to the repository for the selected user because admins can still push on the default branch even if there
 is a protection rule in place.
