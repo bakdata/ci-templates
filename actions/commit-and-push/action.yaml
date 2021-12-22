@@ -4,7 +4,8 @@ description: "Commits all the changed files and pushes them to the repository"
 inputs:
   ref:
     description: "The ref name to commit and push the files on."
-    required: true
+    required: false
+    default: $default_branch
   commit-message:
     description: "The commit message."
     required: true
@@ -21,7 +22,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    # For more information to create a commit with GitHub action bot go to:
+    # For more information to create a commit with a valid GitHub user go to:
     # https://github.com/ad-m/github-push-action
     - name: Commit all files
       run: |

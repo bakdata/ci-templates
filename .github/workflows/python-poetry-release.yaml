@@ -70,27 +70,27 @@ jobs:
 
       - name: Bump version with poetry
         id: release-tag
-        uses: bakdata/ci-templates/actions/python-poetry-bump-version
+        uses: bakdata/ci-templates/actions/python-poetry-bump-version@feature/add-python-release-with-poetry
         with:
           release-type: ${{ inputs.release-type }}
           python-version: ${{ inputs.python-version }}
           poetry-version: ${{ inputs.poetry-version }}
 
-      - name: Release to PyPI
-        if: success()
-        uses: bakdata/ci-templates/actions/python-poetry-release
-        with:
-          pypi-token: ${{ secrets.pypi-token }}
-          publish-to-test: ${{ inputs.publish-to-test }}
-          working-directory: ${{ inputs.working-directory }}
-          python-version: ${{ inputs.python-version }}
-          poetry-version: ${{ inputs.poetry-version }}
+#      - name: Release to PyPI
+#        if: success()
+#        uses: bakdata/ci-templates/actions/python-poetry-release@feature/add-python-release-with-poetry
+#        with:
+#          pypi-token: ${{ secrets.pypi-token }}
+#          publish-to-test: ${{ inputs.publish-to-test }}
+#          working-directory: ${{ inputs.working-directory }}
+#          python-version: ${{ inputs.python-version }}
+#          poetry-version: ${{ inputs.poetry-version }}
 
       - name: Commit and push pyproject.toml file
         if: success()
-        uses: bakdata/ci-templates/actions/commit-and-push
+        uses: bakdata/ci-templates/actions/commit-and-push@feature/add-python-release-with-poetry
         with:
-          ref: ${{ inputs.ref }}
+#          ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
