@@ -6,7 +6,7 @@ inputs:
     description: "The pypi token for pushing packages."
     required: true
   publish-to-test:
-    description: "If set to false, the packages are published to pypi.org. (Default is true)"
+    description: "If set to false, the packages are published to pypi.org. (Default is TestPyPI)"
     required: false
     default: "true"
   python-version:
