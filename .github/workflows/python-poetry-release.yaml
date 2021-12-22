@@ -1,0 +1,98 @@
+name: Reusable workflow for building and publishing python packages to TestPyPI or PyPI
+
+on:
+  workflow_call:
+    inputs:
+      release-type:
+        description: "Scope of the release; See: https://python-poetry.org/docs/cli/#version"
+        required: true
+        type: string
+      ref:
+        description: "The ref name to checkout the repository."
+        required: false
+        default: ${{ github.event.repository.default_branch }}
+        type: string
+      python-version:
+        description: "The python version for setting up poetry. (Default is 3.10)"
+        required: false
+        default: "3.10"
+        type: string
+      poetry-version:
+        description: "The python version for setting up poetry. (Default is 1.1.12)"
+        required: false
+        default: "1.1.12"
+        type: string
+      publish-to-test:
+        description: "If set to false, the package is published to PyPI. (Default is true)"
+        required: false
+        default: true
+        type: boolean
+      working-directory:
+        description: "The working directory of your Python package. (Default is root directory)"
+        required: false
+        default: "./"
+        type: string
+    secrets:
+      github-username:
+        description: "The GitHub username for committing the changes."
+        required: true
+      github-email:
+        description: "The GitHub email for committing the changes."
+        required: true
+      github-token:
+        description: "The GitHub token for committing the changes."
+        required: true
+      pypi-token:
+        description: "The PyPI token for publishing packages."
+        required: true
+
+    # Map the workflow outputs to job outputs
+    outputs:
+      release-tag:
+        description: "The release tag."
+        value: ${{ jobs.create-release.outputs.release-tag }}
+      old-tag:
+        description: "The old tag."
+        value: ${{ jobs.create-release.outputs.old-tag }}
+
+jobs:
+  create-release:
+    runs-on: ubuntu-20.04
+    # Map the job outputs to step outputs
+    outputs:
+      release-tag: ${{ steps.release-tag.outputs.release-tag }}
+      old-tag: ${{ steps.release-tag.outputs.old-tag }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Bump version with poetry
+        id: release-tag
+        uses: bakdata/ci-templates/actions/python-poetry-bump-version@main
+        with:
+          release-type: ${{ inputs.release-type }}
+          python-version: ${{ inputs.python-version }}
+          poetry-version: ${{ inputs.poetry-version }}
+
+      - name: Release to PyPI
+        if: success()
+        uses: bakdata/ci-templates/actions/python-poetry-release@main
+        with:
+          pypi-token: ${{ secrets.pypi-token }}
+          publish-to-test: ${{ inputs.publish-to-test }}
+          working-directory: ${{ inputs.working-directory }}
+          python-version: ${{ inputs.python-version }}
+          poetry-version: ${{ inputs.poetry-version }}
+
+      - name: Commit and push pyproject.toml file
+        if: success()
+        uses: bakdata/ci-templates/actions/commit-and-push@main
+        with:
+          ref: ${{ inputs.ref }}
+          commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}

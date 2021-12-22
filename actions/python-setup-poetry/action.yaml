@@ -1,0 +1,48 @@
+name: "Setup poetry"
+description: "Install Python and then poetry for a given version"
+
+inputs:
+  python-version:
+    description: "The python version for setting up poetry."
+    required: false
+    default: "3.10"
+  poetry-version:
+    description: "The poetry version to be installed."
+    required: false
+    default: "1.1.12"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python ${{ inputs.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Get full Python version
+      id: full-python-version
+      run: echo ::set-output name=version::$(python -c "import sys; print('-'.join(str(v) for v in sys.version_info))")
+      shell: bash
+
+    - name: Bootstrap poetry
+      shell: bash
+      run: |
+        python -m ensurepip
+        python -m pip install --upgrade pip
+        python -m pip install poetry==${{ inputs.poetry-version }}
+
+    - name: Configure poetry
+      run: python -m poetry config virtualenvs.in-project true
+      shell: bash
+
+    - name: Set up cache
+      uses: actions/cache@v2
+      id: cache
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ steps.full-python-version.outputs.version }}-${{ hashFiles('poetry.lock') }}
+
+    - name: Ensure cache is healthy
+      if: steps.cache.outputs.cache-hit == 'true'
+      run: timeout 10s python -m poetry run pip --version || rm -rf .venv
+      shell: bash
