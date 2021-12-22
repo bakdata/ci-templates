@@ -15,7 +15,7 @@ This action uses another composite action listed below:
 | Name              | Required | Default Value |  Type   | Description                                                                                                                        |
 |-------------------|:--------:|:-------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------|
 | release-type      |    ✅     |       -       | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values  |
-| python-version    |    ❌     |      3.7      | number  | The python version for setting up poetry.                                                                                          |
+| python-version    |    ❌     |     3.10      | number  | The python version for setting up poetry.                                                                                          |
 | poetry-version    |    ❌     |    1.1.12     | number  | The poetry version to be installed.                                                                                                |
 
 ## Output Parameters

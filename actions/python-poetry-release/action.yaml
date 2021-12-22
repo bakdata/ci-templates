@@ -10,9 +10,9 @@ inputs:
     required: false
     default: "true"
   python-version:
-    description: "The python version for setting up poetry. (Default is 3.7)"
+    description: "The python version for setting up poetry. (Default is 3.10)"
     required: false
-    default: "3.7"
+    default: "3.10"
   poetry-version:
     description: "The poetry version to be installed. (Default is 1.1.12)"
     required: false

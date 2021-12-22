@@ -14,7 +14,7 @@ is a protection rule in place.
 
 ## Dependencies
 
-This workflow is build from multiple composite actions listed below:
+This workflow is built from multiple composite actions listed below:
 
 * [python-poetry-bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-bump-version)
 * [python-poetry-release](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-release)
@@ -27,7 +27,7 @@ This workflow is build from multiple composite actions listed below:
 | release-type      |    ✅     |                   -                   | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values  |
 | ref               |    ❌     | The default branch of your repository | string  | The ref name to checkout the repository                                                                                            |
 | publish-to-test   |    ❌     |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                      |
-| python-version    |    ❌     |                 "3.7"                 | string  | The python version for setting up poetry.                                                                                          |
+| python-version    |    ❌     |                "3.10"                 | string  | The python version for setting up poetry.                                                                                          |
 | poetry-version    |    ❌     |               "1.1.12"                | string  | The poetry version to be installed.                                                                                                |
 | working-directory |    ❌     |                 "./"                  | string  | The working directory of your Python package.                                                                                      |
 
@@ -71,7 +71,7 @@ jobs:
       release-type: patch # (Required) See more values at: https://python-poetry.org/docs/cli/#version
       ref: my-awesome-ref # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value. In this case the changes will be pushed to my-awesome-ref
       publish-to-test: false # (Optional) Default value true. In this case the packages are pushed to PyPI
-      python-version: 3.8 # (Optional) Default value is 3.7. In this case poetry is installed with Python 3.8
+      python-version: 3.8 # (Optional) Default value is 3.10. In this case poetry is installed with Python 3.8
       poetry-version: 1.1.11 # (Optional) Default value is 1.1.12. In this case poetry version 1.1.11 is installed
       working-directory: "./my-awesome-python-project" # (Optional) Default value is the root directory of your repository. In this case all the files to the given path are published
     secrets:

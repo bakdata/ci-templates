@@ -14,7 +14,7 @@ This action uses another composite action listed below:
 |-------------------|:--------:|:-------------:|------------------------------------------------------------------------------------------------------------------------------------|
 | pypi-token        |    ✅     |       -       | The (test) pypi api token for pushing packages                                                                                     |
 | publish-to-test   |    ❌     |     true      | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                      |
-| python-version    |    ❌     |      3.7      | The python version for setting up poetry.                                                                                          |
+| python-version    |    ❌     |     3.10      | The python version for setting up poetry.                                                                                          |
 | poetry-version    |    ❌     |    1.1.12     | The poetry version to be installed.                                                                                                |
 | working-directory |    ❌     |     "./"      | The working directory of your Python package.                                                                                      |
 
