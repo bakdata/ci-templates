@@ -13,7 +13,7 @@ inputs:
   working-directory:
     description: "The root directory of the poetry project."
     required: false
-    default: "./"
+    default: "."
 
 runs:
   using: "composite"
