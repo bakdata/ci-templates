@@ -71,7 +71,7 @@ jobs:
       - name: Lint helm chart
         uses: bakdata/ci-templates/actions/helm-lint@feature/helm-release-workflow
         with:
-          lintConfig: "${{ inputs.lint-config-path }}"
+          lint-config-path: "${{ inputs.lint-config-path }}"
 
   helm-release:
     runs-on: ubuntu-20.04
