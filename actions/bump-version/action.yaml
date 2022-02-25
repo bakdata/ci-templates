@@ -1,5 +1,6 @@
 name: "Bump version"
 description: "Bump version with python bump2version using .bumpversion.cfg"
+
 inputs:
   release-type:
     description: "The type of the release (major, minor or patch)."
@@ -10,6 +11,15 @@ inputs:
     required: false
     default: "3.10"
     type: string
+
+outputs:
+  release-tag:
+    description: "The bumped version."
+    value: ${{ steps.release-tag.outputs.newTag }}
+  old-tag:
+    description: "The old version"
+    value: ${{ steps.release-tag.outputs.oldTag }}
+
 runs:
   using: "composite"
   steps:
@@ -23,5 +33,6 @@ runs:
       shell: bash
 
     - name: Bump version
-      run: bump2version ${{ inputs.release-type }}
+      id: release-tag
+      run: bump2version ${{ inputs.release-type }} --no-commit
       shell: bash
