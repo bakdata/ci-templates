@@ -1,4 +1,10 @@
-# helm-lint
+# Workflow Templates
+The following workflows can be found here:
+* [Helm Lint](https://github.com/bakdata/ci-templates/tree/feature/helm-release-workflow/.github/workflows#helm-lint)
+* [Helm Release](https://github.com/bakdata/ci-templates/tree/feature/helm-release-workflow/.github/workflows#helm-release)
+* [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/feature/helm-release-workflow/.github/workflows#python-poetry-release)
+
+## Helm Lint
 This workflow will lint your helm chart project.
 
 ### Prerequisite
@@ -33,7 +39,7 @@ jobs:
 ```
 
 
-# Helm Release
+## Helm Release
 This workflow will lint all charts, bump the project version according to the `.bumpversion.cfg` file, create releases for all changed charts
 and provide `index.yaml` for all packaged charts as a Github web page.
 
@@ -136,7 +142,7 @@ jobs:
 ```
 
 
-# Python Poetry Release
+## Python Poetry Release
 This workflow will bump the version of your python project and publish the built project to either TestPyPI or PyPI. In
 the following, you will first find the necessary prerequisite to set up the workflow. Next, you will find the
 documentation of the input, secret, and output parameters. In the end, you find a small example of how to use this
