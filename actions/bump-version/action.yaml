@@ -34,5 +34,8 @@ runs:
 
     - name: Bump version
       id: release-tag
-      run: bump2version ${{ inputs.release-type }} --no-commit
+      run: |
+        echo ::set-output name=oldTag::$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")
+        bump2version ${{ inputs.release-type }} --no-commit
+        echo ::set-output name=newTag::$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")
       shell: bash
