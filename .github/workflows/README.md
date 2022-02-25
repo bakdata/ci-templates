@@ -39,7 +39,7 @@ and provide `index.yaml` for all packaged charts as a Github web page.
 
 ### Prerequisites
 Your helm charts need to be located inside the `charts` folder of your repository to use this workflow and
-you need a `bumpversion.cfg` file in your root directory. Make sure to set the correct path for the `Chart.yaml` file.
+you need a `.bumpversion.cfg` file in your root directory. Make sure to set the correct path for the `Chart.yaml` file.
 A minimal configuration could look like this:
 ```cfg
 [bumpversion]
@@ -59,7 +59,7 @@ A minimal configuration could look like this:
 target-branch: "main"
 ```
 
-Moreover, choose a GitHub user who will change, commit, and push the version in your `bumpversion.cfg` file. Make sure to configure
+Moreover, choose a GitHub user who will change, commit, and push the version in your `.bumpversion.cfg` file. Make sure to configure
 admin access to the repository for the selected user because admins can still push on the default branch even if there
 is a protection rule in place.
 
@@ -88,7 +88,7 @@ This workflow is built from multiple composite actions listed below:
 | helm-version      |    ❌     |               "v3.4.0"                | string  | The helm version                                                                                                                         |
 
 ### Secret Parameters
-These secrets define the GitHub user that pushes the changes of your `bumpversion.cfg` file to the repository. Create a
+These secrets define the GitHub user that pushes the changes of your `.bumpversion.cfg` file to the repository. Create a
 repository secret for the GitHub username (`GH_USERNAME`), the GitHub Email (`GH_EMAIL`), and a personal access
 token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the
 email: `[username]@users.noreply.github.com`.
@@ -103,10 +103,10 @@ email: `[username]@users.noreply.github.com`.
 This workflow outputs two variables: The `old-tag` and the `release-tag`. These variables can be used in the future
 jobs (e.g., using the `release-tag` to create GitHub release).
 
-| Name        | Description                                          |
-|-------------|------------------------------------------------------|
-| old-tag     | Defines the old version in your bumpversion.cfg file |
-| release-tag | The bumped version of your project                   |
+| Name        | Description                                           |
+|-------------|-------------------------------------------------------|
+| old-tag     | Defines the old version in your .bumpversion.cfg file |
+| release-tag | The bumped version of your project                    |
 
 ### Calling the workflow
 ```yaml
