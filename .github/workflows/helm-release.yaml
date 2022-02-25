@@ -53,10 +53,25 @@ on:
         value: ${{ jobs.create-release.outputs.old-tag }}
 
 jobs:
-  helm-lint: 
-    call-workflow-passing-data:
-    name: Lint helm chart
-    uses: bakdata/ci-templates/.github/workflows/helm-lint.yaml@feature/helm-release-workflow
+  helm-lint:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 2
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: "${{ inputs.helm-version }}"
+
+      - name: Lint helm chart
+        uses: bakdata/ci-templates/actions/helm-lint@main
+        with:
+          lintConfig: "${{ inputs.lint-config-path }}"
 
   helm-release:
     runs-on: ubuntu-20.04
