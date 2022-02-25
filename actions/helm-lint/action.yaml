@@ -20,8 +20,8 @@ runs:
     - name: Run chart-testing (lint)
       run: |
         if [[ "${GITHUB_REF#refs/heads/}" == "main" || "${GITHUB_REF#refs/heads/}" == "master" ]]; then
-          ct lint --config ${{ inputs.lintConfig }} --since HEAD^
+          ct lint --config ${{ inputs.lint-config-path }} --since HEAD^
         else
-          ct lint --config ${{ inputs.lintConfig }} --since HEAD
+          ct lint --config ${{ inputs.lint-config-path }} --since HEAD
         fi
       shell: bash
