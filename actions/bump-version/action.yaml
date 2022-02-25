@@ -23,5 +23,5 @@ runs:
       shell: bash
 
     - name: Bump version
-      run: bump2version --new-version ${{ inputs.release-type }}
+      run: bump2version ${{ inputs.release-type }}
       shell: bash

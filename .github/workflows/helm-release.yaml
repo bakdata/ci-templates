@@ -83,6 +83,11 @@ jobs:
       old-tag: ${{ steps.release-tag.outputs.old-tag }}
 
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.ref }}
+      
       - name: Bump version
         if: success()
         id: release-tag
