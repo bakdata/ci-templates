@@ -23,8 +23,5 @@ runs:
       shell: bash
 
     - name: Bump version
-      run: |
-        echo ::set-output name=oldTag::$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")
-        bump2version --new-version ${{ inputs.release-type }}
-        echo ::set-output name=newTag::$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")
+      run: bump2version --new-version ${{ inputs.release-type }}
       shell: bash
