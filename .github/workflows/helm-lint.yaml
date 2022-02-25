@@ -25,7 +25,7 @@ on:
         type: string
 
 jobs:
-  create-release:
+  helm-lint:
     runs-on: ubuntu-20.04
 
     steps:
