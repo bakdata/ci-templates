@@ -24,7 +24,7 @@ runs:
 
     - name: Bump version
       run: |
-        echo ::set-output name=oldTag::$(poetry version -s)
+        echo ::set-output name=oldTag::$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")
         ./ci-templates/bump-version/bumpversion.sh "${{ inputs.release-type }}"
-        echo ::set-output name=newTag::$(poetry version -s)
+        echo ::set-output name=newTag::$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")
       shell: bash
