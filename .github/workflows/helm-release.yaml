@@ -12,11 +12,6 @@ on:
         required: false
         default: ${{ github.event.repository.default_branch }}
         type: string
-      chart-directory:
-        description: "The parent directory of all charts in this repository."
-        default: "charts"
-        required: false
-        type: string
       lint-config-path:
         description: "The path to the lint configuration file (See https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml)."
         required: false
@@ -28,7 +23,7 @@ on:
         default: "3.10"
         type: string
       helm-version:
-        description: "The helm version for setting up poetry."
+        description: "The helm version."
         required: false
         default: "v3.4.0"
         type: string
@@ -110,6 +105,6 @@ jobs:
         if: success()
         uses: helm/chart-releaser-action@v1.2.1
         with:
-          charts_dir: "${{ inputs.chart-directory }}"
+          charts_dir: "charts"
         env:
           CR_TOKEN: "${{ secrets.github-token }}"

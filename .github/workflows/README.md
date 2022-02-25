@@ -1,167 +1,171 @@
 # helm-lint
-To use this action you need to have a few things setup in the repository:
+This workflow will lint your helm chart project.
 
-1. Add a `./github/lint-config.yaml` file with the following content and set the target branch to the default branch of your repository:
+### Prerequisite
+Your helm charts need to be located inside the `charts` folder of your repository to use this workflow. Additionally,
+you need to create the lint configuration file `.github/lint-config.yaml` and configure it to your liking
+(For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml).
+
+### Dependencies
+This workflow is built with the following composite action:
+* [helm-lint](https://github.com/bakdata/ci-templates/tree/main/actions/helm-lint)
+
+### Input Parameters
+| Name              | Required  |             Default Value             |  Type   | Description                                                                                                                              |
+|-------------------|:---------:|:-------------------------------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------------|
+| ref               |    ❌     | The default branch of your repository | string  | The ref name to checkout the repository                                                                                                  |
+| lint-config-path  |    ❌     |      ".github/lint-config.yaml"       | string  | The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml) |
+| helm-version      |    ❌     |               "v3.4.0"                | string  | The helm version                                                                                                                         |
+
+### Calling the workflow
+```yaml
+name: Call this reusable workflow
+
+on: [push, pull_request]
+
+jobs:
+  call-workflow-passing-data:
+    uses: bakdata/ci-templates/.github/workflows/helm-lint.yaml@main
+    with:
+      ref: "my-awesome-ref" # (Optional)
+      lint-config-path: "my-lint-config.yaml" # (Optional)
+      helm-version: "v3.4.0" # (Optional)
+```
+
+
+# Helm Release
+This workflow will lint all charts, bump the project version according to the `.bumpversion.cfg` file, create releases for all changed charts
+and provide `index.yaml` for all packaged charts as a Github web page.
+
+### Prerequisites
+Your helm charts need to be located inside the `charts` folder of your repository to use this workflow and
+you need a `bumpversion.cfg` file in your root directory. Make sure to set the correct path for the `Chart.yaml` file.
+A minimal configuration could look like this:
+```cfg
+[bumpversion]
+current_version = 0.0.1
+commit = True
+tag = False
+
+[bumpversion:file:charts/my-chart/Chart.yaml]
+search = version: {current_version}
+replace = version: {new_version}
+```
+
+Additionally, you need to create the lint configuration file `.github/lint-config.yaml` and configure it to your liking.
+A minimal configuration could look like this:
 ```yaml
 # check https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml for possible configurations
 target-branch: "main"
 ```
 
-2. Add the following steps to your workflow:
-```yaml
-...
-steps:
-  # check out current repository
-  - uses: actions/checkout@v2
-    with:
-      # this is only needed if your workflow runs on pull_requests
-      fetch-depth: 0
+Moreover, choose a GitHub user who will change, commit, and push the version in your `bumpversion.cfg` file. Make sure to configure
+admin access to the repository for the selected user because admins can still push on the default branch even if there
+is a protection rule in place.
 
-  # check out ci-templates into ./ci-templates
-  - uses: actions/checkout@v2
-    with:
-      repository: "bakdata/ci-templates"
-      path: "ci-templates"
-  
-  # lint all charts
-  - name: Lint helm charts
-    uses: ./ci-templates/helm-lint
-```
-
-# helm release
-This action will lint all charts, bump the version according to the `.bumpversion.cfg` file and create releases for all changed charts. To use this action you need to have a few things setup in the repository:
-
-1. Add a `./github/lint-config.yaml` file with the following content and set `target-branch` to the default branch of your repository:
-```yaml
-# check https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml for possible configurations
-target-branch: "main"
-```
-
-2. Add an empty branch `gh-pages` for the index.yaml to be hosted publically:
-```
+Finally, add an empty branch `gh-pages` for the `index.yaml` to be hosted publically:
+```sh
 git checkout --orphan gh-pages
 git rm --cached .
 git commit -m "Initial commit" --allow-empty
 git push --set-upstream origin gh-pages
 ```
 
-3. Add a `.bumpversion.cfg` file in the root directory of your repository with the following content. Make sure to replace the `CHART_NAME` with the folder name to your chart and `CHART_VERSION` with the current version of your chart found in the `Chart.yaml` file. If you have multiple charts in the same repository just copy the second block multiple times, but be aware that all charts in the same repository need to have the same version:
-```cfg
-[bumpversion]
-current_version = CHART_VERSION
-commit = True
-tag = False
+### Dependencies
+This workflow is built from multiple composite actions listed below:
 
-[bumpversion:file:charts/CHART_NAME/Chart.yaml]
-search = version: {current_version}
-replace = version: {new_version}
-```
+* [helm-lint](https://github.com/bakdata/ci-templates/tree/main/actions/helm-lint)
+* [bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/bump-version)
+* [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
 
-4. Choose a Github user that is going to push the tags and version updates. Create a repository secret for the Github username (`GH_USERNAME`), the Github Email (`GH_EMAIL`) and a personal access token (`GH_TOKEN`) of the user. For the email you can use the no reply github email: `[username]@users.noreply.github.com`. Make sure to configure admin access to the repository for the selected user because admins can still push on the default branch even if there is a protection rule in place.
+### Input Parameters
+| Name              | Required  |             Default Value             |  Type   | Description                                                                                                                              |
+|-------------------|:---------:|:-------------------------------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------------|
+| release-type      |    ✅     |                patch                  | string  | The scope of the release (major, minor or patch)                                                                                         |
+| ref               |    ❌     | The default branch of your repository | string  | The ref name to checkout the repository                                                                                                  |
+| lint-config-path  |    ❌     |      ".github/lint-config.yaml"       | string  | The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml) |
+| python-version    |    ❌     |                "3.10"                 | string  | The python version for bump2version                                                                                                      |
+| helm-version      |    ❌     |               "v3.4.0"                | string  | The helm version                                                                                                                         |
 
-6. Add the following steps to your workflow:
+### Secret Parameters
+These secrets define the GitHub user that pushes the changes of your `bumpversion.cfg` file to the repository. Create a
+repository secret for the GitHub username (`GH_USERNAME`), the GitHub Email (`GH_EMAIL`), and a personal access
+token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the
+email: `[username]@users.noreply.github.com`.
+
+| Name            | Required  | Description                                       |
+|-----------------|:---------:|---------------------------------------------------|
+| github-username |    ✅     | The GitHub username for committing the changes    |
+| github-email    |    ✅     | The GitHub email for committing the changes       |
+| github-token    |    ✅     | The GitHub token for committing the changes       |
+
+### Outputs
+This workflow outputs two variables: The `old-tag` and the `release-tag`. These variables can be used in the future
+jobs (e.g., using the `release-tag` to create GitHub release).
+
+| Name        | Description                                          |
+|-------------|------------------------------------------------------|
+| old-tag     | Defines the old version in your bumpversion.cfg file |
+| release-tag | The bumped version of your project                   |
+
+### Calling the workflow
 ```yaml
-...
-steps:
-  # check out current repository
-  - uses: actions/checkout@v2
-    with:
-      # needed because the releaser scans for chart changes in multiple commits
-      fetch-depth: 0
-      # needed to push the bumped charts
-      persist-credentials: false
-
-  # check out ci-templates repository into ./ci-templates
-  - uses: actions/checkout@v2
-    with:
-      repository: "bakdata/ci-templates"
-      path: "ci-templates"
-  
-  # lint, bump version and release all changed charts
-  - name: Release charts
-      uses: ./ci-templates/helm-release
-      with:
-        githubToken: "${{ secrets.GH_TOKEN }}"
-        githubUsername: "${{ secrets.GH_USERNAME }}"
-        githubEmail: "${{ secrets.GH_EMAIL }}"
-```
-
-## Optional parameters
-You can optionally set the `releaseType` to `major`, `minor` or `patch`. This can also be done via a workflow input:
-```yaml
-name: release
+name: Call this reusable workflow
 
 on:
   workflow_dispatch:
     inputs:
-      releaseType:
-        description: "The type of the release."
+      release-type:
+        description: "The scope of the release (major, minor or patch)."
         default: "patch"
         required: false
 
 jobs:
-  release:
-    runs-on: ubuntu-20.04
-    steps:
-      # check out current repository
-      - uses: actions/checkout@v2
-        with:
-          # needed because the releaser scans for chart changes in multiple commits
-          fetch-depth: 0
-          # needed to push the bumped charts
-          persist-credentials: false
-
-      # check out ci-templates repository into ./ci-templates
-      - uses: actions/checkout@v2
-        with:
-          repository: "bakdata/ci-templates"
-          path: "ci-templates"
-      
-      # lint, bump version and release all changed charts
-      - name: Release charts
-          uses: ./ci-templates/helm-release
-          with:
-            githubToken: "${{ secrets.GH_TOKEN }}"
-            githubUsername: "${{ secrets.GH_USERNAME }}"
-            githubEmail: "${{ secrets.GH_EMAIL }}"
-            releaseType: "${{ github.event.inputs.releaseType }}"
+  call-workflow-passing-data:
+    uses: bakdata/ci-templates/.github/workflows/helm-release.yaml@main
+    with:
+      release-type: "${{ github.event.inputs.release-type }}"
+      ref: "my-awesome-ref" # (Optional)
+      lint-config-path: "my-lint-config.yaml" # (Optional)
+      helm-version: "v3.4.0" # (Optional)
+      python-version: "3.8" # (Optional)
+    secrets:
+      github-email: "${{ secrets.GH_EMAIL }}"
+      github-username: "${{ secrets.GH_USERNAME }}"
+      github-token: "${{ secrets.GH_TOKEN }}"
 ```
 
-# python-poetry-release
 
+# Python Poetry Release
 This workflow will bump the version of your python project and publish the built project to either TestPyPI or PyPI. In
 the following, you will first find the necessary prerequisite to set up the workflow. Next, you will find the
 documentation of the input, secret, and output parameters. In the end, you find a small example of how to use this
 workflow.
 
-## Prerequisite
-
+### Prerequisites
 Your Python project needs to be set up with poetry and contain a `pyproject.toml` file to use this workflow. Moreover,
 choose a GitHub user who will change, commit, and push the version in your `pyproject.toml` file. Make sure to configure
 admin access to the repository for the selected user because admins can still push on the default branch even if there
 is a protection rule in place.
 
-## Dependencies
-
+### Dependencies
 This workflow is built from multiple composite actions listed below:
 
 * [python-poetry-bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-bump-version)
 * [python-poetry-release](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-release)
 * [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
 
-## Input Parameters
-
-| Name              | Required |             Default Value             |  Type   | Description                                                                                                                        |
-|-------------------|:--------:|:-------------------------------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------|
+### Input Parameters
+| Name              | Required  |             Default Value             |  Type   | Description                                                                                                                        |
+|-------------------|:---------:|:-------------------------------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------|
 | release-type      |    ✅     |                   -                   | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values  |
 | ref               |    ❌     | The default branch of your repository | string  | The ref name to checkout the repository                                                                                            |
 | publish-to-test   |    ❌     |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                      |
-| python-version    |    ❌     |                "3.10"                 | string  | The python version for setting up poetry.                                                                                          |
-| poetry-version    |    ❌     |               "1.1.12"                | string  | The poetry version to be installed.                                                                                                |
-| working-directory |    ❌     |                 "./"                  | string  | The working directory of your Python package.                                                                                      |
+| python-version    |    ❌     |                "3.10"                 | string  | The python version for setting up poetry                                                                                           |
+| poetry-version    |    ❌     |               "1.1.12"                | string  | The poetry version to be installed                                                                                                 |
+| working-directory |    ❌     |                 "./"                  | string  | The working directory of your Python package                                                                                       |
 
-## Secret Parameters
-
+### Secret Parameters
 These secrets define the GitHub user that pushes the changes of your `pyproject.toml` file to the repository. Create a
 repository secret for the GitHub username (`GH_USERNAME`), the GitHub Email (`GH_EMAIL`), and a personal access
 token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the
@@ -174,8 +178,7 @@ email: `[username]@users.noreply.github.com`.
 | github-token    |    ✅     | The GitHub token for committing the changes       |
 | pypi-token      |    ✅     | The (test) PyPI api token for publishing packages |
 
-## Outputs
-
+### Outputs
 This workflow outputs two variables: The `old-tag` and the `release-tag`. These variables can be used in the future
 jobs (e.g., using the `release-tag` to create GitHub release).
 
@@ -184,8 +187,7 @@ jobs (e.g., using the `release-tag` to create GitHub release).
 | old-tag     | Defines the old version in your pyproject.toml file |
 | release-tag | The bumped version of your project                  |
 
-## Calling the workflow
-
+### Calling the workflow
 ```yaml
 name: Call this reusable workflow
 
@@ -215,4 +217,3 @@ jobs:
     steps:
       - run: echo Bumped Version from ${{ needs.call-workflow-passing-data.outputs.old-tag }} to ${{ needs.call-workflow-passing-data.outputs.release-tag }}
 ```
-
