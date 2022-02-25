@@ -75,6 +75,8 @@ jobs:
 
   helm-release:
     runs-on: ubuntu-20.04
+    needs: helm-lint
+
     # Map the job outputs to step outputs
     outputs:
       release-tag: ${{ steps.release-tag.outputs.release-tag }}
