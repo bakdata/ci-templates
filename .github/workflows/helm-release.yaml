@@ -1,0 +1,105 @@
+name: Reusable workflow for building and publishing helm charts on Github pages
+
+on:
+  workflow_call:
+    inputs:
+      release-type:
+        description: "Scope of the release (major, minor or patch)."
+        required: true
+        type: string
+      ref:
+        description: "The ref name to checkout the repository."
+        required: false
+        default: ${{ github.event.repository.default_branch }}
+        type: string
+      chart-directory:
+        description: "The parent directory of all charts in this repository."
+        default: "charts"
+        required: false
+        type: string
+      lint-config-path:
+        description: "The path to the lint configuration file (See https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml)."
+        required: false
+        default: ".github/lint-config.yaml"
+        type: string
+      python-version:
+        description: "The python version for bump2version."
+        required: false
+        default: "3.10"
+        type: string
+      helm-version:
+        description: "The helm version for setting up poetry."
+        required: false
+        default: "v3.4.0"
+        type: string
+    secrets:
+      github-username:
+        description: "The GitHub username for committing the changes."
+        required: true
+      github-email:
+        description: "The GitHub email for committing the changes."
+        required: true
+      github-token:
+        description: "The GitHub token for committing the changes."
+        required: true
+
+    # Map the workflow outputs to job outputs
+    outputs:
+      release-tag:
+        description: "The release tag."
+        value: ${{ jobs.create-release.outputs.release-tag }}
+      old-tag:
+        description: "The old tag."
+        value: ${{ jobs.create-release.outputs.old-tag }}
+
+jobs:
+  create-release:
+    runs-on: ubuntu-20.04
+    # Map the job outputs to step outputs
+    outputs:
+      release-tag: ${{ steps.release-tag.outputs.release-tag }}
+      old-tag: ${{ steps.release-tag.outputs.old-tag }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.ref }}
+          # fetch-depth: 0
+          # persist-credentials: false
+      
+      - name: Set up Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: "${{ inputs.helm-version }}"
+
+      - name: Lint helm chart
+        uses: bakdata/ci-templates/actions/helm-lint@main
+        with:
+          lintConfig: "${{ inputs.lint-config-path }}"
+
+      - name: Bump version
+        if: success()
+        id: release-tag
+        uses: bakdata/ci-templates/actions/bump-version@main
+        with:
+          release-type: ${{ inputs.release-type }}
+          python-version: ${{ inputs.python-version }}
+      
+      - name: Commit and push bumpversion.cfg file
+        if: success()
+        uses: bakdata/ci-templates/actions/commit-and-push@main
+        with:
+          ref: ${{ inputs.ref }}
+          commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
+
+      - name: Run chart-releaser
+        if: success()
+        uses: helm/chart-releaser-action@v1.2.1
+        with:
+          charts_dir: "${{ inputs.chart-directory }}"
+        env:
+          CR_TOKEN: "${{ secrets.github-token }}"

@@ -1,6 +1,135 @@
+# helm-lint
+To use this action you need to have a few things setup in the repository:
+
+1. Add a `./github/lint-config.yaml` file with the following content and set the target branch to the default branch of your repository:
+```yaml
+# check https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml for possible configurations
+target-branch: "main"
+```
+
+2. Add the following steps to your workflow:
+```yaml
+...
+steps:
+  # check out current repository
+  - uses: actions/checkout@v2
+    with:
+      # this is only needed if your workflow runs on pull_requests
+      fetch-depth: 0
+
+  # check out ci-templates into ./ci-templates
+  - uses: actions/checkout@v2
+    with:
+      repository: "bakdata/ci-templates"
+      path: "ci-templates"
+  
+  # lint all charts
+  - name: Lint helm charts
+    uses: ./ci-templates/helm-lint
+```
+
+# helm release
+This action will lint all charts, bump the version according to the `.bumpversion.cfg` file and create releases for all changed charts. To use this action you need to have a few things setup in the repository:
+
+1. Add a `./github/lint-config.yaml` file with the following content and set `target-branch` to the default branch of your repository:
+```yaml
+# check https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml for possible configurations
+target-branch: "main"
+```
+
+2. Add an empty branch `gh-pages` for the index.yaml to be hosted publically:
+```
+git checkout --orphan gh-pages
+git rm --cached .
+git commit -m "Initial commit" --allow-empty
+git push --set-upstream origin gh-pages
+```
+
+3. Add a `.bumpversion.cfg` file in the root directory of your repository with the following content. Make sure to replace the `CHART_NAME` with the folder name to your chart and `CHART_VERSION` with the current version of your chart found in the `Chart.yaml` file. If you have multiple charts in the same repository just copy the second block multiple times, but be aware that all charts in the same repository need to have the same version:
+```cfg
+[bumpversion]
+current_version = CHART_VERSION
+commit = True
+tag = False
+
+[bumpversion:file:charts/CHART_NAME/Chart.yaml]
+search = version: {current_version}
+replace = version: {new_version}
+```
+
+4. Choose a Github user that is going to push the tags and version updates. Create a repository secret for the Github username (`GH_USERNAME`), the Github Email (`GH_EMAIL`) and a personal access token (`GH_TOKEN`) of the user. For the email you can use the no reply github email: `[username]@users.noreply.github.com`. Make sure to configure admin access to the repository for the selected user because admins can still push on the default branch even if there is a protection rule in place.
+
+6. Add the following steps to your workflow:
+```yaml
+...
+steps:
+  # check out current repository
+  - uses: actions/checkout@v2
+    with:
+      # needed because the releaser scans for chart changes in multiple commits
+      fetch-depth: 0
+      # needed to push the bumped charts
+      persist-credentials: false
+
+  # check out ci-templates repository into ./ci-templates
+  - uses: actions/checkout@v2
+    with:
+      repository: "bakdata/ci-templates"
+      path: "ci-templates"
+  
+  # lint, bump version and release all changed charts
+  - name: Release charts
+      uses: ./ci-templates/helm-release
+      with:
+        githubToken: "${{ secrets.GH_TOKEN }}"
+        githubUsername: "${{ secrets.GH_USERNAME }}"
+        githubEmail: "${{ secrets.GH_EMAIL }}"
+```
+
+## Optional parameters
+You can optionally set the `releaseType` to `major`, `minor` or `patch`. This can also be done via a workflow input:
+```yaml
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseType:
+        description: "The type of the release."
+        default: "patch"
+        required: false
+
+jobs:
+  release:
+    runs-on: ubuntu-20.04
+    steps:
+      # check out current repository
+      - uses: actions/checkout@v2
+        with:
+          # needed because the releaser scans for chart changes in multiple commits
+          fetch-depth: 0
+          # needed to push the bumped charts
+          persist-credentials: false
+
+      # check out ci-templates repository into ./ci-templates
+      - uses: actions/checkout@v2
+        with:
+          repository: "bakdata/ci-templates"
+          path: "ci-templates"
+      
+      # lint, bump version and release all changed charts
+      - name: Release charts
+          uses: ./ci-templates/helm-release
+          with:
+            githubToken: "${{ secrets.GH_TOKEN }}"
+            githubUsername: "${{ secrets.GH_USERNAME }}"
+            githubEmail: "${{ secrets.GH_EMAIL }}"
+            releaseType: "${{ github.event.inputs.releaseType }}"
+```
+
 # python-poetry-release
 
-This action will bump the version of your python project and publish the built project to either TestPyPI or PyPI. In
+This workflow will bump the version of your python project and publish the built project to either TestPyPI or PyPI. In
 the following, you will first find the necessary prerequisite to set up the workflow. Next, you will find the
 documentation of the input, secret, and output parameters. In the end, you find a small example of how to use this
 workflow.
