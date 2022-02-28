@@ -1,5 +1,5 @@
 name: "Lint helm chart"
-description: "Lint all helm charts in the chart directory"
+description: "Lint all helm charts in the charts directory of a repository"
 inputs:
   lint-config-path:
     description: "The path to the lint configuration file (See https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml)."
