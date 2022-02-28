@@ -24,6 +24,7 @@ runs:
       uses: actions/checkout@v2
       with:
         ref: "${{ inputs.ref }}"
+        # fetch-depth of 2 needed for comparison of helm charts between commits while linting
         fetch-depth: 2
 
     - name: Set up Helm
