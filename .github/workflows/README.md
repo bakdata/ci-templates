@@ -1,43 +1,7 @@
 # Workflow Templates
 The following workflows can be found here:
-* [Helm Lint](https://github.com/bakdata/ci-templates/tree/feature/helm-release-workflow/.github/workflows#helm-lint)
 * [Helm Release](https://github.com/bakdata/ci-templates/tree/feature/helm-release-workflow/.github/workflows#helm-release)
 * [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/feature/helm-release-workflow/.github/workflows#python-poetry-release)
-
-## Helm Lint
-This workflow will lint your helm chart project.
-
-### Prerequisite
-Your helm charts need to be located inside the `charts` folder of your repository to use this workflow. Additionally,
-you need to create the lint configuration file `.github/lint-config.yaml` and configure it to your liking
-(For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml).
-
-### Dependencies
-This workflow is built with the following composite action:
-* [helm-lint](https://github.com/bakdata/ci-templates/tree/main/actions/helm-lint)
-
-### Input Parameters
-| Name              | Required  |             Default Value             |  Type   | Description                                                                                                                              |
-|-------------------|:---------:|:-------------------------------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------------|
-| ref               |    ❌     | The default branch of your repository | string  | The ref name to checkout the repository                                                                                                  |
-| lint-config-path  |    ❌     |      ".github/lint-config.yaml"       | string  | The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml) |
-| helm-version      |    ❌     |               "v3.4.0"                | string  | The helm version                                                                                                                         |
-
-### Calling the workflow
-```yaml
-name: Call this reusable workflow
-
-on: [push, pull_request]
-
-jobs:
-  call-workflow-passing-data:
-    uses: bakdata/ci-templates/.github/workflows/helm-lint.yaml@main
-    with:
-      ref: "my-awesome-ref" # (Optional)
-      lint-config-path: "my-lint-config.yaml" # (Optional)
-      helm-version: "v3.4.0" # (Optional)
-```
-
 
 ## Helm Release
 This workflow will lint all charts, bump the project version according to the `.bumpversion.cfg` file, create releases for all changed charts

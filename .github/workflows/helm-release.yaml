@@ -52,17 +52,6 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ inputs.ref }}
-          fetch-depth: 2
-
-      - name: Set up Helm
-        uses: azure/setup-helm@v1
-        with:
-          version: "${{ inputs.helm-version }}"
-
       - name: Lint helm chart
         uses: bakdata/ci-templates/actions/helm-lint@feature/helm-release-workflow
         with:

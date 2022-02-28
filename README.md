@@ -21,12 +21,8 @@ The composite actions only work if you check them out into the `ci-templates` fo
 ```yaml
 ...
 steps:
-  # check out current repository
-  - uses: actions/checkout@v2
-
-  # check out ci-templates into ./ci-templates
-  - uses: actions/checkout@v2
+  - uses: bakdata/ci-templates/actions/my-action@main
     with:
-      repository: "bakdata/ci-templates"
-      path: "ci-templates"
+      foo: bar
+...
 ```
