@@ -13,34 +13,20 @@ target-branch: "main"
 ## Input Parameters
 | Name              | Required  |             Default Value             |  Type   | Description                                                                                                                              |
 |-------------------|:---------:|:-------------------------------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------------|
+| ref               |    ❌     | The default branch of your repository | string  | The ref name to checkout the repository                                                                                                  |
 | lint-config-path  |    ❌     |      ".github/lint-config.yaml"       | string  | The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml) |
+| helm-version      |    ❌     |               "v3.4.0"                | string  | The helm version                                                                                                                         |
 
 ## Usage
 
 ```yaml
 ...
 steps:
-  # check out current repository
-  - uses: actions/checkout@v2
-    with:
-      # this is only needed if your workflow runs on pull_requests
-      fetch-depth: 0
-
-  # check out ci-templates into ./ci-templates
-  - uses: actions/checkout@v2
-    with:
-      repository: "bakdata/ci-templates"
-      path: "ci-templates"
-
-  # set up helm
-  - uses: azure/setup-helm@v1
-    with:
-      version: "v3.4.0"
-  
-  # lint all charts
   - name: Lint helm charts
-    uses: ./ci-templates/helm-lint
+    uses: bakdata/ci-templates/actions/helm-lint@main
     with:
+      ref: "my-awesome-ref" # (Optional)
       lint-config-path: "my-lint-config.yaml" # (Optional)
+      helm-version: "v3.4.0" # (Optional)
 ...
 ```

@@ -20,11 +20,17 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: List directories
+      run: ls -lisa
+    
     - name: Check out repository
       uses: actions/checkout@v2
       with:
         ref: "${{ inputs.ref }}"
         fetch-depth: 2
+    
+    - name: List directories
+      run: ls -lisa
 
     - name: Set up Helm
       uses: azure/setup-helm@v1
