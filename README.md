@@ -11,7 +11,7 @@ jobs:
   call-workflow-passing-data:
     uses: bakdata/ci-templates/.github/workflows/my-workflow.yaml@main
     with:
-      var1: foo
+      foo: bar
 ...
 ```
 
