@@ -6,11 +6,6 @@ inputs:
     required: false
     default: ".github/lint-config.yaml"
     type: string
-  helm-version:
-    description: "The helm version for setting up poetry."
-    required: false
-    default: "v3.4.0"
-    type: string
 runs:
   using: "composite"
   steps:

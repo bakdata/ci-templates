@@ -14,7 +14,6 @@ target-branch: "main"
 | Name              | Required  |             Default Value             |  Type   | Description                                                                                                                              |
 |-------------------|:---------:|:-------------------------------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------------|
 | lint-config-path  |    ❌     |      ".github/lint-config.yaml"       | string  | The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml) |
-| helm-version      |    ❌     |               "v3.4.0"                | string  | The helm version                                                                                                                         |
 
 ## Usage
 
@@ -32,6 +31,11 @@ steps:
     with:
       repository: "bakdata/ci-templates"
       path: "ci-templates"
+
+  # Set up helm
+  - uses: azure/setup-helm@v1
+    with:
+      version: "v3.4.0"
   
   # lint all charts
   - name: Lint helm charts
