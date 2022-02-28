@@ -41,7 +41,7 @@ jobs:
 
 ## Helm Release
 This workflow will lint all charts, bump the project version according to the `.bumpversion.cfg` file, create releases for all changed charts
-and provide `index.yaml` for all packaged charts as a Github web page.
+and provide an `index.yaml` for all packaged charts as a Github web page.
 
 ### Prerequisites
 Your helm charts need to be located inside the `charts` folder of your repository to use this workflow and
