@@ -18,7 +18,7 @@ is a protection rule in place.
 ## Input Parameters
 | Name              | Required  |             Default Value             |  Type   | Description                                        |
 |-------------------|:---------:|:-------------------------------------:|:-------:|----------------------------------------------------|
-| release-type      |    ✅     |                patch                  | string  | The scope of the release (major, minor or patch)   |
+| release-type      |    ✅     |                  -                    | string  | The scope of the release (major, minor or patch)   |
 | python-version    |    ❌     |                "3.10"                 | string  | The python version for bump2version                |
 
 ### Outputs
