@@ -19,7 +19,6 @@ is a protection rule in place.
 | Name              | Required  |             Default Value             |  Type   | Description                                        |
 |-------------------|:---------:|:-------------------------------------:|:-------:|----------------------------------------------------|
 | release-type      |    ✅     |                  -                    | string  | The scope of the release (major, minor or patch)   |
-| python-version    |    ❌     |                "3.10"                 | string  | The python version for bump2version                |
 
 ### Outputs
 This action outputs the following variables:
@@ -43,11 +42,15 @@ steps:
       repository: "bakdata/ci-templates"
       path: "ci-templates"
   
+  # set up python
+  - uses: actions/setup-python@v2
+    with:
+      python-version: "${{ inputs.python-version }}"
+  
   # bump the version of your project
   - name: Bump version
       uses: ./ci-templates/bump-version
       with:
         release-type: "patch"
-        python-version: "3.10"
 ...
 ```

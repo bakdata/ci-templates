@@ -6,11 +6,6 @@ inputs:
     description: "The type of the release (major, minor or patch)."
     required: true
     type: string
-  python-version:
-    description: "The python version for setting up poetry."
-    required: false
-    default: "3.10"
-    type: string
 
 outputs:
   release-tag:
@@ -23,11 +18,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Set up python
-      uses: actions/setup-python@v2
-      with:
-        python-version: "${{ inputs.python-version }}"
-
     - name: Set up bump2version
       run: pip install --no-cache-dir bump2version
       shell: bash

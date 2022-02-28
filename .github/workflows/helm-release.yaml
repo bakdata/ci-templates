@@ -83,13 +83,17 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
       
+      - name: Set up python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "${{ inputs.python-version }}"
+      
       - name: Bump version
         if: success()
         id: release-tag
         uses: bakdata/ci-templates/actions/bump-version@feature/helm-release-workflow
         with:
           release-type: ${{ inputs.release-type }}
-          python-version: ${{ inputs.python-version }}
       
       - name: Commit and push bumpversion.cfg file
         if: success()

@@ -32,7 +32,7 @@ steps:
       repository: "bakdata/ci-templates"
       path: "ci-templates"
 
-  # Set up helm
+  # set up helm
   - uses: azure/setup-helm@v1
     with:
       version: "v3.4.0"
@@ -40,5 +40,7 @@ steps:
   # lint all charts
   - name: Lint helm charts
     uses: ./ci-templates/helm-lint
+    with:
+      lint-config-path: "my-lint-config.yaml" # (Optional)
 ...
 ```
