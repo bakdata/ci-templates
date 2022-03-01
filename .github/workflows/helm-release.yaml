@@ -82,10 +82,6 @@ jobs:
         uses: bakdata/ci-templates/actions/bump-version@feature/helm-release-workflow
         with:
           release-type: ${{ inputs.release-type }}
-      
-      - name: Test
-        run: exit 1
-        shell: bash
 
       - name: Commit and push bumpversion.cfg file
         uses: bakdata/ci-templates/actions/commit-and-push@feature/helm-release-workflow
