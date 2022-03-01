@@ -78,14 +78,16 @@ jobs:
           python-version: "${{ inputs.python-version }}"
       
       - name: Bump version
-        if: success()
         id: release-tag
         uses: bakdata/ci-templates/actions/bump-version@feature/helm-release-workflow
         with:
           release-type: ${{ inputs.release-type }}
       
+      - name: Test
+        run: exit 1
+        shell: bash
+
       - name: Commit and push bumpversion.cfg file
-        if: success()
         uses: bakdata/ci-templates/actions/commit-and-push@feature/helm-release-workflow
         with:
           ref: ${{ inputs.ref }}
@@ -95,7 +97,6 @@ jobs:
           github-token: ${{ secrets.github-token }}
 
       - name: Run chart-releaser
-        if: success()
         uses: helm/chart-releaser-action@v1.2.1
         with:
           charts_dir: "charts"
