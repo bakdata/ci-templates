@@ -24,8 +24,9 @@ runs:
       uses: actions/checkout@v2
       with:
         ref: "${{ inputs.ref }}"
-        # fetch-depth of 2 needed for comparison of helm charts between commits while linting
-        fetch-depth: 2
+        # fetch-depth of 0 is needed for the comparison of helm charts from the HEAD of the current
+        # branch to the HEAD of the default branch (one or multiple commits in between)
+        fetch-depth: 0
 
     - name: Set up Helm
       uses: azure/setup-helm@v1
@@ -35,12 +36,16 @@ runs:
     - name: Set up chart-testing
       uses: helm/chart-testing-action@v2.0.1
 
+    # On the default branch we want to lint helm charts when they have changed compared
+    # to the previous commit (HEAD^) and on any other branch we lint helm charts
+    # when there are changes in comparison to the HEAD of the default branch 
+    # (see --target-branch and --since in https://github.com/helm/chart-testing/blob/main/doc/ct_lint.md)
     - name: Run chart-testing (lint)
       run: |
         if [[ "${GITHUB_REF#refs/heads/}" == "main" || "${GITHUB_REF#refs/heads/}" == "master" ]]; then
           ct lint --config ${{ inputs.lint-config-path }} --since HEAD^
         else
           echo "${{ github.event.repository.default_branch }}"
-          ct lint --config ${{ inputs.lint-config-path }} --since "refs/heads/${{ github.event.repository.default_branch }}"
+          ct lint --config ${{ inputs.lint-config-path }}
         fi
       shell: bash
