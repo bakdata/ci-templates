@@ -53,7 +53,7 @@ jobs:
 
     steps:
       - name: Lint helm chart
-        uses: bakdata/ci-templates/actions/helm-lint@feature/helm-release-workflow
+        uses: bakdata/ci-templates/actions/helm-lint@main
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
 
@@ -79,12 +79,12 @@ jobs:
       
       - name: Bump version
         id: release-tag
-        uses: bakdata/ci-templates/actions/bump-version@feature/helm-release-workflow
+        uses: bakdata/ci-templates/actions/bump-version@main
         with:
           release-type: ${{ inputs.release-type }}
 
       - name: Commit and push bumpversion.cfg file
-        uses: bakdata/ci-templates/actions/commit-and-push@feature/helm-release-workflow
+        uses: bakdata/ci-templates/actions/commit-and-push@main
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"

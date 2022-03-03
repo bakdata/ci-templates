@@ -1,7 +1,7 @@
 # Workflow Templates
 The following workflows can be found here:
-* [Helm Release](https://github.com/bakdata/ci-templates/tree/feature/helm-release-workflow/.github/workflows#helm-release)
-* [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/feature/helm-release-workflow/.github/workflows#python-poetry-release)
+* [Helm Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-release)
+* [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
 
 ## Helm Release
 This workflow will lint all charts, bump the project version according to the `.bumpversion.cfg` file, create releases for all changed charts
