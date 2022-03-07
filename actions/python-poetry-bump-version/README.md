@@ -16,6 +16,7 @@ This action uses another composite action listed below:
 | release-type      |    ✅     |       -       | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values  |
 | python-version    |    ❌     |     3.10      | number  | The python version for setting up poetry.                                                                                          |
 | poetry-version    |    ❌     |    1.1.12     | number  | The poetry version to be installed.                                                                                                |
+| working-directory |    ❌     |       .       | The root directory of the poetry project. |
 
 ## Output Parameters
 
