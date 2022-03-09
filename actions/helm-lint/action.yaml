@@ -45,7 +45,6 @@ runs:
         if [[ "${GITHUB_REF#refs/heads/}" == "main" || "${GITHUB_REF#refs/heads/}" == "master" ]]; then
           ct lint --config ${{ inputs.lint-config-path }} --since HEAD^
         else
-          echo "${{ github.event.repository.default_branch }}"
           ct lint --config ${{ inputs.lint-config-path }}
         fi
       shell: bash
