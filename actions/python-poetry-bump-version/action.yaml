@@ -13,6 +13,10 @@ inputs:
     description: "The poetry version to be installed."
     required: false
     default: "1.1.12"
+  working-directory:
+    description: "The root directory of the poetry project."
+    required: false
+    default: "."
 
 outputs:
   release-tag:
@@ -30,6 +34,7 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: ${{ inputs.poetry-version }}
+        working-directory: ${{ inputs.working-directory }}
 
     # Update the pyproject.toml version. Versioning format for dev packages: X.Y.Z
     # For more information visit: https://www.python.org/dev/peps/pep-0440/#semantic-versioning
@@ -41,3 +46,4 @@ runs:
         poetry version ${{ inputs.release-type }}
         echo ::set-output name=newTag::$(poetry version -s)
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
