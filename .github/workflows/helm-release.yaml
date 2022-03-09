@@ -1,0 +1,100 @@
+name: Reusable workflow for building and publishing helm charts on Github pages
+
+on:
+  workflow_call:
+    inputs:
+      release-type:
+        description: "Scope of the release (major, minor or patch)."
+        required: true
+        type: string
+      ref:
+        description: "The ref name to checkout the repository."
+        required: false
+        default: ${{ github.event.repository.default_branch }}
+        type: string
+      lint-config-path:
+        description: "The path to the lint configuration file (See https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml)."
+        required: false
+        default: ".github/lint-config.yaml"
+        type: string
+      python-version:
+        description: "The python version for bump2version."
+        required: false
+        default: "3.10"
+        type: string
+      helm-version:
+        description: "The helm version."
+        required: false
+        default: "v3.4.0"
+        type: string
+    secrets:
+      github-username:
+        description: "The GitHub username for committing the changes."
+        required: true
+      github-email:
+        description: "The GitHub email for committing the changes."
+        required: true
+      github-token:
+        description: "The GitHub token for committing the changes."
+        required: true
+
+    # Map the workflow outputs to job outputs
+    outputs:
+      release-tag:
+        description: "The release tag."
+        value: ${{ jobs.create-release.outputs.release-tag }}
+      old-tag:
+        description: "The old tag."
+        value: ${{ jobs.create-release.outputs.old-tag }}
+
+jobs:
+  helm-lint:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Lint helm chart
+        uses: bakdata/ci-templates/actions/helm-lint@main
+        with:
+          lint-config-path: "${{ inputs.lint-config-path }}"
+
+  helm-release:
+    runs-on: ubuntu-20.04
+    needs: helm-lint
+
+    # Map the job outputs to step outputs
+    outputs:
+      release-tag: ${{ steps.release-tag.outputs.release-tag }}
+      old-tag: ${{ steps.release-tag.outputs.old-tag }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.ref }}
+      
+      - name: Set up python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "${{ inputs.python-version }}"
+      
+      - name: Bump version
+        id: release-tag
+        uses: bakdata/ci-templates/actions/bump-version@main
+        with:
+          release-type: ${{ inputs.release-type }}
+
+      - name: Commit and push bumpversion.cfg file
+        uses: bakdata/ci-templates/actions/commit-and-push@main
+        with:
+          ref: ${{ inputs.ref }}
+          commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.2.1
+        with:
+          charts_dir: "charts"
+        env:
+          CR_TOKEN: "${{ secrets.github-token }}"

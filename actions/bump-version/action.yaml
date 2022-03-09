@@ -1,40 +1,31 @@
 name: "Bump version"
 description: "Bump version with python bump2version using .bumpversion.cfg"
+
 inputs:
-  githubToken:
-    description: "The personal access token for pushing."
+  release-type:
+    description: "The type of the release (major, minor or patch)."
     required: true
-  githubUsername:
-    description: "The github username for pushing."
-    required: true
-  githubEmail:
-    description: "The github email for pushing."
-    required: true
-  releaseType:
-    description: "The type of the release."
-    default: "patch"
-    required: false
+    type: string
+
+outputs:
+  release-tag:
+    description: "The bumped version."
+    value: ${{ steps.release-tag.outputs.newTag }}
+  old-tag:
+    description: "The old version"
+    value: ${{ steps.release-tag.outputs.oldTag }}
+
 runs:
   using: "composite"
   steps:
-    - name: Configure git
-      run: ./ci-templates/git-setup.sh "${{ inputs.githubUsername }}" "${{ inputs.githubEmail }}"
-      shell: bash
-
-    - name: Set up python
-      uses: actions/setup-python@v2
-      with:
-        python-version: "3.8"
-
     - name: Set up bump2version
       run: pip install --no-cache-dir bump2version
       shell: bash
 
     - name: Bump version
-      run: ./ci-templates/bump-version/bumpversion.sh "${{ inputs.releaseType }}"
+      id: release-tag
+      run: |
+        echo ::set-output name=oldTag::$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")
+        bump2version ${{ inputs.release-type }} --no-commit
+        echo ::set-output name=newTag::$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")
       shell: bash
-
-    - name: Git push
-      uses: ad-m/github-push-action@8407731efefc0d8f72af254c74276b7a90be36e1
-      with:
-        github_token: "${{ inputs.githubToken }}"
