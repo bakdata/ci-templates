@@ -1,0 +1,50 @@
+name: "Destroy helm chart"
+description: "Deploy a helm chart from the GKE cluster"
+inputs:
+  gke-service-account-key:
+    description: "GKE service account key for authentication"
+    required: true
+  gke-project-id:
+    description: "GKE project id for authentication"
+    required: true
+  gke-region:
+    description: "GKE region for authentication"
+    required: true
+  gke-cluster:
+    description: "GKE cluster for authentication"
+    required: true
+  release-name:
+    description: "Helm release name"
+    required: true
+  namespace:
+    description: "K8s namespace to deploy in"
+    required: true
+  gcloud-sdk-version:
+    description: "GCloud SDK version for authentication"
+    default: "376.0.0"
+    required: false
+  kubectl-version:
+    description: "Kubectl version"
+    default: "v1.23.0"
+    required: false
+  helm-version:
+    description: "Helm version"
+    default: "v3.8.1"
+    required: false 
+runs:
+  using: "composite"
+  steps:
+    - name: Setup environment
+      uses: uses: bakdata/ci-templates/actions/helm-setup@v1.0.0
+      with:
+        gke-service-account-key: ${{ inputs.gke-service-account-key }}
+        gke-project-id: ${{ inputs.gke-project-id }}
+        gke-region: ${{ inputs.gke-region }}
+        gke-cluster: ${{ inputs.gke-cluster }}
+        gcloud-sdk-version: ${{ inputs.gcloud-sdk-version }}
+        kubectl-version: ${{ inputs.kubectl-version }}
+        helm-version: ${{ inputs.helm-version }}
+
+    - name: Destroy helm chart
+      shell: bash
+      run: helm delete --namespace ${{ inputs.namespace }} ${{ inputs.release-name }}

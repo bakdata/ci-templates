@@ -1,0 +1,61 @@
+name: "Setup environment"
+description: "Setup GKE environment for Kubernetes deployments"
+inputs:
+  gke-service-account-key:
+    description: "GKE service account key for authentication"
+    required: true
+  gke-project-id:
+    description: "GKE project id for authentication"
+    required: true
+  gke-region:
+    description: "GKE region for authentication"
+    required: true
+  gke-cluster:
+    description: "GKE cluster for authentication"
+    required: true
+  gcloud-sdk-version:
+    description: "GCloud SDK version for authentication"
+    default: "376.0.0"
+    required: false
+  kubectl-version:
+    description: "Kubectl version"
+    default: "v1.23.0"
+    required: false
+  helm-version:
+    description: "Helm version"
+    default: "v3.8.1"
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Setup python
+      uses: actions/setup-python@v1
+      with:
+        python-version: "3.10.0"
+
+    - name: Setup GCloud SDK
+      uses: google-github-actions/setup-gcloud@v0.6.0
+      with:
+        version: ${{ gcloud-sdk-version }}
+        project_id: ${{ inputs.gke-project-id }}
+        service_account_key: ${{ inputs.gke-service-account-key }}
+        export_default_credentials: true
+
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v1
+      with:
+        version: ${{ inputs.kubectl-version }}
+
+    - name: Setup authentication
+      shell: bash
+      run: |
+        gcloud container clusters get-credentials "$GKE_CLUSTER" --region "$GKE_REGION" --project "$GKE_PROJECT"
+      env:
+        GKE_REGION: ${{ inputs.gke-region }}
+        GKE_CLUSTER: ${{ inputs.gke-cluster }}
+        GKE_PROJECT: ${{ inputs.gke-project-id }}
+
+    - name: Install Helm
+      uses: azure/setup-helm@v1
+      with:
+        version: ${{ inputs.helm-version }}
