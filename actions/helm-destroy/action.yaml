@@ -4,7 +4,7 @@ inputs:
   gke-service-account-key:
     description: "GKE service account key for authentication"
     required: true
-  gke-project-id:
+  gke-project:
     description: "GKE project id for authentication"
     required: true
   gke-region:
@@ -38,7 +38,7 @@ runs:
       uses: uses: bakdata/ci-templates/actions/helm-setup@feature/helm-deploy-destroy-workflows
       with:
         gke-service-account-key: ${{ inputs.gke-service-account-key }}
-        gke-project-id: ${{ inputs.gke-project-id }}
+        gke-project: ${{ inputs.gke-project }}
         gke-region: ${{ inputs.gke-region }}
         gke-cluster: ${{ inputs.gke-cluster }}
         gcloud-sdk-version: ${{ inputs.gcloud-sdk-version }}

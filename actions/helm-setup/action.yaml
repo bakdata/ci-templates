@@ -4,7 +4,7 @@ inputs:
   gke-service-account-key:
     description: "GKE service account key for authentication"
     required: true
-  gke-project-id:
+  gke-project:
     description: "GKE project id for authentication"
     required: true
   gke-region:
@@ -37,7 +37,7 @@ runs:
       uses: google-github-actions/setup-gcloud@v0.6.0
       with:
         version: ${{ gcloud-sdk-version }}
-        project_id: ${{ inputs.gke-project-id }}
+        project_id: ${{ inputs.gke-project }}
         service_account_key: ${{ inputs.gke-service-account-key }}
         export_default_credentials: true
 
@@ -53,7 +53,7 @@ runs:
       env:
         GKE_REGION: ${{ inputs.gke-region }}
         GKE_CLUSTER: ${{ inputs.gke-cluster }}
-        GKE_PROJECT: ${{ inputs.gke-project-id }}
+        GKE_PROJECT: ${{ inputs.gke-project }}
 
     - name: Install Helm
       uses: azure/setup-helm@v1
