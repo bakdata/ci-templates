@@ -35,7 +35,7 @@ runs:
   using: "composite"
   steps:
     - name: Setup environment
-      uses: uses: bakdata/ci-templates/actions/helm-setup@v1.0.0
+      uses: uses: bakdata/ci-templates/actions/helm-setup@feature/helm-deploy-destroy-workflows
       with:
         gke-service-account-key: ${{ inputs.gke-service-account-key }}
         gke-project-id: ${{ inputs.gke-project-id }}
