@@ -37,7 +37,7 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
 
-    - name: Authenticate with service account
+    - name: Authenticate at GCloud
       uses: 'google-github-actions/auth@v0'
       with:
         credentials_json: ${{ inputs.gke-service-account }}
