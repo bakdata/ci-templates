@@ -19,8 +19,12 @@ inputs:
   namespace:
     description: "K8s namespace to deploy in"
     required: true
+  python-version:
+    description: "Python version"
+    default: "3.10"
+    required: false
   gcloud-sdk-version:
-    description: "GCloud SDK version for authentication"
+    description: "GCloud SDK version"
     default: "376.0.0"
     required: false
   kubectl-version:
@@ -41,6 +45,7 @@ runs:
         gke-project: ${{ inputs.gke-project }}
         gke-region: ${{ inputs.gke-region }}
         gke-cluster: ${{ inputs.gke-cluster }}
+        python-version: ${{ inputs.python-version }}
         gcloud-sdk-version: ${{ inputs.gcloud-sdk-version }}
         kubectl-version: ${{ inputs.kubectl-version }}
         helm-version: ${{ inputs.helm-version }}

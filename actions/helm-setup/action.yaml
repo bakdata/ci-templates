@@ -13,8 +13,12 @@ inputs:
   gke-cluster:
     description: "GKE cluster for authentication"
     required: true
+  python-version:
+    description: "Python version"
+    default: "3.10"
+    required: false
   gcloud-sdk-version:
-    description: "GCloud SDK version for authentication"
+    description: "GCloud SDK version"
     default: "376.0.0"
     required: false
   kubectl-version:
@@ -31,7 +35,7 @@ runs:
     - name: Setup python
       uses: actions/setup-python@v1
       with:
-        python-version: "3.10.0"
+        python-version: ${{ inputs.python-version }}
 
     - name: Setup GCloud SDK
       uses: google-github-actions/setup-gcloud@v0.6.0
