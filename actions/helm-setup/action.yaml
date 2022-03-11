@@ -36,7 +36,7 @@ runs:
     - name: Setup GCloud SDK
       uses: google-github-actions/setup-gcloud@v0.6.0
       with:
-        version: ${{ gcloud-sdk-version }}
+        version: ${{ inputs.gcloud-sdk-version }}
         project_id: ${{ inputs.gke-project }}
         service_account_key: ${{ inputs.gke-service-account-key }}
         export_default_credentials: true
