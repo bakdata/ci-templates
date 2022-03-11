@@ -1,7 +1,7 @@
 name: "Deploy helm chart"
 description: "Deploy a helm chart to the GKE cluster"
 inputs:
-  gke-service-account-key:
+  gke-service-account:
     description: "GKE service account key for authentication"
     required: true
   gke-project:
@@ -52,7 +52,7 @@ runs:
     - name: Setup environment
       uses: bakdata/ci-templates/actions/helm-setup@feature/helm-deploy-destroy-workflows
       with:
-        gke-service-account-key: ${{ inputs.gke-service-account-key }}
+        gke-service-account: ${{ inputs.gke-service-account }}
         gke-project: ${{ inputs.gke-project }}
         gke-region: ${{ inputs.gke-region }}
         gke-cluster: ${{ inputs.gke-cluster }}

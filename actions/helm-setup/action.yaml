@@ -1,7 +1,7 @@
 name: "Setup environment"
 description: "Setup GKE environment for Kubernetes deployments"
 inputs:
-  gke-service-account-key:
+  gke-service-account:
     description: "GKE service account key for authentication"
     required: true
   gke-project:
@@ -38,7 +38,7 @@ runs:
       with:
         version: ${{ inputs.gcloud-sdk-version }}
         project_id: ${{ inputs.gke-project }}
-        service_account_key: ${{ inputs.gke-service-account-key }}
+        service_account_key: ${{ inputs.gke-service-account }}
         export_default_credentials: true
 
     - name: Install kubectl
