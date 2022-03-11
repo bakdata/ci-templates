@@ -53,6 +53,9 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
     - name: Setup environment
       uses: bakdata/ci-templates/actions/helm-setup@feature/helm-deploy-destroy-workflows
       with:
