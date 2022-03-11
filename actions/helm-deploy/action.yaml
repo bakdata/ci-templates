@@ -78,6 +78,10 @@ runs:
       env:
         REPOSITORY_NAME: ${{ inputs.repository-name }}
         REPOSITORY_URL: ${{ inputs.repository-url }}
+    
+    - name: Testing
+      shell: bash
+      run: ls
 
     - name: Deploy helm chart
       shell: bash
