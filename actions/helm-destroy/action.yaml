@@ -1,5 +1,5 @@
 name: "Destroy helm chart"
-description: "Deploy a helm chart from the GKE cluster"
+description: "Destroy a helm chart from the GKE cluster"
 inputs:
   gke-service-account:
     description: "GKE service account key for authentication"

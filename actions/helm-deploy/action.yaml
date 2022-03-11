@@ -13,17 +13,17 @@ inputs:
   gke-cluster:
     description: "GKE cluster for authentication"
     required: true
-  chart:
-    description: "Helm chart to deploy"
-    required: true
-  chart-version:
-    description: "Chart Version"
-    required: true
   release-name:
     description: "Helm release name"
     required: true
   namespace:
     description: "K8s namespace to deploy in"
+    required: true
+  chart:
+    description: "Helm chart to deploy"
+    required: true
+  chart-version:
+    description: "Chart Version"
     required: true
   values-yaml:
     description: "Location of helm's value file"
@@ -81,12 +81,6 @@ runs:
       env:
         REPOSITORY_NAME: ${{ inputs.repository-name }}
         REPOSITORY_URL: ${{ inputs.repository-url }}
-    
-    - name: Testing
-      shell: bash
-      run: |
-        echo "test"
-        ls -lisa
 
     - name: Deploy helm chart
       shell: bash
