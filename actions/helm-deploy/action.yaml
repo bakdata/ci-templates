@@ -81,7 +81,9 @@ runs:
     
     - name: Testing
       shell: bash
-      run: ls
+      run: |
+        echo "test"
+        ls -lisa
 
     - name: Deploy helm chart
       shell: bash
