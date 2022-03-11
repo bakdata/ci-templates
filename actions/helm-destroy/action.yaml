@@ -29,11 +29,11 @@ inputs:
     required: false
   kubectl-version:
     description: "Kubectl version"
-    default: "v1.13.7"
+    default: "v1.23.0"
     required: false
   helm-version:
     description: "Helm version"
-    default: "v3.6.3"
+    default: "v3.8.1"
     required: false 
 runs:
   using: "composite"
