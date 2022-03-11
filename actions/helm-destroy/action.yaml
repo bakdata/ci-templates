@@ -52,4 +52,4 @@ runs:
 
     - name: Destroy helm chart
       shell: bash
-      run: helm delete --namespace ${{ inputs.namespace }} ${{ inputs.release-name }}
+      run: helm uninstall --namespace ${{ inputs.namespace }} ${{ inputs.release-name }}
