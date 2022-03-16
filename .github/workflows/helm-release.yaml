@@ -42,10 +42,10 @@ on:
     outputs:
       release-tag:
         description: "The release tag."
-        value: ${{ jobs.create-release.outputs.release-tag }}
+        value: ${{ jobs.helm-release.outputs.release-tag }}
       old-tag:
         description: "The old tag."
-        value: ${{ jobs.create-release.outputs.old-tag }}
+        value: ${{ jobs.helm-release.outputs.old-tag }}
 
 jobs:
   helm-lint:
