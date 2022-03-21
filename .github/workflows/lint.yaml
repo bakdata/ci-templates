@@ -18,11 +18,3 @@ jobs:
             echo "::add-matcher::.github/actionlint-matcher.json"
             bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash)
             ./actionlint -color
-
-      - run: |
-            TEMP="test fail"
-            echo $TEMP
-
-      - uses: actions/setup-node@v2
-        with:
-          node-ver: 16.x
