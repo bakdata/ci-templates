@@ -87,6 +87,8 @@ runs:
       run: |
         # parse multiple value files if necessary
         if $(echo '${{ inputs.values-yaml }}' | jq -e > /dev/null 2>&1); then
+          echo "Test"
+          echo $(echo '${{ inputs.values-yaml }}' | jq -r '[ .[] | . = "--values \(.)"] | join(" ")')
           helm upgrade --debug --install --wait --timeout 1200s --force \
           --version ${{ inputs.chart-version }} \
           $(echo '${{ inputs.values-yaml }}' | jq -r '[ .[] | . = "--values \(.)"] | join(" ")') \
