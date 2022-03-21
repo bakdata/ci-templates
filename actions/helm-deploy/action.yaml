@@ -25,8 +25,8 @@ inputs:
   chart-version:
     description: "Chart Version"
     required: true
-  values-yaml-file-paths:
-    description: "Location of helm's value files as a json array."
+  values-yaml:
+    description: "File path as string for a single helm value file or as json array for multiple helm value files."
     required: true
   repository-name:
     description: "Helm repository name"
@@ -85,8 +85,16 @@ runs:
     - name: Deploy helm chart
       shell: bash
       run: |
-        helm upgrade --debug --install --wait --timeout 1200s --force \
+        # parse multiple value files if necessary
+        if $(echo '${{ inputs.values-yaml }}' | jq -e > /dev/null 2>&1); then
+          helm upgrade --debug --install --wait --timeout 1200s --force \
           --version ${{ inputs.chart-version }} \
-          $(echo '${{ inputs.values-yaml-file-paths }}' | jq -r '[ .[] | . = "--values \(.)"] | join(" ")') \
+          $(echo '${{ inputs.values-yaml }}' | jq -r '[ .[] | . = "--values \(.)"] | join(" ")') \
           --namespace ${{ inputs.namespace }} \
           ${{ inputs.release-name }} ${{ inputs.chart }}
+        else
+          helm upgrade --debug --install --wait --timeout 1200s --force \
+          --version ${{ inputs.chart-version }} \
+          --values ${{ inputs.values-yaml }} \
+          --namespace ${{ inputs.namespace }} \
+        fi
