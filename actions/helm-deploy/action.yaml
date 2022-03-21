@@ -85,19 +85,8 @@ runs:
     - name: Deploy helm chart
       shell: bash
       run: |
-        # parse multiple value files if necessary
-        if $(echo '${{ inputs.values-yaml }}' | jq -e > /dev/null 2>&1); then
-          echo "Test"
-          echo $(echo '${{ inputs.values-yaml }}' | jq -r '[ .[] | . = "--values \(.)"] | join(" ")')
           helm upgrade --debug --install --wait --timeout 1200s --force \
           --version ${{ inputs.chart-version }} \
           $(echo '${{ inputs.values-yaml }}' | jq -r '[ .[] | . = "--values \(.)"] | join(" ")') \
           --namespace ${{ inputs.namespace }} \
           ${{ inputs.release-name }} ${{ inputs.chart }}
-        else
-          helm upgrade --debug --install --wait --timeout 1200s --force \
-          --version ${{ inputs.chart-version }} \
-          --values ${{ inputs.values-yaml }} \
-          --namespace ${{ inputs.namespace }} \
-          ${{ inputs.release-name }} ${{ inputs.chart }}
-        fi
