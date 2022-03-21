@@ -87,6 +87,6 @@ runs:
       run: |
         helm upgrade --debug --install --wait --timeout 1200s --force \
           --version ${{ inputs.chart-version }} \
-          $(echo '${{ input.values-yaml-file-paths }}' | jq -r '[ .[] | . = "--values \(.)"] | join(" ")') \
+          $(echo '${{ inputs.values-yaml-file-paths }}' | jq -r '[ .[] | . = "--values \(.)"] | join(" ")') \
           --namespace ${{ inputs.namespace }} \
           ${{ inputs.release-name }} ${{ inputs.chart }}
