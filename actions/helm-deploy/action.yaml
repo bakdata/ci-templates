@@ -85,7 +85,7 @@ runs:
     - name: Deploy helm chart
       shell: bash
       run: |
-        if $(echo '["a", "b"]' | jq -e > /dev/null 2>&1); then
+        if $(echo '${{ inputs.values-yaml }}' | jq -e > /dev/null 2>&1); then
           echo "Deploying with multiple value files"
           helm upgrade --debug --install --wait --timeout 1200s --force \
             --version ${{ inputs.chart-version }} \
