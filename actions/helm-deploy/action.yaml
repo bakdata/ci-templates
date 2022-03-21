@@ -97,4 +97,5 @@ runs:
           --version ${{ inputs.chart-version }} \
           --values ${{ inputs.values-yaml }} \
           --namespace ${{ inputs.namespace }} \
+          ${{ inputs.release-name }} ${{ inputs.chart }}
         fi
