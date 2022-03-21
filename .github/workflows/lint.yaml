@@ -22,3 +22,7 @@ jobs:
       - run: |
             TEMP="test fail"
             echo $TEMP
+
+      - uses: actions/setup-node@v2
+        with:
+          node-ver: 16.x
