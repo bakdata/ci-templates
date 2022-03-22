@@ -71,7 +71,7 @@ jobs:
 
       - name: Bump version with poetry
         id: release-tag
-        uses: bakdata/ci-templates/actions/python-poetry-bump-version@main
+        uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.0.0
         with:
           release-type: ${{ inputs.release-type }}
           python-version: ${{ inputs.python-version }}
@@ -79,7 +79,7 @@ jobs:
 
       - name: Release to PyPI
         if: success()
-        uses: bakdata/ci-templates/actions/python-poetry-release@main
+        uses: bakdata/ci-templates/actions/python-poetry-release@v1.0.0
         with:
           pypi-token: ${{ secrets.pypi-token }}
           publish-to-test: ${{ inputs.publish-to-test }}
@@ -89,7 +89,7 @@ jobs:
 
       - name: Commit and push pyproject.toml file
         if: success()
-        uses: bakdata/ci-templates/actions/commit-and-push@main
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.0.0
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"

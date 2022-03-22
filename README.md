@@ -16,7 +16,7 @@ jobs:
 ```
 
 ## Using composite actions
-The composite actions only work if you check them out into the `ci-templates` folder in the root directory. To checkout the repository in a workflow you can use these steps:
+You can use composite actions in this repository like this:
 
 ```yaml
 ...

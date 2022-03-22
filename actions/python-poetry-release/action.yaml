@@ -25,7 +25,7 @@ runs:
   using: "composite"
   steps:
     - name: Set up Poetry with version ${{ inputs.poetry-version }}
-      uses: bakdata/ci-templates/actions/python-setup-poetry@main
+      uses: bakdata/ci-templates/actions/python-setup-poetry@v1.0.0
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: ${{ inputs.poetry-version }}
