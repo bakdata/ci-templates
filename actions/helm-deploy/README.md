@@ -37,7 +37,7 @@ steps:
         gke-cluster: "my-awesome-cluster"
         release-name: "my-release"
         namespace: "my-namespace"
-        chart: 'foo/bar"' # Installs the chart 'bar' from the repository called 'foo'
+        chart: "foo/bar" # Installs the chart 'bar' from the repository called 'foo'
         chart-version: "1.0.0"
         values-yaml: '["bar/values.yaml", "bar/values-1.yaml"]' # or for a single value file just as a string: "bar/values.yaml"
         repository-name: "foo" # optional
