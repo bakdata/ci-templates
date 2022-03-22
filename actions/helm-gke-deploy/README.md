@@ -1,4 +1,4 @@
-# helm-deploy
+# helm-gke-deploy
 This action will deploy a helm chart on a Google Kubernetes Engine cluster.
 
 ## Prerequisites
@@ -29,7 +29,7 @@ Create a `values.yaml` file according to the documentation of the specific helm 
 ...
 steps:
   - name: Deploy helm chart
-      uses: bakdata/ci-templates/actions/helm-deploy@main
+      uses: bakdata/ci-templates/actions/helm-gke-deploy@main
       with:
         gke-service-account: ${{ secrets.GKE_SERVICE_ACCOUNT }}
         gke-project: "my-awesome-project"

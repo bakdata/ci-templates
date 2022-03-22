@@ -1,4 +1,4 @@
-# helm-setup
+# helm-gke-setup
 This action will setup everything necessary to deploy or destroy helm charts on a Google Kubernetes Engine cluster.
 
 ## Input Parameters
@@ -19,7 +19,7 @@ This action will setup everything necessary to deploy or destroy helm charts on 
 ...
 steps:
   - name: Setup environment
-      uses: bakdata/ci-templates/actions/helm-setup@main
+      uses: bakdata/ci-templates/actions/helm-gke-setup@main
       with:
         gke-service-account: ${{ secrets.GKE_SERVICE_ACCOUNT }}
         gke-project: "my-awesome-project"
