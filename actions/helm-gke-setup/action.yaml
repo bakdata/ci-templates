@@ -53,6 +53,12 @@ runs:
       with:
         version: ${{ inputs.kubectl-version }}
 
+    - name: Install kfilt
+      shell: bash
+      run: |
+        curl -L "https://github.com/ryane/kfilt/releases/download/v0.0.7/kfilt_0.0.7_linux_amd64" -o /usr/local/bin/kfilt
+        chmod +x /usr/local/bin/kfilt
+
     - name: Setup authentication
       shell: bash
       run: |
