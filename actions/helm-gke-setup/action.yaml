@@ -53,6 +53,7 @@ runs:
       with:
         version: ${{ inputs.kubectl-version }}
 
+    # TODO: replace by ci runner image
     - name: Install kfilt
       shell: bash
       run: |
