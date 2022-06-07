@@ -25,6 +25,9 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - run: echo "{{ github.run_id }}"
+      shell: bash
+
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
       with:
@@ -43,13 +46,10 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
-    # - name: Run integration tests
-    #   run: ./gradlew check --info -PincludeTests="**/*IntegrationTest*"
-    #   shell: bash
-    #   working-directory: ${{ inputs.working-directory }}
-    
-    - run: echo "{{ github.run_id }}"
+    - name: Run integration tests
+      run: ./gradlew check --info -PincludeTests="**/*IntegrationTest*"
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
     
     # - name: Build Docker image
     #   run: ./gradlew --info jibBuildTar --image=${{ github.event.repository.name }}:{{ github.run_id }} -x test

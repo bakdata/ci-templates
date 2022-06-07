@@ -25,11 +25,9 @@ runs:
       with:
         distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
-        cache: 'gradle'
+        cache: ${{ inputs.gradle-cache }}
 
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
       with:
-        java-version: ${{ inputs.java-version }}
         gradle-version: ${{ inputs.gradle-version }}
-        cache: ${{ inputs.cache }}
