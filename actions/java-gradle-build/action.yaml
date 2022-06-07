@@ -58,7 +58,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
     
     - name: Build Docker image
-      if: inputs.docker-image == true
+      if: ${{ inputs.docker-image  == 'true' }}
       run: ./gradlew --info jibBuildTar --image=${{ github.event.repository.name }}:${{ github.run_id }} -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
