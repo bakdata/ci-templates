@@ -25,7 +25,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: echo "{{ github.run_id }}"
+    - run: echo "${{ github.run_id }}"
       shell: bash
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
