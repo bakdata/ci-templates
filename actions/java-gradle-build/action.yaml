@@ -1,0 +1,53 @@
+name: "Build Java artifacts"
+description: "Build Java artifacts using gradle"
+
+inputs:
+  java-distribution:
+    description: "The java distribution to be installed. (Default is temurin)"
+    required: false
+    default: "temurin"
+  java-version:
+    description: "The java version to be installed. (Default is 11)"
+    required: false
+    default: "11"
+  gradle-version:
+    description: "The gradle version to be installed. (Default is 6.7.1)"
+    required: false
+    default: "6.7.1"
+  gradle-cache:
+    description: "The cache to use. Options are gradle, maven, sbt. (Default is gradle)"
+    required: false
+    default: "gradle"
+  working-directory:
+    description: "The working directory of your Gradle artifacts. (Default is root directory)"
+    required: false
+    default: "./"
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Gradle with version ${{ inputs.gradle-version }}
+      uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
+      with:
+        java-distribution: ${{ inputs.java-distribution }}
+        java-version: ${{ inputs.java-version }}
+        gradle-version: ${{ inputs.gradle-version }}
+        gradle-cache: ${{ inputs.gradle-cache }}
+
+    - name: Compile
+      run: ./gradlew --info --stacktrace assemble
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+    
+    - name: Run test
+      run: ./gradlew --info --stacktrace build
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+    
+    - run: echo "{{ github.run_id }}"
+      shell: bash
+    
+    # - name: Build Docker image
+    #   run: ./gradlew --info jibBuildTar --image=${{ github.event.repository.name }}:{{ github.run_id }} -x test
+    #   shell: bash
+    #   working-directory: ${{ inputs.working-directory }}
+    

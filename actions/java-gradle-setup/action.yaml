@@ -1,0 +1,35 @@
+name: "Setup gradle"
+description: "Build Java artifacts using gradle"
+
+inputs:
+  java-distribution:
+    description: "The java distribution to be installed. (Default is temurin)"
+    required: false
+    default: "temurin"
+  java-version:
+    description: "The java version to be installed. (Default is 11)"
+    required: false
+    default: "11"
+  gradle-version:
+    description: "The gradle version to be installed. (Default is 6.7.1)"
+    required: false
+    default: "6.7.1"
+  gradle-cache:
+    description: "The cache to use. Options are gradle, maven, sbt. (Default is gradle)"
+    required: false
+    default: "gradle"
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-java@v3
+      with:
+        distribution: ${{ inputs.java-distribution }}
+        java-version: ${{ inputs.java-version }}
+        cache: 'gradle'
+
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        java-version: ${{ inputs.java-version }}
+        gradle-version: ${{ inputs.gradle-version }}
+        cache: ${{ inputs.cache }}
