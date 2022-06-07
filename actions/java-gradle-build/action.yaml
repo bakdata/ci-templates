@@ -34,12 +34,12 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
 
     - name: Compile
-      run: ./gradlew --info --stacktrace assemble
+      run: ./gradlew assemble
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
-    - name: Run test
-      run: ./gradlew --info --stacktrace build
+    - name: Run tests
+      run: ./gradlew build
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
