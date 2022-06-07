@@ -15,9 +15,17 @@ inputs:
     required: false
     default: "6.7.1"
   gradle-cache:
-    description: "The cache to use. Options are gradle, maven, sbt. (Default is gradle)"
+    description: "The gradle cache to use. Options are gradle, maven, sbt. (Default is gradle)"
     required: false
     default: "gradle"
+  integration-tests:
+    description: "If true, the action is executing integration tests (Default is true)"
+    required: false
+    default: true
+  docker-image:
+    description: "If true, the action is building a docker image with jib (Default is false)"
+    required: false
+    default: false
   working-directory:
     description: "The working directory of your Gradle artifacts. (Default is root directory)"
     required: false
@@ -25,9 +33,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: echo "${{ github.run_id }}"
-      shell: bash
-
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
       with:
@@ -47,12 +52,13 @@ runs:
       working-directory: ${{ inputs.working-directory }}
     
     - name: Run integration tests
+      if: inputs.integration-tests == true
       run: ./gradlew check --info -PincludeTests="**/*IntegrationTest*"
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
-    # - name: Build Docker image
-    #   run: ./gradlew --info jibBuildTar --image=${{ github.event.repository.name }}:{{ github.run_id }} -x test
-    #   shell: bash
-    #   working-directory: ${{ inputs.working-directory }}
-    
+    - name: Build Docker image
+      if: inputs.docker-image == true
+      run: ./gradlew --info jibBuildTar --image=${{ github.event.repository.name }}:${{ github.run_id }} -x test
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
