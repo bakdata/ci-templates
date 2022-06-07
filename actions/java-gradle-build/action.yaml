@@ -34,14 +34,19 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
 
     - name: Compile
-      run: ./gradlew assemble
+      run: ./gradlew --info assemble
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
-    - name: Run tests
-      run: ./gradlew build
+    - name: Run unit tests
+      run: ./gradlew check --info -PexcludeTests="**/*IntegrationTest*"
       shell: bash
       working-directory: ${{ inputs.working-directory }}
+    
+    # - name: Run integration tests
+    #   run: ./gradlew check --info -PincludeTests="**/*IntegrationTest*"
+    #   shell: bash
+    #   working-directory: ${{ inputs.working-directory }}
     
     - run: echo "{{ github.run_id }}"
       shell: bash
