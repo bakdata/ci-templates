@@ -22,7 +22,7 @@ inputs:
     description: "If true, the action is executing integration tests (Default is true)"
     required: false
     default: true
-  docker-image:
+  docker:
     description: "If true, the action is building a docker image with jib (Default is false)"
     required: false
     default: false
@@ -58,7 +58,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
     
     - name: Build Docker image
-      if: ${{ inputs.docker-image  == 'true' }}
+      if: ${{ inputs.docker  == 'true' }}
       run: ./gradlew --info jibBuildTar --image=${{ github.event.repository.name }}:${{ github.run_id }} -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
