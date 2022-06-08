@@ -2,6 +2,9 @@ name: "Build Java artifacts"
 description: "Build Java artifacts using gradle"
 
 inputs:
+  sonar-token:
+    description: "The token for sonarcloud."
+    required: true
   java-distribution:
     description: "The java distribution to be installed. (Default is temurin)"
     required: false
