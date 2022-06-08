@@ -15,9 +15,9 @@ inputs:
     required: false
     default: "6.7.1"
   gradle-cache:
-    description: "The cache to use. Options are gradle, maven, sbt. (Default is gradle)"
+    description: "The cache to use. Options are gradle, maven, sbt. (Default is '')"
     required: false
-    default: "gradle"
+    default: ""
 runs:
   using: "composite"
   steps:
