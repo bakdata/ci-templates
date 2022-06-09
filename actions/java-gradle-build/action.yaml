@@ -78,13 +78,13 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
-    # - name: Assess code quality
-    #   run: ./gradlew -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=bakdata --info --stacktrace sonarqube
-    #   shell: bash
-    #   working-directory: ${{ inputs.working-directory }}
-    #   env:
-    #     GITHUB_TOKEN: ${{ inputs.github-token }}
-    #     SONAR_TOKEN: ${{ inputs.sonar-token }}
+    - name: Assess code quality
+      run: ./gradlew -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=bakdata --info --stacktrace sonarqube
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        SONAR_TOKEN: ${{ inputs.sonar-token }}
 
     - name: Check if everything builds (incl. javadoc) for snapshot/release and signing works
       run: ./gradlew --info --stacktrace signSonatypePublication
