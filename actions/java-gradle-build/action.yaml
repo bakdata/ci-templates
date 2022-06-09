@@ -8,6 +8,15 @@ inputs:
   sonar-token:
     description: "The token for sonarcloud."
     required: true
+  signing-secret-key-ring-file:
+    description: "The key ring file for signing the sonatype publication."
+    required: true
+  signing-key-id:
+    description: "The key id for signing the sonatype publication."
+    required: true
+  signing-password:
+    description: "The password for signing the sonatype publication."
+    required: true
   java-distribution:
     description: "The java distribution to be installed. (Default is temurin)"
     required: false
@@ -69,10 +78,20 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
-    - name: Assess code quality
-      run: ./gradlew -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=bakdata --info --stacktrace sonarqube
+    # - name: Assess code quality
+    #   run: ./gradlew -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=bakdata --info --stacktrace sonarqube
+    #   shell: bash
+    #   working-directory: ${{ inputs.working-directory }}
+    #   env:
+    #     GITHUB_TOKEN: ${{ inputs.github-token }}
+    #     SONAR_TOKEN: ${{ inputs.sonar-token }}
+
+    - name: Check if everything builds (incl. javadoc) for snapshot/release and signing works
+      run: ./gradlew --info --stacktrace signSonatypePublication
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
-        SONAR_TOKEN: ${{ inputs.sonar-token }}
+        SIGNING_SECRET_KEY_RING_FILE: ${{ inputs.signing-secret-key-ring-file }}
+        SIGNING_KEY_ID: ${{ inputs.signing-key-id }}
+        SIGNING_PASSWORD: ${{ inputs.signing-password }}
+  
