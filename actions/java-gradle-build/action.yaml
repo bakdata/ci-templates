@@ -86,12 +86,11 @@ runs:
         GITHUB_TOKEN: ${{ inputs.github-token }}
         SONAR_TOKEN: ${{ inputs.sonar-token }}
 
-    - name: Check if everything builds (incl. javadoc) for snapshot/release and signing works
-      run: ./gradlew --info --stacktrace signSonatypePublication
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-      env:
-        SIGNING_SECRET_KEY_RING_FILE: ${{ inputs.signing-secret-key-ring-file }}
-        SIGNING_KEY_ID: ${{ inputs.signing-key-id }}
-        SIGNING_PASSWORD: ${{ inputs.signing-password }}
-  
+    # - name: Check if everything builds (incl. javadoc) for snapshot/release and signing works
+    #   run: ./gradlew --info --stacktrace signSonatypePublication
+    #   shell: bash
+    #   working-directory: ${{ inputs.working-directory }}
+    #   env:
+    #     SIGNING_SECRET_KEY_RING_FILE: ${{ inputs.signing-secret-key-ring-file }}
+    #     SIGNING_KEY_ID: ${{ inputs.signing-key-id }}
+    #     SIGNING_PASSWORD: ${{ inputs.signing-password }}
