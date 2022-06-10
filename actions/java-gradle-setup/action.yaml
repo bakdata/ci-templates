@@ -9,7 +9,7 @@ inputs:
   java-version:
     description: "The java version to be installed. (Default is 11)"
     required: false
-    default: "11"
+    default: "1.11"
   gradle-version:
     description: "The gradle version to be installed. (Default is 6.7.1)"
     required: false
