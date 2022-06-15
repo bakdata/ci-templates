@@ -77,6 +77,11 @@ runs:
     #   run: ./gradlew --info jibBuildTar --image=${{ github.event.repository.name }}:${{ github.run_id }} -x test
     #   shell: bash
     #   working-directory: ${{ inputs.working-directory }}
+
+    - name: Test
+      run: git status
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
     
     - name: Assess code quality
       run: ./gradlew -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=bakdata --info --stacktrace sonarqube
