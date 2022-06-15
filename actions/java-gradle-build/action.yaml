@@ -84,7 +84,6 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
-        #GITHUB_TOKEN: ${{ inputs.github-token }}
         SONAR_TOKEN: ${{ inputs.sonar-token }}
 
     - name: Check if everything builds (incl. javadoc) for snapshot/release and signing works
