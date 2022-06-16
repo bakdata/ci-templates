@@ -90,30 +90,30 @@ jobs:
           signing-key-id: ${{ secrets.signing-key-id }}
           signing-password: ${{ secrets.signing-password }}
     
-    publish:
-      name: Publish
-      runs-on: ubuntu-22.04
+  publish:
+    name: Publish
+    runs-on: ubuntu-22.04
 
-      steps:
-        - name: Check out repository
-          uses: actions/checkout@v2
-          with:
-            fetch-depth: 0
-        
-        - name: Set up Gradle with version ${{ inputs.gradle-version }}
-          uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
-          with:
-            java-distribution: ${{ inputs.java-distribution }}
-            java-version: ${{ inputs.java-version }}
-            gradle-version: ${{ inputs.gradle-version }}
-            gradle-cache: ${{ inputs.gradle-cache }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Gradle with version ${{ inputs.gradle-version }}
+        uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
+        with:
+          java-distribution: ${{ inputs.java-distribution }}
+          java-version: ${{ inputs.java-version }}
+          gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
 
-        # - name: Publish
-        #   uses: bakdata/ci-templates/actions/java-gradle-build@feature/java-gradle
-        #   with:
-        #     integration-tests: true
-        #     docker: true
-        #     sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
-        #     signing-secret-key-ring-file: ${{ secrets.SIGNING_SECRET_KEY_RING_FILE }}
-        #     signing-key-id: ${{ secrets.SIGNING_KEY_ID }}
-        #     signing-password: ${{ secrets.SIGNING_PASSWORD }}
+      # - name: Publish
+      #   uses: bakdata/ci-templates/actions/java-gradle-build@feature/java-gradle
+      #   with:
+      #     integration-tests: true
+      #     docker: true
+      #     sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
+      #     signing-secret-key-ring-file: ${{ secrets.SIGNING_SECRET_KEY_RING_FILE }}
+      #     signing-key-id: ${{ secrets.SIGNING_KEY_ID }}
+      #     signing-password: ${{ secrets.SIGNING_PASSWORD }}
