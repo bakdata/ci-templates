@@ -93,6 +93,7 @@ jobs:
   publish:
     name: Publish
     runs-on: ubuntu-22.04
+    needs: build
 
     steps:
       - name: Check out repository
