@@ -115,11 +115,11 @@ jobs:
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
 
-      - name: Publish
-        uses: bakdata/ci-templates/actions/java-gradle-publish@feature/java-gradle
-        with:
-          signing-secret-key-ring-file: ${{ secrets.signing-secret-key-ring-file }}
-          signing-key-id: ${{ secrets.signing-key-id }}
-          signing-password: ${{ secrets.signing-password }}
-          osshr-username: ${{ secrets.osshr-username }}
-          osshr-password: ${{ secrets.osshr-password }}
+      # - name: Publish
+      #   uses: bakdata/ci-templates/actions/java-gradle-publish@feature/java-gradle
+      #   with:
+      #     signing-secret-key-ring-file: ${{ secrets.signing-secret-key-ring-file }}
+      #     signing-key-id: ${{ secrets.signing-key-id }}
+      #     signing-password: ${{ secrets.signing-password }}
+      #     osshr-username: ${{ secrets.osshr-username }}
+      #     osshr-password: ${{ secrets.osshr-password }}
