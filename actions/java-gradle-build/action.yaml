@@ -14,22 +14,6 @@ inputs:
   signing-password:
     description: "The password for signing the sonatype publication."
     required: true
-  java-distribution:
-    description: "The java distribution to be installed. (Default is temurin)"
-    required: false
-    default: "temurin"
-  java-version:
-    description: "The java version to be installed. (Default is 11)"
-    required: false
-    default: "11"
-  gradle-version:
-    description: "The gradle version to be installed. (Default is 6.7.1)"
-    required: false
-    default: "6.7.1"
-  gradle-cache:
-    description: "The gradle cache to use. Options are gradle, maven, sbt. (Default is gradle)"
-    required: false
-    default: "gradle"
   integration-tests:
     description: "If true, the action is executing integration tests (Default is true)"
     required: false
@@ -45,14 +29,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
-      with:
-        java-distribution: ${{ inputs.java-distribution }}
-        java-version: ${{ inputs.java-version }}
-        gradle-version: ${{ inputs.gradle-version }}
-        gradle-cache: ${{ inputs.gradle-cache }}
-
     - name: Compile
       run: ./gradlew --info --stacktrace assemble
       shell: bash

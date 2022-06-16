@@ -1,0 +1,112 @@
+name: Reusable workflow for building and publishing java gradle artifacts
+
+on:
+  workflow_call:
+    inputs:
+      java-distribution:
+        description: "The java distribution to be installed. (Default is temurin)"
+        required: false
+        default: "temurin"
+      java-version:
+        description: "The java version to be installed. (Default is 11)"
+        required: false
+        default: "11"
+      gradle-version:
+        description: "The gradle version to be installed. (Default is 6.7.1)"
+        required: false
+        default: "6.7.1"
+      gradle-cache:
+        description: "The gradle cache to use. Options are gradle, maven, sbt. (Default is gradle)"
+        required: false
+        default: "gradle"
+      integration-tests:
+        description: "If true, the action is executing integration tests (Default is true)"
+        required: false
+        default: true
+      docker:
+        description: "If true, the action is building a docker image with jib (Default is false)"
+        required: false
+        default: false
+      working-directory:
+        description: "The working directory of your Gradle artifacts. (Default is root directory)"
+        required: false
+        default: "./"
+    secrets:
+      sonar-token:
+        description: "The token for sonarcloud."
+        required: true
+      signing-secret-key-ring-file:
+        description: "The key ring file for signing the sonatype publication."
+        required: true
+      signing-key-id:
+        description: "The key id for signing the sonatype publication."
+        required: true
+      signing-password:
+        description: "The password for signing the sonatype publication."
+        required: true
+
+    # Map the workflow outputs to job outputs
+    # outputs:
+    #   release-tag:
+    #     description: "The release tag."
+    #     value: ${{ jobs.helm-release.outputs.release-tag }}
+    #   old-tag:
+    #     description: "The old tag."
+    #     value: ${{ jobs.helm-release.outputs.old-tag }}
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Gradle with version ${{ inputs.gradle-version }}
+        uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
+        with:
+          java-distribution: ${{ inputs.java-distribution }}
+          java-version: ${{ inputs.java-version }}
+          gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
+
+      - name: Build
+        uses: bakdata/ci-templates/actions/java-gradle-build@feature/java-gradle
+        with:
+          integration-tests: true
+          docker: true
+          sonar-token: ${{ secrets.sonar-token }}
+          signing-secret-key-ring-file: ${{ secrets.signing-secret-key-ring-file }}
+          signing-key-id: ${{ secrets.signing-key-id }}
+          signing-password: ${{ secrets.signing-password }}
+    
+    publish:
+      name: Publish
+      runs-on: ubuntu-22.04
+
+      steps:
+        - name: Check out repository
+          uses: actions/checkout@v2
+          with:
+            fetch-depth: 0
+        
+        - name: Set up Gradle with version ${{ inputs.gradle-version }}
+          uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
+          with:
+            java-distribution: ${{ inputs.java-distribution }}
+            java-version: ${{ inputs.java-version }}
+            gradle-version: ${{ inputs.gradle-version }}
+            gradle-cache: ${{ inputs.gradle-cache }}
+
+        # - name: Publish
+        #   uses: bakdata/ci-templates/actions/java-gradle-build@feature/java-gradle
+        #   with:
+        #     integration-tests: true
+        #     docker: true
+        #     sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
+        #     signing-secret-key-ring-file: ${{ secrets.SIGNING_SECRET_KEY_RING_FILE }}
+        #     signing-key-id: ${{ secrets.SIGNING_KEY_ID }}
+        #     signing-password: ${{ secrets.SIGNING_PASSWORD }}

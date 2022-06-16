@@ -2,12 +2,6 @@ name: "Publish Java artifacts"
 description: "Publish Java artifacts using gradle"
 
 inputs:
-  github-token:
-    description: "The token for github access."
-    required: true
-  sonar-token:
-    description: "The token for sonarcloud."
-    required: true
   java-distribution:
     description: "The java distribution to be installed. (Default is temurin)"
     required: false
@@ -24,14 +18,6 @@ inputs:
     description: "The gradle cache to use. Options are gradle, maven, sbt. (Default is gradle)"
     required: false
     default: "gradle"
-  integration-tests:
-    description: "If true, the action is executing integration tests (Default is true)"
-    required: false
-    default: true
-  docker:
-    description: "If true, the action is building a docker image with jib (Default is false)"
-    required: false
-    default: false
   working-directory:
     description: "The working directory of your Gradle artifacts. (Default is root directory)"
     required: false
