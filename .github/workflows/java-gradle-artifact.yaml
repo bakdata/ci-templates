@@ -51,6 +51,12 @@ on:
       signing-password:
         description: "The password for signing the sonatype publication."
         required: true
+      osshr-username:
+        description: "The username for signing into sonatype repository."
+        required: true
+      osshr-password:
+        description: "The password for signing into sonatype repository."
+        required: true
 
     # Map the workflow outputs to job outputs
     # outputs:
@@ -109,12 +115,11 @@ jobs:
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
 
-      # - name: Publish
-      #   uses: bakdata/ci-templates/actions/java-gradle-build@feature/java-gradle
-      #   with:
-      #     integration-tests: true
-      #     docker: true
-      #     sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
-      #     signing-secret-key-ring-file: ${{ secrets.SIGNING_SECRET_KEY_RING_FILE }}
-      #     signing-key-id: ${{ secrets.SIGNING_KEY_ID }}
-      #     signing-password: ${{ secrets.SIGNING_PASSWORD }}
+      - name: Publish
+        uses: bakdata/ci-templates/actions/java-gradle-publish@feature/java-gradle
+        with:
+          signing-secret-key-ring-file: ${{ secrets.signing-secret-key-ring-file }}
+          signing-key-id: ${{ secrets.signing-key-id }}
+          signing-password: ${{ secrets.signing-password }}
+          osshr-username: ${{ secrets.osshr-username }}
+          osshr-password: ${{ secrets.osshr-password }}
