@@ -2,9 +2,6 @@ name: "Build Java artifacts"
 description: "Build Java artifacts using gradle"
 
 inputs:
-  github-token:
-    description: "The token for github access."
-    required: true
   sonar-token:
     description: "The token for sonarcloud."
     required: true
