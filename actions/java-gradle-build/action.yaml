@@ -57,24 +57,24 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
 
     - name: Compile
-      run: ./gradlew --info assemble
+      run: ./gradlew --info --stacktrace assemble
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
     - name: Run unit tests
-      run: ./gradlew check --info -PexcludeTests="**/*IntegrationTest*"
+      run: ./gradlew check --info --stacktrace -PexcludeTests="**/*IntegrationTest*"
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
     - name: Run integration tests
       if: ${{ inputs.integration-tests  == 'true' }}
-      run: ./gradlew check --info -PincludeTests="**/*IntegrationTest*"
+      run: ./gradlew check --info --stacktrace -PincludeTests="**/*IntegrationTest*"
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
     - name: Build Docker image
       if: ${{ inputs.docker  == 'true' }}
-      run: ./gradlew --info jibBuildTar --image=${{ github.event.repository.name }}:${{ github.run_id }} -x test
+      run: ./gradlew --info --stacktrace jibBuildTar --image=${{ github.event.repository.name }}:${{ github.run_id }} -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
