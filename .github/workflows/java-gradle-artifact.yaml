@@ -42,7 +42,7 @@ on:
       sonar-token:
         description: "The token for sonarcloud."
         required: true
-      signing-secret-key-ring-file:
+      signing-secret-key-ring:
         description: "The key ring file for signing the sonatype publication."
         required: true
       signing-key-id:
@@ -92,7 +92,7 @@ jobs:
           integration-tests: true
           docker: true
           sonar-token: ${{ secrets.sonar-token }}
-          signing-secret-key-ring-file: ${{ secrets.signing-secret-key-ring-file }}
+          signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
           signing-password: ${{ secrets.signing-password }}
     
@@ -118,7 +118,7 @@ jobs:
       - name: Publish
         uses: bakdata/ci-templates/actions/java-gradle-publish@feature/java-gradle
         with:
-          signing-secret-key-ring-file: ${{ secrets.signing-secret-key-ring-file }}
+          signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
           signing-password: ${{ secrets.signing-password }}
           osshr-username: ${{ secrets.osshr-username }}

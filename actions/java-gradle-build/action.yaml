@@ -5,7 +5,7 @@ inputs:
   sonar-token:
     description: "The token for sonarcloud."
     required: true
-  signing-secret-key-ring-file:
+  signing-secret-key-ring:
     description: "The key ring file for signing the sonatype publication."
     required: true
   signing-key-id:
