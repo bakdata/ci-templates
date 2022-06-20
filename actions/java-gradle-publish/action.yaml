@@ -39,4 +39,3 @@ runs:
         OSSRH_USERNAME: ${{ inputs.ossrh-username }}
         OSSRH_PASSWORD: ${{ inputs.ossrh-password }}
         CI: true
-
