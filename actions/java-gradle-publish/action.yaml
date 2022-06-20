@@ -26,7 +26,14 @@ runs:
   steps:
     - name: Publish to Nexus
       run: |
+        echo "SIGNING_SECRET_KEY_RING_FILE: $SIGNING_SECRET_KEY_RING_FILE"
+        echo "SIGNING_KEY_ID: $SIGNING_KEY_ID"
+        echo "SIGNING_PASSWORD: $SIGNING_PASSWORD"
+        echo "OSSRH_USERNAME: $OSSRH_USERNAME"
+        echo "OSSRH_PASSWORD: $OSSRH_PASSWORD"
+        echo "CI: $CI"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > secring.gpg
+        cat $SIGNING_SECRET_KEY_RING_FILE
         ./gradlew --info --stacktrace publishToNexus
       shell: bash
       working-directory: ${{ inputs.working-directory }}
