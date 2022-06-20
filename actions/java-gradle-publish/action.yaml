@@ -25,10 +25,7 @@ runs:
   using: "composite"
   steps:
     - name: Prepare environment
-      run: |
-        echo '-----BEGIN PGP PRIVATE KEY BLOCK-----\n' > secring.gpg
-        echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > secring.gpg
-        echo '\n-----END PGP PRIVATE KEY BLOCK-----' > secring.gpg
+      run: echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > secring.gpg
       shell: bash
 
     - name: Publish to Nexus
