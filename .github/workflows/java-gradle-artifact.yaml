@@ -122,4 +122,4 @@ jobs:
           signing-key-id: ${{ secrets.signing-key-id }}
           signing-password: ${{ secrets.signing-password }}
           ossrh-username: ${{ secrets.ossrh-username }}
-          ossrh-password: ${{ secrets.ossrb-password }}
+          ossrh-password: ${{ secrets.ossrh-password }}
