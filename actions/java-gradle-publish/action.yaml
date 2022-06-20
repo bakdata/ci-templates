@@ -25,7 +25,7 @@ runs:
   using: "composite"
   steps:
     - name: Prepare environment
-      run: secho '${{ inputs.signing-secret-key-ring }}' | base64 -d > 'secring.gpg'
+      run: echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > 'secring.gpg'
       shell: bash
 
     - name: Publish to Nexus
