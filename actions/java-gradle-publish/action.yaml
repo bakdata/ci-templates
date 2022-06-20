@@ -17,6 +17,10 @@ inputs:
   ossrh-password:
     description: "The password for signing into sonatype repository."
     required: true
+  docker:
+    description: "If true, the action is publishing a docker image with jib (Default is false)"
+    required: false
+    default: false
   working-directory:
     description: "The working directory of your Gradle artifacts. (Default is root directory)"
     required: false
@@ -26,14 +30,7 @@ runs:
   steps:
     - name: Publish to Nexus
       run: |
-        echo "SIGNING_SECRET_KEY_RING_FILE: $SIGNING_SECRET_KEY_RING_FILE"
-        echo "SIGNING_KEY_ID: $SIGNING_KEY_ID"
-        echo "SIGNING_PASSWORD: $SIGNING_PASSWORD"
-        echo "OSSRH_USERNAME: $OSSRH_USERNAME"
-        echo "OSSRH_PASSWORD: $OSSRH_PASSWORD"
-        echo "CI: $CI"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > secring.gpg
-        cat $SIGNING_SECRET_KEY_RING_FILE
         ./gradlew --info --stacktrace publishToNexus
       shell: bash
       working-directory: ${{ inputs.working-directory }}
@@ -44,3 +41,17 @@ runs:
         OSSRH_USERNAME: "${{ inputs.ossrh-username }}"
         OSSRH_PASSWORD: "${{ inputs.ossrh-password }}"
         CI: true
+
+    - name: Build Docker image
+      if: ${{ inputs.docker  == 'true' }}
+      run: docker load --input 
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: Publish docker
+      if: ${{ inputs.docker  == 'true' }}
+      run: |
+        echo "${{ inputs.DOCKER_PASSWORD }}" | docker login -u "${{ inputs.DOCKER_USERNAME }}" --password-stdin
+        docker push ${{ inputs.DOCKER_PUBLISHER }}/${{ github.event.repository.name }}:${{ github.run_id }}
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
