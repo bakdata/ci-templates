@@ -24,15 +24,10 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Prepare sonatype environment
+    - name: Publish to Nexus
       run: |
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > secring.gpg
-        cat secring.gpg
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-
-    - name: Publish to Nexus
-      run: ./gradlew --info --stacktrace publishToNexus
+        ./gradlew --info --stacktrace publishToNexus
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:

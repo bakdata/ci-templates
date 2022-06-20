@@ -59,12 +59,10 @@ runs:
       env:
         SONAR_TOKEN: ${{ inputs.sonar-token }}
 
-    - name: Prepare sonatype environment
-      run: echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > secring.gpg
-      shell: bash
-
     - name: Check if everything builds (incl. javadoc) for snapshot/release and signing works
-      run: ./gradlew --info --stacktrace signSonatypePublication
+      run: |
+        echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > secring.gpg
+        ./gradlew --info --stacktrace signSonatypePublication
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
