@@ -51,10 +51,10 @@ on:
       signing-password:
         description: "The password for signing the sonatype publication."
         required: true
-      osshr-username:
+      ossrh-username:
         description: "The username for signing into sonatype repository."
         required: true
-      osshr-password:
+      ossrh-password:
         description: "The password for signing into sonatype repository."
         required: true
 
@@ -121,5 +121,5 @@ jobs:
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
           signing-password: ${{ secrets.signing-password }}
-          osshr-username: ${{ secrets.osshr-username }}
-          osshr-password: ${{ secrets.osshr-password }}
+          ossrh-username: ${{ secrets.ossrh-username }}
+          ossrh-password: ${{ secrets.ossrb-password }}
