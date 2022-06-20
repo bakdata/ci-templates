@@ -2,7 +2,7 @@ name: "Publish Java artifacts"
 description: "Publish Java artifacts using gradle"
 
 inputs:
-  signing-secret-key-ring-file:
+  signing-secret-key-ring-contents:
     description: "The key ring file for signing the sonatype publication."
     required: true
   signing-key-id:
@@ -24,7 +24,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: echo ${{ inputs.signing-secret-key-ring-file }} > ./secret-key-ring
+    - name: Prepare environment
+      run: secho '${{ inputs.signing-secret-key-ring-contents }}' | base64 -d > 'secring.gpg'
       shell: bash
 
     - name: Publish to Nexus
@@ -32,7 +33,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
-        SIGNING_SECRET_KEY_RING_FILE: ./secret-key-ring
+        SIGNING_SECRET_KEY_RING_FILE: ./secring.gpg
         SIGNING_KEY_ID: ${{ inputs.signing-key-id }}
         SIGNING_PASSWORD: ${{ inputs.signing-password }}
         OSSRH_USERNAME: ${{ inputs.ossrh-username }}
