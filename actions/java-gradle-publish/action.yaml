@@ -11,7 +11,7 @@ inputs:
   signing-password:
     description: "The password for signing the sonatype publication."
     required: true
-  osshr-username:
+  ossrh-username:
     description: "The username for signing into sonatype repository."
     required: true
   ossrh-password:
