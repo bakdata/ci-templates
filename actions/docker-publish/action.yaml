@@ -40,7 +40,7 @@ runs:
     
     - name: Publish docker image
       run: |
-        if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) <> 1 ]]; then
+        if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
           >&2 echo "Error: A single image tar file is needed in the downloaded pipeline artifact. You can upload one before using this action, see https://github.com/actions/upload-artifact."
           exit 1
         fi

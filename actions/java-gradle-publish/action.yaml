@@ -17,8 +17,24 @@ inputs:
   ossrh-password:
     description: "Password for signing into sonatype repository."
     required: true
+  java-distribution:
+    description: "Java distribution to be installed. (Default is temurin)"
+    required: false
+    default: "temurin"
+  java-version:
+    description: "Java version to be installed. (Default is 11)"
+    required: false
+    default: "11"
+  gradle-version:
+    description: "Gradle version to be installed. (Default is 6.7.1)"
+    required: false
+    default: "6.7.1"
+  gradle-cache:
+    description: "Cache to use. Options are gradle, maven, sbt. (Default is '')"
+    required: false
+    default: ""
   working-directory:
-    description: "The working directory of your Gradle artifacts. (Default is root directory)."
+    description: "Working directory of your Gradle artifacts. (Default is root directory)"
     required: false
     default: "./"
 runs:
