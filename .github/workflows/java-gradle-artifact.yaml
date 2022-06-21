@@ -31,6 +31,7 @@ on:
       docker-publisher:
         description: "Publisher to prefix docker image."
         required: false
+        type: string
       working-directory:
         description: "The working directory of your Gradle artifacts. (Default is root directory)"
         required: false
