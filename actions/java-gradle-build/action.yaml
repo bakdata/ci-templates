@@ -22,10 +22,6 @@ inputs:
     description: "If true, the action is building a docker image with jib (Default is false)"
     required: false
     default: false
-  shell:
-    description: "Shell to use for run steps. (Default is bash)"
-    required: false
-    default: "bash"
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is root directory)"
     required: false
@@ -34,26 +30,33 @@ runs:
   using: "composite"
   defaults:
     run:
-      shell: ${{ inputs.shell }}
       working-directory: ${{ inputs.working-directory }}
   steps:
     ### Build
 
     - name: Compile
       run: ./gradlew --info --stacktrace assemble
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
     
     ### Test
 
     - name: Run unit tests
       run: ./gradlew check --info --stacktrace -PexcludeTests="**/*IntegrationTest*"
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
     
     - name: Run integration tests
       if: ${{ inputs.integration-tests == 'true' }}
       run: ./gradlew check --info --stacktrace -PincludeTests="**/*IntegrationTest*"
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
     
     # sonar.branch.autoconfig.disabled is necessary for autocreation of projects on sonarcloud to work
     - name: Assess code quality
       run: ./gradlew -Dsonar.branch.autoconfig.disabled=true -Dsonar.projectKey=github-playground -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=bakdata --info --stacktrace sonarqube
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
       env:
         SONAR_TOKEN: ${{ inputs.sonar-token }}
 
@@ -61,6 +64,8 @@ runs:
       run: |
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > secring.gpg
         ./gradlew --info --stacktrace signSonatypePublication
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
       env:
         SIGNING_SECRET_KEY_RING_FILE: secring.gpg
         SIGNING_KEY_ID: ${{ inputs.signing-key-id }}
@@ -72,6 +77,8 @@ runs:
     - name: Build Docker image
       if: ${{ inputs.docker == 'true' }}
       run: ./gradlew --info --stacktrace jibBuildTar --image=${{ github.event.repository.name }}:${{ github.run_id }} -x test
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
     
     - name: Upload Docker image
       if: ${{ inputs.docker == 'true' }}

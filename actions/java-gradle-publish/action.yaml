@@ -58,24 +58,21 @@ runs:
     - name: Login to DockerHub
       if: ${{ inputs.docker-username != '' && inputs.docker-password != '' && inputs.docker-publisher != '' }}
       uses: docker/login-action@v1
-      working-directory: ${{ inputs.working-directory }}
       with:
         username: ${{ inputs.docker-username }}
         password: ${{ inputs.docker-password }}
 
     - name: Download docker image
       uses: actions/download-artifact@master
-      working-directory: ${{ inputs.working-directory }}
       with:
         name: ${{ inputs.docker-image-artifact-name }}
         path: build/jib-image.tar
     
     - name: Push docker image
       if: ${{ inputs.docker-username != '' && inputs.docker-password != '' && inputs.docker-publisher != '' }}
-      working-directory: ${{ inputs.working-directory }}
       run: |
         docker load --input build/jib-image.tar
         docker images
         #docker push ${{ inputs.docker-publisher }}/${{ github.event.repository.name }}:${{ github.run_id }}
       shell: bash
-      
+      working-directory: ${{ inputs.working-directory }}

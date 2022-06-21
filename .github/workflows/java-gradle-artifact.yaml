@@ -75,9 +75,6 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-22.04
-    defaults:
-      run:
-        working-directory: ${{ inputs.working-directory }}
 
     steps:
       - name: Check out repository
@@ -92,7 +89,7 @@ jobs:
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
-
+      
       - name: Build
         uses: bakdata/ci-templates/actions/java-gradle-build@feature/java-gradle
         with:
@@ -108,9 +105,6 @@ jobs:
     name: Publish
     runs-on: ubuntu-22.04
     needs: build
-    defaults:
-      run:
-        working-directory: ${{ inputs.working-directory }}
 
     steps:
       - name: Check out repository
