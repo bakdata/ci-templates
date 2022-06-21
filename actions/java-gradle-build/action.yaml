@@ -28,9 +28,6 @@ inputs:
     default: "./"
 runs:
   using: "composite"
-  defaults:
-    run:
-      working-directory: ${{ inputs.working-directory }}
   steps:
     ### Build
 
