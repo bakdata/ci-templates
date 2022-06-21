@@ -74,7 +74,7 @@ runs:
         docker load --input build/jib-image.tar
         docker images
 
-        if [ "${{ GITHUB_REF }}" =~ ^ref/tags/.* ]; then
+        if [[ "$GITHUB_REF" =~ ^ref/tags/.* ]]; then
           echo "TAG BRANCH"
           docker tag ${{ github.event.repository.name }}:${{ github.run_id }} ${{ inputs.docker-publisher }}/${{ github.event.repository.name }}:latest
           docker tag ${{ github.event.repository.name }}:${{ github.run_id }} ${{ inputs.docker-publisher }}/${{ github.event.repository.name }}:${GITHUB_REF/refs\/tags\//}
