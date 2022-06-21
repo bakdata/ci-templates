@@ -56,10 +56,10 @@ runs:
         CI: true
     
     - name: Release to Nexus
-      if: startsWith($GITHUB_REF, "ref/tags/")
+      if: startsWith(github.ref, "ref/tags/")
       run: |
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > secring.gpg
-        ./gradlew --info --stacktrace closeAndReleaseRepository -x test
+        #./gradlew --info --stacktrace closeAndReleaseRepository -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:

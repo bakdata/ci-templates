@@ -88,12 +88,12 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
 
   test:
-    name: Tests
+    name: Test
     runs-on: ubuntu-22.04
     needs: build
 
     steps:
-      - name: Tests
+      - name: Test
         uses: bakdata/ci-templates/actions/java-gradle-test@feature/java-gradle
         with:
           integration-tests: true
@@ -142,14 +142,14 @@ jobs:
           gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}
 
-  publish-jib:
-    name: Publish
+  publish-jib-image:
+    name: Publish Jib Image
     runs-on: ubuntu-22.04
     needs: build-jib
 
     steps:
     - name: Publish jib image
-      uses: bakdata/ci-templates/actions/docker-publish-artifact@feature/java-gradle
+      uses: bakdata/ci-templates/actions/docker-publish@feature/java-gradle
       with:
         docker-publisher: ${{ inputs.docker-publisher }}
         docker-username: ${{ secrets.docker-username }}
