@@ -128,7 +128,7 @@ jobs:
     needs: build-jib
 
     steps:
-      - name: Publish gradle artifact
+      - name: Publish
         uses: bakdata/ci-templates/actions/java-gradle-publish@feature/java-gradle
         with:
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
