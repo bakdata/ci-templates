@@ -73,7 +73,7 @@ runs:
         SIGNING_PASSWORD: ${{ inputs.signing-password }}
         CI: true
 
-    ### Build jib docker image
+    ### Build docker image
 
     - name: Build Docker image
       if: ${{ inputs.docker == 'true' }}
