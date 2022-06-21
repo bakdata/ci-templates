@@ -68,7 +68,7 @@ runs:
         name: ${{ inputs.docker-image-artifact-name }}
         path: build/jib-image.tar
     
-    - name: Build Docker image
+    - name: Debug
       if: ${{ inputs.docker == 'true' }}
       run: |
         ls -lisa
