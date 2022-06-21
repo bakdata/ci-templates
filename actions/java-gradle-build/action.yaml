@@ -40,13 +40,13 @@ runs:
       working-directory: ${{ inputs.working-directory }}
     
     - name: Run integration tests
-      if: ${{ inputs.integration-tests  == 'true' }}
+      if: ${{ inputs.integration-tests == 'true' }}
       run: ./gradlew check --info --stacktrace -PincludeTests="**/*IntegrationTest*"
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
     - name: Build Docker image
-      if: ${{ inputs.docker  == 'true' }}
+      if: ${{ inputs.docker == 'true' }}
       run: ./gradlew --info --stacktrace jibBuildTar --image=${{ github.event.repository.name }}:${{ github.run_id }} -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}

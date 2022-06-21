@@ -3,26 +3,31 @@ description: "Publish Java artifacts using gradle"
 
 inputs:
   signing-secret-key-ring:
-    description: "The key ring file for signing the sonatype publication."
+    description: "Key ring file for signing the sonatype publication."
     required: true
   signing-key-id:
-    description: "The key id for signing the sonatype publication."
+    description: "Key id for signing the sonatype publication."
     required: true
   signing-password:
-    description: "The password for signing the sonatype publication."
+    description: "Password for signing the sonatype publication."
     required: true
   ossrh-username:
-    description: "The username for signing into sonatype repository."
+    description: "Username for signing into sonatype repository."
     required: true
   ossrh-password:
-    description: "The password for signing into sonatype repository."
+    description: "Password for signing into sonatype repository."
     required: true
-  docker:
-    description: "If true, the action is publishing a docker image with jib (Default is false)"
+  docker-username:
+    description: "Username for docker authentication."
     required: false
-    default: false
+  docker-password:
+    description: "Password for docker authentication."
+    required: false
+  docker-publisher:
+    description: "Publisher to prefix docker image."
+    required: false
   working-directory:
-    description: "The working directory of your Gradle artifacts. (Default is root directory)"
+    description: "The working directory of your Gradle artifacts. (Default is root directory)."
     required: false
     default: "./"
 runs:
@@ -42,16 +47,11 @@ runs:
         OSSRH_PASSWORD: "${{ inputs.ossrh-password }}"
         CI: true
 
-    - name: Build Docker image
-      if: ${{ inputs.docker  == 'true' }}
-      run: docker load --input 
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-
     - name: Publish docker
-      if: ${{ inputs.docker  == 'true' }}
+      if: ${{ inputs.docker-username != '' && inputs.docker-password != '' && inputs.docker-publisher != '' }}
       run: |
-        echo "${{ inputs.DOCKER_PASSWORD }}" | docker login -u "${{ inputs.DOCKER_USERNAME }}" --password-stdin
-        docker push ${{ inputs.DOCKER_PUBLISHER }}/${{ github.event.repository.name }}:${{ github.run_id }}
+        docker images
+        #echo "${{ inputs.docker-password }}" | docker login -u "${{ inputs.docker-username }}" --password-stdin
+        #docker push ${{ inputs.docker-publisher }}/${{ github.event.repository.name }}:${{ github.run_id }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
