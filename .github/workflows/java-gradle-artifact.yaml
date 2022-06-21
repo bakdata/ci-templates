@@ -99,7 +99,7 @@ jobs:
           signing-key-id: ${{ secrets.signing-key-id }}
           signing-password: ${{ secrets.signing-password }}
           integration-tests: true
-          docker: ${{ secrets.docker-username != '' && secrets.docker-password != '' && secrets.docker-publisher != '' }}
+          docker: ${{ secrets.docker-username != '' && secrets.docker-password != '' && inputs.docker-publisher != '' }}
           working-directory: ${{ inputs.working-directory }}
   
   publish:
