@@ -69,7 +69,7 @@ runs:
         path: build/jib-image.tar
     
     - name: Debug
-      if: ${{ inputs.docker == 'true' }}
+      if: ${{ inputs.docker-username != '' && inputs.docker-password != '' && inputs.docker-publisher != '' }}
       run: |
         ls -lisa
         echo "---------------------------"
