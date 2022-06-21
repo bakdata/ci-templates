@@ -46,12 +46,18 @@ runs:
         OSSRH_USERNAME: "${{ inputs.ossrh-username }}"
         OSSRH_PASSWORD: "${{ inputs.ossrh-password }}"
         CI: true
+    
+    - name: Login to DockerHub
+      if: ${{ inputs.docker-username != '' && inputs.docker-password != '' && inputs.docker-publisher != '' }}
+      uses: docker/login-action@v1
+      with:
+        username: ${{ inputs.docker-username }}
+        password: ${{ inputs.docker-password }}
 
     - name: Publish docker
       if: ${{ inputs.docker-username != '' && inputs.docker-password != '' && inputs.docker-publisher != '' }}
       run: |
         docker images
-        #echo "${{ inputs.docker-password }}" | docker login -u "${{ inputs.docker-username }}" --password-stdin
         #docker push ${{ inputs.docker-publisher }}/${{ github.event.repository.name }}:${{ github.run_id }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
