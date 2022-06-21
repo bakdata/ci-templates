@@ -151,6 +151,6 @@ jobs:
     - name: Publish jib image
       uses: bakdata/ci-templates/actions/docker-publish@feature/java-gradle
       with:
-        docker-publisher: ${{ inputs.docker-publisher }}
-        docker-username: ${{ secrets.docker-username }}
-        docker-password: ${{ secrets.docker-password }}        
+        publisher: ${{ inputs.docker-publisher }}
+        username: ${{ secrets.docker-username }}
+        password: ${{ secrets.docker-password }}        
