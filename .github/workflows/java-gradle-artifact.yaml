@@ -28,6 +28,9 @@ on:
         required: false
         type: boolean
         default: true
+      docker-publisher:
+        description: "Publisher to prefix docker image."
+        required: false
       working-directory:
         description: "The working directory of your Gradle artifacts. (Default is root directory)"
         required: false
@@ -57,9 +60,6 @@ on:
         required: false
       docker-password:
         description: "Password for docker authentication."
-        required: false
-      docker-publisher:
-        description: "Publisher to prefix docker image."
         required: false
 
     # Map the workflow outputs to job outputs
@@ -130,5 +130,5 @@ jobs:
           ossrh-password: ${{ secrets.ossrh-password }}
           docker-username: ${{ secrets.docker-username }}
           docker-password: ${{ secrets.docker-password }}
-          docker-publisher: ${{ secrets.docker-publisher }}
+          docker-publisher: ${{ inputs.docker-publisher }}
           working-directory: ${{ inputs.working-directory }}
