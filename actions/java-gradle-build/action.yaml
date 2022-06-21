@@ -23,7 +23,7 @@ inputs:
     required: false
     default: false
   docker-image-artifact-name:
-    descritption: "Artifact name to upload docker image (see https://github.com/actions/upload-artifact and https://github.com/actions/download-artifact)"
+    descritption: "Artifact name to upload jib docker image (see https://github.com/actions/upload-artifact and https://github.com/actions/download-artifact)"
     required: false
     default: "docker-image"
   working-directory:
@@ -73,7 +73,7 @@ runs:
         SIGNING_PASSWORD: ${{ inputs.signing-password }}
         CI: true
 
-    ### Build and upload docker image
+    ### Build jib docker image
 
     - name: Build Docker image
       if: ${{ inputs.docker == 'true' }}
@@ -81,16 +81,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
-    - name: Build Docker image
-      if: ${{ inputs.docker == 'true' }}
-      run: |
-        ls -lisa
-        echo "---------------------------"
-        ls build -lisa
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-    
-    - name: Upload Docker image
+    - name: Upload jib docker image artifact
       if: ${{ inputs.docker == 'true' }}
       uses: actions/upload-artifact@master
       with:

@@ -27,7 +27,7 @@ inputs:
     description: "Publisher to prefix docker image."
     required: false
   docker-image-artifact-name:
-    descritption: "Artifact name to download previously uploaded docker image (see https://github.com/actions/upload-artifact and https://github.com/actions/download-artifact)"
+    descritption: "Artifact name to download previously uploaded jib docker image (see https://github.com/actions/upload-artifact and https://github.com/actions/download-artifact)"
     required: false
     default: "docker-image"
   working-directory:
@@ -62,13 +62,24 @@ runs:
         username: ${{ inputs.docker-username }}
         password: ${{ inputs.docker-password }}
 
-    - name: Download docker image
+    - name: Download jib docker image artifact
       uses: actions/download-artifact@master
       with:
         name: ${{ inputs.docker-image-artifact-name }}
         path: build/jib-image.tar
     
-    - name: Push docker image
+    - name: Build Docker image
+      if: ${{ inputs.docker == 'true' }}
+      run: |
+        ls -lisa
+        echo "---------------------------"
+        ls build -lisa
+        echo "---------------------------"
+        ls build/jib-image.tar -lisa
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+    
+    - name: Publish docker image
       if: ${{ inputs.docker-username != '' && inputs.docker-password != '' && inputs.docker-publisher != '' }}
       run: |
         docker load --input build/jib-image.tar
