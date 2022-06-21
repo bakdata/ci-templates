@@ -108,6 +108,9 @@ jobs:
     name: Publish
     runs-on: ubuntu-22.04
     needs: build
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
 
     steps:
       - name: Check out repository
