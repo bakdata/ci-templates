@@ -87,9 +87,10 @@ jobs:
           gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}
 
-  tests:
+  test:
     name: Tests
     runs-on: ubuntu-22.04
+    needs: build
 
     steps:
       - name: Tests
@@ -109,7 +110,7 @@ jobs:
   build-jib:
     name: Build Jib Image
     runs-on: ubuntu-22.04
-    needs: tests
+    needs: test
 
     steps:
       - name: Build Jib Image
