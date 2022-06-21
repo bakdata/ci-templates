@@ -29,11 +29,15 @@ inputs:
 runs:
   using: "composite"
   steps:
+    ### Build
+
     - name: Compile
       run: ./gradlew --info --stacktrace assemble
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
+    ### Test
+
     - name: Run unit tests
       run: ./gradlew check --info --stacktrace -PexcludeTests="**/*IntegrationTest*"
       shell: bash
@@ -42,12 +46,6 @@ runs:
     - name: Run integration tests
       if: ${{ inputs.integration-tests == 'true' }}
       run: ./gradlew check --info --stacktrace -PincludeTests="**/*IntegrationTest*"
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-    
-    - name: Build Docker image
-      if: ${{ inputs.docker == 'true' }}
-      run: ./gradlew --info --stacktrace jibBuildTar --image=${{ github.event.repository.name }}:${{ github.run_id }} -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
@@ -69,3 +67,20 @@ runs:
         SIGNING_SECRET_KEY_RING_FILE: secring.gpg
         SIGNING_KEY_ID: ${{ inputs.signing-key-id }}
         SIGNING_PASSWORD: ${{ inputs.signing-password }}
+        CI: true
+
+    ### Build and upload docker image
+
+    - name: Build Docker image
+      if: ${{ inputs.docker == 'true' }}
+      run: ./gradlew --info --stacktrace jibBuildTar --image=${{ github.event.repository.name }}:${{ github.run_id }} -x test
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+    
+    - name: Upload Docker image
+      if: ${{ inputs.docker == 'true' }}
+      uses: actions/upload-artifact@master
+      working-directory: ${{ inputs.working-directory }}
+      with:
+        name: docker-image
+        path: /build/jib-image.tar

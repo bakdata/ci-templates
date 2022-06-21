@@ -26,6 +26,10 @@ inputs:
   docker-publisher:
     description: "Publisher to prefix docker image."
     required: false
+  docker-image-artifact-name:
+    descritption: "Artifact name to download previously uploaded docker image (see https://github.com/actions/upload-artifact and https://github.com/actions/download-artifact)"
+    required: false
+    default: "docker-image"
   working-directory:
     description: "The working directory of your Gradle artifacts. (Default is root directory)."
     required: false
@@ -33,6 +37,8 @@ inputs:
 runs:
   using: "composite"
   steps:
+    ### Publish java artifact
+
     - name: Publish to Nexus
       run: |
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > secring.gpg
@@ -47,17 +53,29 @@ runs:
         OSSRH_PASSWORD: "${{ inputs.ossrh-password }}"
         CI: true
     
+    ### Publish docker image
+
     - name: Login to DockerHub
       if: ${{ inputs.docker-username != '' && inputs.docker-password != '' && inputs.docker-publisher != '' }}
       uses: docker/login-action@v1
+      working-directory: ${{ inputs.working-directory }}
       with:
         username: ${{ inputs.docker-username }}
         password: ${{ inputs.docker-password }}
 
-    - name: Publish docker
+    - name: Download docker image
+      uses: actions/download-artifact@master
+      working-directory: ${{ inputs.working-directory }}
+      with:
+        name: ${{ inputs.docker-image-artifact-name }}
+        path: build/jib-image.tar
+    
+    - name: Push docker image
       if: ${{ inputs.docker-username != '' && inputs.docker-password != '' && inputs.docker-publisher != '' }}
+      working-directory: ${{ inputs.working-directory }}
       run: |
+        docker load --input build/jib-image.tar
         docker images
         #docker push ${{ inputs.docker-publisher }}/${{ github.event.repository.name }}:${{ github.run_id }}
       shell: bash
-      working-directory: ${{ inputs.working-directory }}
+      
