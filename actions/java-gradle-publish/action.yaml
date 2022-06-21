@@ -68,22 +68,24 @@ runs:
         name: ${{ inputs.docker-image-artifact-name }}
         path: build
     
-    - name: Debug
-      if: ${{ inputs.docker-username != '' && inputs.docker-password != '' && inputs.docker-publisher != '' }}
-      run: |
-        ls -lisa
-        echo "---------------------------"
-        ls build -lisa
-        echo "---------------------------"
-        ls build/jib-image.tar -lisa
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-    
     - name: Publish docker image
       if: ${{ inputs.docker-username != '' && inputs.docker-password != '' && inputs.docker-publisher != '' }}
       run: |
         docker load --input build/jib-image.tar
         docker images
-        #docker push ${{ inputs.docker-publisher }}/${{ github.event.repository.name }}:${{ github.run_id }}
+
+        if [ "${{ GITHUB_REF }}" =~ ^ref/tags/.* ]; then
+          echo "TAG BRANCH"
+          docker tag ${{ github.event.repository.name }}:${{ github.run_id }} ${{ inputs.docker-publisher }}/${{ github.event.repository.name }}:latest
+          docker tag ${{ github.event.repository.name }}:${{ github.run_id }} ${{ inputs.docker-publisher }}/${{ github.event.repository.name }}:${GITHUB_REF/refs\/tags\//}
+          #docker push ${{ inputs.docker-publisher }}/${{ github.event.repository.name }}:latest
+          #docker push ${{ inputs.docker-publisher }}/${{ github.event.repository.name }}:${GITHUB_REF/refs\/tags\//}
+        else
+          echo "OTHER BRANCH"
+          docker tag ${{ github.event.repository.name }}:${{ github.run_id }} ${{ inputs.docker-publisher }}/${{ github.event.repository.name }}:${{ github.run_id }}
+          #docker push ${{ inputs.docker-publisher }}/${{ github.event.repository.name }}:${{ github.run_id }}
+        fi
+
+        docker images
       shell: bash
       working-directory: ${{ inputs.working-directory }}
