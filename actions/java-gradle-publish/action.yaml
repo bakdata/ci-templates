@@ -83,7 +83,7 @@ runs:
         else
           echo "OTHER BRANCH"
           docker tag ${{ github.event.repository.name }}:${{ github.run_id }} ${{ inputs.docker-publisher }}/${{ github.event.repository.name }}:${{ github.run_id }}
-          #docker push ${{ inputs.docker-publisher }}/${{ github.event.repository.name }}:${{ github.run_id }}
+          docker push ${{ inputs.docker-publisher }}/${{ github.event.repository.name }}:${{ github.run_id }}
         fi
 
         docker images
