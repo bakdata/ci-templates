@@ -22,6 +22,10 @@ inputs:
     description: "If true, the action is building a docker image with jib (Default is false)"
     required: false
     default: false
+  docker-image-artifact-name:
+    descritption: "Artifact name to upload docker image (see https://github.com/actions/upload-artifact and https://github.com/actions/download-artifact)"
+    required: false
+    default: "docker-image"
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is root directory)"
     required: false
@@ -77,9 +81,18 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
+    - name: Build Docker image
+      if: ${{ inputs.docker == 'true' }}
+      run: |
+        ls -lisa
+        echo "---------------------------"
+        ls build -lisa
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+    
     - name: Upload Docker image
       if: ${{ inputs.docker == 'true' }}
       uses: actions/upload-artifact@master
       with:
-        name: docker-image
+        name: ${{ inputs.docker-image-artifact-name }}
         path: /build/jib-image.tar
