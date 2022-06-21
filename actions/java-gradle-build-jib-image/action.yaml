@@ -41,13 +41,11 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
 
     - name: Build Docker image
-      if: ${{ inputs.docker == 'true' }}
       run: ./gradlew --info --stacktrace jibBuildTar --image=${{ github.event.repository.name }}:${{ github.run_id }} -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
     - name: Upload jib docker image artifact
-      if: ${{ inputs.docker == 'true' }}
       uses: actions/upload-artifact@master
       with:
         name: ${{ inputs.image-artifact-name }}
