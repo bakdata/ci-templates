@@ -1,4 +1,4 @@
-name: Reusable workflow for building and publishing java gradle artifacts
+name: Reusable workflow for building and publishing java gradle library projects
 
 on:
   workflow_call:
@@ -28,10 +28,6 @@ on:
         required: false
         type: boolean
         default: true
-      docker-publisher:
-        description: "Publisher to prefix docker image."
-        required: false
-        type: string
       working-directory:
         description: "The working directory of your Gradle artifacts. (Default is root directory)"
         required: false
@@ -56,12 +52,6 @@ on:
       ossrh-password:
         description: "Password for signing into sonatype repository."
         required: true
-      docker-username:
-        description: "Username for docker authentication."
-        required: false
-      docker-password:
-        description: "Password for docker authentication."
-        required: false
 
     # Map the workflow outputs to job outputs
     # outputs:
@@ -78,56 +68,50 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Gradle with version ${{ inputs.gradle-version }}
+        uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
+        with:
+          java-distribution: ${{ inputs.java-distribution }}
+          java-version: ${{ inputs.java-version }}
+          gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
+      
       - name: Build
         uses: bakdata/ci-templates/actions/java-gradle-build@feature/java-gradle
         with:
-          java-distribution: ${{ inputs.java-distribution }}
-          java-version: ${{ inputs.java-version }}
-          gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}
-          working-directory: ${{ inputs.working-directory }}
-
-  tests:
-    name: Tests
-    runs-on: ubuntu-22.04
-
-    steps:
-      - name: Tests
-        uses: bakdata/ci-templates/actions/java-gradle-test@feature/java-gradle
-        with:
-          integration-tests: true
           sonar-token: ${{ secrets.sonar-token }}
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
-          signing-password: ${{ secrets.signing-password }}   
-          java-distribution: ${{ inputs.java-distribution }}
-          java-version: ${{ inputs.java-version }}
-          gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}       
+          signing-password: ${{ secrets.signing-password }}
+          integration-tests: true
+          docker: false
           working-directory: ${{ inputs.working-directory }}
-
-  build-jib:
-    name: Build Jib Image
+  
+  publish:
+    name: Publish
     runs-on: ubuntu-22.04
-    needs: tests
+    needs: build
 
     steps:
-      - name: Build Jib Image
-        uses: bakdata/ci-templates/actions/java-gradle-build-jib-image@feature/java-gradle
+      - name: Check out repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Gradle with version ${{ inputs.gradle-version }}
+        uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
         with:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
-          working-directory: ${{ inputs.working-directory }}
 
-  publish:
-    name: Publish
-    runs-on: ubuntu-22.04
-    needs: build-jib
-
-    steps:
-      - name: Publish gradle artifact
+      - name: Publish
         uses: bakdata/ci-templates/actions/java-gradle-publish@feature/java-gradle
         with:
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
@@ -135,21 +119,4 @@ jobs:
           signing-password: ${{ secrets.signing-password }}
           ossrh-username: ${{ secrets.ossrh-username }}
           ossrh-password: ${{ secrets.ossrh-password }}
-          java-distribution: ${{ inputs.java-distribution }}
-          java-version: ${{ inputs.java-version }}
-          gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}
-
-  publish-jib:
-    name: Publish
-    runs-on: ubuntu-22.04
-    needs: build-jib
-
-    steps:
-    - name: Publish jib image
-      uses: bakdata/ci-templates/actions/docker-publish-artifact@feature/java-gradle
-      with:
-        docker-publisher: ${{ inputs.docker-publisher }}
-        docker-username: ${{ secrets.docker-username }}
-        docker-password: ${{ secrets.docker-password }}        

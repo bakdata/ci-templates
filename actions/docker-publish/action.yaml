@@ -1,0 +1,60 @@
+name: "Publish Java artifacts"
+description: "Publish Java artifacts using gradle"
+
+inputs:
+  image-name:
+    descritption: "Name of docker image (Default is the respository name)."
+    required: true
+    default: ${{ github.event.repository.name }}
+  image-artifact-name:
+    descritption: "Name of the pipeline artifact that contains the docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'docker-image')."
+    required: true
+    default: "docker-image"  
+  publisher:
+    description: "Publisher to prefix docker image (e.g. 'my-publisher' with a repository name `)."
+    required: false
+  username:
+    description: "Username for the docker registry login."
+    required: true
+  password:
+    description: "Password for the docker registry login."
+    required: true  
+  working-directory:
+    description: "The working directory of your Gradle artifacts. (Default is root directory)."
+    required: false
+    default: "./"
+runs:
+  using: "composite"
+  steps:
+    - name: Download docker image tar artifact
+      uses: actions/download-artifact@master
+      with:
+        name: ${{ inputs.image-artifact-name }}
+        path: build
+    
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ inputs.username }}
+        password: ${{ inputs.password }}   
+    
+    - name: Publish docker image
+      run: |
+        if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) <> 1 ]]; then
+          >&2 echo "Error: A single image tar file is needed in the downloaded pipeline artifact. You can upload one before using this action, see https://github.com/actions/upload-artifact."
+          exit 1
+        fi
+
+        docker load --input build/*.tar
+
+        if [[ "$GITHUB_REF" =~ ^ref/tags/.* ]]; then
+          docker tag ${{ github.event.repository.name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ github.event.repository.name }}:latest
+          docker tag ${{ github.event.repository.name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ github.event.repository.name }}:${GITHUB_REF/refs\/tags\//}
+          docker push ${{ inputs.publisher }}/${{ github.event.repository.name }}:latest
+          docker push ${{ inputs.publisher }}/${{ github.event.repository.name }}:${GITHUB_REF/refs\/tags\//}
+        else
+          docker tag ${{ github.event.repository.name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ github.event.repository.name }}:${{ github.run_id }}
+          docker push ${{ inputs.publisher }}/${{ github.event.repository.name }}:${{ github.run_id }}
+        fi
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}

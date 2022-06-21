@@ -3,19 +3,19 @@ description: "Build Java artifacts using gradle"
 
 inputs:
   java-distribution:
-    description: "The java distribution to be installed. (Default is temurin)"
+    description: "Java distribution to be installed. (Default is temurin)"
     required: false
     default: "temurin"
   java-version:
-    description: "The java version to be installed. (Default is 11)"
+    description: "Java version to be installed. (Default is 11)"
     required: false
     default: "11"
   gradle-version:
-    description: "The gradle version to be installed. (Default is 6.7.1)"
+    description: "Gradle version to be installed. (Default is 6.7.1)"
     required: false
     default: "6.7.1"
   gradle-cache:
-    description: "The cache to use. Options are gradle, maven, sbt. (Default is '')"
+    description: "Cache to use. Options are gradle, maven, sbt. (Default is '')"
     required: false
     default: ""
 runs:

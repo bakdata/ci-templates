@@ -1,7 +1,11 @@
-name: "Build Java artifacts"
-description: "Build Java artifacts using gradle"
+name: "Build Jib image"
+description: "Build Jib image using gradle"
 
 inputs:
+  image-artifact-name:
+    descritption: "Artifact name to upload jib docker image (see https://github.com/actions/upload-artifact and https://github.com/actions/download-artifact)"
+    required: false
+    default: "docker-image"
   java-distribution:
     description: "Java distribution to be installed. (Default is temurin)"
     required: false
@@ -27,7 +31,7 @@ runs:
   steps:
     - name: Check out repository
       uses: actions/checkout@v2
-    
+      
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
       with:
@@ -35,8 +39,17 @@ runs:
         java-version: ${{ inputs.java-version }}
         gradle-version: ${{ inputs.gradle-version }}
         gradle-cache: ${{ inputs.gradle-cache }}
-    
-    - name: Compile
-      run: ./gradlew --info --stacktrace assemble
+
+    - name: Build Docker image
+      if: ${{ inputs.docker == 'true' }}
+      run: ./gradlew --info --stacktrace jibBuildTar --image=${{ github.event.repository.name }}:${{ github.run_id }} -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
+    
+    - name: Upload jib docker image artifact
+      if: ${{ inputs.docker == 'true' }}
+      uses: actions/upload-artifact@master
+      with:
+        name: ${{ inputs.image-artifact-name }}
+        path: build/jib-image.tar
+        retention-days: 1
