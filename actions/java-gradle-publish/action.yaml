@@ -56,11 +56,7 @@ runs:
     - name: Publish to Nexus
       run: |
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > secring.gpg
-        if [[ "$GITHUB_REF" =~ ^ref/tags/.* ]]; then
-          ./gradlew --info --stacktrace publishToNexus closeAndReleaseRepository -x test
-        else
-          ./gradlew --info --stacktrace publishToNexus
-        fi
+        ./gradlew --info --stacktrace publishToNexus
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
