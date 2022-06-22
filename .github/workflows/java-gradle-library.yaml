@@ -1,4 +1,4 @@
-name: Reusable workflow for building and publishing java gradle library projects
+name: Reusable workflow for building and publishing java gradle artifacts
 
 on:
   workflow_call:
@@ -68,49 +68,41 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      
-      - name: Set up Gradle with version ${{ inputs.gradle-version }}
-        uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
+      - name: Build
+        uses: bakdata/ci-templates/actions/java-gradle-build@feature/java-gradle
         with:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
-      
-      - name: Build
-        uses: bakdata/ci-templates/actions/java-gradle-build@feature/java-gradle
-        with:
-          sonar-token: ${{ secrets.sonar-token }}
-          signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
-          signing-key-id: ${{ secrets.signing-key-id }}
-          signing-password: ${{ secrets.signing-password }}
-          integration-tests: true
-          docker: false
           working-directory: ${{ inputs.working-directory }}
-  
-  publish:
-    name: Publish
+
+  test:
+    name: Test
     runs-on: ubuntu-22.04
     needs: build
 
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
+      - name: Test
+        uses: bakdata/ci-templates/actions/java-gradle-test@feature/java-gradle
         with:
-          fetch-depth: 0
-      
-      - name: Set up Gradle with version ${{ inputs.gradle-version }}
-        uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
-        with:
+          integration-tests: true
+          sonar-token: ${{ secrets.sonar-token }}
+          signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
+          signing-key-id: ${{ secrets.signing-key-id }}
+          signing-password: ${{ secrets.signing-password }}   
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}
+          gradle-cache: ${{ inputs.gradle-cache }}       
+          working-directory: ${{ inputs.working-directory }}
 
+  publish:
+    name: Publish
+    runs-on: ubuntu-22.04
+    needs: test
+
+    steps:
       - name: Publish
         uses: bakdata/ci-templates/actions/java-gradle-publish@feature/java-gradle
         with:
@@ -119,4 +111,8 @@ jobs:
           signing-password: ${{ secrets.signing-password }}
           ossrh-username: ${{ secrets.ossrh-username }}
           ossrh-password: ${{ secrets.ossrh-password }}
+          java-distribution: ${{ inputs.java-distribution }}
+          java-version: ${{ inputs.java-version }}
+          gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}
