@@ -28,13 +28,6 @@ runs:
         poetry config virtualenvs.path ${{ inputs.working-directory }}/.venv
       shell: bash
 
-    # - name: Install Poetry ${{ inputs.poetry-version }}
-    #   uses: snok/install-poetry@v1
-    #   with:
-    #     version: ${{ inputs.poetry-version }}
-    #     virtualenvs-create: true
-    #     virtualenvs-in-project: true
-
     - name: Set up Python ${{ inputs.python-version }}
       uses: actions/setup-python@v4
       with:
