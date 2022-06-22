@@ -18,22 +18,22 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install poetry
+    - name: Install Poetry ${{ inputs.poetry-version }}
       shell: bash
       run: pipx install poetry==${{ inputs.poetry-version }}
+
+    - name: Configure poetry
+      run: poetry config virtualenvs.in-project true
+      shell: bash
 
     - name: Set up Python ${{ inputs.python-version }}
       uses: actions/setup-python@v4
       with:
         python-version: ${{ inputs.python-version }}
-        cache: 'poetry'
+        cache: poetry
+        cache-dependency-path: ${{ inputs.working-directory }}/poetry.lock
 
     - name: Get full Python version
       id: full-python-version
       run: echo ::set-output name=version::$(python -c "import sys; print('-'.join(str(v) for v in sys.version_info))")
       shell: bash
-
-    - name: Configure poetry
-      run: poetry config virtualenvs.in-project true
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
