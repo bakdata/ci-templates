@@ -14,9 +14,9 @@ inputs:
     required: false
     default: "3.10"
   poetry-version:
-    description: "The poetry version to be installed. (Default is 1.1.12)"
+    description: "The poetry version to be installed. (Default is 1.1.13)"
     required: false
-    default: "1.1.12"
+    default: "1.1.13"
   working-directory:
     description: "The working directory of your Python packages. (Default is root directory)"
     required: false
