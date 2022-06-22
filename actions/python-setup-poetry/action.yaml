@@ -33,6 +33,8 @@ runs:
         cache: poetry
         cache-dependency-path: ${{ inputs.working-directory }}/poetry.lock
 
+    - run: poetry env use ${{ inputs.poetry-version }}
+
     - name: Get full Python version
       id: full-python-version
       run: echo ::set-output name=version::$(python -c "import sys; print('-'.join(str(v) for v in sys.version_info))")
