@@ -1,7 +1,6 @@
 # python-setup-poetry
 
-This composite action sets up poetry. First, it installs Python for the given version and then Poetry for the given input
-version.
+This composite action sets up poetry for the given input version. It supports caching the Python virtualenv between workflow runs.
 
 ## Input Parameters
 
@@ -18,7 +17,7 @@ version.
 
     # Other Steps in your workflow
 
-    - name: Set up Poetry version ${{ inputs.poetry-version }}
+    - name: Set up Poetry ${{ inputs.poetry-version }}
       uses: bakdata/ci-templates/actions/python-setup-poetry@main
       with:
         python-version: ${{ inputs.python-version }}
