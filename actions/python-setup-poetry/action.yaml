@@ -1,5 +1,5 @@
 name: "Setup poetry"
-description: "Install Python and then poetry for a given version"
+description: "Set up poetry with virtualenv caching"
 
 inputs:
   python-version:
@@ -18,7 +18,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install Poetry ${{ inputs.poetry-version }}
+    - name: Install poetry ${{ inputs.poetry-version }}
       run: pipx install poetry==${{ inputs.poetry-version }}
       shell: bash
 
