@@ -38,8 +38,3 @@ runs:
     - run: poetry env use ${{ inputs.python-version }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-
-    - name: Get full Python version
-      id: full-python-version
-      run: echo ::set-output name=version::$(python -c "import sys; print('-'.join(str(v) for v in sys.version_info))")
-      shell: bash
