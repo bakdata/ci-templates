@@ -20,5 +20,24 @@ This action uses another composite action listed below:
 
 ## Output Parameters
 
-| Name | Description |
-| ---- | ----------- |
+| Name        | Description                                         |
+| ----------- | --------------------------------------------------- |
+| old-tag     | Defines the old version in your pyproject.toml file |
+| release-tag | The bumped version of your project                  |
+
+## Usage
+
+```yaml
+steps:
+  # Other steps in your workflow
+  - name: Bump version
+    id: bump-version
+    uses: bakdata/ci-templates/actions/python-poetry-bump-version@main
+    with:
+      release-type: ${{ inputs.release-type }}
+      python-version: ${{ inputs.python-version }}
+      poetry-version: ${{ inputs.poetry-version }}
+
+  - name: Use bump version output
+    run: echo Bumped Version from ${{ steps.bump-version.outputs.old-tag }} to ${{ steps.bump-version.outputs.release-tag }}
+```
