@@ -13,9 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      # TODO: use tag after v1.6.11 is released
       - name: Check workflow files
         run: |
             echo "::add-matcher::.github/actionlint-matcher.json"
-            bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/77d8de2/scripts/download-actionlint.bash)
+            bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/v1.6.14/scripts/download-actionlint.bash)
             ./actionlint -color
