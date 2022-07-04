@@ -90,9 +90,8 @@ runs:
     - name: Publish plugin
       if: ${{ inputs.gradle-publish-key != '' && inputs.gradle-publish-secret != '' }}
       run: |
-        echo "BAR123"
-        #echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > secring.gpg
-        #./gradlew --info --stacktrace -Pgradle.publish.key=${{ inputs.gradle-publish-key }} -Pgradle.publish.secret=${{ inputs.gradle-publish-secret }} publishPlugins -x test
+        echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > secring.gpg
+        ./gradlew --info --stacktrace -Pgradle.publish.key=${{ inputs.gradle-publish-key }} -Pgradle.publish.secret=${{ inputs.gradle-publish-secret }} publishPlugins -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
