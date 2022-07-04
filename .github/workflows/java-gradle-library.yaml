@@ -52,6 +52,12 @@ on:
       ossrh-password:
         description: "Password for signing into sonatype repository."
         required: true
+      gradle-publish-key:
+        description: "Key for publishing to gradle plugin portal."
+        required: true
+      gradle-publish-secret:
+        description: "Secret for publishing to gradle plugin portal."
+        required: true
 
     # Map the workflow outputs to job outputs
     # outputs:
@@ -111,6 +117,8 @@ jobs:
           signing-password: ${{ secrets.signing-password }}
           ossrh-username: ${{ secrets.ossrh-username }}
           ossrh-password: ${{ secrets.ossrh-password }}
+          gradle-publish-key: ${{ secrets.gradle-publish-key }}
+          gradle-publish-secret: ${{ secrets.gradle-publish-secret }}
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
