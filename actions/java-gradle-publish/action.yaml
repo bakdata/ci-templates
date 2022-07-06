@@ -91,6 +91,7 @@ runs:
       if: ${{ inputs.gradle-publish-key != '' && inputs.gradle-publish-secret != '' }}
       run: |
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > secring.gpg
+        ls -lisah
         ./gradlew --info --stacktrace -Pgradle.publish.key=${{ inputs.gradle-publish-key }} -Pgradle.publish.secret=${{ inputs.gradle-publish-secret }} publishPlugins -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
