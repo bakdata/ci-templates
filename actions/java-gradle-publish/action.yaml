@@ -62,7 +62,7 @@ runs:
     - name: Publish to Nexus
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
-        echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > secring.gpg        
+        echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
         ./gradlew --info --stacktrace publishToNexus
       shell: bash
       working-directory: ${{ inputs.working-directory }}
