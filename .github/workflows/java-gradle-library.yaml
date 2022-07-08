@@ -107,6 +107,7 @@ jobs:
     name: Publish
     runs-on: ubuntu-22.04
     #needs: test
+    needs: build
 
     steps:
       - name: Publish
