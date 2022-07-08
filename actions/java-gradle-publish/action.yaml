@@ -87,7 +87,7 @@ runs:
         CI: true
 
     - name: Publish plugin
-      if: ${{ inputs.gradle-publish-key != '' && inputs.gradle-publish-secret != '' }}
+      if: startsWith(github.ref, 'refs/tags/') && ${{ inputs.gradle-publish-key != '' && inputs.gradle-publish-secret != '' }}
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
