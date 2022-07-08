@@ -83,30 +83,30 @@ jobs:
           gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}
 
-  test:
-    name: Test
-    runs-on: ubuntu-22.04
-    needs: build
+  # test:
+  #   name: Test
+  #   runs-on: ubuntu-22.04
+  #   needs: build
 
-    steps:
-      - name: Test
-        uses: bakdata/ci-templates/actions/java-gradle-test@feature/java-gradle
-        with:
-          integration-tests: true
-          sonar-token: ${{ secrets.sonar-token }}
-          signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
-          signing-key-id: ${{ secrets.signing-key-id }}
-          signing-password: ${{ secrets.signing-password }}   
-          java-distribution: ${{ inputs.java-distribution }}
-          java-version: ${{ inputs.java-version }}
-          gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}       
-          working-directory: ${{ inputs.working-directory }}
+  #   steps:
+  #     - name: Test
+  #       uses: bakdata/ci-templates/actions/java-gradle-test@feature/java-gradle
+  #       with:
+  #         integration-tests: true
+  #         sonar-token: ${{ secrets.sonar-token }}
+  #         signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
+  #         signing-key-id: ${{ secrets.signing-key-id }}
+  #         signing-password: ${{ secrets.signing-password }}   
+  #         java-distribution: ${{ inputs.java-distribution }}
+  #         java-version: ${{ inputs.java-version }}
+  #         gradle-version: ${{ inputs.gradle-version }}
+  #         gradle-cache: ${{ inputs.gradle-cache }}       
+  #         working-directory: ${{ inputs.working-directory }}
 
   publish:
     name: Publish
     runs-on: ubuntu-22.04
-    needs: test
+    #needs: test
 
     steps:
       - name: Publish
