@@ -91,9 +91,12 @@ jobs:
         working-directory: ${{ inputs.working-directory }}
 
       - name: Generate changelog
-        run: ./gradlew -Pchangelog.releaseVersion=${{ steps.release.outputs.version }} -Pchangelog.githubUser=${{ secrets.github-username }} -Pchangelog.githubToken=${{ secrets.github-token }} --info --stacktrace generateChangelog
+        run: ./gradlew -Pchangelog.releaseVersion=${{ steps.release.outputs.version }} --info --stacktrace generateChangelog
         shell: bash
         working-directory: ${{ inputs.working-directory }}
+        env:
+          GITHUB_USER: ${{ secrets.github-username }}
+          GITHUB_TOKEN: ${{ secrets.github-token }}
 
       - name: Push Changelog
         run: git status
