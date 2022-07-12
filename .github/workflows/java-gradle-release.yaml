@@ -89,6 +89,7 @@ jobs:
 
   generate-changelog:
     name: Generate changelog
+    needs: [evaluate-version]
     runs-on: ubuntu-22.04
     
     steps:
@@ -122,6 +123,7 @@ jobs:
       
   release:
     name: Release
+    needs: [generate-changelog]
     runs-on: ubuntu-22.04
     
     steps:
