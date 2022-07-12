@@ -1,0 +1,91 @@
+name: Reusable workflow for building and publishing java gradle artifacts
+
+on:
+  workflow_call:
+    inputs:
+      release-type:
+        description: "Scope of the release (major, minor or patch)."
+        required: true
+        type: string
+      java-distribution:
+        description: "The java distribution to be installed. (Default is temurin)"
+        required: false
+        type: string
+        default: "temurin"
+      java-version:
+        description: "The java version to be installed. (Default is 11)"
+        required: false
+        type: string
+        default: "11"
+      gradle-version:
+        description: "The gradle version to be installed. (Default is 6.7.1)"
+        required: false
+        type: string
+        default: "6.7.1"
+      gradle-cache:
+        description: "The gradle cache to use. Options are gradle, maven, sbt. (Default is gradle)"
+        required: false
+        type: string
+        default: "gradle"
+      working-directory:
+        description: "The working directory of your Gradle artifacts. (Default is root directory)"
+        required: false
+        type: string
+        default: "./"
+
+    # Map the workflow outputs to job outputs
+    outputs:
+      release-tag:
+        description: "The release tag."
+        value: ${{ jobs.release.outputs.version }}
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-22.04
+
+    # Map the job outputs to step outputs
+    outputs:
+      release-version: ${{ steps.release.outputs.version }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+    
+      - name: Set up Gradle with version ${{ inputs.gradle-version }}
+        uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
+        with:
+          java-distribution: ${{ inputs.java-distribution }}
+          java-version: ${{ inputs.java-version }}
+          gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
+      
+      - name: Calculate release version
+        id: release
+        run: |
+          version=$(grep "version=" gradle.properties | cut -d'=' -f2)
+          if [[ "${{ inputs.release-type }}" == "patch" ]]; then
+              version=${version%-*}
+          elif [[ "${{ inputs.release-type }}" == "minor" ]]; then
+              version=${version%%.*}.$((`echo ${version} | cut -d'.' -f 2`+1)).0
+          elif [[ "${{ inputs.release-type }}" == "major" ]]; then
+              version=$((${version%%.*}+1)).0.0
+          elif [[ "${{ inputs.release-type }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              version=${{ inputs.release-type }}
+          else
+              echo "Got unsupported version ${{ inputs.release-type }}, use patch|minor|major|<version>" >&2
+              exit 1
+          fi
+          echo ::set-output name=version::$version
+        shell: bash
+        working-directory: ${{ inputs.working-directory }}
+
+      - name: Generate changelog
+        run: ./gradlew -Pchangelog.releaseVersion=${{ steps.release.outputs.version }} --info --stacktrace generateChangelog
+        shell: bash
+        working-directory: ${{ inputs.working-directory }}
+
+      - name: Push Changelog
+        run: git status
+        shell: bash
+        working-directory: ${{ inputs.working-directory }}

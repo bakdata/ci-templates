@@ -63,15 +63,6 @@ on:
         description: "Password for docker authentication."
         required: false
 
-    # Map the workflow outputs to job outputs
-    # outputs:
-    #   release-tag:
-    #     description: "The release tag."
-    #     value: ${{ jobs.helm-release.outputs.release-tag }}
-    #   old-tag:
-    #     description: "The old tag."
-    #     value: ${{ jobs.helm-release.outputs.old-tag }}
-
 jobs:
   build:
     name: Build

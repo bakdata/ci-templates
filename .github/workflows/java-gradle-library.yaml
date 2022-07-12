@@ -59,15 +59,6 @@ on:
         description: "Secret for publishing to gradle plugin portal."
         required: true
 
-    # Map the workflow outputs to job outputs
-    # outputs:
-    #   release-tag:
-    #     description: "The release tag."
-    #     value: ${{ jobs.helm-release.outputs.release-tag }}
-    #   old-tag:
-    #     description: "The old tag."
-    #     value: ${{ jobs.helm-release.outputs.old-tag }}
-
 jobs:
   build:
     name: Build

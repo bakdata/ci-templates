@@ -1,16 +1,20 @@
 # Workflow Templates
+
 The following workflows can be found here:
 * [Helm Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-release)
 * [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
 
 ## Helm Release
+
 This workflow will lint all charts, bump the project version according to the `.bumpversion.cfg` file, create releases for all changed charts
 and provide an `index.yaml` for all packaged charts as a Github web page.
 
 ### Prerequisites
+
 Your helm charts need to be located inside the `charts` folder of your repository to use this workflow and
 you need a `.bumpversion.cfg` file in your root directory. Make sure to set the correct path for the `Chart.yaml` file.
 A minimal configuration could look like this:
+
 ```cfg
 [bumpversion]
 current_version = 0.0.1
@@ -24,6 +28,7 @@ replace = version: {new_version}
 
 Additionally, you need to create the lint configuration file `.github/lint-config.yaml` and configure it to your liking.
 A minimal configuration could look like this:
+
 ```yaml
 # check https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml for possible configurations
 target-branch: "main"
@@ -34,6 +39,7 @@ admin access to the repository for the selected user because admins can still pu
 is a protection rule in place.
 
 Finally, add an empty branch `gh-pages` for the `index.yaml` to be hosted publically:
+
 ```sh
 git checkout --orphan gh-pages
 git rm --cached .
@@ -42,6 +48,7 @@ git push --set-upstream origin gh-pages
 ```
 
 ### Dependencies
+
 This workflow is built from multiple composite actions listed below:
 
 * [helm-lint](https://github.com/bakdata/ci-templates/tree/main/actions/helm-lint)
@@ -49,6 +56,7 @@ This workflow is built from multiple composite actions listed below:
 * [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
 
 ### Input Parameters
+
 | Name              | Required  |             Default Value             |  Type   | Description                                                                                                                              |
 |-------------------|:---------:|:-------------------------------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------------|
 | release-type      |    ✅     |                  -                    | string  | The scope of the release (major, minor or patch)                                                                                         |
@@ -58,6 +66,7 @@ This workflow is built from multiple composite actions listed below:
 | helm-version      |    ❌     |               "v3.4.0"                | string  | The helm version                                                                                                                         |
 
 ### Secret Parameters
+
 These secrets define the GitHub user that pushes the changes of your `.bumpversion.cfg` file to the repository. Create a
 repository secret for the GitHub username (`GH_USERNAME`), the GitHub Email (`GH_EMAIL`), and a personal access
 token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the
@@ -70,6 +79,7 @@ email: `[username]@users.noreply.github.com`.
 | github-token    |    ✅     | The GitHub token for committing the changes       |
 
 ### Outputs
+
 This workflow outputs two variables: The `old-tag` and the `release-tag`. These variables can be used in the future
 jobs (e.g., using the `release-tag` to create GitHub release).
 
@@ -79,6 +89,7 @@ jobs (e.g., using the `release-tag` to create GitHub release).
 | release-tag | The bumped version of your project                    |
 
 ### Calling the workflow
+
 ```yaml
 name: Call this reusable workflow
 
@@ -105,20 +116,22 @@ jobs:
       github-token: "${{ secrets.GH_TOKEN }}"
 ```
 
-
 ## Python Poetry Release
+
 This workflow will bump the version of your python project and publish the built project to either TestPyPI or PyPI. In
 the following, you will first find the necessary prerequisite to set up the workflow. Next, you will find the
 documentation of the input, secret, and output parameters. In the end, you find a small example of how to use this
 workflow.
 
 ### Prerequisites
+
 Your Python project needs to be set up with poetry and contain a `pyproject.toml` file to use this workflow. Moreover,
 choose a GitHub user who will change, commit, and push the version in your `pyproject.toml` file. Make sure to configure
 admin access to the repository for the selected user because admins can still push on the default branch even if there
 is a protection rule in place.
 
 ### Dependencies
+
 This workflow is built from multiple composite actions listed below:
 
 * [python-poetry-bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-bump-version)
@@ -126,6 +139,7 @@ This workflow is built from multiple composite actions listed below:
 * [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
 
 ### Input Parameters
+
 | Name              | Required  |             Default Value             |  Type   | Description                                                                                                                        |
 |-------------------|:---------:|:-------------------------------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------|
 | release-type      |    ✅     |                   -                   | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values  |
@@ -136,6 +150,7 @@ This workflow is built from multiple composite actions listed below:
 | working-directory |    ❌     |                 "./"                  | string  | The working directory of your Python package                                                                                       |
 
 ### Secret Parameters
+
 These secrets define the GitHub user that pushes the changes of your `pyproject.toml` file to the repository. Create a
 repository secret for the GitHub username (`GH_USERNAME`), the GitHub Email (`GH_EMAIL`), and a personal access
 token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the
@@ -149,6 +164,7 @@ email: `[username]@users.noreply.github.com`.
 | pypi-token      |    ✅     | The (test) PyPI api token for publishing packages |
 
 ### Outputs
+
 This workflow outputs two variables: The `old-tag` and the `release-tag`. These variables can be used in the future
 jobs (e.g., using the `release-tag` to create GitHub release).
 
@@ -158,6 +174,7 @@ jobs (e.g., using the `release-tag` to create GitHub release).
 | release-tag | The bumped version of your project                  |
 
 ### Calling the workflow
+
 ```yaml
 name: Call this reusable workflow
 
