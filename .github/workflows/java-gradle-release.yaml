@@ -112,13 +112,6 @@ jobs:
           GITHUB_USER: ${{ secrets.github-username }}
           GITHUB_TOKEN: ${{ secrets.github-token }}
 
-      - name: Debug
-        run: |
-          echo "Username: ${{ secrets.github-username }}"
-          echo "E-Mail: ${{ secrets.github-email }}"
-          echo "Token: ${{ secrets.github-token }}"
-        shell: bash
-
       - name: Commit and push changelog
         uses: bakdata/ci-templates/actions/commit-and-push@v1.0.0
         with:
