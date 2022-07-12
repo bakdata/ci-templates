@@ -56,7 +56,7 @@ on:
 
 jobs:
   evaluate-version:
-    name: Release
+    name: Evaluate version
     runs-on: ubuntu-22.04
 
     # Map the job outputs to step outputs
@@ -88,7 +88,7 @@ jobs:
         working-directory: ${{ inputs.working-directory }}
 
   generate-changelog:
-    name: Release
+    name: Generate changelog
     runs-on: ubuntu-22.04
     
     steps:
