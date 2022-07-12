@@ -7,6 +7,11 @@ on:
         description: "Scope of the release (major, minor or patch)."
         required: true
         type: string
+      ref:
+        description: "Ref name to checkout the repository."
+        required: false
+        default: ${{ github.event.repository.default_branch }}
+        type: string
       java-distribution:
         description: "The java distribution to be installed. (Default is temurin)"
         required: false
@@ -47,10 +52,10 @@ on:
     outputs:
       release-tag:
         description: "The release tag."
-        value: ${{ jobs.release.outputs.version }}
+        value: ${{ jobs.release.outputs.release-version }}
 
 jobs:
-  release:
+  evaluate-version:
     name: Release
     runs-on: ubuntu-22.04
 
@@ -61,14 +66,6 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-    
-      - name: Set up Gradle with version ${{ inputs.gradle-version }}
-        uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
-        with:
-          java-distribution: ${{ inputs.java-distribution }}
-          java-version: ${{ inputs.java-version }}
-          gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}
       
       - name: Calculate release version
         id: release
@@ -90,15 +87,59 @@ jobs:
         shell: bash
         working-directory: ${{ inputs.working-directory }}
 
+  generate-changelog:
+    name: Release
+    runs-on: ubuntu-22.04
+    
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up Gradle with version ${{ inputs.gradle-version }}
+        uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
+        with:
+          java-distribution: ${{ inputs.java-distribution }}
+          java-version: ${{ inputs.java-version }}
+          gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
+
       - name: Generate changelog
-        run: ./gradlew -Pchangelog.releaseVersion=${{ steps.release.outputs.version }} --info --stacktrace generateChangelog
+        run: ./gradlew -Pchangelog.releaseVersion=${{ jobs.release.outputs.release-version }} --info --stacktrace generateChangelog
         shell: bash
         working-directory: ${{ inputs.working-directory }}
         env:
           GITHUB_USER: ${{ secrets.github-username }}
           GITHUB_TOKEN: ${{ secrets.github-token }}
 
-      - name: Push Changelog
-        run: git status
+      - name: Commit and push changelog
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.0.0
+        with:
+          ref: ${{ inputs.ref }}
+          commit-message: "Changelog for version ${{ jobs.release.outputs.release-version }}"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
+      
+  release:
+    name: Release
+    runs-on: ubuntu-22.04
+    
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      
+      - name: Set up Gradle with version ${{ inputs.gradle-version }}
+        uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
+        with:
+          java-distribution: ${{ inputs.java-distribution }}
+          java-version: ${{ inputs.java-version }}
+          gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
+
+      - name: Release
+        run: ./gradlew --Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ jobs.release.outputs.release-version }} --stacktrace --info release -x test
         shell: bash
         working-directory: ${{ inputs.working-directory }}
+        env:
+          GITHUB_USER: ${{ secrets.github-username }}
+          GITHUB_TOKEN: ${{ secrets.github-token }}
