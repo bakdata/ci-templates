@@ -30,7 +30,7 @@ runs:
         git config user.name ${{ inputs.github-username }}
         git commit -m "${{ inputs.commit-message }}" -a
         git status
-        git push https://${{inputs.github-token}}@https://github.com/bakdata/github-playground.git
+        git push https://${{inputs.github-token}}@github.com/bakdata/github-playground.git
       shell: bash
 
     # - name: Push changes
