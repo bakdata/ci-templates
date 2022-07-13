@@ -111,7 +111,7 @@ jobs:
           gradle-cache: ${{ inputs.gradle-cache }}
 
       - name: Generate changelog
-        run: ./gradlew -Pchangelog.releaseVersion=${{ github.jobs.evaluate-version.outputs.release-version }} --info --stacktrace generateChangelog
+        run: ./gradlew -Pchangelog.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} --info --stacktrace generateChangelog
         shell: bash
         working-directory: ${{ inputs.working-directory }}
         env:
@@ -122,14 +122,14 @@ jobs:
         uses: bakdata/ci-templates/actions/commit-and-push@feature/java-gradle
         with:
           ref: ${{ inputs.ref }}
-          commit-message: "Changelog for version ${{ github.jobs.evaluate-version.outputs.release-version }}"
+          commit-message: "Changelog for version ${{ needs.evaluate-version.outputs.release-version }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
   
   release:
     name: Release
-    needs: generate-changelog
+    needs: [evaluate-version, generate-changelog]
     runs-on: ubuntu-22.04
     
     steps:
@@ -145,7 +145,7 @@ jobs:
           gradle-cache: ${{ inputs.gradle-cache }}
 
       - name: Release
-        run: ./gradlew --Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ github.jobs.evaluate-version.outputs.release-version }} --stacktrace --info release -x test
+        run: ./gradlew --Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} --stacktrace --info release -x test
         shell: bash
         working-directory: ${{ inputs.working-directory }}
         env:
