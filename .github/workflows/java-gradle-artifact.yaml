@@ -158,12 +158,12 @@ jobs:
       
       - name: Debug 1
         run: |
-          echo "Tag: ${${{ github.ref }}/refs\/tags\//}"
+          echo "Tag: ${GITHUB_REF##*/}"
         shell: bash
       
       - name: Extract changelog section
         id: changelog
-        run: echo ::set-output name=body::$(awk '/^## \[/ { if (p) { exit }; if ($2 ~ /\['"${{ github.ref }}"'\](.*)/) { p=1; next} } p && NF' CHANGELOG.md)
+        run: echo ::set-output name=body::$(awk '/^## \[/ { if (p) { exit }; if ($2 ~ /\['"${GITHUB_REF##*/}"'\](.*)/) { p=1; next} } p && NF' CHANGELOG.md)
         shell: bash
       
       - name: Debug 2
