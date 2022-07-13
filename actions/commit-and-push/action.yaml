@@ -36,4 +36,4 @@ runs:
       uses: ad-m/github-push-action@v0.6.0
       with:
         github_token: ${{ inputs.github-token }}
-        branch: refs/heads/${{ inputs.ref }}
+        branch: ${{ inputs.ref }}
