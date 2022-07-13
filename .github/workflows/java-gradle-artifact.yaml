@@ -156,8 +156,10 @@ jobs:
     needs: publish
     
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
       - name: Create Github release
         uses: softprops/action-gh-release@v1
         with:
           body_path: CHANGELOG.md
-          token: ${{ secrets.github-token }}
