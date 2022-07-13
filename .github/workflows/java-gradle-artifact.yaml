@@ -155,10 +155,15 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
+      
+      - name: Extract changelog section
+        id: changelog
+        run: echo ::set-output name=body::$(awk '/^## \[/ { if (p) { exit }; if ($2 ~ /\['"${{  }}"'\](.*)/) { p=1; next} } p && NF' CHANGELOG.md)
+        shell: bash
 
       - name: Create Github release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: CHANGELOG.md
+          body: ${{ steps.changelog.outputs.body }}
           files: |
             '**/build/libs/*.jar'
