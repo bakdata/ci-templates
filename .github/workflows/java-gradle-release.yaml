@@ -115,7 +115,7 @@ jobs:
           gradle-cache: ${{ inputs.gradle-cache }}
       
       - name: Generate changelog
-        run: ./gradlew -Pchangelog.releaseVersion=${GITHUB_REF##*/}  --info --stacktrace generateChangelog
+        run: ./gradlew -Pchangelog.futureVersionTag=${{ steps.evaluate-version.outputs.release_version }} --info --stacktrace generateChangelog
         shell: bash
         working-directory: ${{ inputs.working-directory }}
         env:
