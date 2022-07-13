@@ -129,5 +129,5 @@ jobs:
       - name: Create Github release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: CHANGELOG.md
+          body_path: ${{ github.workspace }}/CHANGELOG.md
           token: ${{ secrets.github-token }}
