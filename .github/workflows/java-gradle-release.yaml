@@ -100,7 +100,7 @@ jobs:
         with:
           token: ${{ secrets.github-token }}
 
-      - name:
+      - name: Setup git
         run: |
           git config user.email ${{ secrets.github-email }}
           git config user.name ${{ secrets.github-username }}
