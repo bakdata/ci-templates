@@ -126,9 +126,20 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
       
+      - name: Debug 1
+        run: |
+          echo "Tag: ${${{ github.ref }}/refs\/tags\//}"
+        shell: bash
+      
       - name: Extract changelog section
         id: changelog
         run: echo ::set-output name=body::$(awk '/^## \[/ { if (p) { exit }; if ($2 ~ /\['"${{  }}"'\](.*)/) { p=1; next} } p && NF' CHANGELOG.md)
+        shell: bash
+      
+      - name: Debug 2
+        run: |
+          echo "Changelog:"
+          echo "${{ steps.changelog.outputs.body }}"
         shell: bash
 
       - name: Create Github release
