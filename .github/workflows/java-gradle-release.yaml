@@ -74,11 +74,11 @@ jobs:
           release_version=$(grep "version=" gradle.properties | cut -d'=' -f2)
           echo "Release Version: $release_version"
           if [[ "${{ inputs.release-type }}" == "patch" ]]; then
-              release_version=${version%-*}
+              release_version=${release_version%-*}
           elif [[ "${{ inputs.release-type }}" == "minor" ]]; then
-              release_version=${version%%.*}.$((`echo ${release_version} | cut -d'.' -f 2`+1)).0
+              release_version=${release_version%%.*}.$((`echo ${release_version} | cut -d'.' -f 2`+1)).0
           elif [[ "${{ inputs.release-type }}" == "major" ]]; then
-              release_version=$((${version%%.*}+1)).0.0
+              release_version=$((${release_version%%.*}+1)).0.0
           elif [[ "${{ inputs.release-type }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
               release_version=${{ inputs.release-type }}
           else
