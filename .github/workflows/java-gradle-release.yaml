@@ -101,8 +101,9 @@ jobs:
 
       - name: Setup git
         run: |
-          git config user.email ${{ secrets.github-email }}
-          git config user.name ${{ secrets.github-username }}
+          git status
+          #git config user.email ${{ secrets.github-email }}
+          #git config user.name ${{ secrets.github-username }}
         shell: bash
 
       - name: Set up Gradle with version ${{ inputs.gradle-version }}
