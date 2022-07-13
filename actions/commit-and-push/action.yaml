@@ -30,10 +30,11 @@ runs:
         git config user.name ${{ inputs.github-username }}
         git commit -m "${{ inputs.commit-message }}" -a
         git status
+        git push https://${{inputs.github-token}}@https://github.com/bakdata/github-playground.git
       shell: bash
 
-    - name: Push changes
-      uses: ad-m/github-push-action@v0.6.0
-      with:
-        github_token: ${{ inputs.github-token }}
-        branch: ${{ inputs.ref }}
+    # - name: Push changes
+    #   uses: ad-m/github-push-action@v0.6.0
+    #   with:
+    #     github_token: ${{ inputs.github-token }}
+    #     branch: ${{ inputs.ref }}
