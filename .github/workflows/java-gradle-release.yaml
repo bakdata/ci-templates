@@ -61,14 +61,14 @@ jobs:
 
     # Map the job outputs to step outputs
     outputs:
-      release-version: ${{ steps.release.outputs.version }}
+      release-version: ${{ steps.evaluate-version.outputs.release_version }}
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
       
       - name: Calculate release version
-        id: release
+        id: evaluate-version
         run: |
           echo "Release Type: ${{ inputs.release-type }}"
           release_version=$(grep "version=" gradle.properties | cut -d'=' -f2)
@@ -86,7 +86,7 @@ jobs:
               exit 1
           fi
           echo "Release Version: $release_version"
-          echo ::set-output name=version::$(echo $release_version)
+          echo ::set-output name=release_version::$(echo $release_version)
         shell: bash
         working-directory: ${{ inputs.working-directory }}
 
@@ -96,6 +96,9 @@ jobs:
     runs-on: ubuntu-22.04
     
     steps:
+      - name: Debug
+        run: echo ${{ needs.evaluate-version.outputs.release-version }}
+
       - name: Check out repository
         uses: actions/checkout@v2
 
