@@ -96,11 +96,10 @@ jobs:
     runs-on: ubuntu-22.04
     
     steps:
-      - name: Debug
-        run: echo ${{ needs.evaluate-version.outputs.release-version }}
-
       - name: Check out repository
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.github-token }}
 
       - name: Set up Gradle with version ${{ inputs.gradle-version }}
         uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
@@ -119,13 +118,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.github-token }}
 
       - name: Commit and push changelog
-        uses: bakdata/ci-templates/actions/commit-and-push@feature/java-gradle
-        with:
-          ref: ${{ inputs.ref }}
-          commit-message: "Changelog for version ${{ needs.evaluate-version.outputs.release-version }}"
-          github-username: ${{ secrets.github-username }}
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
+        run: |
+          git config user.email ${{ inputs.github-email }}
+          git config user.name ${{ inputs.github-username }}
+          git commit -m "${{ inputs.commit-message }}" -a
+          git push
+        shell: bash
   
   release:
     name: Release
