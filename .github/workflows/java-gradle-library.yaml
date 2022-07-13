@@ -134,6 +134,8 @@ jobs:
       - name: Extract changelog section
         id: changelog
         run: |
+          ls -lisa
+          cat CHANGELOG.md
           changelog=$(awk '/^## \[/ { if (p) { exit }; if ($2 ~ /\['"${GITHUB_REF##*/}"'\](.*)/) { p=1; next} } p && NF' CHANGELOG.md)
           echo $changelog
           echo ::set-output name=body::$(echo $changelog)
