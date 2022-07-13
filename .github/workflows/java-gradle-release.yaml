@@ -83,7 +83,7 @@ jobs:
               echo "Got unsupported version ${{ inputs.release-type }}, use patch|minor|major|<version>" >&2
               exit 1
           fi
-          echo ::set-output name=version::$version
+          echo ::set-output name=version::$(echo $version)
         shell: bash
         working-directory: ${{ inputs.working-directory }}
 
