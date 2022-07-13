@@ -102,6 +102,7 @@ jobs:
       - name: Setup git
         run: |
           git status
+          git checkout refs/heads/main
           #git config user.email ${{ secrets.github-email }}
           #git config user.name ${{ secrets.github-username }}
         shell: bash
