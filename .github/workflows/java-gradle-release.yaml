@@ -114,11 +114,6 @@ jobs:
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
       
-      - name: Create release
-        run: ./gradlew -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} --stacktrace --info release -x test
-        shell: bash
-        working-directory: ${{ inputs.working-directory }}
-      
       - name: Generate changelog
         run: ./gradlew -Pchangelog.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} --info --stacktrace generateChangelog
         shell: bash
@@ -132,3 +127,8 @@ jobs:
           git commit -m "Changelog for version ${{ needs.evaluate-version.outputs.release-version }}" -a
           git push
         shell: bash
+      
+      - name: Create release
+        run: ./gradlew -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} --stacktrace --info release -x test
+        shell: bash
+        working-directory: ${{ inputs.working-directory }}
