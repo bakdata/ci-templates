@@ -91,7 +91,7 @@ jobs:
         working-directory: ${{ inputs.working-directory }}
 
   release:
-    name: Generate changelog
+    name: Release
     needs: evaluate-version
     runs-on: ubuntu-22.04
     
