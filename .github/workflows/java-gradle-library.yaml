@@ -133,7 +133,10 @@ jobs:
       
       - name: Extract changelog section
         id: changelog
-        run: echo ::set-output name=body::$(awk '/^## \[/ { if (p) { exit }; if ($2 ~ /\['"${GITHUB_REF##*/}"'\](.*)/) { p=1; next} } p && NF' CHANGELOG.md)
+        run: |
+          changelog=$(awk '/^## \[/ { if (p) { exit }; if ($2 ~ /\['"${GITHUB_REF##*/}"'\](.*)/) { p=1; next} } p && NF' CHANGELOG.md)
+          echo $changelog
+          echo ::set-output name=body::$(echo $changelog)
         shell: bash
       
       - name: Debug 2
