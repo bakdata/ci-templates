@@ -14,9 +14,9 @@ inputs:
     required: false
     default: "3.10"
   poetry-version:
-    description: "The poetry version to be installed. (Default is 1.1.13)"
+    description: "The poetry version to be installed. (Default is 1.1.14)"
     required: false
-    default: "1.1.13"
+    default: "1.1.14"
   working-directory:
     description: "The working directory of your Python packages. (Default is root directory)"
     required: false
@@ -25,7 +25,7 @@ runs:
   using: "composite"
   steps:
     - name: Set up Poetry with version ${{ inputs.poetry-version }}
-      uses: bakdata/ci-templates/actions/python-setup-poetry@v1.3.0
+      uses: bakdata/ci-templates/actions/python-setup-poetry@v1.3.1
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: ${{ inputs.poetry-version }}

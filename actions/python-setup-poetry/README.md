@@ -7,7 +7,7 @@ This composite action sets up poetry for the given input version. It supports ca
 | Name              | Required | Default Value | Description                               |
 | ----------------- | :------: | :-----------: | ----------------------------------------- |
 | python-version    |    ❌     |     3.10      | The python version for setting up poetry. |
-| poetry-version    |    ❌     |    1.1.13     | The poetry version to be installed.       |
+| poetry-version    |    ❌     |    1.1.14     | The poetry version to be installed.       |
 | working-directory |    ❌     |       .       | The root directory of the poetry project. |
 
 ## Usage
