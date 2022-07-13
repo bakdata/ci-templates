@@ -70,9 +70,8 @@ jobs:
       - name: Calculate release version
         id: evaluate-version
         run: |
-          echo "Release Type: ${{ inputs.release-type }}"
           release_version=$(grep "version=" gradle.properties | cut -d'=' -f2)
-          echo "Release Version: $release_version"
+
           if [[ "${{ inputs.release-type }}" == "patch" ]]; then
               release_version=${release_version%-*}
           elif [[ "${{ inputs.release-type }}" == "minor" ]]; then
@@ -85,7 +84,7 @@ jobs:
               echo "Got unsupported version ${{ inputs.release-type }}, use patch|minor|major|<version>" >&2
               exit 1
           fi
-          echo "Release Version: $release_version"
+
           echo ::set-output name=release_version::$(echo $release_version)
         shell: bash
         working-directory: ${{ inputs.working-directory }}
@@ -108,7 +107,12 @@ jobs:
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
-
+      
+      - name: Create release
+        run: ./gradlew -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true --stacktrace --info release -x test
+        shell: bash
+        working-directory: ${{ inputs.working-directory }}
+      
       - name: Generate changelog
         run: ./gradlew -Pchangelog.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} --info --stacktrace generateChangelog
         shell: bash
@@ -116,11 +120,6 @@ jobs:
         env:
           GITHUB_USER: ${{ secrets.github-username }}
           GITHUB_TOKEN: ${{ secrets.github-token }}
-      
-      - name: Create release
-        run: ./gradlew -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true --stacktrace --info release -x test
-        shell: bash
-        working-directory: ${{ inputs.working-directory }}
 
       - name: Commit and push
         run: |
