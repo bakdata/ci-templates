@@ -115,7 +115,7 @@ jobs:
           gradle-cache: ${{ inputs.gradle-cache }}
       
       - name: Create release
-        run: ./gradlew -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true --stacktrace --info release -x test
+        run: ./gradlew -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} -Prelease.git.commitVersionFileOnly=true --stacktrace --info release -x test
         shell: bash
         working-directory: ${{ inputs.working-directory }}
       
