@@ -90,7 +90,7 @@ jobs:
         shell: bash
         working-directory: ${{ inputs.working-directory }}
 
-  generate-changelog:
+  release:
     name: Generate changelog
     needs: evaluate-version
     runs-on: ubuntu-22.04
@@ -116,36 +116,19 @@ jobs:
         env:
           GITHUB_USER: ${{ secrets.github-username }}
           GITHUB_TOKEN: ${{ secrets.github-token }}
+      
+      - name: Create release
+        run: ./gradlew --Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true --stacktrace --info release -x test
+        shell: bash
+        working-directory: ${{ inputs.working-directory }}
+        env:
+          GITHUB_USER: ${{ secrets.github-username }}
+          GITHUB_TOKEN: ${{ secrets.github-token }}
 
-      - name: Commit and push changelog
+      - name: Commit and push
         run: |
           git config user.email ${{ secrets.github-email }}
           git config user.name ${{ secrets.github-username }}
           git commit -m "Changelog for version ${{ needs.evaluate-version.outputs.release-version }}" -a
           git push
         shell: bash
-        
-  release:
-    name: Release
-    needs: [evaluate-version, generate-changelog]
-    runs-on: ubuntu-22.04
-    
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-      
-      - name: Set up Gradle with version ${{ inputs.gradle-version }}
-        uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
-        with:
-          java-distribution: ${{ inputs.java-distribution }}
-          java-version: ${{ inputs.java-version }}
-          gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}
-
-      - name: Release
-        run: ./gradlew --Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} --stacktrace --info release -x test
-        shell: bash
-        working-directory: ${{ inputs.working-directory }}
-        env:
-          GITHUB_USER: ${{ secrets.github-username }}
-          GITHUB_TOKEN: ${{ secrets.github-token }}
