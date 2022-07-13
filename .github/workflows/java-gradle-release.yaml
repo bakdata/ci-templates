@@ -118,12 +118,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.github-token }}
       
       - name: Create release
-        run: ./gradlew --Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true --stacktrace --info release -x test
+        run: ./gradlew -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true --stacktrace --info release -x test
         shell: bash
         working-directory: ${{ inputs.working-directory }}
-        env:
-          GITHUB_USER: ${{ secrets.github-username }}
-          GITHUB_TOKEN: ${{ secrets.github-token }}
 
       - name: Commit and push
         run: |
