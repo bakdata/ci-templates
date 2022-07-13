@@ -58,9 +58,6 @@ on:
       gradle-publish-secret:
         description: "Secret for publishing to gradle plugin portal."
         required: true
-      github-token:
-        description: "GitHub token for committing the changes."
-        required: true
 
 jobs:
   build:
@@ -133,3 +130,5 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           body_path: CHANGELOG.md
+          files: |
+            '**/build/libs/*.jar'

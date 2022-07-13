@@ -62,9 +62,6 @@ on:
       docker-password:
         description: "Password for docker authentication."
         required: false
-      github-token:
-        description: "GitHub token for committing the changes."
-        required: true
 
 jobs:
   build:
@@ -163,3 +160,5 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           body_path: CHANGELOG.md
+          files: |
+            '**/build/libs/*.jar'
