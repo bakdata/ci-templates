@@ -121,10 +121,10 @@ jobs:
         run: |
           git config user.email ${{ secrets.github-email }}
           git config user.name ${{ secrets.github-username }}
-          git commit -m "${{ inputs.commit-message }}" -a
+          git commit -m "Changelog for version ${{ needs.evaluate-version.outputs.release-version }}" -a
           git push
         shell: bash
-  
+        
   release:
     name: Release
     needs: [evaluate-version, generate-changelog]
