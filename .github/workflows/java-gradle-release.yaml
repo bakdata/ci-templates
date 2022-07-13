@@ -70,7 +70,9 @@ jobs:
       - name: Calculate release version
         id: release
         run: |
+          echo "Release Type: ${{ inputs.release-type }}"
           release_version=$(grep "version=" gradle.properties | cut -d'=' -f2)
+          echo "Release Version: $release_version"
           if [[ "${{ inputs.release-type }}" == "patch" ]]; then
               release_version=${version%-*}
           elif [[ "${{ inputs.release-type }}" == "minor" ]]; then
@@ -83,7 +85,7 @@ jobs:
               echo "Got unsupported version ${{ inputs.release-type }}, use patch|minor|major|<version>" >&2
               exit 1
           fi
-          echo $release_version
+          echo "Release Version: $release_version"
           echo ::set-output name=version::$(echo $release_version)
         shell: bash
         working-directory: ${{ inputs.working-directory }}
