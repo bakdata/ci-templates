@@ -97,14 +97,14 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-        
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.github-token }}
 
       - name: Setup git
         run: |
-          git status
-          git checkout refs/heads/main
-          #git config user.email ${{ secrets.github-email }}
-          #git config user.name ${{ secrets.github-username }}
+          git config user.email ${{ secrets.github-email }}
+          git config user.name ${{ secrets.github-username }}
         shell: bash
 
       - name: Set up Gradle with version ${{ inputs.gradle-version }}
