@@ -156,8 +156,8 @@ jobs:
 
       - name: Debug
         run: |
-          ls -lisa
-          ls build -lisa
+          ls -lisah
+          ls build -lisah
         shell: bash
 
       - name: Create Github release
@@ -165,4 +165,4 @@ jobs:
         with:
           body_path: CHANGELOG.md
           files: |
-            '**/build/libs/*.jar'
+            '**/build/*.jar'
