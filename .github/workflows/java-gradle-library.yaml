@@ -58,6 +58,12 @@ on:
       gradle-publish-secret:
         description: "Secret for publishing to gradle plugin portal."
         required: true
+      github-username:
+        description: "GitHub username for committing the changes."
+        required: true
+      github-token:
+        description: "GitHub token for committing the changes."
+        required: true
 
 jobs:
   build:
@@ -125,12 +131,6 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-      
-      - name: Setup git
-        run: |
-          git config user.email ${{ secrets.github-email }}
-          git config user.name ${{ secrets.github-username }}
-        shell: bash
 
       - name: Set up Gradle with version ${{ inputs.gradle-version }}
         uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
