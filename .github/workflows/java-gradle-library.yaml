@@ -165,4 +165,4 @@ jobs:
         with:
           body_path: CHANGELOG.md
           files: |
-            '**/build/*.jar'
+            '**/build/**/*.jar'
