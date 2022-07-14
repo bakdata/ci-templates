@@ -116,7 +116,7 @@ jobs:
           gradle-cache: ${{ inputs.gradle-cache }}
       
       - name: Generate changelog
-        run: gradle -Pchangelog.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} --stacktrace --info generateChangelog
+        run: ./gradlew -Pchangelog.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} --stacktrace --info generateChangelog
         shell: bash
         working-directory: ${{ inputs.working-directory }}
         env:
