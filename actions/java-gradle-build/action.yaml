@@ -44,6 +44,12 @@ runs:
       run: ./gradlew --info --stacktrace assemble
       shell: bash
       working-directory: ${{ inputs.working-directory }}
+    
+    - name: Debug
+      run: |
+        ls -lisah
+        ls build -lisah
+      shell: bash
 
     - name: Upload build artifact
       uses: actions/upload-artifact@master
