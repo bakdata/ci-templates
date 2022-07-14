@@ -132,6 +132,12 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
 
+      - name: Download build artifact
+        uses: actions/download-artifact@master
+        with:
+          name: build-artifact
+          path: build
+
       - name: Set up Gradle with version ${{ inputs.gradle-version }}
         uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
         with:
@@ -149,7 +155,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.github-token }}
 
       - name: Debug
-        run: cat CHANGELOG.md
+        run: |
+          ls -lisa
+          ls build -lisa
         shell: bash
 
       - name: Create Github release

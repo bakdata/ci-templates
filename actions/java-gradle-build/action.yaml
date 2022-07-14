@@ -2,6 +2,10 @@ name: "Build Java artifacts"
 description: "Build Java artifacts using gradle"
 
 inputs:
+  build-artifact-name:
+    descritption: "Name to upload build artifacts (see https://github.com/actions/upload-artifact and https://github.com/actions/download-artifact)"
+    required: false
+    default: "build-artifact"
   java-distribution:
     description: "Java distribution to be installed. (Default is temurin)"
     required: false
@@ -40,3 +44,10 @@ runs:
       run: ./gradlew --info --stacktrace assemble
       shell: bash
       working-directory: ${{ inputs.working-directory }}
+
+    - name: Upload build artifact
+      uses: actions/upload-artifact@master
+      with:
+        name: ${{ inputs.build-artifact-name }}
+        path: build/*.jar
+        retention-days: 1
