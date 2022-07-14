@@ -164,5 +164,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           body_path: CHANGELOG.md
-          files: |
-            '**/build/**/*.jar'
+          files: ./build/**/*.jar
