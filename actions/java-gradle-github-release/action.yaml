@@ -1,11 +1,7 @@
-name: "Build Java artifacts"
-description: "Build Java artifacts using gradle"
+name: "Publish Java artifacts"
+description: "Publish Java artifacts using gradle"
 
 inputs:
-  build-artifact-name:
-    descritption: "Name to upload build artifacts (see https://github.com/actions/upload-artifact and https://github.com/actions/download-artifact)"
-    required: false
-    default: "build-artifact"
   java-distribution:
     description: "Java distribution to be installed. (Default is temurin)"
     required: false
@@ -22,16 +18,28 @@ inputs:
     description: "Cache to use. Options are gradle, maven, sbt. (Default is '')"
     required: false
     default: ""
+  github-username:
+    description: "GitHub username for requesting changes from API."
+    required: true
+  github-token:
+    description: "GitHub token for requesting changes from API."
+    required: true
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is root directory)"
     required: false
     default: "./"
 runs:
-  using: "composite"
+  using: "composite"    
   steps:
     - name: Check out repository
       uses: actions/checkout@v2
-    
+
+    - name: Download build artifact
+      uses: actions/download-artifact@master
+      with:
+        name: build-artifact
+        path: build
+
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
       with:
@@ -40,19 +48,16 @@ runs:
         gradle-version: ${{ inputs.gradle-version }}
         gradle-cache: ${{ inputs.gradle-cache }}
     
-    - name: Compile
-      run: ./gradlew --info --stacktrace build
+    - name: Generate changelog
+      run: ./gradlew -Pchangelog.releaseVersion=${GITHUB_REF##*/} -Pchangelog.sinceTag=${GITHUB_REF##*/} --stacktrace --info generateChangelog
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-
-    - name: Build jar
-      run: ./gradlew --info --stacktrace jar
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-
-    - name: Upload build artifact
-      uses: actions/upload-artifact@master
+      env:
+        GITHUB_USER: ${{ inputs.github-username }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+    
+    - name: Create Github release
+      uses: softprops/action-gh-release@v1
       with:
-        name: ${{ inputs.build-artifact-name }}
-        path: ./**/build/libs/*.jar
-        retention-days: 1
+        body_path: CHANGELOG.md
+        files: ./build/**/*.jar

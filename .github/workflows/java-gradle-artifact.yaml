@@ -62,6 +62,12 @@ on:
       docker-password:
         description: "Password for docker authentication."
         required: false
+      github-username:
+        description: "GitHub username for requesting changes from API."
+        required: true
+      github-token:
+        description: "GitHub token for requesting changes from API."
+        required: true
 
 jobs:
   build:
@@ -151,33 +157,15 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-22.04
     needs: publish
-    
+  
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-      
-      - name: Debug 1
-        run: |
-          echo "Tag: ${GITHUB_REF##*/}"
-        shell: bash
-      
-      - name: Extract changelog section
-        id: changelog
-        run: |
-          changelog=$(awk '/^## \[/ { if (p) { exit }; if ($2 ~ /\['"${GITHUB_REF##*/}"'\](.*)/) { p=1; next} } p && NF' CHANGELOG.md)
-          echo $changelog
-          echo ::set-output name=body::$(echo $changelog)
-        shell: bash
-      
-      - name: Debug 2
-        run: |
-          echo "Changelog:"
-          echo "${{ steps.changelog.outputs.body }}"
-        shell: bash
-
-      - name: Create Github release
-        uses: softprops/action-gh-release@v1
+      - name: Release on github
+        uses: bakdata/ci-templates/actions/java-gradle-github-release@feature/java-gradle
         with:
-          body: ${{ steps.changelog.outputs.body }}
-          files: |
-            '**/build/libs/*.jar'
+          github-username: ${{ secrets.github-username }}
+          github-token: ${{ secrets.github-token }}
+          java-distribution: ${{ inputs.java-distribution }}
+          java-version: ${{ inputs.java-version }}
+          gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
+          working-directory: ${{ inputs.working-directory }}
