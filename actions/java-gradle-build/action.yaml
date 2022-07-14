@@ -52,13 +52,12 @@ runs:
     
     - name: Debug
       run: |
-        ls -lisah
-        ls build -lisah
+        ls github-playground-avro/build/libs -lisah
       shell: bash
 
     - name: Upload build artifact
       uses: actions/upload-artifact@master
       with:
         name: ${{ inputs.build-artifact-name }}
-        path: ./**/build/*.jar
+        path: ./**/build/libs/*.jar
         retention-days: 1
