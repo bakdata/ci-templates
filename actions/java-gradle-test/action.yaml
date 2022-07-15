@@ -1,4 +1,4 @@
-name: "Run Java tests"
+name: "Test java gradle"
 description: "Run unit and optionally integration tests using gradle"
 
 inputs:
@@ -7,16 +7,16 @@ inputs:
     required: false
     default: true
   sonar-token:
-    description: "The token for sonarcloud."
+    description: "Token for sonarcloud."
     required: false
   signing-secret-key-ring:
-    description: "The key ring file for signing the sonatype publication."
+    description: "Key ring file for signing the sonatype publication."
     required: false
   signing-key-id:
-    description: "The key id for signing the sonatype publication."
+    description: "Key id for signing the sonatype publication."
     required: false
   signing-password:
-    description: "The password for signing the sonatype publication."
+    description: "Password for signing the sonatype publication."
     required: false
   java-distribution:
     description: "Java distribution to be installed. (Default is temurin)"

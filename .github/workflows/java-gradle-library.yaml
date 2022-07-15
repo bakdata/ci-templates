@@ -1,25 +1,25 @@
-name: Reusable workflow for building and publishing java gradle artifacts
+name: Reusable workflow for building and publishing java gradle libraries
 
 on:
   workflow_call:
     inputs:
       java-distribution:
-        description: "The java distribution to be installed. (Default is temurin)"
+        description: "Java distribution to be installed. (Default is temurin)"
         required: false
         type: string
         default: "temurin"
       java-version:
-        description: "The java version to be installed. (Default is 11)"
+        description: "Java version to be installed. (Default is 11)"
         required: false
         type: string
         default: "11"
       gradle-version:
-        description: "The gradle version to be installed. (Default is 6.7.1)"
+        description: "Gradle version to be installed. (Default is 6.7.1)"
         required: false
         type: string
         default: "6.7.1"
       gradle-cache:
-        description: "The gradle cache to use. Options are gradle, maven, sbt. (Default is gradle)"
+        description: "Gradle cache to use. Options are gradle, maven, sbt. (Default is gradle)"
         required: false
         type: string
         default: "gradle"
@@ -29,7 +29,7 @@ on:
         type: boolean
         default: true
       working-directory:
-        description: "The working directory of your Gradle artifacts. (Default is root directory)"
+        description: "Working directory of your Gradle artifacts. (Default is root directory)"
         required: false
         type: string
         default: "./"

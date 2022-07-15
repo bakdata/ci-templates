@@ -4,22 +4,22 @@ on:
   workflow_call:
     inputs:
       java-distribution:
-        description: "The java distribution to be installed. (Default is temurin)"
+        description: "Java distribution to be installed. (Default is temurin)"
         required: false
         type: string
         default: "temurin"
       java-version:
-        description: "The java version to be installed. (Default is 11)"
+        description: "Java version to be installed. (Default is 11)"
         required: false
         type: string
         default: "11"
       gradle-version:
-        description: "The gradle version to be installed. (Default is 6.7.1)"
+        description: "Gradle version to be installed. (Default is 6.7.1)"
         required: false
         type: string
         default: "6.7.1"
       gradle-cache:
-        description: "The gradle cache to use. Options are gradle, maven, sbt. (Default is gradle)"
+        description: "Gradle cache to use. Options are gradle, maven, sbt. (Default is gradle)"
         required: false
         type: string
         default: "gradle"
@@ -33,7 +33,7 @@ on:
         required: false
         type: string
       working-directory:
-        description: "The working directory of your Gradle artifacts. (Default is root directory)"
+        description: "Working directory of your Gradle artifacts. (Default is root directory)"
         required: false
         type: string
         default: "./"
@@ -57,10 +57,10 @@ on:
         description: "Password for signing into sonatype repository."
         required: true
       docker-username:
-        description: "Username for docker authentication."
+        description: "Username for publishing to dockerhub."
         required: false
       docker-password:
-        description: "Password for docker authentication."
+        description: "Password for publishing to dockerhub."
         required: false
       github-username:
         description: "GitHub username for requesting changes from API."

@@ -1,5 +1,5 @@
-name: "Publish Java artifacts"
-description: "Publish Java artifacts using gradle"
+name: "Publish java artifacts"
+description: "Publish java artifacts using gradle"
 
 inputs:
   signing-secret-key-ring:

@@ -1,4 +1,4 @@
-name: Reusable workflow for building and publishing java gradle artifacts
+name: Reusable workflow for releasing java gradle projects
 
 on:
   workflow_call:
@@ -7,33 +7,28 @@ on:
         description: "Scope of the release (major, minor or patch)."
         required: true
         type: string
-      ref:
-        description: "Ref name to checkout the repository."
-        required: false
-        default: ${{ github.event.repository.default_branch }}
-        type: string
       java-distribution:
-        description: "The java distribution to be installed. (Default is temurin)"
+        description: "Java distribution to be installed. (Default is temurin)"
         required: false
         type: string
         default: "temurin"
       java-version:
-        description: "The java version to be installed. (Default is 11)"
+        description: "Java version to be installed. (Default is 11)"
         required: false
         type: string
         default: "11"
       gradle-version:
-        description: "The gradle version to be installed. (Default is 6.7.1)"
+        description: "Gradle version to be installed. (Default is 6.7.1)"
         required: false
         type: string
         default: "6.7.1"
       gradle-cache:
-        description: "The gradle cache to use. Options are gradle, maven, sbt. (Default is gradle)"
+        description: "Gradle cache to use. Options are gradle, maven, sbt. (Default is gradle)"
         required: false
         type: string
         default: "gradle"
       working-directory:
-        description: "The working directory of your Gradle artifacts. (Default is root directory)"
+        description: "Working directory of your Gradle artifacts. (Default is root directory)"
         required: false
         type: string
         default: "./"
@@ -52,7 +47,7 @@ on:
     outputs:
       release-tag:
         description: "The release tag."
-        value: ${{ jobs.release.outputs.release-version }}
+        value: ${{ jobs.evaluate-version.outputs.release-version }}
 
 jobs:
   evaluate-version:
@@ -61,7 +56,7 @@ jobs:
 
     # Map the job outputs to step outputs
     outputs:
-      release-version: ${{ steps.evaluate-version.outputs.release_version }}
+      release-version: ${{ steps.evaluate-version.outputs.release-version }}
 
     steps:
       - name: Check out repository
@@ -70,12 +65,12 @@ jobs:
       - name: Calculate release version
         id: evaluate-version
         run: |
-          release_version=$(grep "version=" gradle.properties | cut -d'=' -f2)
+          release_version=$(grep "version=" gradle.properties | cut -d "=" -f2)
 
           if [[ "${{ inputs.release-type }}" == "patch" ]]; then
               release_version=${release_version%-*}
           elif [[ "${{ inputs.release-type }}" == "minor" ]]; then
-              release_version=${release_version%%.*}.$((`echo ${release_version} | cut -d'.' -f 2`+1)).0
+              release_version=${release_version%%.*}.$(($(echo ${release_version} | cut -d "." -f 2)+1)).0
           elif [[ "${{ inputs.release-type }}" == "major" ]]; then
               release_version=$((${release_version%%.*}+1)).0.0
           elif [[ "${{ inputs.release-type }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -85,7 +80,7 @@ jobs:
               exit 1
           fi
 
-          echo ::set-output name=release_version::$(echo $release_version)
+          echo ::set-output name=release-version::$(echo $release_version)
         shell: bash
         working-directory: ${{ inputs.working-directory }}
 

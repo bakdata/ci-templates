@@ -1,5 +1,5 @@
-name: "Publish Java artifacts"
-description: "Publish Java artifacts using gradle"
+name: "Release java artifacts"
+description: "Release java artifacts on github"
 
 inputs:
   java-distribution:

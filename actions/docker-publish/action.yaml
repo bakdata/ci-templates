@@ -1,5 +1,5 @@
-name: "Publish Java artifacts"
-description: "Publish Java artifacts using gradle"
+name: "Publish docker image"
+description: "Publish docker image from download artifact"
 
 inputs:
   image-name:
@@ -11,16 +11,16 @@ inputs:
     required: true
     default: "docker-image"  
   publisher:
-    description: "Publisher to prefix docker image (e.g. 'my-publisher' with a repository name `)."
+    description: "Publisher to prefix docker image (e.g. 'my-publisher' with a repository name)."
     required: false
   username:
     description: "Username for the docker registry login."
     required: true
   password:
     description: "Password for the docker registry login."
-    required: true  
+    required: true
   working-directory:
-    description: "The working directory of your Gradle artifacts. (Default is root directory)."
+    description: "Working directory of your Gradle artifacts. (Default is root directory)"
     required: false
     default: "./"
 runs:
@@ -48,13 +48,13 @@ runs:
         docker load --input build/*.tar
 
         if [[ "$GITHUB_REF" =~ ^ref/tags/.* ]]; then
-          docker tag ${{ github.event.repository.name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ github.event.repository.name }}:latest
-          docker tag ${{ github.event.repository.name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ github.event.repository.name }}:${GITHUB_REF/refs\/tags\//}
-          docker push ${{ inputs.publisher }}/${{ github.event.repository.name }}:latest
-          docker push ${{ inputs.publisher }}/${{ github.event.repository.name }}:${GITHUB_REF/refs\/tags\//}
+          docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ inputs.image-name }}:latest
+          docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
+          docker push ${{ inputs.publisher }}/${{ inputs.image-name }}:latest
+          docker push ${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
         else
-          docker tag ${{ github.event.repository.name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ github.event.repository.name }}:${{ github.run_id }}
-          docker push ${{ inputs.publisher }}/${{ github.event.repository.name }}:${{ github.run_id }}
+          docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ inputs.image-name }}:${{ github.run_id }}
+          docker push ${{ inputs.publisher }}/${{ inputs.image-name }}:${{ github.run_id }}
         fi
       shell: bash
       working-directory: ${{ inputs.working-directory }}

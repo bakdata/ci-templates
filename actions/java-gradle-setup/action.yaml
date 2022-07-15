@@ -1,5 +1,5 @@
 name: "Setup gradle"
-description: "Build Java artifacts using gradle"
+description: "Setup java and gradle"
 
 inputs:
   java-distribution:
