@@ -54,14 +54,11 @@ runs:
         java-version: ${{ inputs.java-version }}
         gradle-version: ${{ inputs.gradle-version }}
 
-    - name: Write secring to file
+    - name: Publish to Nexus
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
-      shell: bash
-
-    - name: Publish to Nexus
-      run: ./gradlew --info --stacktrace publishToNexus
+        ./gradlew --info --stacktrace publishToNexus
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
@@ -73,7 +70,10 @@ runs:
     
     - name: Release to Nexus
       if: startsWith(github.ref, 'refs/tags/')
-      run: ./gradlew --info --stacktrace closeAndReleaseRepository -x test
+      run: |
+        export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
+        echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
+        #./gradlew --info --stacktrace closeAndReleaseRepository -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
@@ -83,7 +83,10 @@ runs:
 
     - name: Publish plugin
       if: ${{ startsWith(github.ref, 'refs/tags/') && inputs.gradle-publish-key != '' && inputs.gradle-publish-secret != '' }}
-      run: ./gradlew --info --stacktrace -Pgradle.publish.key=${{ inputs.gradle-publish-key }} -Pgradle.publish.secret=${{ inputs.gradle-publish-secret }} publishPlugins -x test
+      run: |
+        export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
+        echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
+        ./gradlew --info --stacktrace -Pgradle.publish.key=${{ inputs.gradle-publish-key }} -Pgradle.publish.secret=${{ inputs.gradle-publish-secret }} publishPlugins -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:

@@ -2,6 +2,12 @@ name: "Release Java artifacts"
 description: "Release Java artifacts on Github"
 
 inputs:
+  github-username:
+    description: "GitHub username for requesting changes from API."
+    required: true
+  github-token:
+    description: "GitHub token for requesting changes from API."
+    required: true
   java-distribution:
     description: "Java distribution to be installed. (Default is microsoft)"
     required: false
@@ -14,12 +20,6 @@ inputs:
     description: "Gradle version to be installed. (Default is wrapper)"
     required: false
     default: "wrapper"
-  github-username:
-    description: "GitHub username for requesting changes from API."
-    required: true
-  github-token:
-    description: "GitHub token for requesting changes from API."
-    required: true
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is root directory)"
     required: false

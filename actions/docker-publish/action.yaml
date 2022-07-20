@@ -9,16 +9,16 @@ inputs:
   image-artifact-name:
     descritption: "Name of the pipeline artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'docker-image')."
     required: true
-    default: "docker-image"  
-  publisher:
-    description: "Publisher to prefix Docker image (e.g. 'my-publisher' with a repository name)."
-    required: false
+    default: "docker-image"
   username:
     description: "Username for the Docker registry login."
     required: true
   password:
     description: "Password for the Docker registry login."
     required: true
+  publisher:
+    description: "Publisher to prefix Docker image (e.g. 'my-publisher' with a repository name)."
+    required: false
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is root directory)"
     required: false
@@ -41,7 +41,7 @@ runs:
     - name: Publish Docker image
       run: |
         if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
-          >&2 echo "Error: A single image tar file is needed in the downloaded pipeline artifact. You can upload one before using this action, see https://github.com/actions/upload-artifact."
+          >&2 echo "Error: A single image tar file is needed in the downloaded pipeline artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
           exit 1
         fi
 

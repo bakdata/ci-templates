@@ -49,10 +49,10 @@ on:
         required: true
       docker-username:
         description: "Username for publishing to Dockerhub."
-        required: false
+        required: true
       docker-password:
         description: "Password for publishing to Dockerhub."
-        required: false
+        required: true
       github-username:
         description: "GitHub username for requesting changes from API."
         required: true
