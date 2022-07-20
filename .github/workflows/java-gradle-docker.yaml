@@ -1,5 +1,5 @@
 name: Java Gradle Docker
-description: Reusable workflow for building and publishing Java Gradle artifacts
+# Reusable workflow for building and publishing Java Gradle artifacts
 
 on:
   workflow_call:

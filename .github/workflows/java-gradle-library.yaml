@@ -1,5 +1,5 @@
 name: Java Gradle library
-description: Reusable workflow for building and publishing Java gradle libraries
+# Reusable workflow for building and publishing Java gradle libraries
 
 on:
   workflow_call:

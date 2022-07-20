@@ -1,5 +1,5 @@
 name: Java Gradle Release
-description: Reusable workflow for releasing Java gradle projects
+# Reusable workflow for releasing Java gradle projects
 
 on:
   workflow_call:
