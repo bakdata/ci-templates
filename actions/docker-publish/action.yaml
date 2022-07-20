@@ -1,23 +1,23 @@
-name: "Publish docker image"
-description: "Publish docker image from download artifact"
+name: "Publish Docker image"
+description: "Publish Docker image from download artifact"
 
 inputs:
   image-name:
-    descritption: "Name of docker image (Default is the respository name)."
+    descritption: "Name of Docker image (Default is the respository name)."
     required: true
     default: ${{ github.event.repository.name }}
   image-artifact-name:
-    descritption: "Name of the pipeline artifact that contains the docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'docker-image')."
+    descritption: "Name of the pipeline artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'docker-image')."
     required: true
     default: "docker-image"  
   publisher:
-    description: "Publisher to prefix docker image (e.g. 'my-publisher' with a repository name)."
+    description: "Publisher to prefix Docker image (e.g. 'my-publisher' with a repository name)."
     required: false
   username:
-    description: "Username for the docker registry login."
+    description: "Username for the Docker registry login."
     required: true
   password:
-    description: "Password for the docker registry login."
+    description: "Password for the Docker registry login."
     required: true
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is root directory)"
@@ -26,8 +26,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Download docker image tar artifact
-      uses: actions/download-artifact@master
+    - name: Download Docker image tar artifact
+      uses: actions/download-artifact@v3
       with:
         name: ${{ inputs.image-artifact-name }}
         path: build
@@ -38,7 +38,7 @@ runs:
         username: ${{ inputs.username }}
         password: ${{ inputs.password }}   
     
-    - name: Publish docker image
+    - name: Publish Docker image
       run: |
         if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
           >&2 echo "Error: A single image tar file is needed in the downloaded pipeline artifact. You can upload one before using this action, see https://github.com/actions/upload-artifact."

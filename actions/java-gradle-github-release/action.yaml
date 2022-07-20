@@ -1,23 +1,19 @@
-name: "Release java artifacts"
-description: "Release java artifacts on github"
+name: "Release Java artifacts"
+description: "Release Java artifacts on Github"
 
 inputs:
   java-distribution:
-    description: "Java distribution to be installed. (Default is temurin)"
+    description: "Java distribution to be installed. (Default is microsoft)"
     required: false
-    default: "temurin"
+    default: "microsoft"
   java-version:
     description: "Java version to be installed. (Default is 11)"
     required: false
     default: "11"
   gradle-version:
-    description: "Gradle version to be installed. (Default is 6.7.1)"
+    description: "Gradle version to be installed. (Default is wrapper)"
     required: false
-    default: "6.7.1"
-  gradle-cache:
-    description: "Cache to use. Options are gradle, maven, sbt. (Default is '')"
-    required: false
-    default: ""
+    default: "wrapper"
   github-username:
     description: "GitHub username for requesting changes from API."
     required: true
@@ -35,7 +31,7 @@ runs:
       uses: actions/checkout@v2
 
     - name: Download build artifact
-      uses: actions/download-artifact@master
+      uses: actions/download-artifact@v3
       with:
         name: build-artifact
         path: build
@@ -46,7 +42,6 @@ runs:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
         gradle-version: ${{ inputs.gradle-version }}
-        gradle-cache: ${{ inputs.gradle-cache }}
     
     - name: Generate changelog
       run: ./gradlew -Pchangelog.releaseVersion=${GITHUB_REF##*/} -Pchangelog.sinceTag=${GITHUB_REF##*/} --stacktrace --info generateChangelog

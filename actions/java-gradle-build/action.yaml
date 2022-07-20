@@ -1,5 +1,5 @@
 name: "Build artifacts"
-description: "Build java artifacts using gradle"
+description: "Build Java artifacts using gradle"
 
 inputs:
   build-artifact-name:
@@ -7,21 +7,17 @@ inputs:
     required: false
     default: "build-artifact"
   java-distribution:
-    description: "Java distribution to be installed. (Default is temurin)"
+    description: "Java distribution to be installed. (Default is microsoft)"
     required: false
-    default: "temurin"
+    default: "microsoft"
   java-version:
     description: "Java version to be installed. (Default is 11)"
     required: false
     default: "11"
   gradle-version:
-    description: "Gradle version to be installed. (Default is 6.7.1)"
+    description: "Gradle version to be installed. (Default is wrapper)"
     required: false
-    default: "6.7.1"
-  gradle-cache:
-    description: "Cache to use. Options are gradle, maven, sbt. (Default is '')"
-    required: false
-    default: ""
+    default: "wrapper"
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is root directory)"
     required: false
@@ -38,7 +34,6 @@ runs:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
         gradle-version: ${{ inputs.gradle-version }}
-        gradle-cache: ${{ inputs.gradle-cache }}
     
     - name: Compile
       run: ./gradlew --info --stacktrace build
@@ -51,7 +46,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
 
     - name: Upload build artifact
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.build-artifact-name }}
         path: ./**/build/libs/*.jar

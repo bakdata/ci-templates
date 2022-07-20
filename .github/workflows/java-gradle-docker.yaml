@@ -1,35 +1,26 @@
-name: Reusable workflow for building and publishing java gradle artifacts
+name: Java Gradle Docker
+description: Reusable workflow for building and publishing Java Gradle artifacts
 
 on:
   workflow_call:
     inputs:
       java-distribution:
-        description: "Java distribution to be installed. (Default is temurin)"
+        description: "Java distribution to be installed. (Default is microsoft)"
         required: false
         type: string
-        default: "temurin"
+        default: "microsoft"
       java-version:
         description: "Java version to be installed. (Default is 11)"
         required: false
         type: string
         default: "11"
       gradle-version:
-        description: "Gradle version to be installed. (Default is 6.7.1)"
+        description: "Gradle version to be installed. (Default is wrapper)"
         required: false
         type: string
-        default: "6.7.1"
-      gradle-cache:
-        description: "Gradle cache to use. Options are gradle, maven, sbt. (Default is gradle)"
-        required: false
-        type: string
-        default: "gradle"
-      integration-tests:
-        description: "If true, the action is executing integration tests (Default is true)"
-        required: false
-        type: boolean
-        default: true
+        default: "wrapper"
       docker-publisher:
-        description: "Publisher to prefix docker image."
+        description: "Publisher to prefix Docker image."
         required: false
         type: string
       working-directory:
@@ -39,7 +30,7 @@ on:
         default: "./"
     secrets:
       sonar-token:
-        description: "Token for sonarcloud."
+        description: "Token for Sonarcloud."
         required: true
       signing-secret-key-ring:
         description: "Key ring file for signing the sonatype publication."
@@ -57,10 +48,10 @@ on:
         description: "Password for signing into sonatype repository."
         required: true
       docker-username:
-        description: "Username for publishing to dockerhub."
+        description: "Username for publishing to Dockerhub."
         required: false
       docker-password:
-        description: "Password for publishing to dockerhub."
+        description: "Password for publishing to Dockerhub."
         required: false
       github-username:
         description: "GitHub username for requesting changes from API."
@@ -81,7 +72,6 @@ jobs:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}
 
   test:
@@ -93,30 +83,27 @@ jobs:
       - name: Test
         uses: bakdata/ci-templates/actions/java-gradle-test@feature/java-gradle
         with:
-          integration-tests: true
           sonar-token: ${{ secrets.sonar-token }}
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
           signing-password: ${{ secrets.signing-password }}   
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
-          gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}       
+          gradle-version: ${{ inputs.gradle-version }}   
           working-directory: ${{ inputs.working-directory }}
 
   build-jib:
-    name: Build Jib Image
+    name: Build Jib image
     runs-on: ubuntu-22.04
     needs: test
 
     steps:
-      - name: Build Jib Image
+      - name: Build Jib image
         uses: bakdata/ci-templates/actions/java-gradle-build-jib-image@feature/java-gradle
         with:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}
 
   publish:
@@ -136,16 +123,15 @@ jobs:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}
 
   publish-jib-image:
-    name: Publish Jib Image
+    name: Publish Jib image
     runs-on: ubuntu-22.04
     needs: build-jib
 
     steps:
-    - name: Publish jib image
+    - name: Publish Jib image
       uses: bakdata/ci-templates/actions/docker-publish@feature/java-gradle
       with:
         publisher: ${{ inputs.docker-publisher }}
@@ -159,7 +145,7 @@ jobs:
     needs: publish
   
     steps:
-      - name: Release on github
+      - name: Release on Github
         uses: bakdata/ci-templates/actions/java-gradle-github-release@feature/java-gradle
         with:
           github-username: ${{ secrets.github-username }}
@@ -167,5 +153,4 @@ jobs:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}

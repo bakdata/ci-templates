@@ -1,4 +1,5 @@
-name: Reusable workflow for releasing java gradle projects
+name: Java Gradle Release
+description: Reusable workflow for releasing Java gradle projects
 
 on:
   workflow_call:
@@ -8,25 +9,20 @@ on:
         required: true
         type: string
       java-distribution:
-        description: "Java distribution to be installed. (Default is temurin)"
+        description: "Java distribution to be installed. (Default is microsoft)"
         required: false
         type: string
-        default: "temurin"
+        default: "microsoft"
       java-version:
         description: "Java version to be installed. (Default is 11)"
         required: false
         type: string
         default: "11"
       gradle-version:
-        description: "Gradle version to be installed. (Default is 6.7.1)"
+        description: "Gradle version to be installed. (Default is wrapper)"
         required: false
         type: string
-        default: "6.7.1"
-      gradle-cache:
-        description: "Gradle cache to use. Options are gradle, maven, sbt. (Default is gradle)"
-        required: false
-        type: string
-        default: "gradle"
+        default: "wrapper"
       working-directory:
         description: "Working directory of your Gradle artifacts. (Default is root directory)"
         required: false
@@ -108,7 +104,6 @@ jobs:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}
       
       - name: Generate changelog
         run: ./gradlew -Pchangelog.releaseVersion=${{ needs.evaluate-version.outputs.release-version }} --stacktrace --info generateChangelog
@@ -120,7 +115,7 @@ jobs:
 
       - name: Commit and push
         run: |
-          git commit -m "Changelog for version ${{ needs.evaluate-version.outputs.release-version }}" -a
+          git commit -am "Changelog for version ${{ needs.evaluate-version.outputs.release-version }}" 
           git push
         shell: bash
       

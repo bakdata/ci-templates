@@ -1,23 +1,19 @@
-name: "Setup gradle"
-description: "Setup java and gradle"
+name: "Setup Gradle"
+description: "Setup Java and Gradle"
 
 inputs:
   java-distribution:
-    description: "Java distribution to be installed. (Default is temurin)"
+    description: "Java distribution to be installed. (Default is microsoft)"
     required: false
-    default: "temurin"
+    default: "microsoft"
   java-version:
     description: "Java version to be installed. (Default is 11)"
     required: false
     default: "11"
   gradle-version:
-    description: "Gradle version to be installed. (Default is 6.7.1)"
+    description: "Gradle version to be installed. (Default is wrapper)"
     required: false
-    default: "6.7.1"
-  gradle-cache:
-    description: "Cache to use. Options are gradle, maven, sbt. (Default is '')"
-    required: false
-    default: ""
+    default: "wrapper"
 runs:
   using: "composite"
   steps:
@@ -25,7 +21,6 @@ runs:
       with:
         distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
-        cache: ${{ inputs.gradle-cache }}
 
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2

@@ -1,13 +1,9 @@
-name: "Test java gradle"
-description: "Run unit and optionally integration tests using gradle"
+name: "Test Java gradle"
+description: "Run unit tests and assess code quality using gradle"
 
 inputs:
-  integration-tests:
-    description: "If true, the action is executing integration tests (Default is true)"
-    required: false
-    default: true
   sonar-token:
-    description: "Token for sonarcloud."
+    description: "Token for Sonarcloud."
     required: false
   signing-secret-key-ring:
     description: "Key ring file for signing the sonatype publication."
@@ -19,21 +15,17 @@ inputs:
     description: "Password for signing the sonatype publication."
     required: false
   java-distribution:
-    description: "Java distribution to be installed. (Default is temurin)"
+    description: "Java distribution to be installed. (Default is microsoft)"
     required: false
-    default: "temurin"
+    default: "microsoft"
   java-version:
     description: "Java version to be installed. (Default is 11)"
     required: false
     default: "11"
   gradle-version:
-    description: "Gradle version to be installed. (Default is 6.7.1)"
+    description: "Gradle version to be installed. (Default is wrapper)"
     required: false
-    default: "6.7.1"
-  gradle-cache:
-    description: "Cache to use. Options are gradle, maven, sbt. (Default is '')"
-    required: false
-    default: ""
+    default: "wrapper"
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is root directory)"
     required: false
@@ -52,20 +44,13 @@ runs:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
         gradle-version: ${{ inputs.gradle-version }}
-        gradle-cache: ${{ inputs.gradle-cache }}
 
-    - name: Run unit tests
-      run: ./gradlew check --info --stacktrace -PexcludeTests="**/*IntegrationTest*"
+    - name: Run tests
+      run: ./gradlew check --info --stacktrace
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
-    - name: Run integration tests
-      if: ${{ inputs.integration-tests == 'true' }}
-      run: ./gradlew check --info --stacktrace -PincludeTests="**/*IntegrationTest*"
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-    
-    # sonar.branch.autoconfig.disabled is necessary for autocreation of projects on sonarcloud to work
+    # sonar.branch.autoconfig.disabled is necessary for autocreation of projects on Sonarcloud to work
     - name: Assess code quality
       if: ${{ inputs.sonar-token != '' }}
       run: ./gradlew -Dsonar.branch.autoconfig.disabled=true -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=bakdata --info --stacktrace sonarqube
