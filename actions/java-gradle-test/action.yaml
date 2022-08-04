@@ -50,6 +50,12 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
     
+    - name: Publish Test Report
+      uses: mikepenz/action-junit-report@v3
+      if: always() # always run even if the previous step fails
+      with:
+        report_paths: '**/build/test-results/test/TEST-*.xml'
+    
     # sonar.branch.autoconfig.disabled is necessary for autocreation of projects on Sonarcloud to work
     - name: Assess code quality
       if: ${{ inputs.sonar-token != '' }}
