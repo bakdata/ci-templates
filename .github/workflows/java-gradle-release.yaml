@@ -75,8 +75,6 @@ jobs:
         run: |
           wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
           chmod +x /usr/local/bin/semver
-          semver --version
-          exit 1
 
       - name: Bump version
         id: evaluate-version
@@ -85,6 +83,8 @@ jobs:
           release_version=$(semver bump ${{ inputs.release-type }} ${old_version})
           echo ::set-output name=release-version::$old_version
           echo ::set-output name=release-version::$release_version
+          echo "Old Version - $old_version"
+          echo "Release Version - $release_version"
 
       - name: Set up Gradle with version ${{ inputs.gradle-version }}
         uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
