@@ -41,49 +41,22 @@ on:
 
     # Map the workflow outputs to job outputs
     outputs:
-      release-tag:
+      old-version:
+        description: "The old tag."
+        value: ${{ jobs.release.outputs.old-version }}
+      release-version:
         description: "The release tag."
-        value: ${{ jobs.evaluate-version.outputs.release-version }}
-
-jobs:
-  evaluate-version:
-    name: Evaluate version
-    runs-on: ubuntu-22.04
-
-    # Map the job outputs to step outputs
-    outputs:
-      release-version: ${{ steps.evaluate-version.outputs.release-version }}
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-      
-      - name: Calculate release version
-        id: evaluate-version
-        run: |
-          release_version=$(grep "version=" gradle.properties | cut -d "=" -f2)
-
-          if [[ "${{ inputs.release-type }}" == "patch" ]]; then
-              release_version=${release_version%-*}
-          elif [[ "${{ inputs.release-type }}" == "minor" ]]; then
-              release_version=${release_version%%.*}.$(($(echo "${release_version}" | cut -d "." -f 2)+1)).0
-          elif [[ "${{ inputs.release-type }}" == "major" ]]; then
-              release_version=$((${release_version%%.*}+1)).0.0
-          elif [[ "${{ inputs.release-type }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-              release_version=${{ inputs.release-type }}
-          else
-              echo "Got unsupported version ${{ inputs.release-type }}, use patch|minor|major|<version>" >&2
-              exit 1
-          fi
-
-          echo ::set-output name=release-version::$release_version
-        shell: bash
-        working-directory: ${{ inputs.working-directory }}
+        value: ${{ jobs.release.outputs.release-version }}
 
   release:
     name: Release
     needs: evaluate-version
     runs-on: ubuntu-22.04
+
+    # Map the job outputs to step outputs
+    outputs:
+      old-version: ${{ steps.evaluate-version.outputs.old-version }}
+      release-version: ${{ steps.evaluate-version.outputs.release-version }}
     
     steps:
       - name: Check out repository
@@ -97,6 +70,21 @@ jobs:
           git config user.email ${{ secrets.github-email }}
           git config user.name ${{ secrets.github-username }}
         shell: bash
+
+      - name: Setup semver
+        run: |
+          wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
+          chmod +x /usr/local/bin/semver
+          semver --version
+          exit 1
+
+      - name: Bump version
+        id: evaluate-version
+        run: |
+          old_version=$(grep "version=" gradle.properties | cut -d "=" -f2)
+          release_version=$(semver bump ${{ inputs.release-type }} ${old_version})
+          echo ::set-output name=release-version::$old_version
+          echo ::set-output name=release-version::$release_version
 
       - name: Set up Gradle with version ${{ inputs.gradle-version }}
         uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
