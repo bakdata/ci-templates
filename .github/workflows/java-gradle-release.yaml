@@ -82,7 +82,7 @@ jobs:
           old_version=$(grep "version=" gradle.properties | cut -d "=" -f2)
           release_version=$(semver bump "${{ inputs.release-type }}" "${old_version}")
           echo ::set-output "name=old-version::$old_version"
-          echo ::set-output name=release-version::$release_version
+          echo ::set-output "name=release-version::$release_version"
 
       - name: Set up Gradle with version ${{ inputs.gradle-version }}
         uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
