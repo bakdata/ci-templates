@@ -48,6 +48,7 @@ on:
         description: "The release tag."
         value: ${{ jobs.release.outputs.release-version }}
 
+jobs:
   release:
     name: Release
     needs: evaluate-version
