@@ -117,7 +117,7 @@ jobs:
   
     steps:
       - name: Release on Github
-        uses: bakdata/ci-templates/actions/java-gradle-github-release@feature/java-gradle
+        uses: bakdata/ci-templates/actions/java-gradle-release-github@feature/java-gradle
         with:
           github-username: ${{ secrets.github-username }}
           github-token: ${{ secrets.github-token }}

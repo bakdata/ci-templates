@@ -1,5 +1,5 @@
-name: "Test Java gradle"
-description: "Run unit tests and assess code quality using gradle"
+name: "Test Java artiacts"
+description: "Run Junit test, publish test results and optionally test signing for sonatype"
 
 inputs:
   sonar-token:
@@ -49,13 +49,13 @@ runs:
       run: ./gradlew check --info --stacktrace
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-    
-    - name: Publish Test Report
+
+    - name: Report test results
       uses: mikepenz/action-junit-report@v3
       if: always() # always run even if the previous step fails
       with:
         report_paths: '**/build/test-results/test/TEST-*.xml'
-    
+
     # sonar.branch.autoconfig.disabled is necessary for autocreation of projects on Sonarcloud to work
     - name: Assess code quality
       if: ${{ inputs.sonar-token != '' }}

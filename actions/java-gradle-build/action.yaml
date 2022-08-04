@@ -1,4 +1,4 @@
-name: "Build artifacts"
+name: "Build Java artifacts"
 description: "Build Java artifacts using gradle"
 
 inputs:
