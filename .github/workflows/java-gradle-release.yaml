@@ -51,7 +51,6 @@ on:
 jobs:
   release:
     name: Release
-    needs: evaluate-version
     runs-on: ubuntu-22.04
 
     # Map the job outputs to step outputs
