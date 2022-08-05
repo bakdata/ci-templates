@@ -3,9 +3,9 @@ description: "Build Jib image using gradle"
 
 inputs:
   image-artifact-name:
-    descritption: "Artifact name to upload Jib Docker image (see https://github.com/actions/upload-artifact and https://github.com/actions/download-artifact)"
+    description: "Artifact name to upload Jib Docker image, see https://github.com/actions/upload-artifact"
     required: false
-    default: "docker-image"
+    default: "image-artifact"
   java-distribution:
     description: "Java distribution to be installed. (Default is microsoft)"
     required: false

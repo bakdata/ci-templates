@@ -29,25 +29,25 @@ on:
         description: "Token for Sonarcloud."
         required: true
       signing-secret-key-ring:
-        description: "Key ring file for signing the sonatype publication."
+        description: "Key ring file for signing the Sonatype publication."
         required: true
       signing-key-id:
-        description: "Key id for signing the sonatype publication."
+        description: "Key id for signing the Sonatype publication."
         required: true
       signing-password:
-        description: "Password for signing the sonatype publication."
+        description: "Password for signing the Sonatype publication."
         required: true
       ossrh-username:
-        description: "Username for signing into sonatype repository."
+        description: "Username for signing into Sonatype repository."
         required: true
       ossrh-password:
-        description: "Password for signing into sonatype repository."
+        description: "Password for signing into Sonatype repository."
         required: true
       gradle-publish-key:
-        description: "Key for publishing to gradle plugin portal."
+        description: "Key for publishing to Gradle Plugin Portal."
         required: true
       gradle-publish-secret:
-        description: "Secret for publishing to gradle plugin portal."
+        description: "Secret for publishing to Gradle Plugin Portal."
         required: true
       github-username:
         description: "GitHub username for requesting changes from API."

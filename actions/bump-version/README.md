@@ -1,9 +1,11 @@
 # bump-version
+
 This action will bump the version of your project according to the `.bumpversion.cfg` file.
 
-
 ## Prerequisites
+
 You need a `.bumpversion.cfg` file in the root directory of your repository. A minimal configuration could look like this:
+
 ```cfg
 [bumpversion]
 current_version = 0.0.1
@@ -16,11 +18,13 @@ admin access to the repository for the selected user because admins can still pu
 is a protection rule in place.
 
 ## Input Parameters
-| Name              | Required  |             Default Value             |  Type   | Description                                        |
-|-------------------|:---------:|:-------------------------------------:|:-------:|----------------------------------------------------|
-| release-type      |    ✅     |                  -                    | string  | The scope of the release (major, minor or patch)   |
+
+| Name         | Required | Default Value |  Type  | Description                                      |
+|--------------|:--------:|:-------------:|:------:|--------------------------------------------------|
+| release-type |    ✅     |       -       | string | The scope of the release (major, minor or patch) |
 
 ### Outputs
+
 This action outputs the following variables:
 
 | Name        | Description                                           |
@@ -29,7 +33,9 @@ This action outputs the following variables:
 | release-tag | The bumped version of your project                    |
 
 ## Usage
+
 Add the following steps to your workflow:
+
 ```yaml
 ...
 steps:

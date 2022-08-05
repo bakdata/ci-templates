@@ -3,13 +3,13 @@ description: "Publish Docker image from download artifact"
 
 inputs:
   image-name:
-    descritption: "Name of Docker image (Default is the respository name)."
+    description: "Name of Docker image (Default is the repository name)."
     required: true
     default: ${{ github.event.repository.name }}
   image-artifact-name:
-    descritption: "Name of the pipeline artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'docker-image')."
+    description: "Name of the pipeline artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
     required: true
-    default: "docker-image"
+    default: "image-artifact"
   username:
     description: "Username for the Docker registry login."
     required: true
@@ -17,10 +17,10 @@ inputs:
     description: "Password for the Docker registry login."
     required: true
   publisher:
-    description: "Publisher to prefix Docker image (e.g. 'my-publisher' with a repository name)."
+    description: "Publisher to prefix Docker image (e.g. 'my-publisher')."
     required: false
   working-directory:
-    description: "Working directory of your Gradle artifacts. (Default is root directory)"
+    description: "Working directory for your docker artifacts. (Default is root directory)"
     required: false
     default: "./"
 runs:

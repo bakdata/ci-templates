@@ -1,18 +1,18 @@
 name: "Test Java artiacts"
-description: "Run Junit test, publish test results and optionally test signing for sonatype"
+description: "Run Junit test, publish test results and optionally test signing for Sonatype"
 
 inputs:
   sonar-token:
     description: "Token for Sonarcloud."
     required: false
   signing-secret-key-ring:
-    description: "Key ring file for signing the sonatype publication."
+    description: "Key ring file for signing the Sonatype publication."
     required: false
   signing-key-id:
-    description: "Key id for signing the sonatype publication."
+    description: "Key id for signing the Sonatype publication."
     required: false
   signing-password:
-    description: "Password for signing the sonatype publication."
+    description: "Password for signing the Sonatype publication."
     required: false
   java-distribution:
     description: "Java distribution to be installed. (Default is microsoft)"

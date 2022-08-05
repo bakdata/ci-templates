@@ -1,6 +1,7 @@
 # Workflow Templates
 
 The following workflows can be found here:
+
 * [Helm Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-release)
 * [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
 
@@ -57,13 +58,13 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name              | Required  |             Default Value             |  Type   | Description                                                                                                                              |
-|-------------------|:---------:|:-------------------------------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------------|
-| release-type      |    ✅     |                  -                    | string  | The scope of the release (major, minor or patch)                                                                                         |
-| ref               |    ❌     | The default branch of your repository | string  | The ref name to checkout the repository                                                                                                  |
-| lint-config-path  |    ❌     |      ".github/lint-config.yaml"       | string  | The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml) |
-| python-version    |    ❌     |                "3.10"                 | string  | The python version for bump2version                                                                                                      |
-| helm-version      |    ❌     |               "v3.4.0"                | string  | The helm version                                                                                                                         |
+| Name             | Required |             Default Value             |  Type  | Description                                                                                                                                |
+|------------------|:--------:|:-------------------------------------:|:------:|--------------------------------------------------------------------------------------------------------------------------------------------|
+| release-type     |    ✅     |                   -                   | string | The scope of the release (major, minor or patch)                                                                                           |
+| ref              |    ❌     | The default branch of your repository | string | The ref name to checkout the repository                                                                                                    |
+| lint-config-path |    ❌     |      ".github/lint-config.yaml"       | string | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
+| python-version   |    ❌     |                "3.10"                 | string | The python version for bump2version                                                                                                        |
+| helm-version     |    ❌     |               "v3.4.0"                | string | The helm version                                                                                                                           |
 
 ### Secret Parameters
 
@@ -72,11 +73,11 @@ repository secret for the GitHub username (`GH_USERNAME`), the GitHub Email (`GH
 token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the
 email: `[username]@users.noreply.github.com`.
 
-| Name            | Required  | Description                                       |
-|-----------------|:---------:|---------------------------------------------------|
-| github-username |    ✅     | The GitHub username for committing the changes    |
-| github-email    |    ✅     | The GitHub email for committing the changes       |
-| github-token    |    ✅     | The GitHub token for committing the changes       |
+| Name            | Required | Description                                    |
+|-----------------|:--------:|------------------------------------------------|
+| github-username |    ✅     | The GitHub username for committing the changes |
+| github-email    |    ✅     | The GitHub email for committing the changes    |
+| github-token    |    ✅     | The GitHub token for committing the changes    |
 
 ### Outputs
 
@@ -140,14 +141,14 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name              | Required  |             Default Value             |  Type   | Description                                                                                                                        |
-|-------------------|:---------:|:-------------------------------------:|:-------:|------------------------------------------------------------------------------------------------------------------------------------|
-| release-type      |    ✅     |                   -                   | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values  |
-| ref               |    ❌     | The default branch of your repository | string  | The ref name to checkout the repository                                                                                            |
-| publish-to-test   |    ❌     |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                      |
-| python-version    |    ❌     |                "3.10"                 | string  | The python version for setting up poetry                                                                                           |
-| poetry-version    |    ❌     |               "1.1.12"                | string  | The poetry version to be installed                                                                                                 |
-| working-directory |    ❌     |                 "./"                  | string  | The working directory of your Python package                                                                                       |
+| Name              | Required |             Default Value             |  Type   | Description                                                                                                                       |
+|-------------------|:--------:|:-------------------------------------:|:-------:|-----------------------------------------------------------------------------------------------------------------------------------|
+| release-type      |    ✅     |                   -                   | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values |
+| ref               |    ❌     | The default branch of your repository | string  | The ref name to checkout the repository                                                                                           |
+| publish-to-test   |    ❌     |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                     |
+| python-version    |    ❌     |                "3.10"                 | string  | The python version for setting up poetry                                                                                          |
+| poetry-version    |    ❌     |               "1.1.12"                | string  | The poetry version to be installed                                                                                                |
+| working-directory |    ❌     |                 "./"                  | string  | The working directory of your Python package                                                                                      |
 
 ### Secret Parameters
 

@@ -3,25 +3,25 @@ description: "Publish Java artifacts using gradle"
 
 inputs:
   signing-secret-key-ring:
-    description: "Key ring file for signing the sonatype publication."
+    description: "Key ring (base64 encoded) for signing the Sonatype publication."
     required: true
   signing-key-id:
-    description: "Key id for signing the sonatype publication."
+    description: "Key id for signing the Sonatype publication."
     required: true
   signing-password:
-    description: "Password for signing the sonatype publication."
+    description: "Password for signing the Sonatype publication."
     required: true
   ossrh-username:
-    description: "Username for signing into sonatype repository."
+    description: "Username for signing into Sonatype repository."
     required: true
   ossrh-password:
-    description: "Password for signing into sonatype repository."
+    description: "Password for signing into Sonatype repository."
     required: true
   gradle-publish-key:
-    description: "Key for publishing to gradle plugin portal (Default is '')."
+    description: "Key for publishing to Gradle Plugin Portal."
     required: false
   gradle-publish-secret:
-    description: "Secret for publishing to gradle plugin portal (Default is '')."
+    description: "Secret for publishing to Gradle Plugin Portal."
     required: false
   java-distribution:
     description: "Java distribution to be installed. (Default is microsoft)"
