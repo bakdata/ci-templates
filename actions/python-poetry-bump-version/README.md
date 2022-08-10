@@ -7,21 +7,21 @@ in the `pyproject.toml` file. It will output the old and new bumped versions.
 
 This action uses another composite action listed below:
 
-* [python-setup-poetry](https://github.com/bakdata/ci-templates/tree/main/actions/python-setup-poetry)
+- [python-setup-poetry](https://github.com/bakdata/ci-templates/tree/main/actions/python-setup-poetry)
 
 ## Input Parameters
 
 | Name              | Required | Default Value |                   Type                    | Description                                                                                                                       |
-|-------------------|:--------:|:-------------:|:-----------------------------------------:|-----------------------------------------------------------------------------------------------------------------------------------|
+| ----------------- | :------: | :-----------: | :---------------------------------------: | --------------------------------------------------------------------------------------------------------------------------------- |
 | release-type      |    ✅     |       -       |                  string                   | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values |
 | python-version    |    ❌     |     3.10      |                  number                   | The python version for setting up poetry.                                                                                         |
-| poetry-version    |    ❌     |    1.1.12     |                  number                   | The poetry version to be installed.                                                                                               |
-| working-directory |    ❌     |       .       | The root directory of the poetry project. |
+| poetry-version    |    ❌     |    1.1.14     |                  number                   | The poetry version to be installed.                                                                                               |
+| working-directory |    ❌     |       .       | The root directory of the poetry project. |                                                                                                                                   |
 
 ## Output Parameters
 
 | Name        | Description                                         |
-|-------------|-----------------------------------------------------|
+| ----------- | --------------------------------------------------- |
 | old-tag     | Defines the old version in your pyproject.toml file |
 | release-tag | The bumped version of your project                  |
 
