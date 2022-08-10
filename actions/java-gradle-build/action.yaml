@@ -49,5 +49,5 @@ runs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.build-artifact-name }}
-        path: ./**/build/libs/*.jar
+        path: ${{ inputs.working-directory }}/**/build/libs/*.jar
         retention-days: 1
