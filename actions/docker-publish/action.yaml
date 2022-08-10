@@ -13,7 +13,6 @@ inputs:
     description: "Name of Docker image (Default is the repository name)."
     required: true
     default: ${{ github.event.repository.name }}
-
   username:
     description: "Username for the Docker registry login."
     required: true
@@ -47,6 +46,8 @@ runs:
         fi
 
         docker load --input build/*.tar
+
+        echo "GITHUB_REF: $GITHUB_REF"
 
         if [[ "$GITHUB_REF" =~ ^ref/tags/.* ]]; then
           docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ inputs.image-name }}:latest
