@@ -20,7 +20,7 @@ inputs:
   working-directory:
     description: "The working directory of your Python packages. (Default is root directory)"
     required: false
-    default: "./"
+    default: "."
 runs:
   using: "composite"
   steps:

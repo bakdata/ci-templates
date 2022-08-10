@@ -30,7 +30,7 @@ on:
       working-directory:
         description: "The working directory of your Python package. (Default is root directory)"
         required: false
-        default: "./"
+        default: "."
         type: string
     secrets:
       github-username:

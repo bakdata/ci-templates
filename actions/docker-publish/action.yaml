@@ -23,7 +23,7 @@ inputs:
   working-directory:
     description: "Working directory for your Docker artifacts. (Default is ./)"
     required: false
-    default: "./"
+    default: "."
 runs:
   using: "composite"
   steps:

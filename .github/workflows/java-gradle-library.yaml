@@ -23,7 +23,7 @@ on:
         description: "Working directory of your Gradle artifacts. (Default is ./)"
         required: false
         type: string
-        default: "./"
+        default: "."
     secrets:
       sonar-token:
         description: "Token for Sonarcloud."
