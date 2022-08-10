@@ -57,7 +57,7 @@ jobs:
     outputs:
       old-version: ${{ steps.evaluate-version.outputs.old-version }}
       release-version: ${{ steps.evaluate-version.outputs.release-version }}
-    
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
@@ -90,7 +90,7 @@ jobs:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
-      
+
       - name: Generate changelog
         run: ./gradlew -Pchangelog.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} --stacktrace --info generateChangelog
         shell: bash
@@ -104,7 +104,7 @@ jobs:
           git commit -am "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}" 
           git push
         shell: bash
-      
+
       - name: Create release
         run: ./gradlew -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} --stacktrace --info release -x test
         shell: bash

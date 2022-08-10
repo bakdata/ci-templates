@@ -25,7 +25,7 @@ inputs:
     required: false
     default: "./"
 runs:
-  using: "composite"    
+  using: "composite"
   steps:
     - name: Check out repository
       uses: actions/checkout@v2
@@ -42,7 +42,7 @@ runs:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
         gradle-version: ${{ inputs.gradle-version }}
-    
+
     - name: Generate changelog
       run: ./gradlew -Pchangelog.releaseVersion=${GITHUB_REF##*/} -Pchangelog.sinceTag=${GITHUB_REF##*/} --stacktrace --info generateChangelog
       shell: bash
@@ -50,7 +50,7 @@ runs:
       env:
         GITHUB_USER: ${{ inputs.github-username }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
-    
+
     - name: Create Github release
       uses: softprops/action-gh-release@v1
       with:

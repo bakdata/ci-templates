@@ -32,12 +32,12 @@ inputs:
     default: "./"
 runs:
   using: "composite"
-  steps:    
+  steps:
     - name: Check out repository
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    
+
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
       with:
@@ -54,7 +54,7 @@ runs:
       uses: mikepenz/action-junit-report@v3
       if: always() # always run even if the previous step fails
       with:
-        report_paths: '**/build/test-results/test/TEST-*.xml'
+        report_paths: "**/build/test-results/test/TEST-*.xml"
 
     # sonar.branch.autoconfig.disabled is necessary for autocreation of projects on Sonarcloud to work
     - name: Assess code quality
@@ -64,7 +64,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
       env:
         SONAR_TOKEN: ${{ inputs.sonar-token }}
-    
+
     - name: Check if everything builds (incl. javadoc) for snapshot/release and signing works
       if: ${{ inputs.signing-secret-key-ring != '' && inputs.signing-key-id != '' && inputs.signing-password != '' }}
       run: |

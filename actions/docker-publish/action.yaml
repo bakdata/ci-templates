@@ -33,13 +33,13 @@ runs:
         name: ${{ inputs.image-artifact-name }}
         path: build
       working-directory: ${{ inputs.working-directory }}
-    
+
     - name: Login to DockerHub
       uses: docker/login-action@v1
       with:
         username: ${{ inputs.username }}
-        password: ${{ inputs.password }}   
-    
+        password: ${{ inputs.password }}
+
     - name: Publish Docker image
       run: |
         if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) != 1 ]]; then

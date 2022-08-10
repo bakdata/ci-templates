@@ -5,17 +5,18 @@ This action builds Java artifacts using Gradle and uploads `.jar` files as a pip
 ## Input Parameters
 
 | Name                | Required | Default Value  |  Type  | Description                                                                                                         |
-|---------------------|:--------:|:--------------:|:------:|---------------------------------------------------------------------------------------------------------------------|
-| build-artifact-name |    ❌     | build-artifact | string | Pipeline artifact name that is used for uploading build artifacts, see <https://github.com/actions/upload-artifact> |
-| java-distribution   |    ❌     |   microsoft    | string | Java distribution to be installed                                                                                   |
-| java-version        |    ❌     |       11       | string | Java version to be installed                                                                                        |
-| gradle-version      |    ❌     |    wrapper     | string | Gradle version to be installed                                                                                      |
-| working-directory   |    ❌     |      "./"      | string | Working directory of your Gradle artifacts                                                                          |
+| ------------------- | :------: | :------------: | :----: | ------------------------------------------------------------------------------------------------------------------- |
+| build-artifact-name |    ❌    | build-artifact | string | Pipeline artifact name that is used for uploading build artifacts, see <https://github.com/actions/upload-artifact> |
+| java-distribution   |    ❌    |   microsoft    | string | Java distribution to be installed                                                                                   |
+| java-version        |    ❌    |       11       | string | Java version to be installed                                                                                        |
+| gradle-version      |    ❌    |    wrapper     | string | Gradle version to be installed                                                                                      |
+| working-directory   |    ❌    |      "./"      | string | Working directory of your Gradle artifacts                                                                          |
 
 ## Usage
 
 ```yaml
-...
+
+---
 steps:
   - name: Build
     uses: bakdata/ci-templates/actions/java-gradle-build@main
@@ -25,5 +26,4 @@ steps:
       java-version: "11" # (Optional)
       gradle-version: "wrapper" # (Optional)
       working-directory: "./" # (Optional)
-...
 ```

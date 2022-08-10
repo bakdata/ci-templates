@@ -2,8 +2,8 @@
 
 The following workflows can be found here:
 
-* [Helm Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-release)
-* [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
+- [Helm Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-release)
+- [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
 
 ## Helm Release
 
@@ -52,19 +52,19 @@ git push --set-upstream origin gh-pages
 
 This workflow is built from multiple composite actions listed below:
 
-* [helm-lint](https://github.com/bakdata/ci-templates/tree/main/actions/helm-lint)
-* [bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/bump-version)
-* [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
+- [helm-lint](https://github.com/bakdata/ci-templates/tree/main/actions/helm-lint)
+- [bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/bump-version)
+- [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
 
 ### Input Parameters
 
 | Name             | Required |             Default Value             |  Type  | Description                                                                                                                                |
-|------------------|:--------:|:-------------------------------------:|:------:|--------------------------------------------------------------------------------------------------------------------------------------------|
-| release-type     |    ✅     |                   -                   | string | The scope of the release (major, minor or patch)                                                                                           |
-| ref              |    ❌     | The default branch of your repository | string | The ref name to checkout the repository                                                                                                    |
-| lint-config-path |    ❌     |      ".github/lint-config.yaml"       | string | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
-| python-version   |    ❌     |                "3.10"                 | string | The python version for bump2version                                                                                                        |
-| helm-version     |    ❌     |               "v3.4.0"                | string | The helm version                                                                                                                           |
+| ---------------- | :------: | :-----------------------------------: | :----: | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| release-type     |    ✅    |                   -                   | string | The scope of the release (major, minor or patch)                                                                                           |
+| ref              |    ❌    | The default branch of your repository | string | The ref name to checkout the repository                                                                                                    |
+| lint-config-path |    ❌    |      ".github/lint-config.yaml"       | string | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
+| python-version   |    ❌    |                "3.10"                 | string | The python version for bump2version                                                                                                        |
+| helm-version     |    ❌    |               "v3.4.0"                | string | The helm version                                                                                                                           |
 
 ### Secret Parameters
 
@@ -74,10 +74,10 @@ token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the
 email: `[username]@users.noreply.github.com`.
 
 | Name            | Required | Description                                    |
-|-----------------|:--------:|------------------------------------------------|
-| github-username |    ✅     | The GitHub username for committing the changes |
-| github-email    |    ✅     | The GitHub email for committing the changes    |
-| github-token    |    ✅     | The GitHub token for committing the changes    |
+| --------------- | :------: | ---------------------------------------------- |
+| github-username |    ✅    | The GitHub username for committing the changes |
+| github-email    |    ✅    | The GitHub email for committing the changes    |
+| github-token    |    ✅    | The GitHub token for committing the changes    |
 
 ### Outputs
 
@@ -85,7 +85,7 @@ This workflow outputs two variables: The `old-tag` and the `release-tag`. These 
 jobs (e.g., using the `release-tag` to create GitHub release).
 
 | Name        | Description                                           |
-|-------------|-------------------------------------------------------|
+| ----------- | ----------------------------------------------------- |
 | old-tag     | Defines the old version in your .bumpversion.cfg file |
 | release-tag | The bumped version of your project                    |
 
@@ -135,20 +135,20 @@ is a protection rule in place.
 
 This workflow is built from multiple composite actions listed below:
 
-* [python-poetry-bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-bump-version)
-* [python-poetry-release](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-release)
-* [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
+- [python-poetry-bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-bump-version)
+- [python-poetry-release](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-release)
+- [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
 
 ### Input Parameters
 
 | Name              | Required |             Default Value             |  Type   | Description                                                                                                                       |
-|-------------------|:--------:|:-------------------------------------:|:-------:|-----------------------------------------------------------------------------------------------------------------------------------|
-| release-type      |    ✅     |                   -                   | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values |
-| ref               |    ❌     | The default branch of your repository | string  | The ref name to checkout the repository                                                                                           |
-| publish-to-test   |    ❌     |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                     |
-| python-version    |    ❌     |                "3.10"                 | string  | The python version for setting up poetry                                                                                          |
-| poetry-version    |    ❌     |               "1.1.12"                | string  | The poetry version to be installed                                                                                                |
-| working-directory |    ❌     |                 "./"                  | string  | The working directory of your Python package                                                                                      |
+| ----------------- | :------: | :-----------------------------------: | :-----: | --------------------------------------------------------------------------------------------------------------------------------- |
+| release-type      |    ✅    |                   -                   | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values |
+| ref               |    ❌    | The default branch of your repository | string  | The ref name to checkout the repository                                                                                           |
+| publish-to-test   |    ❌    |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                     |
+| python-version    |    ❌    |                "3.10"                 | string  | The python version for setting up poetry                                                                                          |
+| poetry-version    |    ❌    |               "1.1.12"                | string  | The poetry version to be installed                                                                                                |
+| working-directory |    ❌    |                 "./"                  | string  | The working directory of your Python package                                                                                      |
 
 ### Secret Parameters
 
@@ -158,11 +158,11 @@ token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the
 email: `[username]@users.noreply.github.com`.
 
 | Name            | Required | Description                                       |
-|-----------------|:--------:|---------------------------------------------------|
-| github-username |    ✅     | The GitHub username for committing the changes    |
-| github-email    |    ✅     | The GitHub email for committing the changes       |
-| github-token    |    ✅     | The GitHub token for committing the changes       |
-| pypi-token      |    ✅     | The (test) PyPI api token for publishing packages |
+| --------------- | :------: | ------------------------------------------------- |
+| github-username |    ✅    | The GitHub username for committing the changes    |
+| github-email    |    ✅    | The GitHub email for committing the changes       |
+| github-token    |    ✅    | The GitHub token for committing the changes       |
+| pypi-token      |    ✅    | The (test) PyPI api token for publishing packages |
 
 ### Outputs
 
@@ -170,7 +170,7 @@ This workflow outputs two variables: The `old-tag` and the `release-tag`. These 
 jobs (e.g., using the `release-tag` to create GitHub release).
 
 | Name        | Description                                         |
-|-------------|-----------------------------------------------------|
+| ----------- | --------------------------------------------------- |
 | old-tag     | Defines the old version in your pyproject.toml file |
 | release-tag | The bumped version of your project                  |
 
@@ -181,7 +181,7 @@ name: Call this reusable workflow
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   call-workflow-passing-data:
@@ -220,22 +220,22 @@ file that uses Jib. Moreover, prepare credentials for Sonarcloud, Sonatype, GitH
 
 This workflow is built from multiple composite actions listed below:
 
-* [java-gradle-build](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build)
-* [java-gradle-test](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-test)
-* [java-gradle-build-jib-image](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build-jib-image)
-* [java-gradle-publish](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-publish)
-* [docker-publish](https://github.com/bakdata/ci-templates/tree/main/actions/docker-publish)
-* [java-gradle-release-github](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-release-github)
+- [java-gradle-build](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build)
+- [java-gradle-test](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-test)
+- [java-gradle-build-jib-image](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build-jib-image)
+- [java-gradle-publish](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-publish)
+- [docker-publish](https://github.com/bakdata/ci-templates/tree/main/actions/docker-publish)
+- [java-gradle-release-github](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-release-github)
 
 ### Input Parameters
 
 | Name              | Required | Default Value |  Type  | Description                                |
-|-------------------|:--------:|:-------------:|:------:|--------------------------------------------|
-| docker-publisher  |    ✅     |       -       | string | Publisher to prefix Docker image           |
-| java-distribution |    ❌     |   microsoft   | string | Java distribution to be installed          |
-| java-version      |    ❌     |      11       | string | Java version to be installed               |
-| gradle-version    |    ❌     |    wrapper    | string | Gradle version to be installed             |
-| working-directory |    ❌     |      ./       | string | Working directory of your Gradle artifacts |
+| ----------------- | :------: | :-----------: | :----: | ------------------------------------------ |
+| docker-publisher  |    ✅    |       -       | string | Publisher to prefix Docker image           |
+| java-distribution |    ❌    |   microsoft   | string | Java distribution to be installed          |
+| java-version      |    ❌    |      11       | string | Java version to be installed               |
+| gradle-version    |    ❌    |    wrapper    | string | Gradle version to be installed             |
+| working-directory |    ❌    |      ./       | string | Working directory of your Gradle artifacts |
 
 ### Secret Parameters
 
@@ -247,17 +247,17 @@ The `github-username` and `github-token` is required to query the GitHub API for
 a tag branch.
 
 | Name                    | Required | Description                                                    |
-|-------------------------|:--------:|----------------------------------------------------------------|
-| sonar-token             |    ✅     | Token for Sonarcloud                                           |
-| signing-secret-key-ring |    ✅     | Key ring (base64 encoded) for signing the Sonatype publication |
-| signing-key-id          |    ✅     | Key id for signing the Sonatype publication                    |
-| signing-password        |    ✅     | Password for signing the Sonatype publication                  |
-| ossrh-username          |    ✅     | Username for signing into Sonatype repository                  |
-| ossrh-password          |    ✅     | Password for signing into Sonatype repository                  |
-| docker-username         |    ✅     | Username for publishing to Dockerhub                           |
-| docker-password         |    ✅     | Password for publishing to Dockerhub                           |
-| github-username         |    ✅     | GitHub username for requesting changes from API                |
-| github-token            |    ✅     | GitHub token for requesting changes from API                   |
+| ----------------------- | :------: | -------------------------------------------------------------- |
+| sonar-token             |    ✅    | Token for Sonarcloud                                           |
+| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication |
+| signing-key-id          |    ✅    | Key id for signing the Sonatype publication                    |
+| signing-password        |    ✅    | Password for signing the Sonatype publication                  |
+| ossrh-username          |    ✅    | Username for signing into Sonatype repository                  |
+| ossrh-password          |    ✅    | Password for signing into Sonatype repository                  |
+| docker-username         |    ✅    | Username for publishing to Dockerhub                           |
+| docker-password         |    ✅    | Password for publishing to Dockerhub                           |
+| github-username         |    ✅    | GitHub username for requesting changes from API                |
+| github-token            |    ✅    | GitHub token for requesting changes from API                   |
 
 ### Calling the workflow
 
@@ -266,7 +266,7 @@ name: Call this reusable workflow
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   call-workflow-passing-data:
@@ -277,7 +277,7 @@ jobs:
       java-distribution: "microsoft" # (Optional) Default is microsoft
       java-version: "11" # (Optional) Default is 11
       gradle-version: "wrapper" # (Optional) Default is wrapper
-      working-directory: "./" # (Optional) Default is ./      
+      working-directory: "./" # (Optional) Default is ./
     secrets:
       sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
       signing-secret-key-ring: ${{ secrets.SIGNING_SECRET_KEY_RING }}
@@ -307,19 +307,19 @@ Plugin Portal.
 
 This workflow is built from multiple composite actions listed below:
 
-* [java-gradle-build](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build)
-* [java-gradle-test](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-test)
-* [java-gradle-publish](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-publish)
-* [java-gradle-release-github](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-release-github)
+- [java-gradle-build](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build)
+- [java-gradle-test](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-test)
+- [java-gradle-publish](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-publish)
+- [java-gradle-release-github](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-release-github)
 
 ### Input Parameters
 
 | Name              | Required | Default Value |  Type  | Description                                |
-|-------------------|:--------:|:-------------:|:------:|--------------------------------------------|
-| java-distribution |    ❌     |   microsoft   | string | Java distribution to be installed          |
-| java-version      |    ❌     |      11       | string | Java version to be installed               |
-| gradle-version    |    ❌     |    wrapper    | string | Gradle version to be installed             |
-| working-directory |    ❌     |      ./       | string | Working directory of your Gradle artifacts |
+| ----------------- | :------: | :-----------: | :----: | ------------------------------------------ |
+| java-distribution |    ❌    |   microsoft   | string | Java distribution to be installed          |
+| java-version      |    ❌    |      11       | string | Java version to be installed               |
+| gradle-version    |    ❌    |    wrapper    | string | Gradle version to be installed             |
+| working-directory |    ❌    |      ./       | string | Working directory of your Gradle artifacts |
 
 ### Secret Parameters
 
@@ -331,17 +331,17 @@ a `gradle-publish-secret`. The `github-username` and `github-token` is required 
 changelog when running on a tag branch.
 
 | Name                    | Required | Description                                                    |
-|-------------------------|:--------:|----------------------------------------------------------------|
-| sonar-token             |    ✅     | Token for Sonarcloud                                           |
-| signing-secret-key-ring |    ✅     | Key ring (base64 encoded) for signing the Sonatype publication |
-| signing-key-id          |    ✅     | Key id for signing the Sonatype publication                    |
-| signing-password        |    ✅     | Password for signing the Sonatype publication                  |
-| ossrh-username          |    ✅     | Username for signing into Sonatype repository                  |
-| ossrh-password          |    ✅     | Password for signing into Sonatype repository                  |
-| gradle-publish-key      |    ✅     | Key for publishing to Gradle Plugin Portal                     |
-| gradle-publish-secret   |    ✅     | Secret for publishing to Gradle Plugin Portal                  |
-| github-username         |    ✅     | GitHub username for requesting changes from API                |
-| github-token            |    ✅     | GitHub token for requesting changes from API                   |
+| ----------------------- | :------: | -------------------------------------------------------------- |
+| sonar-token             |    ✅    | Token for Sonarcloud                                           |
+| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication |
+| signing-key-id          |    ✅    | Key id for signing the Sonatype publication                    |
+| signing-password        |    ✅    | Password for signing the Sonatype publication                  |
+| ossrh-username          |    ✅    | Username for signing into Sonatype repository                  |
+| ossrh-password          |    ✅    | Password for signing into Sonatype repository                  |
+| gradle-publish-key      |    ✅    | Key for publishing to Gradle Plugin Portal                     |
+| gradle-publish-secret   |    ✅    | Secret for publishing to Gradle Plugin Portal                  |
+| github-username         |    ✅    | GitHub username for requesting changes from API                |
+| github-token            |    ✅    | GitHub token for requesting changes from API                   |
 
 ### Calling the workflow
 
@@ -350,7 +350,7 @@ name: Call this reusable workflow
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   call-workflow-passing-data:
@@ -389,17 +389,17 @@ file that uses the `net.researchgate.release` dependency. Moreover, prepare cred
 
 This workflow is built from another composite action listed below:
 
-* [java-gradle-setup](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-setup)
+- [java-gradle-setup](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-setup)
 
 ### Input Parameters
 
 | Name              | Required | Default Value |  Type  | Description                                  |
-|-------------------|:--------:|:-------------:|:------:|----------------------------------------------|
-| release-type      |    ✅     |     patch     | string | Scope of the release (major, minor or patch) |
-| java-distribution |    ❌     |   microsoft   | string | Java distribution to be installed            |
-| java-version      |    ❌     |      11       | string | Java version to be installed                 |
-| gradle-version    |    ❌     |    wrapper    | string | Gradle version to be installed               |
-| working-directory |    ❌     |      ./       | string | Working directory of your Gradle artifacts   |
+| ----------------- | :------: | :-----------: | :----: | -------------------------------------------- |
+| release-type      |    ✅    |     patch     | string | Scope of the release (major, minor or patch) |
+| java-distribution |    ❌    |   microsoft   | string | Java distribution to be installed            |
+| java-version      |    ❌    |      11       | string | Java version to be installed                 |
+| gradle-version    |    ❌    |    wrapper    | string | Gradle version to be installed               |
+| working-directory |    ❌    |      ./       | string | Working directory of your Gradle artifacts   |
 
 ### Secret Parameters
 
@@ -407,10 +407,10 @@ For committing and pushing the changes to GitHub you need to define a `github-us
 a `github-token`.
 
 | Name            | Required | Description                                |
-|-----------------|:--------:|--------------------------------------------|
-| github-username |    ✅     | GitHub username for committing the changes |
-| github-email    |    ✅     | GitHub email for committing the changes    |
-| github-token    |    ✅     | GitHub token for committing the changes    |
+| --------------- | :------: | ------------------------------------------ |
+| github-username |    ✅    | GitHub username for committing the changes |
+| github-email    |    ✅    | GitHub email for committing the changes    |
+| github-token    |    ✅    | GitHub token for committing the changes    |
 
 ### Outputs
 
@@ -418,7 +418,7 @@ This workflow outputs two variables: The `old-version` and the `release-version`
 future jobs (e.g., using the `release-version` to create GitHub release).
 
 | Name            | Description                                            |
-|-----------------|--------------------------------------------------------|
+| --------------- | ------------------------------------------------------ |
 | old-version     | Defines the old version in your gradle.properties file |
 | release-version | The bumped version of your project                     |
 

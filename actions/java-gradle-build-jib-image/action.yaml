@@ -27,7 +27,7 @@ runs:
   steps:
     - name: Check out repository
       uses: actions/checkout@v2
-      
+
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@feature/java-gradle
       with:
@@ -39,7 +39,7 @@ runs:
       run: ./gradlew --info --stacktrace jibBuildTar --image=${{ github.event.repository.name }}:${{ github.run_id }} -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-    
+
     - name: Upload Jib Docker image artifact
       uses: actions/upload-artifact@v3
       with:

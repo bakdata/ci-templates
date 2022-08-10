@@ -86,10 +86,10 @@ jobs:
           sonar-token: ${{ secrets.sonar-token }}
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
-          signing-password: ${{ secrets.signing-password }}   
+          signing-password: ${{ secrets.signing-password }}
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
-          gradle-version: ${{ inputs.gradle-version }}   
+          gradle-version: ${{ inputs.gradle-version }}
           working-directory: ${{ inputs.working-directory }}
 
   build-jib:
@@ -131,19 +131,19 @@ jobs:
     needs: build-jib
 
     steps:
-    - name: Publish Jib image
-      uses: bakdata/ci-templates/actions/docker-publish@feature/java-gradle
-      with:
-        publisher: ${{ inputs.docker-publisher }}
-        username: ${{ secrets.docker-username }}
-        password: ${{ secrets.docker-password }}
+      - name: Publish Jib image
+        uses: bakdata/ci-templates/actions/docker-publish@feature/java-gradle
+        with:
+          publisher: ${{ inputs.docker-publisher }}
+          username: ${{ secrets.docker-username }}
+          password: ${{ secrets.docker-password }}
 
   release:
     name: Create Github release
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-22.04
     needs: publish
-  
+
     steps:
       - name: Release on Github
         uses: bakdata/ci-templates/actions/java-gradle-release-github@feature/java-gradle
