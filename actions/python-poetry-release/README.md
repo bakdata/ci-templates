@@ -6,16 +6,16 @@ This composite action uses poetry to build and push your Python packages either 
 
 This action uses another composite action listed below:
 
-* [python-setup-poetry](https://github.com/bakdata/ci-templates/tree/main/actions/python-setup-poetry)
+- [python-setup-poetry](https://github.com/bakdata/ci-templates/tree/main/actions/python-setup-poetry)
 
 ## Input Parameters
 
 | Name              | Required | Default Value | Description                                                                                          |
-|-------------------|:--------:|:-------------:|------------------------------------------------------------------------------------------------------|
+| ----------------- | :------: | :-----------: | ---------------------------------------------------------------------------------------------------- |
 | pypi-token        |    ✅     |       -       | The (test) PyPI api token for publishing packages                                                    |
 | publish-to-test   |    ❌     |     true      | If set to true, the packages are published to TestPyPI other wise the packages are published to PyPI |
 | python-version    |    ❌     |     3.10      | The python version for setting up poetry.                                                            |
-| poetry-version    |    ❌     |    1.1.12     | The poetry version to be installed.                                                                  |
+| poetry-version    |    ❌     |    1.1.14     | The poetry version to be installed.                                                                  |
 | working-directory |    ❌     |     "./"      | The working directory of your Python package.                                                        |
 
 ## Usage
