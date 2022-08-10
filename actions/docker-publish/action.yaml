@@ -50,11 +50,13 @@ runs:
         echo "GITHUB_REF: $GITHUB_REF"
 
         if [[ "$GITHUB_REF" =~ ^ref/tags/.* ]]; then
+          echo "TAG BRANCH"
           docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ inputs.image-name }}:latest
           docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
           docker push ${{ inputs.publisher }}/${{ inputs.image-name }}:latest
           docker push ${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
         else
+          echo "NORMAL BRANCH"
           docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ inputs.image-name }}:${{ github.run_id }}
           docker push ${{ inputs.publisher }}/${{ inputs.image-name }}:${{ github.run_id }}
         fi
