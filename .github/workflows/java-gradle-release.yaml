@@ -42,10 +42,10 @@ on:
     # Map the workflow outputs to job outputs
     outputs:
       old-version:
-        description: "The old tag."
+        description: "The old version."
         value: ${{ jobs.release.outputs.old-version }}
       release-version:
-        description: "The release tag."
+        description: "The release version."
         value: ${{ jobs.release.outputs.release-version }}
 
 jobs:
