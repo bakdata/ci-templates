@@ -277,7 +277,7 @@ jobs:
       java-distribution: "microsoft" # (Optional) Default is microsoft
       java-version: "11" # (Optional) Default is 11
       gradle-version: "wrapper" # (Optional) Default is wrapper
-      working-directory: "./" # (Optional) Default is ./
+      working-directory: "./" # (Optional) Default is .
     secrets:
       sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
       signing-secret-key-ring: ${{ secrets.SIGNING_SECRET_KEY_RING }}
@@ -360,7 +360,7 @@ jobs:
       java-distribution: "microsoft" # (Optional) Default is microsoft
       java-version: "11" # (Optional) Default is 11
       gradle-version: "wrapper" # (Optional) Default is wrapper
-      working-directory: "./" # (Optional) Default is ./
+      working-directory: "./" # (Optional) Default is .
     secrets:
       sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
       signing-secret-key-ring: ${{ secrets.SIGNING_SECRET_KEY_RING }}
@@ -444,7 +444,7 @@ jobs:
       java-distribution: "microsoft" # (Optional) Default is microsoft
       java-version: "11" # (Optional) Default is 11
       gradle-version: "wrapper" # (Optional) Default is wrapper
-      working-directory: "./" # (Optional) Default is ./
+      working-directory: "./" # (Optional) Default is .
     secrets:
       github-username: "${{ secrets.GH_USERNAME }}"
       github-email: "${{ secrets.GH_EMAIL }}"

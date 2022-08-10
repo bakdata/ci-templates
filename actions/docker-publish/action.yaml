@@ -21,7 +21,7 @@ inputs:
     description: "Password for the Docker registry login."
     required: true
   working-directory:
-    description: "Working directory for your Docker artifacts. (Default is ./)"
+    description: "Working directory for your Docker artifacts. (Default is .)"
     required: false
     default: "."
 runs:

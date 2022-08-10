@@ -19,7 +19,7 @@ inputs:
     required: false
     default: "wrapper"
   working-directory:
-    description: "Working directory of your Gradle artifacts. (Default is ./)"
+    description: "Working directory of your Gradle artifacts. (Default is .)"
     required: false
     default: "."
 runs:
