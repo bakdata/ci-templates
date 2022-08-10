@@ -36,9 +36,8 @@ target-branch: "main"
 ```
 
 Moreover, choose a GitHub user who will change, commit, and push the version in your `.bumpversion.cfg` file. Make sure
-to configure
-admin access to the repository for the selected user because admins can still push on the default branch even if there
-is a protection rule in place.
+to configure admin access to the repository for the selected user because admins can still push on the default branch
+even if there is a protection rule in place.
 
 Finally, add an empty branch `gh-pages` for the `index.yaml` to be hosted publicly:
 
@@ -236,29 +235,29 @@ This workflow is built from multiple composite actions listed below:
 | java-distribution |    ❌     |   microsoft   | string | Java distribution to be installed          |
 | java-version      |    ❌     |      11       | string | Java version to be installed               |
 | gradle-version    |    ❌     |    wrapper    | string | Gradle version to be installed             |
-| working-directory |    ❌     |       .       | string | Working directory of your Gradle artifacts |
+| working-directory |    ❌     |      ./       | string | Working directory of your Gradle artifacts |
 
 ### Secret Parameters
 
 For Sonarcloud you need to provide a `sonar-token` to publish code quality results. In case of Sonatype, the action
-requires you to have a `signing-secret-key-ring` (base64 encoded), a `signing-key-id`, a `signing-password` to sign your
-build artifacts and additionally a `ossrh-username` and a `ossrh-password` to publish the signed artifacts to Nexus. To
-publish the docker image to DockerHub you need to provide a `docker-username` and a `docker-password`.
+requires you to have a `signing-secret-key-ring` (base64 encoded), a `signing-key-id` and a `signing-password` to sign
+your build artifacts and additionally a `ossrh-username` and a `ossrh-password` to publish the signed artifacts to
+Nexus. To publish the Docker image to DockerHub you need to provide a `docker-username` and a `docker-password`.
 The `github-username` and `github-token` is required to query the GitHub API for generating a changelog when running on
 a tag branch.
 
-| Name                    | Required | Description                                        |
-|-------------------------|:--------:|----------------------------------------------------|
-| sonar-token             |    ✅     | Token for Sonarcloud                               |
-| signing-secret-key-ring |    ✅     | Key ring file for signing the Sonatype publication |
-| signing-key-id          |    ✅     | Key id for signing the Sonatype publication        |
-| signing-password        |    ✅     | Password for signing the Sonatype publication      |
-| ossrh-username          |    ✅     | Username for signing into Sonatype repository      |
-| ossrh-password          |    ✅     | Password for signing into Sonatype repository      |
-| docker-username         |    ✅     | Username for publishing to Dockerhub               |
-| docker-password         |    ✅     | Password for publishing to Dockerhub               |
-| github-username         |    ✅     | GitHub username for requesting changes from API    |
-| github-token            |    ✅     | GitHub token for requesting changes from API       |
+| Name                    | Required | Description                                                    |
+|-------------------------|:--------:|----------------------------------------------------------------|
+| sonar-token             |    ✅     | Token for Sonarcloud                                           |
+| signing-secret-key-ring |    ✅     | Key ring (base64 encoded) for signing the Sonatype publication |
+| signing-key-id          |    ✅     | Key id for signing the Sonatype publication                    |
+| signing-password        |    ✅     | Password for signing the Sonatype publication                  |
+| ossrh-username          |    ✅     | Username for signing into Sonatype repository                  |
+| ossrh-password          |    ✅     | Password for signing into Sonatype repository                  |
+| docker-username         |    ✅     | Username for publishing to Dockerhub                           |
+| docker-password         |    ✅     | Password for publishing to Dockerhub                           |
+| github-username         |    ✅     | GitHub username for requesting changes from API                |
+| github-token            |    ✅     | GitHub token for requesting changes from API                   |
 
 ### Calling the workflow
 
@@ -320,29 +319,29 @@ This workflow is built from multiple composite actions listed below:
 | java-distribution |    ❌     |   microsoft   | string | Java distribution to be installed          |
 | java-version      |    ❌     |      11       | string | Java version to be installed               |
 | gradle-version    |    ❌     |    wrapper    | string | Gradle version to be installed             |
-| working-directory |    ❌     |       .       | string | Working directory of your Gradle artifacts |
+| working-directory |    ❌     |      ./       | string | Working directory of your Gradle artifacts |
 
 ### Secret Parameters
 
 For Sonarcloud you need to provide a `sonar-token` to publish code quality results. In case of Sonatype, the action
-requires you to have a `signing-secret-key-ring` (base64 encoded), a `signing-key-id`, a `signing-password` to sign your
-build artifacts and additionally a `ossrh-username` and a `ossrh-password` to publish the signed artifacts to Nexus. To
-publish the gradle plugin to the Gradle Plugin Portal you need to provide a `gradle-publish-key` and
+requires you to have a `signing-secret-key-ring` (base64 encoded), a `signing-key-id` and a `signing-password` to sign
+your build artifacts and additionally a `ossrh-username` and a `ossrh-password` to publish the signed artifacts to
+Nexus. To publish the Gradle plugin to the Gradle Plugin Portal you need to provide a `gradle-publish-key` and
 a `gradle-publish-secret`. The `github-username` and `github-token` is required to query the GitHub API for generating a
 changelog when running on a tag branch.
 
-| Name                    | Required | Description                                        |
-|-------------------------|:--------:|----------------------------------------------------|
-| sonar-token             |    ✅     | Token for Sonarcloud                               |
-| signing-secret-key-ring |    ✅     | Key ring file for signing the Sonatype publication |
-| signing-key-id          |    ✅     | Key id for signing the Sonatype publication        |
-| signing-password        |    ✅     | Password for signing the Sonatype publication      |
-| ossrh-username          |    ✅     | Username for signing into Sonatype repository      |
-| ossrh-password          |    ✅     | Password for signing into Sonatype repository      |
-| gradle-publish-key      |    ✅     | Key for publishing to Gradle Plugin Portal         |
-| gradle-publish-secret   |    ✅     | Secret for publishing to Gradle Plugin Portal      |
-| github-username         |    ✅     | GitHub username for requesting changes from API    |
-| github-token            |    ✅     | GitHub token for requesting changes from API       |
+| Name                    | Required | Description                                                    |
+|-------------------------|:--------:|----------------------------------------------------------------|
+| sonar-token             |    ✅     | Token for Sonarcloud                                           |
+| signing-secret-key-ring |    ✅     | Key ring (base64 encoded) for signing the Sonatype publication |
+| signing-key-id          |    ✅     | Key id for signing the Sonatype publication                    |
+| signing-password        |    ✅     | Password for signing the Sonatype publication                  |
+| ossrh-username          |    ✅     | Username for signing into Sonatype repository                  |
+| ossrh-password          |    ✅     | Password for signing into Sonatype repository                  |
+| gradle-publish-key      |    ✅     | Key for publishing to Gradle Plugin Portal                     |
+| gradle-publish-secret   |    ✅     | Secret for publishing to Gradle Plugin Portal                  |
+| github-username         |    ✅     | GitHub username for requesting changes from API                |
+| github-token            |    ✅     | GitHub token for requesting changes from API                   |
 
 ### Calling the workflow
 
@@ -400,12 +399,12 @@ This workflow is built from another composite action listed below:
 | java-distribution |    ❌     |   microsoft   | string | Java distribution to be installed            |
 | java-version      |    ❌     |      11       | string | Java version to be installed                 |
 | gradle-version    |    ❌     |    wrapper    | string | Gradle version to be installed               |
-| working-directory |    ❌     |       .       | string | Working directory of your Gradle artifacts   |
+| working-directory |    ❌     |      ./       | string | Working directory of your Gradle artifacts   |
 
 ### Secret Parameters
 
 For committing and pushing the changes to GitHub you need to define a `github-username`, a `github-email` and
-a `github-password`.
+a `github-token`.
 
 | Name            | Required | Description                                |
 |-----------------|:--------:|--------------------------------------------|

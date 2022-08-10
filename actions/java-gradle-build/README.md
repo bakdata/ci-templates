@@ -1,6 +1,6 @@
 # java-gradle-build
 
-This action builds java artifacts using gradle and uploads `.jar` files as a pipeline artifact.
+This action builds Java artifacts using Gradle and uploads `.jar` files as a pipeline artifact.
 
 ## Input Parameters
 

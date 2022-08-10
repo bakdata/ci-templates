@@ -1,9 +1,13 @@
 name: Java Gradle Docker
-# Reusable workflow for building and publishing Java Gradle artifacts
+# Reusable workflow for building and publishing Java Gradle artifacts including a Jib Docker image
 
 on:
   workflow_call:
     inputs:
+      docker-publisher:
+        description: "Publisher to prefix Docker image."
+        required: true
+        type: string
       java-distribution:
         description: "Java distribution to be installed. (Default is microsoft)"
         required: false
@@ -19,12 +23,8 @@ on:
         required: false
         type: string
         default: "wrapper"
-      docker-publisher:
-        description: "Publisher to prefix Docker image."
-        required: false
-        type: string
       working-directory:
-        description: "Working directory of your Gradle artifacts. (Default is root directory)"
+        description: "Working directory of your Gradle artifacts. (Default is ./)"
         required: false
         type: string
         default: "./"
@@ -33,7 +33,7 @@ on:
         description: "Token for Sonarcloud."
         required: true
       signing-secret-key-ring:
-        description: "Key ring file for signing the Sonatype publication."
+        description: "Key ring (base64 encoded) for signing the Sonatype publication."
         required: true
       signing-key-id:
         description: "Key id for signing the Sonatype publication."

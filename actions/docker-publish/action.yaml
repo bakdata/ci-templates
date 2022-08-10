@@ -2,6 +2,10 @@ name: "Publish Docker image"
 description: "Publish Docker image from download artifact"
 
 inputs:
+  image-artifact-name:
+    description: "Name of the pipeline artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
+    required: true
+    default: "image-artifact"
   publisher:
     description: "Publisher to prefix Docker image (e.g. 'my-publisher')."
     required: true
@@ -9,10 +13,7 @@ inputs:
     description: "Name of Docker image (Default is the repository name)."
     required: true
     default: ${{ github.event.repository.name }}
-  image-artifact-name:
-    description: "Name of the pipeline artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
-    required: true
-    default: "image-artifact"
+
   username:
     description: "Username for the Docker registry login."
     required: true
@@ -20,7 +21,7 @@ inputs:
     description: "Password for the Docker registry login."
     required: true
   working-directory:
-    description: "Working directory for your docker artifacts. (Default is root directory)"
+    description: "Working directory for your Docker artifacts. (Default is ./)"
     required: false
     default: "./"
 runs:

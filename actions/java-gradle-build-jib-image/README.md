@@ -1,6 +1,6 @@
 # java-gradle-build-jib-image
 
-This action builds a Jib image using gradle and uploads an `image.tar` file as a pipeline artifact.
+This action builds a Jib image using Gradle and uploads an `image.tar` file as a pipeline artifact.
 
 ## Input Parameters
 

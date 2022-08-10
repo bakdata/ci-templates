@@ -1,9 +1,9 @@
 name: "Build Java artifacts"
-description: "Build Java artifacts using gradle"
+description: "Build Java artifacts using Gradle"
 
 inputs:
   build-artifact-name:
-    description: "Pipeline artifact name that is used for uploading build artifacts, see https://github.com/actions/upload-artifact."
+    description: "Pipeline artifact name that is used for uploading build artifacts, see https://github.com/actions/upload-artifact (Default is build-artifact)."
     required: false
     default: "build-artifact"
   java-distribution:
@@ -19,7 +19,7 @@ inputs:
     required: false
     default: "wrapper"
   working-directory:
-    description: "Working directory of your Gradle artifacts. (Default is root directory)"
+    description: "Working directory of your Gradle artifacts. (Default is ./)"
     required: false
     default: "./"
 runs:
