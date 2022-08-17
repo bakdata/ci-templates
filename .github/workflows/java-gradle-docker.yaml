@@ -93,12 +93,12 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
 
   build-jib:
-    name: Build Jib image
+    name: Build tarball iamge
     runs-on: ubuntu-22.04
     needs: test
 
     steps:
-      - name: Build Jib image
+      - name: Build tarball iamge
         uses: bakdata/ci-templates/actions/java-gradle-build-jib-image@feature/java-gradle
         with:
           java-distribution: ${{ inputs.java-distribution }}
@@ -126,12 +126,12 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
 
   publish-jib-image:
-    name: Publish Jib image
+    name: Publish tarball iamge
     runs-on: ubuntu-22.04
     needs: build-jib
 
     steps:
-      - name: Publish Jib image
+      - name: Publish tarball iamge
         uses: bakdata/ci-templates/actions/docker-publish@feature/java-gradle
         with:
           publisher: ${{ inputs.docker-publisher }}

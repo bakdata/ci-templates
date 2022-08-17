@@ -3,7 +3,7 @@ description: "Publish Docker image from download artifact"
 
 inputs:
   image-artifact-name:
-    description: "Name of the pipeline artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
+    description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
     required: true
     default: "image-artifact"
   publisher:
@@ -41,7 +41,7 @@ runs:
     - name: Publish Docker image
       run: |
         if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
-          >&2 echo "Error: A single image tar file is needed in the downloaded pipeline artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
+          >&2 echo "Error: A single image tar file is needed in the downloaded artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
           exit 1
         fi
 

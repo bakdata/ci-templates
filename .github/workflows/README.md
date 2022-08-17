@@ -148,7 +148,7 @@ This workflow is built from multiple composite actions listed below:
 | publish-to-test   |    ❌    |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                     |
 | python-version    |    ❌    |                "3.10"                 | string  | The python version for setting up poetry                                                                                          |
 | poetry-version    |    ❌    |               "1.1.12"                | string  | The poetry version to be installed                                                                                                |
-| working-directory |    ❌    |                 "./"                  | string  | The working directory of your Python package                                                                                      |
+| working-directory |    ❌    |                  "."                  | string  | The working directory of your Python package                                                                                      |
 
 ### Secret Parameters
 
@@ -208,7 +208,7 @@ jobs:
 
 ## Java Gradle Docker
 
-This workflow will build, test and publish a Java Gradle project including a Jib image. Additionally,
+This workflow will build, test and publish a Java Gradle project including a tarball iamge. Additionally,
 the workflow creates a GitHub Release when running on a tag branch.
 
 ### Prerequisites
@@ -229,13 +229,13 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name              | Required | Default Value |  Type  | Description                                |
-| ----------------- | :------: | :-----------: | :----: | ------------------------------------------ |
-| docker-publisher  |    ✅    |       -       | string | Publisher to prefix Docker image           |
-| java-distribution |    ❌    |   microsoft   | string | Java distribution to be installed          |
-| java-version      |    ❌    |      11       | string | Java version to be installed               |
-| gradle-version    |    ❌    |    wrapper    | string | Gradle version to be installed             |
-| working-directory |    ❌    |      ./       | string | Working directory of your Gradle artifacts |
+| Name              | Required | Default Value |  Type  | Description                                                                                                   |
+| ----------------- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------------------- |
+| docker-publisher  |    ✅    |       -       | string | Publisher to prefix Docker image                                                                              |
+| java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
+| java-version      |    ❌    |      11       | string | Java version to be installed                                                                                  |
+| gradle-version    |    ❌    |    wrapper    | string | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
+| working-directory |    ❌    |      ./       | string | Working directory of your Gradle artifacts                                                                    |
 
 ### Secret Parameters
 
@@ -277,7 +277,7 @@ jobs:
       java-distribution: "microsoft" # (Optional) Default is microsoft
       java-version: "11" # (Optional) Default is 11
       gradle-version: "wrapper" # (Optional) Default is wrapper
-      working-directory: "./" # (Optional) Default is .
+      working-directory: "." # (Optional) Default is .
     secrets:
       sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
       signing-secret-key-ring: ${{ secrets.SIGNING_SECRET_KEY_RING }}
@@ -314,12 +314,12 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name              | Required | Default Value |  Type  | Description                                |
-| ----------------- | :------: | :-----------: | :----: | ------------------------------------------ |
-| java-distribution |    ❌    |   microsoft   | string | Java distribution to be installed          |
-| java-version      |    ❌    |      11       | string | Java version to be installed               |
-| gradle-version    |    ❌    |    wrapper    | string | Gradle version to be installed             |
-| working-directory |    ❌    |      ./       | string | Working directory of your Gradle artifacts |
+| Name              | Required | Default Value |  Type  | Description                                                                                                   |
+| ----------------- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------------------- |
+| java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
+| java-version      |    ❌    |      11       | string | Java version to be installed                                                                                  |
+| gradle-version    |    ❌    |    wrapper    | string | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
+| working-directory |    ❌    |      ./       | string | Working directory of your Gradle artifacts                                                                    |
 
 ### Secret Parameters
 
@@ -360,7 +360,7 @@ jobs:
       java-distribution: "microsoft" # (Optional) Default is microsoft
       java-version: "11" # (Optional) Default is 11
       gradle-version: "wrapper" # (Optional) Default is wrapper
-      working-directory: "./" # (Optional) Default is .
+      working-directory: "." # (Optional) Default is .
     secrets:
       sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
       signing-secret-key-ring: ${{ secrets.SIGNING_SECRET_KEY_RING }}
@@ -393,13 +393,13 @@ This workflow is built from another composite action listed below:
 
 ### Input Parameters
 
-| Name              | Required | Default Value |  Type  | Description                                  |
-| ----------------- | :------: | :-----------: | :----: | -------------------------------------------- |
-| release-type      |    ✅    |     patch     | string | Scope of the release (major, minor or patch) |
-| java-distribution |    ❌    |   microsoft   | string | Java distribution to be installed            |
-| java-version      |    ❌    |      11       | string | Java version to be installed                 |
-| gradle-version    |    ❌    |    wrapper    | string | Gradle version to be installed               |
-| working-directory |    ❌    |      ./       | string | Working directory of your Gradle artifacts   |
+| Name              | Required | Default Value |  Type  | Description                                                                                                   |
+| ----------------- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------------------- |
+| release-type      |    ✅    |     patch     | string | Scope of the release (major, minor or patch)                                                                  |
+| java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
+| java-version      |    ❌    |      11       | string | Java version to be installed                                                                                  |
+| gradle-version    |    ❌    |    wrapper    | string | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
+| working-directory |    ❌    |      ./       | string | Working directory of your Gradle artifacts                                                                    |
 
 ### Secret Parameters
 
@@ -444,7 +444,7 @@ jobs:
       java-distribution: "microsoft" # (Optional) Default is microsoft
       java-version: "11" # (Optional) Default is 11
       gradle-version: "wrapper" # (Optional) Default is wrapper
-      working-directory: "./" # (Optional) Default is .
+      working-directory: "." # (Optional) Default is .
     secrets:
       github-username: "${{ secrets.GH_USERNAME }}"
       github-email: "${{ secrets.GH_EMAIL }}"

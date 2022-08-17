@@ -1,29 +1,27 @@
 # docker-publish
 
-This action downloads an `image.tar` file from a pipeline artifact and publishes it on Dockerhub.
+This action downloads an `image.tar` file from an artifact and publishes it on Dockerhub.
 
 ## Prerequisites
 
-Create an action that uploads an `image.tar` file as pipeline artifact (see <https://github.com/actions/upload-artifact>).
+Create an action that uploads an `image.tar` file as artifact (see <https://github.com/actions/upload-artifact>).
 
 ## Input Parameters
 
-| Name                | Required |        Default Value         |  Type  | Description                                                                                                                     |
-| ------------------- | :------: | :--------------------------: | :----: | ------------------------------------------------------------------------------------------------------------------------------- |
-| image-artifact-name |    ✅    |       "image-artifact"       | string | Name of the pipeline artifact that contains the Docker image.tar file to push, see <https://github.com/actions/upload-artifact> |
-| publisher           |    ✅    |              -               | string | Publisher to prefix Docker image (e.g. 'my-publisher')                                                                          |
-| image-name          |    ✅    | github.event.repository.name | string | Name of Docker image on Dockerhub                                                                                               |
-| username            |    ✅    |              -               | string | Username for the Docker registry login                                                                                          |
-| password            |    ✅    |              -               | string | Password for the Docker registry login                                                                                          |
-| working-directory   |    ❌    |             "./"             | string | Working directory for your Docker artifacts                                                                                     |
+| Name                | Required |        Default Value         |  Type  | Description                                                                                                            |
+| ------------------- | :------: | :--------------------------: | :----: | ---------------------------------------------------------------------------------------------------------------------- |
+| image-artifact-name |    ✅    |       "image-artifact"       | string | Name of the artifact that contains the Docker image.tar file to push, see <https://github.com/actions/upload-artifact> |
+| publisher           |    ✅    |              -               | string | Publisher to prefix Docker image (e.g. 'my-publisher')                                                                 |
+| image-name          |    ✅    | github.event.repository.name | string | Name of Docker image on Dockerhub                                                                                      |
+| username            |    ✅    |              -               | string | Username for the Docker registry login                                                                                 |
+| password            |    ✅    |              -               | string | Password for the Docker registry login                                                                                 |
+| working-directory   |    ❌    |             "."              | string | Working directory for your Docker artifacts                                                                            |
 
 ## Usage
 
 ```yaml
-
----
 steps:
-  - name: Publish Jib image
+  - name: Publish tarball iamge
     uses: bakdata/ci-templates/actions/docker-publish@main
     with:
       image-artifact-name: "image-artifact"
@@ -31,5 +29,5 @@ steps:
       image-name: "my-image" # published image name will be 'my-publisher/my-image'
       username: ${{ secrets.docker-user }}
       password: ${{ secrets.docker-password }}
-      working-directory: "./" # (Optional)
+      working-directory: "." # (Optional)
 ```

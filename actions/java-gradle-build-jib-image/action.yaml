@@ -1,5 +1,5 @@
-name: "Build Jib image"
-description: "Build Jib image using Gradle"
+name: "Build tarball iamge"
+description: "Build tarball iamge using Gradle"
 
 inputs:
   image-artifact-name:
