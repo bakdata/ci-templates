@@ -246,18 +246,18 @@ Nexus. To publish the Docker image to DockerHub you need to provide a `docker-us
 The `github-username` and `github-token` is required to query the GitHub API for generating a changelog when running on
 a tag branch.
 
-| Name                    | Required | Description                                                    |
-| ----------------------- | :------: | -------------------------------------------------------------- |
-| sonar-token             |    ✅    | Token for Sonarcloud                                           |
-| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication |
-| signing-key-id          |    ✅    | Key id for signing the Sonatype publication                    |
-| signing-password        |    ✅    | Password for signing the Sonatype publication                  |
-| ossrh-username          |    ✅    | Username for signing into Sonatype repository                  |
-| ossrh-password          |    ✅    | Password for signing into Sonatype repository                  |
-| docker-username         |    ✅    | Username for publishing to Dockerhub                           |
-| docker-password         |    ✅    | Password for publishing to Dockerhub                           |
-| github-username         |    ✅    | GitHub username for requesting changes from API                |
-| github-token            |    ✅    | GitHub token for requesting changes from API                   |
+| Name                    | Required | Description                                                                                                |
+| ----------------------- | :------: | ---------------------------------------------------------------------------------------------------------- |
+| sonar-token             |    ✅    | Token for Sonarcloud. An empty value will skip the Sonarcloud jobs                                         |
+| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication. An empty value will skip the Sonatype jobs |
+| signing-key-id          |    ✅    | Key id for signing the Sonatype publication. An empty value will skip the Sonatype jobs                    |
+| signing-password        |    ✅    | Password for signing the Sonatype publication. An empty value will the Sonatype jobs                       |
+| ossrh-username          |    ✅    | Username for signing into Sonatype repository. An empty value will the Sonatype jobs                       |
+| ossrh-password          |    ✅    | Password for signing into Sonatype repository. An empty value will the Sonatpye jobs                       |
+| docker-username         |    ✅    | Username for publishing to Dockerhub                                                                       |
+| docker-password         |    ✅    | Password for publishing to Dockerhub                                                                       |
+| github-username         |    ✅    | GitHub username for requesting changes from API                                                            |
+| github-token            |    ✅    | GitHub token for requesting changes from API                                                               |
 
 ### Calling the workflow
 
@@ -330,18 +330,18 @@ Nexus. To publish the Gradle plugin to the Gradle Plugin Portal you need to prov
 a `gradle-publish-secret`. The `github-username` and `github-token` is required to query the GitHub API for generating a
 changelog when running on a tag branch.
 
-| Name                    | Required | Description                                                    |
-| ----------------------- | :------: | -------------------------------------------------------------- |
-| sonar-token             |    ✅    | Token for Sonarcloud                                           |
-| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication |
-| signing-key-id          |    ✅    | Key id for signing the Sonatype publication                    |
-| signing-password        |    ✅    | Password for signing the Sonatype publication                  |
-| ossrh-username          |    ✅    | Username for signing into Sonatype repository                  |
-| ossrh-password          |    ✅    | Password for signing into Sonatype repository                  |
-| gradle-publish-key      |    ✅    | Key for publishing to Gradle Plugin Portal                     |
-| gradle-publish-secret   |    ✅    | Secret for publishing to Gradle Plugin Portal                  |
-| github-username         |    ✅    | GitHub username for requesting changes from API                |
-| github-token            |    ✅    | GitHub token for requesting changes from API                   |
+| Name                    | Required | Description                                                                                                |
+| ----------------------- | :------: | ---------------------------------------------------------------------------------------------------------- |
+| sonar-token             |    ✅    | Token for Sonarcloud. An empty value will skip the Sonarcloud jobs                                         |
+| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication. An empty value will skip the Sonatype jobs |
+| signing-key-id          |    ✅    | Key id for signing the Sonatype publication. An empty value will skip the Sonatype jobs                    |
+| signing-password        |    ✅    | Password for signing the Sonatype publication. An empty value will the Sonatype jobs                       |
+| ossrh-username          |    ✅    | Username for signing into Sonatype repository. An empty value will the Sonatype jobs                       |
+| ossrh-password          |    ✅    | Password for signing into Sonatype repository. An empty value will the Sonatpye jobs                       |
+| gradle-publish-key      |    ✅    | Key for publishing to Gradle Plugin Portal                                                                 |
+| gradle-publish-secret   |    ✅    | Secret for publishing to Gradle Plugin Portal                                                              |
+| github-username         |    ✅    | GitHub username for requesting changes from API                                                            |
+| github-token            |    ✅    | GitHub token for requesting changes from API                                                               |
 
 ### Calling the workflow
 
