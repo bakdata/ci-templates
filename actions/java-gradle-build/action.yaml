@@ -3,7 +3,7 @@ description: "Build Java artifacts using Gradle"
 
 inputs:
   build-artifact-name:
-    description: "Pipeline artifact name that is used for uploading build artifacts, see https://github.com/actions/upload-artifact (Default is build-artifact)."
+    description: "Artifact name that is used for uploading build artifacts, see https://github.com/actions/upload-artifact (Default is build-artifact)."
     required: false
     default: "build-artifact"
   java-distribution:
