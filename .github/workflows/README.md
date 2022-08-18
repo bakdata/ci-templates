@@ -214,7 +214,7 @@ the workflow creates a GitHub Release when running on a tag branch.
 ### Prerequisites
 
 Your Java project needs to be set up with Gradle and either needs to contain a `build.gradle` or a `build.gradle.kts`
-file that uses Jib. Moreover, prepare credentials for Sonarcloud, Sonatype, GitHub and Docker.
+file that uses the [Sonar](https://github.com/bakdata/gradle-plugins/tree/master/sonar), [Sonatype](https://github.com/bakdata/gradle-plugins/tree/master/sonatype) and [Jib](https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin) plugins. Moreover, prepare credentials for Sonarcloud, Sonatype, GitHub and Docker.
 
 ### Dependencies
 
@@ -299,8 +299,7 @@ the workflow creates a GitHub Release when running on a tag branch.
 ### Prerequisites
 
 Your Java project needs to be set up with Gradle and either needs to contain a `build.gradle` or a `build.gradle.kts`
-file that uses the `plugin-publish-plugin` dependency. Moreover, prepare credentials for Sonarcloud, Sonatype, GitHub
-and Gradle Plugin Portal.
+file that uses the [Sonar](https://github.com/bakdata/gradle-plugins/tree/master/sonar) and [Sonatype](https://github.com/bakdata/gradle-plugins/tree/master/sonatype) plugins. Moreover, prepare credentials for Sonarcloud, Sonatype and GitHub.
 
 ### Dependencies
 
@@ -324,9 +323,87 @@ This workflow is built from multiple composite actions listed below:
 
 For Sonarcloud you need to provide a `sonar-token` to publish code quality results. In case of Sonatype, the action
 requires you to have a `signing-secret-key-ring` (base64 encoded), a `signing-key-id` and a `signing-password` to sign
+your build artifacts and additionally an `ossrh-username` and an `ossrh-password` to publish the signed artifacts to
+Nexus. The `github-username` and `github-token` are required to query the GitHub API for generating a
+changelog when running on a tag branch.
+
+| Name                    | Required | Description                                                                                                |
+| ----------------------- | :------: | ---------------------------------------------------------------------------------------------------------- |
+| sonar-token             |    ✅    | Token for Sonarcloud. An empty value will skip the Sonarcloud jobs                                         |
+| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication. An empty value will skip the Sonatype jobs |
+| signing-key-id          |    ✅    | Key id for signing the Sonatype publication. An empty value will skip the Sonatype jobs                    |
+| signing-password        |    ✅    | Password for signing the Sonatype publication. An empty value will the Sonatype jobs                       |
+| ossrh-username          |    ✅    | Username for signing into Sonatype repository. An empty value will the Sonatype jobs                       |
+| ossrh-password          |    ✅    | Password for signing into Sonatype repository. An empty value will the Sonatpye jobs                       |
+| github-username         |    ✅    | GitHub username for requesting changes from API                                                            |
+| github-token            |    ✅    | GitHub token for requesting changes from API                                                               |
+
+### Calling the workflow
+
+```yaml
+name: Call this reusable workflow
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  call-workflow-passing-data:
+    name: Java Gradle Library
+    uses: bakdata/ci-templates/.github/workflows/java-gradle-library.yaml@main
+    with:
+      java-distribution: "microsoft" # (Optional) Default is microsoft
+      java-version: "11" # (Optional) Default is 11
+      gradle-version: "wrapper" # (Optional) Default is wrapper
+      working-directory: "." # (Optional) Default is .
+    secrets:
+      sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
+      signing-secret-key-ring: ${{ secrets.SIGNING_SECRET_KEY_RING }}
+      signing-key-id: ${{ secrets.SIGNING_KEY_ID }}
+      signing-password: ${{ secrets.SIGNING_PASSWORD }}
+      ossrh-username: ${{ secrets.OSSHR_USERNAME }}
+      ossrh-password: ${{ secrets.OSSHR_PASSWORD }}
+      github-username: ${{ secrets.GH_USERNAME }}
+      github-token: ${{ secrets.GH_TOKEN }}
+```
+
+## Java Gradle Plugin
+
+This workflow will build, test and publish a Java Gradle plugin project to the Gradle Plugin Portal. Additionally,
+the workflow creates a GitHub Release when running on a tag branch.
+
+### Prerequisites
+
+Your Java project needs to be set up with Gradle and either needs to contain a `build.gradle` or a `build.gradle.kts`
+file that uses the [Sonar](https://github.com/bakdata/gradle-plugins/tree/master/sonar), [Sonatype](https://github.com/bakdata/gradle-plugins/tree/master/sonatype) and [Plugin Publish](https://plugins.gradle.org/plugin/com.gradle.plugin-publish) plugins. Moreover, prepare credentials for Sonarcloud, Sonatype, GitHub
+and Gradle Plugin Portal.
+
+### Dependencies
+
+This workflow is built from multiple composite actions listed below:
+
+- [java-gradle-build](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build)
+- [java-gradle-test](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-test)
+- [java-gradle-publish](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-publish)
+- [java-gradle-publish-plugin](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-publish-plugin)
+- [java-gradle-release-github](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-release-github)
+
+### Input Parameters
+
+| Name              | Required | Default Value |  Type  | Description                                                                                                   |
+| ----------------- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------------------- |
+| java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
+| java-version      |    ❌    |      11       | string | Java version to be installed                                                                                  |
+| gradle-version    |    ❌    |    wrapper    | string | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
+| working-directory |    ❌    |      ./       | string | Working directory of your Gradle artifacts                                                                    |
+
+### Secret Parameters
+
+For Sonarcloud you need to provide a `sonar-token` to publish code quality results. In case of Sonatype, the action
+requires you to have a `signing-secret-key-ring` (base64 encoded), a `signing-key-id` and a `signing-password` to sign
 your build artifacts and additionally a `ossrh-username` and a `ossrh-password` to publish the signed artifacts to
 Nexus. To publish the Gradle plugin to the Gradle Plugin Portal you need to provide a `gradle-publish-key` and
-a `gradle-publish-secret`. The `github-username` and `github-token` is required to query the GitHub API for generating a
+a `gradle-publish-secret`. The `github-username` and `github-token` are required to query the GitHub API for generating a
 changelog when running on a tag branch.
 
 | Name                    | Required | Description                                                                                                |
