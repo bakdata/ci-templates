@@ -109,13 +109,12 @@ jobs:
 
   publish-plugin:
     name: Publish
+    if: ${{ startsWith(github.ref, 'refs/tags/') }}
     runs-on: ubuntu-22.04
     needs: test
 
     steps:
       - name: Publish plugin
-        needs: test
-        if: ${{ startsWith(github.ref, 'refs/tags/') }}
         uses: bakdata/ci-templates/actions/java-gradle-publish-plugin@feature/java-gradle
         with:
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
