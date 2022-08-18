@@ -104,7 +104,7 @@ jobs:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
-            working-directory: ${{ inputs.working-directory }}
+          working-directory: ${{ inputs.working-directory }}
 
   publish:
     name: Publish
