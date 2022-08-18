@@ -1,9 +1,9 @@
-name: "Build tarball iamge"
-description: "Build tarball iamge using Gradle"
+name: "Build tarball image"
+description: "Build tarball image using Gradle"
 
 inputs:
   image-artifact-name:
-    description: "Artifact name to upload Jib Docker image, see https://github.com/actions/upload-artifact"
+    description: "Artifact name to upload tarball image, see https://github.com/actions/upload-artifact"
     required: false
     default: "image-artifact"
   java-distribution:
@@ -40,7 +40,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Upload Jib Docker image artifact
+    - name: Upload tarball image artifact
       uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.image-artifact-name }}

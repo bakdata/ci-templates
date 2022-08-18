@@ -11,11 +11,11 @@ inputs:
   signing-password:
     description: "Password for signing the Sonatype publication."
     required: true
-  ossrh-username:
-    description: "Username for signing into Sonatype repository."
+  gradle-publish-key:
+    description: "Key for publishing to Gradle Plugin Portal."
     required: true
-  ossrh-password:
-    description: "Password for signing into Sonatype repository."
+  gradle-publish-secret:
+    description: "Secret for publishing to Gradle Plugin Portal."
     required: true
   java-distribution:
     description: "Java distribution to be installed. (Default is microsoft)"
@@ -48,26 +48,11 @@ runs:
         java-version: ${{ inputs.java-version }}
         gradle-version: ${{ inputs.gradle-version }}
 
-    - name: Publish to Nexus
+    - name: Publish plugin
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
-        ./gradlew --info --stacktrace publishToNexus -x test
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-      env:
-        SIGNING_KEY_ID: "${{ inputs.signing-key-id }}"
-        SIGNING_PASSWORD: "${{ inputs.signing-password }}"
-        OSSRH_USERNAME: "${{ inputs.ossrh-username }}"
-        OSSRH_PASSWORD: "${{ inputs.ossrh-password }}"
-        CI: true
-
-    - name: Release to Nexus
-      if: startsWith(github.ref, 'refs/tags/')
-      run: |
-        export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
-        echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
-        #./gradlew --info --stacktrace closeAndReleaseRepository -x test
+        ./gradlew --info --stacktrace -Pgradle.publish.key=${{ inputs.gradle-publish-key }} -Pgradle.publish.secret=${{ inputs.gradle-publish-secret }} publishPlugins -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:

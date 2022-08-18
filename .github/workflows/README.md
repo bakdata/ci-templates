@@ -208,7 +208,7 @@ jobs:
 
 ## Java Gradle Docker
 
-This workflow will build, test and publish a Java Gradle project including a tarball iamge. Additionally,
+This workflow will build, test and publish a Java Gradle project including a tarball image. Additionally,
 the workflow creates a GitHub Release when running on a tag branch.
 
 ### Prerequisites
@@ -300,8 +300,7 @@ the workflow creates a GitHub Release when running on a tag branch.
 
 Your Java project needs to be set up with Gradle and either needs to contain a `build.gradle` or a `build.gradle.kts`
 file that uses the `plugin-publish-plugin` dependency. Moreover, prepare credentials for Sonarcloud, Sonatype, GitHub
-and Gradle
-Plugin Portal.
+and Gradle Plugin Portal.
 
 ### Dependencies
 

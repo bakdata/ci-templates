@@ -1,6 +1,6 @@
-# java-gradle-publish
+# java-gradle-publish-plugin
 
-This action uses Gradle to publish Java artifacts to Sonatype Nexus.
+This action uses Gradle to publish Java plugins to the Gradle Plugin Portal.
 
 ## Input Parameters
 
@@ -9,8 +9,8 @@ This action uses Gradle to publish Java artifacts to Sonatype Nexus.
 | signing-secret-key-ring |    ✅    |       -       | string | Key ring (base64 encoded) for signing the Sonatype publication                                                |
 | signing-key-id          |    ✅    |       -       | string | Key id for signing the Sonatype publication                                                                   |
 | signing-password        |    ✅    |       -       | string | Password for signing the Sonatype publication                                                                 |
-| ossrh-username          |    ✅    |       -       | string | Username for signing into Sonatype repository                                                                 |
-| ossrh-password          |    ✅    |       -       | string | Password for signing into Sonatype repository                                                                 |
+| gradle-publish-key      |    ✅    |       -       | string | Key for publishing to Gradle Plugin Portal                                                                    |
+| gradle-publish-secret   |    ✅    |       -       | string | Secret for publishing to Gradle Plugin Portal                                                                 |
 | java-distribution       |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
 | java-version            |    ❌    |      11       | string | Java version to be installed                                                                                  |
 | gradle-version          |    ❌    |    wrapper    | string | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
@@ -21,13 +21,13 @@ This action uses Gradle to publish Java artifacts to Sonatype Nexus.
 ```yaml
 steps:
   - name: Publish
-    uses: bakdata/ci-templates/actions/java-gradle-publish@main
+    uses: bakdata/ci-templates/actions/java-gradle-publish-plugin@main
     with:
       signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
       signing-key-id: ${{ secrets.signing-key-id }}
       signing-password: ${{ secrets.signing-password }}
-      ossrh-username: ${{ secrets.ossrh-username }}
-      ossrh-password: ${{ secrets.ossrh-password }}
+      gradle-publish-key: ${{ secrets.gradle-publish-key }}
+      gradle-publish-secret: ${{ secrets.gradle-publish-secret }}
       java-distribution: "microsoft" # (Optional)
       java-version: "11" # (Optional)
       gradle-version: "wrapper" # (Optional)

@@ -21,7 +21,7 @@ Create an action that [uploads a tarball image as artifact](https://github.com/a
 
 ```yaml
 steps:
-  - name: Publish tarball iamge
+  - name: Publish tarball image
     uses: bakdata/ci-templates/actions/docker-publish@main
     with:
       image-artifact-name: "image-artifact"
