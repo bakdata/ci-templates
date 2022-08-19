@@ -148,7 +148,7 @@ This workflow is built from multiple composite actions listed below:
 | publish-to-test   |    ❌    |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                     |
 | python-version    |    ❌    |                "3.10"                 | string  | The python version for setting up poetry                                                                                          |
 | poetry-version    |    ❌    |               "1.1.12"                | string  | The poetry version to be installed                                                                                                |
-| working-directory |    ❌    |                  "."                  | string  | The working directory of your Python package                                                                                      |
+| working-directory |    ❌    |                  "./"                  | string  | The working directory of your Python package                                                                                      |
 
 ### Secret Parameters
 
