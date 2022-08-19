@@ -1,5 +1,5 @@
-name: Java Gradle library
-# Reusable workflow for building and publishing Java Gradle libraries
+name: Java Gradle plugin
+# Reusable workflow for building and publishing Java Gradle plugins on the Gradle Plugin Portal
 
 on:
   workflow_call:
@@ -27,6 +27,9 @@ on:
     secrets:
       sonar-token:
         description: "Token for Sonarcloud."
+        required: true
+      sonar-organization:
+        description: "Organization for Sonarcloud"
         required: true
       signing-secret-key-ring:
         description: "Key ring (base64 encoded) for signing the Sonatype publication."
@@ -80,6 +83,7 @@ jobs:
         uses: bakdata/ci-templates/actions/java-gradle-test@feature/java-gradle
         with:
           sonar-token: ${{ secrets.sonar-token }}
+          sonar-organization: ${{ secrets.sonar-organization }}
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
           signing-password: ${{ secrets.signing-password }}
@@ -108,8 +112,8 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
 
   publish-plugin:
-    name: Publish
-    if: ${{ startsWith(github.ref, 'refs/tags/') }}
+    name: Publish plugin
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-22.04
     needs: test
 

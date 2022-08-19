@@ -28,6 +28,9 @@ on:
       sonar-token:
         description: "Token for Sonarcloud."
         required: true
+      sonar-organization:
+        description: "Organization for Sonarcloud"
+        required: true
       signing-secret-key-ring:
         description: "Key ring (base64 encoded) for signing the Sonatype publication."
         required: true
@@ -74,6 +77,7 @@ jobs:
         uses: bakdata/ci-templates/actions/java-gradle-test@feature/java-gradle
         with:
           sonar-token: ${{ secrets.sonar-token }}
+          sonar-organization: ${{ secrets.sonar-organization }}
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
           signing-password: ${{ secrets.signing-password }}

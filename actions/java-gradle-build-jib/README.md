@@ -1,4 +1,4 @@
-# java-gradle-build-jib-image
+# java-gradle-build-jib
 
 This action builds an image tarball using [Jib Gradle](https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin) and uploads an `image.tar` file as an artifact.
 
@@ -17,7 +17,7 @@ This action builds an image tarball using [Jib Gradle](https://github.com/Google
 ```yaml
 steps:
   - name: Build tarball image
-    uses: bakdata/ci-templates/actions/java-gradle-build-jib-image@main
+    uses: bakdata/ci-templates/actions/java-gradle-build-jib@main
     with:
       image-artifact-name: "image-artifact" # (Optional)
       java-distribution: "microsoft" # (Optional)

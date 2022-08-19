@@ -4,7 +4,7 @@ This action downloads an `image.tar` file from an artifact and publishes it on D
 
 ## Prerequisites
 
-Create an action that [uploads a tarball image as artifact](https://github.com/actions/upload-artifact). A [Gradle Jib](https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin) example can be found [here](https://github.com/bakdata/ci-templates/tree/feature/java-gradle/actions/java-gradle-build-jib-image).
+Create an action that [uploads a tarball image as artifact](https://github.com/actions/upload-artifact). A [Gradle Jib](https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin) example can be found [here](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build-jib).
 
 ## Input Parameters
 

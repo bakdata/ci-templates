@@ -222,7 +222,7 @@ This workflow is built from multiple composite actions listed below:
 
 - [java-gradle-build](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build)
 - [java-gradle-test](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-test)
-- [java-gradle-build-jib-image](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build-jib-image)
+- [java-gradle-build-jib](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build-jib)
 - [java-gradle-publish](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-publish)
 - [docker-publish](https://github.com/bakdata/ci-templates/tree/main/actions/docker-publish)
 - [java-gradle-release-github](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-release-github)
@@ -235,29 +235,30 @@ This workflow is built from multiple composite actions listed below:
 | java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
 | java-version      |    ❌    |      11       | string | Java version to be installed                                                                                  |
 | gradle-version    |    ❌    |    wrapper    | string | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
-| working-directory |    ❌    |      ./       | string | Working directory of your Gradle artifacts                                                                    |
+| working-directory |    ❌    |       .       | string | Working directory of your Gradle artifacts                                                                    |
 
 ### Secret Parameters
 
-For Sonarcloud you need to provide a `sonar-token` to publish code quality results. In case of Sonatype, the action
+For Sonarcloud you need to provide a `sonar-token` and a `sonar-organization` to publish code quality results. In case of Sonatype, the action
 requires you to have a `signing-secret-key-ring` (base64 encoded), a `signing-key-id` and a `signing-password` to sign
-your build artifacts and additionally a `ossrh-username` and a `ossrh-password` to publish the signed artifacts to
+your build artifacts and additionally an `ossrh-username` and an `ossrh-password` to publish the signed artifacts to
 Nexus. To publish the Docker image to DockerHub you need to provide a `docker-username` and a `docker-password`.
 The `github-username` and `github-token` is required to query the GitHub API for generating a changelog when running on
 a tag branch.
 
-| Name                    | Required | Description                                                                                                |
-| ----------------------- | :------: | ---------------------------------------------------------------------------------------------------------- |
-| sonar-token             |    ✅    | Token for Sonarcloud. An empty value will skip the Sonarcloud jobs                                         |
-| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication. An empty value will skip the Sonatype jobs |
-| signing-key-id          |    ✅    | Key id for signing the Sonatype publication. An empty value will skip the Sonatype jobs                    |
-| signing-password        |    ✅    | Password for signing the Sonatype publication. An empty value will the Sonatype jobs                       |
-| ossrh-username          |    ✅    | Username for signing into Sonatype repository. An empty value will the Sonatype jobs                       |
-| ossrh-password          |    ✅    | Password for signing into Sonatype repository. An empty value will the Sonatpye jobs                       |
-| docker-username         |    ✅    | Username for publishing to Dockerhub                                                                       |
-| docker-password         |    ✅    | Password for publishing to Dockerhub                                                                       |
-| github-username         |    ✅    | GitHub username for requesting changes from API                                                            |
-| github-token            |    ✅    | GitHub token for requesting changes from API                                                               |
+| Name                    | Required | Description                                                    |
+| ----------------------- | :------: | -------------------------------------------------------------- |
+| sonar-token             |    ✅    | Token for Sonarcloud                                           |
+| sonar-organization      |    ✅    | Organization for Sonarcloud                                    |
+| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication |
+| signing-key-id          |    ✅    | Key id for signing the Sonatype publication                    |
+| signing-password        |    ✅    | Password for signing the Sonatype publication                  |
+| ossrh-username          |    ✅    | Username for signing into Sonatype repository                  |
+| ossrh-password          |    ✅    | Password for signing into Sonatype repository                  |
+| docker-username         |    ✅    | Username for publishing to Dockerhub                           |
+| docker-password         |    ✅    | Password for publishing to Dockerhub                           |
+| github-username         |    ✅    | GitHub username for requesting changes from API                |
+| github-token            |    ✅    | GitHub token for requesting changes from API                   |
 
 ### Calling the workflow
 
@@ -280,6 +281,7 @@ jobs:
       working-directory: "." # (Optional) Default is .
     secrets:
       sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
+      sonar-organization: ${{ secrets.SONARCLOUD_ORGANIZATION }}
       signing-secret-key-ring: ${{ secrets.SIGNING_SECRET_KEY_RING }}
       signing-key-id: ${{ secrets.SIGNING_KEY_ID }}
       signing-password: ${{ secrets.SIGNING_PASSWORD }}
@@ -317,26 +319,27 @@ This workflow is built from multiple composite actions listed below:
 | java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
 | java-version      |    ❌    |      11       | string | Java version to be installed                                                                                  |
 | gradle-version    |    ❌    |    wrapper    | string | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
-| working-directory |    ❌    |      ./       | string | Working directory of your Gradle artifacts                                                                    |
+| working-directory |    ❌    |       .       | string | Working directory of your Gradle artifacts                                                                    |
 
 ### Secret Parameters
 
-For Sonarcloud you need to provide a `sonar-token` to publish code quality results. In case of Sonatype, the action
+For Sonarcloud you need to provide a `sonar-token` and a `sonar-organization` to publish code quality results. In case of Sonatype, the action
 requires you to have a `signing-secret-key-ring` (base64 encoded), a `signing-key-id` and a `signing-password` to sign
 your build artifacts and additionally an `ossrh-username` and an `ossrh-password` to publish the signed artifacts to
 Nexus. The `github-username` and `github-token` are required to query the GitHub API for generating a
 changelog when running on a tag branch.
 
-| Name                    | Required | Description                                                                                                |
-| ----------------------- | :------: | ---------------------------------------------------------------------------------------------------------- |
-| sonar-token             |    ✅    | Token for Sonarcloud. An empty value will skip the Sonarcloud jobs                                         |
-| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication. An empty value will skip the Sonatype jobs |
-| signing-key-id          |    ✅    | Key id for signing the Sonatype publication. An empty value will skip the Sonatype jobs                    |
-| signing-password        |    ✅    | Password for signing the Sonatype publication. An empty value will the Sonatype jobs                       |
-| ossrh-username          |    ✅    | Username for signing into Sonatype repository. An empty value will the Sonatype jobs                       |
-| ossrh-password          |    ✅    | Password for signing into Sonatype repository. An empty value will the Sonatpye jobs                       |
-| github-username         |    ✅    | GitHub username for requesting changes from API                                                            |
-| github-token            |    ✅    | GitHub token for requesting changes from API                                                               |
+| Name                    | Required | Description                                                    |
+| ----------------------- | :------: | -------------------------------------------------------------- |
+| sonar-token             |    ✅    | Token for Sonarcloud                                           |
+| sonar-organization      |    ✅    | Organization for Sonarcloud                                    |
+| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication |
+| signing-key-id          |    ✅    | Key id for signing the Sonatype publication                    |
+| signing-password        |    ✅    | Password for signing the Sonatype publication                  |
+| ossrh-username          |    ✅    | Username for signing into Sonatype repository                  |
+| ossrh-password          |    ✅    | Password for signing into Sonatype repository                  |
+| github-username         |    ✅    | GitHub username for requesting changes from API                |
+| github-token            |    ✅    | GitHub token for requesting changes from API                   |
 
 ### Calling the workflow
 
@@ -358,6 +361,7 @@ jobs:
       working-directory: "." # (Optional) Default is .
     secrets:
       sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
+      sonar-organization: ${{ secrets.SONARCLOUD_ORGANIZATION }}
       signing-secret-key-ring: ${{ secrets.SIGNING_SECRET_KEY_RING }}
       signing-key-id: ${{ secrets.SIGNING_KEY_ID }}
       signing-password: ${{ secrets.SIGNING_PASSWORD }}
@@ -395,29 +399,30 @@ This workflow is built from multiple composite actions listed below:
 | java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
 | java-version      |    ❌    |      11       | string | Java version to be installed                                                                                  |
 | gradle-version    |    ❌    |    wrapper    | string | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
-| working-directory |    ❌    |      ./       | string | Working directory of your Gradle artifacts                                                                    |
+| working-directory |    ❌    |       .       | string | Working directory of your Gradle artifacts                                                                    |
 
 ### Secret Parameters
 
-For Sonarcloud you need to provide a `sonar-token` to publish code quality results. In case of Sonatype, the action
+For Sonarcloud you need to provide a `sonar-token` and a `sonar-organization` to publish code quality results. In case of Sonatype, the action
 requires you to have a `signing-secret-key-ring` (base64 encoded), a `signing-key-id` and a `signing-password` to sign
-your build artifacts and additionally a `ossrh-username` and a `ossrh-password` to publish the signed artifacts to
+your build artifacts and additionally an `ossrh-username` and an `ossrh-password` to publish the signed artifacts to
 Nexus. To publish the Gradle plugin to the Gradle Plugin Portal you need to provide a `gradle-publish-key` and
 a `gradle-publish-secret`. The `github-username` and `github-token` are required to query the GitHub API for generating a
 changelog when running on a tag branch.
 
-| Name                    | Required | Description                                                                                                |
-| ----------------------- | :------: | ---------------------------------------------------------------------------------------------------------- |
-| sonar-token             |    ✅    | Token for Sonarcloud. An empty value will skip the Sonarcloud jobs                                         |
-| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication. An empty value will skip the Sonatype jobs |
-| signing-key-id          |    ✅    | Key id for signing the Sonatype publication. An empty value will skip the Sonatype jobs                    |
-| signing-password        |    ✅    | Password for signing the Sonatype publication. An empty value will the Sonatype jobs                       |
-| ossrh-username          |    ✅    | Username for signing into Sonatype repository. An empty value will the Sonatype jobs                       |
-| ossrh-password          |    ✅    | Password for signing into Sonatype repository. An empty value will the Sonatpye jobs                       |
-| gradle-publish-key      |    ✅    | Key for publishing to Gradle Plugin Portal                                                                 |
-| gradle-publish-secret   |    ✅    | Secret for publishing to Gradle Plugin Portal                                                              |
-| github-username         |    ✅    | GitHub username for requesting changes from API                                                            |
-| github-token            |    ✅    | GitHub token for requesting changes from API                                                               |
+| Name                    | Required | Description                                                    |
+| ----------------------- | :------: | -------------------------------------------------------------- |
+| sonar-token             |    ✅    | Token for Sonarcloud                                           |
+| sonar-organization      |    ✅    | Organization for Sonarcloud                                    |
+| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication |
+| signing-key-id          |    ✅    | Key id for signing the Sonatype publication                    |
+| signing-password        |    ✅    | Password for signing the Sonatype publication                  |
+| ossrh-username          |    ✅    | Username for signing into Sonatype repository                  |
+| ossrh-password          |    ✅    | Password for signing into Sonatype repository                  |
+| gradle-publish-key      |    ✅    | Key for publishing to Gradle Plugin Portal                     |
+| gradle-publish-secret   |    ✅    | Secret for publishing to Gradle Plugin Portal                  |
+| github-username         |    ✅    | GitHub username for requesting changes from API                |
+| github-token            |    ✅    | GitHub token for requesting changes from API                   |
 
 ### Calling the workflow
 
@@ -439,6 +444,7 @@ jobs:
       working-directory: "." # (Optional) Default is .
     secrets:
       sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
+      sonar-organization: ${{ secrets.SONARCLOUD_ORGANIZATION }}
       signing-secret-key-ring: ${{ secrets.SIGNING_SECRET_KEY_RING }}
       signing-key-id: ${{ secrets.SIGNING_KEY_ID }}
       signing-password: ${{ secrets.SIGNING_PASSWORD }}
@@ -459,7 +465,7 @@ to the default branch and generate and push a changelog to the default branch.
 ### Prerequisites
 
 Your Java project needs to be set up with Gradle and either needs to contain a `build.gradle` or a `build.gradle.kts`
-file that uses the `net.researchgate.release` dependency. Moreover, prepare credentials for pushing to GitHub.
+file that uses the [Researchgate Release](https://plugins.gradle.org/plugin/net.researchgate.release) plugin. Moreover, prepare a `github-username`, a `github-email` and a `github-token` to push to GitHub.
 
 ### Dependencies
 
@@ -475,7 +481,7 @@ This workflow is built from another composite action listed below:
 | java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
 | java-version      |    ❌    |      11       | string | Java version to be installed                                                                                  |
 | gradle-version    |    ❌    |    wrapper    | string | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
-| working-directory |    ❌    |      ./       | string | Working directory of your Gradle artifacts                                                                    |
+| working-directory |    ❌    |       .       | string | Working directory of your Gradle artifacts                                                                    |
 
 ### Secret Parameters
 
@@ -491,12 +497,12 @@ a `github-token`.
 ### Outputs
 
 This workflow outputs two variables: The `old-version` and the `release-version`. These variables can be used in the
-future jobs (e.g., using the `release-version` to create GitHub release).
+future jobs (e.g., using the `release-version` to create a GitHub release).
 
-| Name            | Description                                            |
-| --------------- | ------------------------------------------------------ |
-| old-version     | Defines the old version in your gradle.properties file |
-| release-version | The bumped version of your project                     |
+| Name            | Description                                  |
+| --------------- | -------------------------------------------- |
+| old-version     | Old version from your gradle.properties file |
+| release-version | Bumped version of your project               |
 
 ### Calling the workflow
 
