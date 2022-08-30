@@ -1,0 +1,61 @@
+name: "Publish Java plugin"
+description: "Publish Java plugin using Gradle"
+
+inputs:
+  signing-secret-key-ring:
+    description: "Key ring (base64 encoded) for signing the Sonatype publication."
+    required: true
+  signing-key-id:
+    description: "Key id for signing the Sonatype publication."
+    required: true
+  signing-password:
+    description: "Password for signing the Sonatype publication."
+    required: true
+  gradle-publish-key:
+    description: "Key for publishing to Gradle Plugin Portal."
+    required: true
+  gradle-publish-secret:
+    description: "Secret for publishing to Gradle Plugin Portal."
+    required: true
+  java-distribution:
+    description: "Java distribution to be installed. (Default is microsoft)"
+    required: false
+    default: "microsoft"
+  java-version:
+    description: "Java version to be installed. (Default is 11)"
+    required: false
+    default: "11"
+  gradle-version:
+    description: "Gradle version to be installed. (Default is wrapper)"
+    required: false
+    default: "wrapper"
+  working-directory:
+    description: "Working directory of your Gradle artifacts. (Default is .)"
+    required: false
+    default: "."
+runs:
+  using: "composite"
+  steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Set up Gradle with version ${{ inputs.gradle-version }}
+      uses: bakdata/ci-templates/actions/java-gradle-setup@v1.4.0
+      with:
+        java-distribution: ${{ inputs.java-distribution }}
+        java-version: ${{ inputs.java-version }}
+        gradle-version: ${{ inputs.gradle-version }}
+
+    - name: Publish plugin
+      run: |
+        export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
+        echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
+        ./gradlew --info --stacktrace -Pgradle.publish.key=${{ inputs.gradle-publish-key }} -Pgradle.publish.secret=${{ inputs.gradle-publish-secret }} publishPlugins -x test
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        SIGNING_KEY_ID: "${{ inputs.signing-key-id }}"
+        SIGNING_PASSWORD: "${{ inputs.signing-password }}"
+        CI: true
