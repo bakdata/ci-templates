@@ -71,15 +71,16 @@ jobs:
 
       - name: Bump version with poetry
         id: release-tag
-        uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.0.0
+        uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.4.1
         with:
           release-type: ${{ inputs.release-type }}
           python-version: ${{ inputs.python-version }}
           poetry-version: ${{ inputs.poetry-version }}
+          working-directory: ${{ inputs.working-directory }}
 
       - name: Release to PyPI
         if: success()
-        uses: bakdata/ci-templates/actions/python-poetry-release@v1.0.0
+        uses: bakdata/ci-templates/actions/python-poetry-release@v1.4.1
         with:
           pypi-token: ${{ secrets.pypi-token }}
           publish-to-test: ${{ inputs.publish-to-test }}
