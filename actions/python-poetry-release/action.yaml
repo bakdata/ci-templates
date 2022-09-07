@@ -21,14 +21,16 @@ inputs:
     description: "The working directory of your Python packages. (Default is root directory)"
     required: false
     default: "./"
+
 runs:
   using: "composite"
   steps:
-    - name: Set up Poetry with version ${{ inputs.poetry-version }}
+    - name: Set up Poetry version ${{ inputs.poetry-version }}
       uses: bakdata/ci-templates/actions/python-setup-poetry@v1.3.1
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: ${{ inputs.poetry-version }}
+        working-directory: ${{ inputs.working-directory }}
 
     - name: Install dependencies
       run: poetry install --no-dev --no-interaction
