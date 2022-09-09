@@ -1,18 +1,6 @@
 name: "Deploy helm chart"
 description: "Deploy a helm chart to the GKE cluster"
 inputs:
-  gke-service-account:
-    description: "GKE service account key for authentication"
-    required: true
-  gke-project:
-    description: "GKE project id for authentication"
-    required: true
-  gke-region:
-    description: "GKE region for authentication"
-    required: true
-  gke-cluster:
-    description: "GKE cluster for authentication"
-    required: true
   release-name:
     description: "Helm release name"
     required: true
@@ -34,40 +22,9 @@ inputs:
   repository-url:
     description: "Url of the repository"
     required: false
-  python-version:
-    description: "Python version"
-    default: "3.10"
-    required: false
-  gcloud-sdk-version:
-    description: "GCloud SDK version"
-    default: "376.0.0"
-    required: false
-  kubectl-version:
-    description: "Kubectl version"
-    default: "v1.23.0"
-    required: false
-  helm-version:
-    description: "Helm version"
-    default: "v3.8.1"
-    required: false 
 runs:
   using: "composite"
   steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Setup environment
-      uses: bakdata/ci-templates/actions/helm-gke-setup@main
-      with:
-        gke-service-account: ${{ inputs.gke-service-account }}
-        gke-project: ${{ inputs.gke-project }}
-        gke-region: ${{ inputs.gke-region }}
-        gke-cluster: ${{ inputs.gke-cluster }}
-        python-version: ${{ inputs.python-version }}
-        gcloud-sdk-version: ${{ inputs.gcloud-sdk-version }}
-        kubectl-version: ${{ inputs.kubectl-version }}
-        helm-version: ${{ inputs.helm-version }}
-
     - name: Add helm repository
       shell: bash
       run: |

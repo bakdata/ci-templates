@@ -1,0 +1,103 @@
+name: Helm GKE Deploy
+# Reusable workflow for deploying a Helm chart on GKE Kubernetes
+
+on:
+  workflow_call:
+    inputs:
+      release-name:
+        description: "Helm release name"
+        required: true
+        type: string
+      namespace:
+        description: "K8s namespace to deploy in"
+        required: true
+        type: string
+      chart:
+        description: "Helm chart to deploy"
+        required: true
+        type: string
+      chart-version:
+        description: "Chart Version"
+        required: true
+        type: string
+      values-yaml:
+        description: "File path as string for a single helm value file or as json array for multiple helm value files."
+        required: true
+        type: string
+      repository-name:
+        description: "Helm repository name"
+        required: false
+        type: string
+      repository-url:
+        description: "Url of the repository"
+        required: false
+        type: string
+      python-version:
+        description: "Python version"
+        default: "3.10"
+        required: false
+        type: string
+      gcloud-sdk-version:
+        description: "GCloud SDK version"
+        default: "376.0.0"
+        required: false
+        type: string
+      kubectl-version:
+        description: "Kubectl version"
+        default: "v1.23.0"
+        required: false
+        type: string
+      helm-version:
+        description: "Helm version"
+        default: "v3.8.1"
+        required: false
+        type: string
+    secrets:
+      gke-service-account:
+        description: "GKE service account key for authentication"
+        required: true
+        type: string
+      gke-project:
+        description: "GKE project id for authentication"
+        required: true
+        type: string
+      gke-region:
+        description: "GKE region for authentication"
+        required: true
+        type: string
+      gke-cluster:
+        description: "GKE cluster for authentication"
+        required: true
+        type: string
+
+jobs:
+  helm-deploy:
+    name: Helm Deploy
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Environment
+        uses: bakdata/ci-templates/actions/helm-gke-setup@main
+        with:
+          gke-service-account: ${{ secrets.gke-service-account }}
+          gke-project: ${{ secrets.gke-project }}
+          gke-region: ${{ secrets.gke-region }}
+          gke-cluster: ${{ secrets.gke-cluster }}
+          python-version: ${{ inputs.python-version }}
+          gcloud-sdk-version: ${{ inputs.gcloud-sdk-version }}
+          kubectl-version: ${{ inputs.kubectl-version }}
+          helm-version: ${{ inputs.helm-version }}
+
+      - name: Deploy Helm Chart
+        uses: bakdata/ci-templates/actions/helm-gke-deploy@main
+        with:
+          release-name: ${{ inputs.release-name }}
+          namespace: ${{ inputs.namespace }}
+          chart: ${{ inputs.chart }}
+          chart-version: ${{ inputs.chart-version }}
+          values-yaml: ${{ inputs.values-yaml }}
+          repository-name: ${{ inputs.repository-name }}
+          repository-url: ${{ inputs.repository-url }}
