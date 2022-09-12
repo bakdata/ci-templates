@@ -12,26 +12,6 @@ on:
         description: "K8s namespace to deploy in"
         required: true
         type: string
-      chart:
-        description: "Helm chart to deploy"
-        required: true
-        type: string
-      chart-version:
-        description: "Chart Version"
-        required: true
-        type: string
-      values-yaml:
-        description: "File path as string for a single helm value file or as json array for multiple helm value files."
-        required: true
-        type: string
-      repository-name:
-        description: "Helm repository name"
-        required: false
-        type: string
-      repository-url:
-        description: "Url of the repository"
-        required: false
-        type: string
       python-version:
         description: "Python version"
         default: "3.10"
