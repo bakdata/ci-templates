@@ -56,19 +56,15 @@ on:
       gke-service-account:
         description: "GKE service account key for authentication"
         required: true
-        type: string
       gke-project:
         description: "GKE project id for authentication"
         required: true
-        type: string
       gke-region:
         description: "GKE region for authentication"
         required: true
-        type: string
       gke-cluster:
         description: "GKE cluster for authentication"
         required: true
-        type: string
 
 jobs:
   helm-deploy:
