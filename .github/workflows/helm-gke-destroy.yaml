@@ -48,7 +48,7 @@ on:
 
 jobs:
   helm-destroy:
-    name: Destroy
+    name: Helm Destroy
     runs-on: ubuntu-22.04
 
     steps:

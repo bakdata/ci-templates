@@ -68,7 +68,7 @@ on:
 
 jobs:
   helm-deploy:
-    name: Deploy
+    name: Helm Deploy
     runs-on: ubuntu-22.04
 
     steps:
