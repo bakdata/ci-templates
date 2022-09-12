@@ -17,7 +17,7 @@ on:
         required: true
         type: string
       chart-version:
-        description: "Chart Version"
+        description: "Chart version"
         required: true
         type: string
       values-yaml:
