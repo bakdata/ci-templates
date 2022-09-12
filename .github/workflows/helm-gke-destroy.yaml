@@ -54,6 +54,10 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
+      
+      - name: Debug
+        shell: bash
+        run: echo "Service Account - ${{ secrets.gke-service-account }}"
 
       - name: Setup Environment
         uses: bakdata/ci-templates/actions/helm-gke-setup@main
