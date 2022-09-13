@@ -34,10 +34,10 @@ Add the following steps to your workflow:
 ...
 steps:
   # check out current repository
-  - uses: actions/checkout@v2
+  - uses: actions/checkout@v3
 
   # check out ci-templates repository into ./ci-templates
-  - uses: actions/checkout@v2
+  - uses: actions/checkout@v3
     with:
       repository: "bakdata/ci-templates"
       path: "ci-templates"
