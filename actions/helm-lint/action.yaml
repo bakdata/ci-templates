@@ -21,7 +21,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: "${{ inputs.ref }}"
         # fetch-depth of 0 is needed for the comparison of helm charts from the HEAD of the current
