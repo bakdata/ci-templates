@@ -43,7 +43,7 @@ steps:
       path: "ci-templates"
   
   # set up python
-  - uses: actions/setup-python@v2
+  - uses: actions/setup-python@v4
     with:
       python-version: "${{ inputs.python-version }}"
   

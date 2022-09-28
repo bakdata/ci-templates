@@ -9,7 +9,7 @@ inputs:
   poetry-version:
     description: "The poetry version to be installed."
     required: false
-    default: "1.1.14"
+    default: "1.2.1"
   working-directory:
     description: "The root directory of the poetry project."
     required: false
