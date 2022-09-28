@@ -15,6 +15,6 @@ jobs:
 
       - name: Check workflow files
         run: |
-            echo "::add-matcher::.github/actionlint-matcher.json"
-            bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/v1.6.15/scripts/download-actionlint.bash)
-            ./actionlint -color
+          echo "::add-matcher::.github/actionlint-matcher.json"
+          bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/v1.6.19/scripts/download-actionlint.bash)
+          ./actionlint -color
