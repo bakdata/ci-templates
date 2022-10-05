@@ -6,7 +6,7 @@ inputs:
     description: "The type of the release (major, minor or patch)."
     required: true
   working-directory:
-    description: "The root directory of the poetry project."
+    description: "The directory containing the `.bumpversion.cfg` file."
     required: false
     default: "."
 
