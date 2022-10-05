@@ -22,7 +22,7 @@ runs:
   using: "composite"
   steps:
     - name: Set up bump2version
-      run: pipx install --no-cache-dir bump2version
+      run: pipx install bump2version
       shell: bash
 
     - name: Bump version
