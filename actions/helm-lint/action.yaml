@@ -5,17 +5,14 @@ inputs:
     description: "The ref name to checkout the repository."
     required: false
     default: ${{ github.event.repository.default_branch }}
-    type: string
   lint-config-path:
     description: "The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml)."
     required: false
     default: ".github/lint-config.yaml"
-    type: string
   helm-version:
     description: "The helm version for setting up poetry."
     required: false
     default: "v3.4.0"
-    type: string
 
 runs:
   using: "composite"
@@ -38,7 +35,7 @@ runs:
 
     # On the default branch we want to lint helm charts when they have changed compared
     # to the previous commit (HEAD^) and on any other branch we lint helm charts
-    # when there are changes in comparison to the HEAD of the default branch 
+    # when there are changes in comparison to the HEAD of the default branch
     # (see --target-branch and --since in https://github.com/helm/chart-testing/blob/main/doc/ct_lint.md)
     - name: Run chart-testing (lint)
       run: |
