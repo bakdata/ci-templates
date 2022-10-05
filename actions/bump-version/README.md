@@ -4,7 +4,7 @@ This action will bump the version of your project according to the `.bumpversion
 
 ## Prerequisites
 
-You need a `.bumpversion.cfg` file in the root directory of your repository. A minimal configuration could look like this:
+You need a `.bumpversion.cfg` file in `working-directory` (repository root by default). A minimal configuration could look like this:
 
 ```cfg
 [bumpversion]
@@ -18,10 +18,10 @@ tag = False
 
 ## Input Parameters
 
-| Name              | Required |     Default Value     | Description                                           |
-| ----------------- | :------: | :-------------------: | ----------------------------------------------------- |
-| release-type      |    ✅     |           -           | The scope of the release (major, minor or patch)      |
-| working-directory |    ❌     | `.` (repository root) | The directory containing the `.bumpversion.cfg` file. |
+| Name              | Required | Default Value | Description                                           |
+| ----------------- | :------: | :-----------: | ----------------------------------------------------- |
+| release-type      |    ✅     |       -       | The scope of the release (major, minor or patch)      |
+| working-directory |    ❌     |       .       | The directory containing the `.bumpversion.cfg` file. |
 
 ### Outputs
 
