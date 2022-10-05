@@ -5,6 +5,10 @@ inputs:
   release-type:
     description: "The type of the release (major, minor or patch)."
     required: true
+  working-directory:
+    description: "The directory containing the `.bumpversion.cfg` file."
+    required: false
+    default: "."
 
 outputs:
   release-tag:
@@ -18,7 +22,7 @@ runs:
   using: "composite"
   steps:
     - name: Set up bump2version
-      run: pip install --no-cache-dir bump2version
+      run: pipx install bump2version
       shell: bash
 
     - name: Bump version
@@ -28,3 +32,4 @@ runs:
         bump2version ${{ inputs.release-type }} --no-commit
         echo ::set-output name=newTag::$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
