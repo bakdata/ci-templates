@@ -9,8 +9,6 @@ You need a `.bumpversion.cfg` file in `working-directory` (repository root by de
 ```cfg
 [bumpversion]
 current_version = 0.0.1
-commit = False
-tag = False
 ```
 
 > **Note**
