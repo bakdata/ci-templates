@@ -10,7 +10,7 @@ inputs:
     required: false
     default: ".github/lint-config.yaml"
   helm-version:
-    description: "The helm version for setting up poetry."
+    description: "The Helm version."
     required: false
     default: "v3.4.0"
 
