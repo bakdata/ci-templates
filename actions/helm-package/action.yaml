@@ -1,0 +1,29 @@
+name: Package Helm chart
+description: Package Helm chart and recreate Helm repository index
+inputs:
+  helm-version:
+    description: "The Helm version."
+    required: false
+    default: "v3.4.0"
+  charts-dir:
+    description: "The directory containing the Helm charts."
+    required: false
+    default: "."
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+
+    - name: Set up Helm
+      uses: azure/setup-helm@v1
+      with:
+        version: "${{ inputs.helm-version }}"
+
+    - name: Helm package
+      run: |
+        helm package .
+        helm repo index .
+      shell: bash
+      working-directory: ${{ inputs.charts-dir }}
