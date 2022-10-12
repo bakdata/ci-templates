@@ -28,16 +28,16 @@ on:
         default: "."
         type: string
 
-    # secrets:
-    #   github-username:
-    #     description: "The GitHub username for committing the changes."
-    #     required: true
-    #   github-email:
-    #     description: "The GitHub email for committing the changes."
-    #     required: true
-    #   github-token:
-    #     description: "The GitHub token for committing the changes."
-    #     required: true
+    secrets:
+      github-username:
+        description: "The GitHub username for committing the changes."
+        required: true
+      github-email:
+        description: "The GitHub email for committing the changes."
+        required: true
+      github-token:
+        description: "The GitHub token for committing the changes."
+        required: true
 
     # Map the workflow outputs to job outputs
     outputs:
