@@ -90,7 +90,7 @@ jobs:
           github-token: ${{ secrets.github-token }}
 
       - name: Helm package
-        uses: bakdata/ci-templates/actions/helm-package@v1.6.0 # TODO: release tag
+        uses: bakdata/ci-templates/actions/helm-package@feat/helm-release # TODO: release tag @v1.6.0
         with:
           charts-dir: ${{ inputs.charts-dir }}
 
