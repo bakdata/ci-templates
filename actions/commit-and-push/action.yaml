@@ -36,7 +36,7 @@ runs:
 
     - name: Add untracked files
       run: git add .
-      if: ${{ inputs.add_untracked }}
+      if: ${{ inputs.add_untracked == "true" }}
       shell: bash
 
     - name: Add untracked files
