@@ -18,7 +18,7 @@ configuration with `charts-dir=charts` could look like this:
 [bumpversion]
 current_version = 0.0.1
 
-[bumpversion:file:charts/my-chart/Chart.yaml]
+[bumpversion:file:charts/Chart.yaml]
 search = version: {current_version}
 replace = version: {new_version}
 ```
