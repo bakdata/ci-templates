@@ -80,21 +80,10 @@ jobs:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.charts-dir }}
 
-      - name: Inspect chart
-        run: |
-          cat ${{ inputs.charts-dir }}/Chart.yaml
-        shell: bash
-
       - name: Helm package
         uses: bakdata/ci-templates/actions/helm-package@feat/helm-release # TODO: release tag @v1.6.0
         with:
           charts-dir: ${{ inputs.charts-dir }}
-
-      - name: Inspect package & index
-        run: |
-          ls -al ${{ inputs.charts-dir }}
-          cat ${{ inputs.charts-dir }}/index.yaml
-        shell: bash
 
       - name: Commit and push bumpversion.cfg file
         uses: bakdata/ci-templates/actions/commit-and-push@feat/helm-release
@@ -124,9 +113,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      # publish to GitHub pages using action actions/deploy-pages
-      # or push to gh-pages branch using bakdata/ci-templates/actions/commit-and-push@v1.0.0
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
