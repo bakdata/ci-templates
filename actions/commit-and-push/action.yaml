@@ -18,18 +18,29 @@ inputs:
     description: "The ref name to commit and push the files on."
     required: false
     default: ${{ github.event.repository.default_branch }}
+  add_untracked:
+    description: "Whether to add untracked files to commit."
+    required: false
+    default: "false"
 
 runs:
   using: "composite"
   steps:
     # For more information to create a commit with a valid GitHub user go to:
     # https://github.com/ad-m/github-push-action
-    - name: Commit all files
+    - name: Configure git
       run: |
         git config user.email ${{ inputs.github-email }}
         git config user.name ${{ inputs.github-username }}
-        git add .
-        git commit -m "${{ inputs.commit-message }}"
+      shell: bash
+
+    - name: Add untracked files
+      run: git add .
+      if: ${{ inputs.add_untracked }}
+      shell: bash
+
+    - name: Add untracked files
+      run: git commit -m "${{ inputs.commit-message }}"
       shell: bash
 
     - name: Push changes

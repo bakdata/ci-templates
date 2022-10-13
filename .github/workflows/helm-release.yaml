@@ -97,7 +97,7 @@ jobs:
         shell: bash
 
       - name: Commit and push bumpversion.cfg file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.0.0
+        uses: bakdata/ci-templates/actions/commit-and-push@feat/helm-release
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
