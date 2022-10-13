@@ -28,7 +28,8 @@ runs:
       run: |
         git config user.email ${{ inputs.github-email }}
         git config user.name ${{ inputs.github-username }}
-        git commit -m "${{ inputs.commit-message }}" -a
+        git add .
+        git commit -m "${{ inputs.commit-message }}"
       shell: bash
 
     - name: Push changes
