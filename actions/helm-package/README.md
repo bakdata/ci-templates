@@ -19,7 +19,7 @@ steps:
     uses: bakdata/ci-templates/actions/helm-package@main
     with:
       helm-version: "v3.10.1" # (Optional)
-      charts-dir: "Committing all the awesome changes in my repository!" # (Optional) if not set the repository root will be used
+      charts-dir: "helm-chart" # (Optional) if not set the repository root will be used
 
 
   # Rest of the workflow steps
