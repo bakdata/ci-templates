@@ -18,16 +18,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Set up Python ${{ inputs.python-version }}
-      uses: actions/setup-python@v4
-      id: python
-      with:
-        python-version: ${{ inputs.python-version }}
-        cache: poetry
-        cache-dependency-path: ${{ inputs.working-directory }}/poetry.lock
-
     - name: Install poetry ${{ inputs.poetry-version }}
-      run: pipx --python "${{ steps.python.outputs.python-path }}" install poetry==${{ inputs.poetry-version }}
+      run: pipx install poetry==${{ inputs.poetry-version }}
       shell: bash
 
     - name: Configure poetry
@@ -36,6 +28,14 @@ runs:
         poetry config virtualenvs.path ${{ inputs.working-directory }}/.venv
       shell: bash
 
-    - run: poetry env use "${{ steps.python.outputs.python-path }}"
+    - name: Set up Python ${{ inputs.python-version }}
+      uses: actions/setup-python@v4
+      id: python
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: poetry
+        cache-dependency-path: ${{ inputs.working-directory }}/poetry.lock
+
+    - run: poetry env use '${{ steps.python.outputs.python-path }}'
       shell: bash
       working-directory: ${{ inputs.working-directory }}
