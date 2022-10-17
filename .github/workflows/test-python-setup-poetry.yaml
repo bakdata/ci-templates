@@ -2,8 +2,8 @@ name: Test python-setup-poetry action
 
 on:
   pull_request:
-    branches:
-      - main
+    # branches:
+    #   - main
     paths:
       - ./actions/python-poetry-release/action.yaml
 
