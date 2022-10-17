@@ -21,6 +21,6 @@ runs:
     - name: Helm package
       run: |
         helm package .
-        helm repo index .
+        helm repo index . --merge index.yaml
       shell: bash
       working-directory: ${{ inputs.charts-dir }}

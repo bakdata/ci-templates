@@ -80,25 +80,49 @@ jobs:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.charts-dir }}
 
+      - name: Download previous Helm index & packages
+        run: |
+          curl -O https://bakdata.github.io/github-playground/index.yaml
+          yq
+        shell: bash
+        working-directory: ${{ inputs.charts-dir }}
+
       - name: Helm package
         uses: bakdata/ci-templates/actions/helm-package@v1.6.0
         with:
           charts-dir: ${{ inputs.charts-dir }}
 
-      - name: Commit and push bumpversion.cfg file
+      - name: Commit and push Chart.yaml & .bumpversion.cfg file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
-          add_untracked: "true"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
 
+      - name: Find previous package versions
+        id: packages
+        uses: mikefarah/yq@v4
+        with:
+          cmd: yq -r '.entries.[] | map(.urls.[]) | join(",")' index.yaml
+
+      - name: Prepare artifact
+        run: |
+          mkdir -p artifact
+          cp index.yaml artifact/
+        shell: bash
+        working-directory: ${{ inputs.charts-dir }}/artifact
+
+      - name: Download packages
+        run: curl -O "https://bakdata.github.io/github-playground/{${{ steps.packages.outputs.result }}}"
+        shell: bash
+        working-directory: ${{ inputs.charts-dir }}/artifact
+
       - name: Create artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: ${{ inputs.charts-dir }}
+          path: ${{ inputs.charts-dir }}/artifact
 
   publish-gh-pages:
     runs-on: ubuntu-22.04

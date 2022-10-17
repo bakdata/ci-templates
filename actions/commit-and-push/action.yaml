@@ -40,7 +40,7 @@ runs:
       shell: bash
 
     - name: Commit files
-      run: git commit -m "${{ inputs.commit-message }}"
+      run: git commit -m "${{ inputs.commit-message }}" -a
       shell: bash
 
     - name: Push changes
