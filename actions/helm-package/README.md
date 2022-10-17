@@ -18,7 +18,7 @@ steps:
   - name: Helm package
     uses: bakdata/ci-templates/actions/helm-package@main
     with:
-      helm-version: "v3.9.0" # (Optional)
+      helm-version: "v3.10.1" # (Optional)
       charts-dir: "Committing all the awesome changes in my repository!" # (Optional) if not set the repository root will be used
 
 
