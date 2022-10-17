@@ -101,7 +101,7 @@ jobs:
 
       - name: Find previous package versions
         id: packages
-        uses: mikefarah/yq@v4
+        uses: mikefarah/yq@master
         with:
           cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ inputs.charts-dir }}/index.yaml
 
