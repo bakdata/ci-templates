@@ -3,12 +3,12 @@ name: Test python-setup-poetry action
 on:
   push:
     paths:
-      - "actions/python-poetry-release/**"
+      - actions/python-poetry-setup/action.yaml
   pull_request:
-    # branches:
-    #   - main
+    branches:
+      - main
     paths:
-      - "actions/python-poetry-release/**"
+      - actions/python-poetry-setup/action.yaml
 
 env:
   POETRY_VERSION: "1.2.2"
