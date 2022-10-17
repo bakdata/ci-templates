@@ -11,7 +11,7 @@ This workflow will lint all charts, bump the project version according to the `.
 
 ### Prerequisites
 
-Your helm charts and `.bumpversion.cfg` need to be located inside the `charts-dir` folder of your repository (repository root by default) to use this workflow. A minimal
+Your Helm charts and `.bumpversion.cfg` need to be located inside the `charts-dir` folder of your repository (repository root by default) to use this workflow. A minimal
 configuration with `charts-dir=charts` could look like this:
 
 ```cfg
@@ -53,7 +53,7 @@ This workflow is built from multiple composite actions listed below:
 | release-type     |    ✅    |                   -                   | string | The scope of the release (major, minor or patch)                                                                                           |
 | ref              |    ❌    | The default branch of your repository | string | The ref name to checkout the repository                                                                                                    |
 | lint-config-path |    ❌    |      ".github/lint-config.yaml"       | string | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
-| helm-version     |    ❌    |               "v3.4.0"                | string | The helm version                                                                                                                           |
+| helm-version     |    ❌    |               "v3.10.1"               | string | The Helm version                                                                                                                           |
 | charts-dir       |    ❌    |                  "."                  | string | The directory containing the Helm charts and `.bumpversion.cfg` file                                                                       |
 
 ### Secret Parameters
@@ -99,7 +99,7 @@ jobs:
       release-type: ${{ inputs.release-type }}
       ref: "my-awesome-ref" # (Optional)
       lint-config-path: "my-lint-config.yaml" # (Optional)
-      helm-version: "v3.4.0" # (Optional)
+      helm-version: "v3.10.1" # (Optional)
       python-version: "3.8" # (Optional)
       charts-dir: charts # (Optional)
     secrets:
@@ -139,7 +139,7 @@ This workflow is built from multiple composite actions listed below:
 | publish-to-test   |    ❌    |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                     |
 | python-version    |    ❌    |                "3.10"                 | string  | The python version for setting up poetry                                                                                          |
 | poetry-version    |    ❌    |               "1.1.12"                | string  | The poetry version to be installed                                                                                                |
-| working-directory |    ❌    |                  "./"                  | string  | The working directory of your Python package                                                                                      |
+| working-directory |    ❌    |                 "./"                  | string  | The working directory of your Python package                                                                                      |
 
 ### Secret Parameters
 
