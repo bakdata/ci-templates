@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - actions/python-poetry-release/action.yaml
+      - ./actions/python-poetry-release/action.yaml
 
 env:
   POETRY_VERSION: "1.2.2"
