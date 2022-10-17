@@ -13,7 +13,7 @@ action.
 | github-token    |    ✅    |                 -                 | The GitHub token for committing the changes    |
 | commit-message  |    ✅    |                 -                 | The commit message                             |
 | ref             |    ❌    | Default branch of your repository | The ref name to commit and push the files on   |
-| add-untracked   |    ❌    |               false               | Whether to add untracked files to commit       |
+| add-untracked   |    ❌    |              "false"              | Whether to add untracked files to commit       |
 
 ## Usage
 
