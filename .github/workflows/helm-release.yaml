@@ -81,9 +81,7 @@ jobs:
           working-directory: ${{ inputs.charts-dir }}
 
       - name: Download previous Helm index & packages
-        run: |
-          curl -O https://bakdata.github.io/github-playground/index.yaml
-          yq
+        run: curl -O https://bakdata.github.io/github-playground/index.yaml
         shell: bash
         working-directory: ${{ inputs.charts-dir }}
 
@@ -105,7 +103,7 @@ jobs:
         id: packages
         uses: mikefarah/yq@v4
         with:
-          cmd: yq -r '.entries.[] | map(.urls.[]) | join(",")' index.yaml
+          cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ inputs.charts-dir }}/index.yaml
 
       - name: Prepare artifact
         run: |
