@@ -18,7 +18,7 @@ inputs:
     description: "The ref name to commit and push the files on."
     required: false
     default: ${{ github.event.repository.default_branch }}
-  add_untracked:
+  add-untracked:
     description: "Whether to add untracked files to commit."
     required: false
     default: "false"
@@ -36,7 +36,7 @@ runs:
 
     - name: Add untracked files
       run: git add .
-      if: ${{ inputs.add_untracked == 'true' }}
+      if: ${{ inputs.add-untracked == 'true' }}
       shell: bash
 
     - name: Commit files

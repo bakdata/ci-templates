@@ -13,7 +13,7 @@ action.
 | github-token    |    ✅    |                 -                 | The GitHub token for committing the changes    |
 | commit-message  |    ✅    |                 -                 | The commit message                             |
 | ref             |    ❌    | Default branch of your repository | The ref name to commit and push the files on   |
-| add_untracked   |    ❌    |               false               | Whether to add untracked files to commit       |
+| add-untracked   |    ❌    |               false               | Whether to add untracked files to commit       |
 
 ## Usage
 
@@ -27,7 +27,7 @@ steps:
     with:
       ref: "my-awesome-ref-name" # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value
       commit-message: "Committing all the awesome changes in my repository!"
-      add_untracked: "true" # (Optional) if not set, only tracked files will be committed
+      add-untracked: "true" # (Optional) if not set, only tracked files will be committed
       github-username: ${{ secrets.github-username }}
       github-email: ${{ secrets.github-email }}
       github-token: ${{ secrets.github-token }}
