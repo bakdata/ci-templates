@@ -50,6 +50,7 @@ This workflow is built from multiple composite actions listed below:
 
 | Name             | Required |             Default Value             |  Type  | Description                                                                                                                                |
 | ---------------- | :------: | :-----------------------------------: | :----: | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| page-url         |    ✅    |                                       | string | URL to the GitHub pages website of the repository.                                                                                         |
 | release-type     |    ✅    |                   -                   | string | The scope of the release (major, minor or patch)                                                                                           |
 | ref              |    ❌    | The default branch of your repository | string | The ref name to checkout the repository                                                                                                    |
 | lint-config-path |    ❌    |      ".github/lint-config.yaml"       | string | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |

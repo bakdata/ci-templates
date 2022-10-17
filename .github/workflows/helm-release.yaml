@@ -3,6 +3,10 @@ name: Reusable workflow for packaging and publishing Helm charts on GitHub pages
 on:
   workflow_call:
     inputs:
+      page-url:
+        description: "URL to the GitHub pages website of the repository."
+        required: true
+        type: string
       release-type:
         description: "Scope of the release (major, minor or patch)."
         required: true
@@ -81,7 +85,7 @@ jobs:
           working-directory: ${{ inputs.charts-dir }}
 
       - name: Download previous Helm index & packages
-        run: curl -O https://bakdata.github.io/github-playground/index.yaml
+        run: curl -O ${{ inputs.page-url }}/index.yaml
         shell: bash
         working-directory: ${{ inputs.charts-dir }}
 
@@ -113,7 +117,7 @@ jobs:
         working-directory: ${{ inputs.charts-dir }}
 
       - name: Download packages
-        run: curl -O "https://bakdata.github.io/github-playground/{${{ steps.packages.outputs.result }}}"
+        run: curl -O "${{ inputs.page-url }}/{${{ steps.packages.outputs.result }}}"
         shell: bash
         working-directory: ${{ inputs.charts-dir }}/artifact
 
