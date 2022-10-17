@@ -88,12 +88,12 @@ jobs:
         working-directory: ${{ inputs.charts-dir }}
 
       - name: Helm package
-        uses: bakdata/ci-templates/actions/helm-package@v1.6.0
+        uses: bakdata/ci-templates/actions/helm-package@feat/helm-release
         with:
           charts-dir: ${{ inputs.charts-dir }}
 
       - name: Commit and push Chart.yaml & .bumpversion.cfg file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        uses: bakdata/ci-templates/actions/commit-and-push@feat/helm-release
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
