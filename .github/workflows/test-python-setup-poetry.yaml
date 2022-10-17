@@ -1,6 +1,9 @@
 name: Test python-setup-poetry action
 
 on:
+  push:
+    paths:
+      - "actions/python-poetry-release/**"
   pull_request:
     # branches:
     #   - main
