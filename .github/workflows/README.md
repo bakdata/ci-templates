@@ -61,7 +61,7 @@ This workflow is built from multiple composite actions listed below:
 ### Secret Parameters
 
 These secrets define the GitHub user that pushes the changes of your `.bumpversion.cfg` and `Chart.yaml` file to the repository. Create a
-repository secret for the GitHub username (`GH_USERNAME`), the GitHub Email (`GH_EMAIL`), and a personal access
+repository secret for the GitHub username (`GH_USERNAME`), the GitHub email (`GH_EMAIL`), and a personal access
 token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the
 email: `[username]@users.noreply.github.com`.
 
