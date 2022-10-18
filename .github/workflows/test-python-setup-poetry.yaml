@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - actions/python-setup-poetry/action.yaml
+      - .github/workflows/test-python-setup-poetry.yaml
 
 env:
   POETRY_VERSION: "1.2.2"
