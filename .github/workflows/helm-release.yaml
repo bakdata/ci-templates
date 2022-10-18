@@ -125,6 +125,7 @@ jobs:
         run: |
           mkdir ${{ inputs.artifact-dir }}
           cp index.yaml ${{ inputs.artifact-dir }}/
+          find . -maxdepth 1 -type f -name "*.tgz" -exec mv {} ${{ inputs.artifact-dir }} \;
         shell: bash
         working-directory: ${{ inputs.charts-dir }}
 
