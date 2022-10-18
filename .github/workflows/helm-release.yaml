@@ -100,6 +100,13 @@ jobs:
         shell: bash
         working-directory: ${{ inputs.charts-dir }}
 
+      - name: Find previous package versions
+        id: packages
+        uses: mikefarah/yq@v4.28.1
+        if: ${{ inputs.skip-download == 'false' }}
+        with:
+          cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ inputs.charts-dir }}/index.yaml
+
       - name: Create Helm package & update index
         uses: bakdata/ci-templates/actions/helm-package@feat/helm-release
         with:
@@ -120,13 +127,6 @@ jobs:
           cp index.yaml ${{ inputs.artifact-dir }}/
         shell: bash
         working-directory: ${{ inputs.charts-dir }}
-
-      - name: Find previous package versions
-        id: packages
-        uses: mikefarah/yq@v4.28.1
-        if: ${{ inputs.skip-download == 'false' }}
-        with:
-          cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ inputs.charts-dir }}/index.yaml
 
       - name: Download packages
         run: curl -O -f "${{ inputs.page-url }}/{${{ steps.packages.outputs.result }}}"
