@@ -104,6 +104,7 @@ jobs:
       helm-version: "v3.10.1" # (Optional)
       python-version: "3.8" # (Optional)
       charts-dir: charts # (Optional)
+      skip-download: "false" # (Optional)
     secrets:
       github-email: "${{ secrets.GH_EMAIL }}"
       github-username: "${{ secrets.GH_USERNAME }}"
