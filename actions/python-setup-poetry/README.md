@@ -1,28 +1,27 @@
 # python-setup-poetry
 
-This composite action sets up poetry for the given input version. It supports caching the Python virtualenv between workflow runs.
+This composite action sets up Poetry for the given input version. It supports caching the Python virtualenv between workflow runs.
 
 ## Input Parameters
 
 | Name              | Required | Default Value | Description                               |
 | ----------------- | :------: | :-----------: | ----------------------------------------- |
-| python-version    |    ❌     |     3.10      | The python version for setting up poetry. |
-| poetry-version    |    ❌     |    1.2.1     | The poetry version to be installed.       |
-| working-directory |    ❌     |       .       | The root directory of the poetry project. |
+| python-version    |    ❌    |     3.10      | The Python version for setting up Poetry. |
+| poetry-version    |    ❌    |     1.2.1     | The Poetry version to be installed.       |
+| working-directory |    ❌    |       .       | The root directory of the Poetry project. |
 
 ## Usage
 
 ```yaml
-  steps:
+steps:
+  # Other Steps in your workflow
 
-    # Other Steps in your workflow
+  - name: Set up Poetry ${{ inputs.poetry-version }}
+    uses: bakdata/ci-templates/actions/python-setup-poetry@main
+    with:
+      python-version: ${{ inputs.python-version }}
+      poetry-version: ${{ inputs.poetry-version }}
+      working-directory: ${{ inputs.working-directory }}
 
-    - name: Set up Poetry ${{ inputs.poetry-version }}
-      uses: bakdata/ci-templates/actions/python-setup-poetry@main
-      with:
-        python-version: ${{ inputs.python-version }}
-        poetry-version: ${{ inputs.poetry-version }}
-        working-directory: ${{ inputs.working-directory }}
-
-    # Rest of your workflow
+  # Rest of your workflow
 ```

@@ -1,28 +1,28 @@
-name: "Setup poetry"
-description: "Set up poetry with virtualenv caching"
+name: "Setup Poetry"
+description: "Set up Poetry with virtualenv caching"
 
 inputs:
   python-version:
-    description: "The python version for setting up poetry."
+    description: "The Python version for setting up Poetry."
     required: false
     default: "3.10"
   poetry-version:
-    description: "The poetry version to be installed."
+    description: "The Poetry version to be installed."
     required: false
     default: "1.2.1"
   working-directory:
-    description: "The root directory of the poetry project."
+    description: "The root directory of the Poetry project."
     required: false
     default: "."
 
 runs:
   using: "composite"
   steps:
-    - name: Install poetry ${{ inputs.poetry-version }}
+    - name: Install Poetry ${{ inputs.poetry-version }}
       run: pipx install poetry==${{ inputs.poetry-version }}
       shell: bash
 
-    - name: Configure poetry
+    - name: Configure Poetry
       run: |
         poetry config virtualenvs.in-project true
         poetry config virtualenvs.path ${{ inputs.working-directory }}/.venv
