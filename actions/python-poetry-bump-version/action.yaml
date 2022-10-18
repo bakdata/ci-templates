@@ -1,20 +1,20 @@
-name: "Bump python project version using poetry"
-description: "The version defined in the pyproject.toml file gets bump with the respect to the release-type using poetry"
+name: "Bump Python project version using Poetry"
+description: "The version defined in the pyproject.toml file gets bump with the respect to the release-type using Poetry"
 
 inputs:
   release-type:
     description: "Scope of the release; See: https://python-poetry.org/docs/cli/#version"
     required: true
   python-version:
-    description: "The python version for setting up poetry."
+    description: "The Python version for the Poetry virtual environment."
     required: false
     default: "3.10"
   poetry-version:
-    description: "The poetry version to be installed."
+    description: "The Poetry version to be installed."
     required: false
-    default: "1.2.1"
+    default: "1.2.2"
   working-directory:
-    description: "The root directory of the poetry project."
+    description: "The root directory of the Poetry project."
     required: false
     default: "."
 
@@ -29,8 +29,8 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Set up Poetry version ${{ inputs.poetry-version }}
-      uses: bakdata/ci-templates/actions/python-setup-poetry@v1.5.1
+    - name: Set up Poetry ${{ inputs.poetry-version }}
+      uses: bakdata/ci-templates/actions/python-setup-poetry@v1.5.3
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: ${{ inputs.poetry-version }}

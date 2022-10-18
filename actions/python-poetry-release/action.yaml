@@ -1,5 +1,5 @@
 name: "Release Python packages"
-description: "Release Python packages using poetry to TestPyPI or PyPI"
+description: "Release Python packages using Poetry to TestPyPI or PyPI"
 
 inputs:
   pypi-token:
@@ -10,13 +10,13 @@ inputs:
     required: false
     default: "true"
   python-version:
-    description: "The python version for setting up poetry. (Default is 3.10)"
+    description: "The Python version for the Poetry virtual environment. (Default is 3.10)"
     required: false
     default: "3.10"
   poetry-version:
-    description: "The poetry version to be installed. (Default is 1.2.1)"
+    description: "The Poetry version to be installed. (Default is 1.2.2)"
     required: false
-    default: "1.2.1"
+    default: "1.2.2"
   working-directory:
     description: "The working directory of your Python packages. (Default is root directory)"
     required: false
@@ -25,8 +25,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Set up Poetry version ${{ inputs.poetry-version }}
-      uses: bakdata/ci-templates/actions/python-setup-poetry@v1.5.1
+    - name: Set up Poetry ${{ inputs.poetry-version }}
+      uses: bakdata/ci-templates/actions/python-setup-poetry@v1.5.3
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: ${{ inputs.poetry-version }}
@@ -46,7 +46,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Build and Publish package to Test PyPI
+    - name: Build and Publish package to TestPyPI
       if: ${{ inputs.publish-to-test == 'true' }}
       run: |
         # set the repository to TestPyPI

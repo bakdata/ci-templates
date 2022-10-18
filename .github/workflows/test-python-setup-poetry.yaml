@@ -1,0 +1,47 @@
+name: Test python-setup-poetry action
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - actions/python-setup-poetry/action.yaml
+      - .github/workflows/test-python-setup-poetry.yaml
+
+env:
+  POETRY_VERSION: "1.2.2"
+
+jobs:
+  tests:
+    name: ${{ matrix.os }} / ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      matrix:
+        os: [Ubuntu, macOS, Windows]
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Poetry
+        uses: ./actions/python-setup-poetry
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+          python-version: ${{ matrix.python-version }}
+          working-directory: .tests/poetry
+
+      - name: Check Poetry version
+        shell: bash
+        run: |
+          [[ $(poetry --version) == "Poetry (version $POETRY_VERSION)" ]]
+        working-directory: .tests/poetry
+
+      - name: Check Python version
+        shell: bash
+        run: |
+          poetry run python -c 'import platform; assert str(${{ matrix.python-version }}) in platform.python_version()'
+        working-directory: .tests/poetry
+
+      - name: Install Poetry package
+        shell: bash
+        run: poetry install
+        working-directory: .tests/poetry
