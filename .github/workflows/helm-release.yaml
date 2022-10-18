@@ -36,6 +36,11 @@ on:
         required: false
         default: "false"
         type: string
+      artifact-dir:
+        description: "Directory inside `charts-dir` for preparation of the GitHub pages artifact."
+        required: false
+        default: "artifact"
+        type: string
 
     secrets:
       github-username:
@@ -111,8 +116,8 @@ jobs:
 
       - name: Prepare artifact
         run: |
-          mkdir artifact
-          cp index.yaml artifact/
+          mkdir ${{ inputs.artifact-dir }}
+          cp index.yaml ${{ inputs.artifact-dir }}/
         shell: bash
         working-directory: ${{ inputs.charts-dir }}
 
@@ -127,12 +132,12 @@ jobs:
         run: curl -O -f "${{ inputs.page-url }}/{${{ steps.packages.outputs.result }}}"
         if: ${{ inputs.skip-download == 'false' }}
         shell: bash
-        working-directory: ${{ inputs.charts-dir }}/artifact
+        working-directory: ${{ inputs.charts-dir }}/${{ inputs.artifact-dir }}
 
       - name: Create artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: ${{ inputs.charts-dir }}/artifact
+          path: ${{ inputs.charts-dir }}/${{ inputs.artifact-dir }}
 
   publish-gh-pages:
     runs-on: ubuntu-22.04

@@ -57,6 +57,7 @@ This workflow is built from multiple composite actions listed below:
 | helm-version     |    ❌    |               "v3.10.1"               | string | The Helm version                                                                                                                           |
 | charts-dir       |    ❌    |                  "."                  | string | The directory containing the Helm charts and `.bumpversion.cfg` file                                                                       |
 | skip-download    |    ❌    |                "false"                | string | Skip downloading index.yaml and previous Chart versions from GitHub pages. (To be used during setup of this workflow)                      |
+| artifact-dir     |    ❌    |              "artifact"               | string | Directory inside `charts-dir` for preparation of the GitHub pages artifact.                                                                |
 
 ### Secret Parameters
 
@@ -105,6 +106,7 @@ jobs:
       python-version: "3.8" # (Optional)
       charts-dir: charts # (Optional)
       skip-download: "false" # (Optional)
+      artifact-dir: "artifact" # (Optional)
     secrets:
       github-email: "${{ secrets.GH_EMAIL }}"
       github-username: "${{ secrets.GH_USERNAME }}"
