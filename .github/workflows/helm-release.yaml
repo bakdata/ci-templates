@@ -108,7 +108,7 @@ jobs:
           cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ inputs.charts-dir }}/index.yaml
 
       - name: Create Helm package & update index
-        uses: bakdata/ci-templates/actions/helm-package@feat/helm-release
+        uses: bakdata/ci-templates/actions/helm-package@v1.6.0
         with:
           charts-dir: ${{ inputs.charts-dir }}
 
