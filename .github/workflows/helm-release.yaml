@@ -103,18 +103,18 @@ jobs:
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
 
-      - name: Find previous package versions
-        id: packages
-        uses: mikefarah/yq@master
-        with:
-          cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ inputs.charts-dir }}/index.yaml
-
       - name: Prepare artifact
         run: |
           mkdir artifact
           cp index.yaml artifact/
         shell: bash
         working-directory: ${{ inputs.charts-dir }}
+
+      - name: Find previous package versions
+        id: packages
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ inputs.charts-dir }}/index.yaml
 
       - name: Download packages
         run: curl -O "${{ inputs.page-url }}/{${{ steps.packages.outputs.result }}}"
