@@ -4,11 +4,11 @@ This composite action sets up Poetry for the given input version. It supports ca
 
 ## Input Parameters
 
-| Name              | Required | Default Value | Description                               |
-| ----------------- | :------: | :-----------: | ----------------------------------------- |
-| python-version    |    ❌    |     3.10      | The Python version for setting up Poetry. |
-| poetry-version    |    ❌    |     1.2.2     | The Poetry version to be installed.       |
-| working-directory |    ❌    |       .       | The root directory of the Poetry project. |
+| Name              | Required | Default Value | Description                                            |
+| ----------------- | :------: | :-----------: | ------------------------------------------------------ |
+| python-version    |    ❌    |     3.10      | The Python version for the Poetry virtual environment. |
+| poetry-version    |    ❌    |     1.2.2     | The Poetry version to be installed.                    |
+| working-directory |    ❌    |       .       | The root directory of the Poetry project.              |
 
 ## Usage
 

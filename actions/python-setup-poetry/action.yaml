@@ -3,7 +3,7 @@ description: "Set up Poetry with virtualenv caching"
 
 inputs:
   python-version:
-    description: "The Python version for setting up Poetry."
+    description: "The Python version for the Poetry virtual environment."
     required: false
     default: "3.10"
   poetry-version:
