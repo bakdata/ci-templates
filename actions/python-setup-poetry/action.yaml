@@ -30,12 +30,12 @@ runs:
 
     - name: Set up Python ${{ inputs.python-version }}
       uses: actions/setup-python@v4
-      id: python
+      id: setup-python
       with:
         python-version: ${{ inputs.python-version }}
         cache: poetry
         cache-dependency-path: ${{ inputs.working-directory }}/poetry.lock
 
-    - run: poetry env use "${{ steps.python.outputs.python-path }}"
+    - run: poetry env use "${{ steps.setup-python.outputs.python-path }}"
       shell: bash
       working-directory: ${{ inputs.working-directory }}
