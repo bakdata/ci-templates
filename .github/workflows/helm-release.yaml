@@ -113,7 +113,7 @@ jobs:
           charts-dir: ${{ inputs.charts-dir }}
 
       - name: Commit and push Chart.yaml & .bumpversion.cfg file
-        uses: bakdata/ci-templates/actions/commit-and-push@feat/helm-release
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
