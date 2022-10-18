@@ -56,6 +56,7 @@ This workflow is built from multiple composite actions listed below:
 | lint-config-path |    ❌    |      ".github/lint-config.yaml"       | string | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
 | helm-version     |    ❌    |               "v3.10.1"               | string | The Helm version                                                                                                                           |
 | charts-dir       |    ❌    |                  "."                  | string | The directory containing the Helm charts and `.bumpversion.cfg` file                                                                       |
+| skip-download    |    ❌    |                "false"                | string | Skip downloading index.yaml and previous Chart versions from GitHub pages. (To be used during setup of this workflow)                      |
 
 ### Secret Parameters
 

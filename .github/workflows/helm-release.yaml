@@ -31,6 +31,11 @@ on:
         required: false
         default: "."
         type: string
+      skip-download:
+        description: "Skip downloading index.yaml and previous Chart versions from GitHub pages. (To be used during setup of this workflow)"
+        required: false
+        default: "false"
+        type: string
 
     secrets:
       github-username:
@@ -84,12 +89,13 @@ jobs:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.charts-dir }}
 
-      - name: Download previous Helm index & packages
-        run: curl -O ${{ inputs.page-url }}/index.yaml
+      - name: Download previous Helm index
+        run: curl -O -f ${{ inputs.page-url }}/index.yaml
+        if: ${{ inputs.skip-download == 'false' }}
         shell: bash
         working-directory: ${{ inputs.charts-dir }}
 
-      - name: Helm package
+      - name: Create Helm package & update index
         uses: bakdata/ci-templates/actions/helm-package@feat/helm-release
         with:
           charts-dir: ${{ inputs.charts-dir }}
@@ -113,11 +119,13 @@ jobs:
       - name: Find previous package versions
         id: packages
         uses: mikefarah/yq@master
+        if: ${{ inputs.skip-download == 'false' }}
         with:
           cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ inputs.charts-dir }}/index.yaml
 
       - name: Download packages
-        run: curl -O "${{ inputs.page-url }}/{${{ steps.packages.outputs.result }}}"
+        run: curl -O -f "${{ inputs.page-url }}/{${{ steps.packages.outputs.result }}}"
+        if: ${{ inputs.skip-download == 'false' }}
         shell: bash
         working-directory: ${{ inputs.charts-dir }}/artifact
 
