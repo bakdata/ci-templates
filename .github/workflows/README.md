@@ -34,11 +34,12 @@ A minimal configuration could look like this:
 target-branch: "main"
 ```
 
-Moreover, choose a GitHub user who will commit and push the changes. Make sure
-to configure admin access to the repository for the selected user because admins can still push on the default branch
+Moreover, choose a GitHub user who will commit and push the changes. Make sure to configure admin access to the repository for the selected user because admins can still push on the default branch
 even if there is a protection rule in place.
 
-Finally, set up GitHub pages for your repository in Settings → Pages → Build and deployment source → GitHub Actions. A special `gh-pages` branch is not needed.
+Finally, set up GitHub pages for your repository in Settings → Pages → Build and deployment source → GitHub Actions. A special `gh-pages` branch is not needed, since we will use GitHub actions to deploy a Pages artifact.
+
+Currently it is not possible to download a previously created Pages artifact as they quickly expire after deploying it. When releasing an update to a Helm chart, we want keep all previous versions of the Helm chart available. Therefore, as a workaround, we download the index.yaml file from Pages, parse all referenced releases, and download these .tgx packages from Pages as well. Then we package the new version and update the index. Afterwards, a new Pages artifact is created from these files and finally deployed.
 
 ### Dependencies
 
