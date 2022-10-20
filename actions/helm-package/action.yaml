@@ -6,7 +6,7 @@ inputs:
     required: false
     default: "v3.10.1"
   charts-dir:
-    description: "The directory containing the Helm charts."
+    description: "The directory containing the Helm chart."
     required: false
     default: "."
 

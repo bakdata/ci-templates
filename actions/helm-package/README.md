@@ -4,10 +4,10 @@ This composite action packages a Helm chart. Afterwards, it creates an index fil
 
 ## Input Parameters
 
-| Name         | Required | Default Value | Description                              |
-| ------------ | :------: | :-----------: | ---------------------------------------- |
-| helm-version |    ❌    |   "v3.10.1"   | The Helm version                         |
-| charts-dir   |    ❌    |      "."      | The directory containing the Helm charts |
+| Name         | Required | Default Value | Description                             |
+| ------------ | :------: | :-----------: | --------------------------------------- |
+| helm-version |    ❌    |   "v3.10.1"   | The Helm version                        |
+| charts-dir   |    ❌    |      "."      | The directory containing the Helm chart |
 
 ## Usage
 

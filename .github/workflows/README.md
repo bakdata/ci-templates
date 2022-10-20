@@ -7,12 +7,11 @@ The following workflows can be found here:
 
 ## Helm Release
 
-This workflow will lint all charts, bump the project version according to the `.bumpversion.cfg` file, create an artifact and provide an updated `index.yaml` for all packaged charts on GitHub pages.
+This workflow will lint a Helm chart, bump its version according to the `.bumpversion.cfg` file, package the chart, update the Helm index, and deploy it on GitHub pages.
 
 ### Prerequisites
 
-Your Helm charts and `.bumpversion.cfg` need to be located inside the `charts-dir` folder of your repository (repository root by default) to use this workflow. A minimal
-configuration with `charts-dir=charts` could look like this:
+Your Helm chart and `.bumpversion.cfg` need to be located inside the `charts-dir` folder of your repository (repository root by default) to use this workflow. A minimal configuration with `charts-dir=charts` could look like this:
 
 ```cfg
 [bumpversion]
@@ -35,7 +34,7 @@ Moreover, choose a GitHub user who will commit and push the changes. Make sure
 to configure admin access to the repository for the selected user because admins can still push on the default branch
 even if there is a protection rule in place.
 
-Finally, setup GitHub pages for your repository in Settings → Pages → Build and deployment source → GitHub Actions. A special `gh-pages` branch is not needed.
+Finally, set up GitHub pages for your repository in Settings → Pages → Build and deployment source → GitHub Actions. A special `gh-pages` branch is not needed.
 
 ### Dependencies
 
@@ -55,16 +54,14 @@ This workflow is built from multiple composite actions listed below:
 | ref              |    ❌    | The default branch of your repository | string | The ref name to checkout the repository                                                                                                    |
 | lint-config-path |    ❌    |      ".github/lint-config.yaml"       | string | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
 | helm-version     |    ❌    |               "v3.10.1"               | string | The Helm version                                                                                                                           |
-| charts-dir       |    ❌    |                  "."                  | string | The directory containing the Helm charts and `.bumpversion.cfg` file                                                                       |
+| charts-dir       |    ❌    |                  "."                  | string | The directory containing the Helm chart and `.bumpversion.cfg` file                                                                        |
 | skip-download    |    ❌    |                "false"                | string | Skip downloading index.yaml and previous Chart versions from GitHub pages. (To be used during setup of this workflow)                      |
 | artifact-dir     |    ❌    |              "artifact"               | string | Directory inside `charts-dir` for preparation of the GitHub pages artifact.                                                                |
 
 ### Secret Parameters
 
-These secrets define the GitHub user that pushes the changes of your `.bumpversion.cfg` and `Chart.yaml` file to the repository. Create a
-repository secret for the GitHub username (`GH_USERNAME`), the GitHub email (`GH_EMAIL`), and a personal access
-token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the
-email: `[username]@users.noreply.github.com`.
+These secrets define the GitHub user that pushes the changes of your `.bumpversion.cfg` and `Chart.yaml` file to the repository. Create a repository secret for the GitHub username (`GH_USERNAME`), the GitHub email (`GH_EMAIL`), and a personal access
+token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the email: `[username]@users.noreply.github.com`.
 
 | Name            | Required | Description                                    |
 | --------------- | :------: | ---------------------------------------------- |
@@ -74,8 +71,7 @@ email: `[username]@users.noreply.github.com`.
 
 ### Outputs
 
-This workflow outputs two variables: The `old-tag` and the `release-tag`. These variables can be used in the future
-jobs (e.g., using the `release-tag` to create GitHub release).
+This workflow outputs two variables: The `old-tag` and the `release-tag`. These variables can be used in subsequent jobs (e.g., using the `release-tag` to create GitHub release).
 
 | Name        | Description                                           |
 | ----------- | ----------------------------------------------------- |

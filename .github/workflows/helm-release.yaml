@@ -27,7 +27,7 @@ on:
         default: "v3.10.1"
         type: string
       charts-dir:
-        description: "The directory containing the Helm charts and `.bumpversion.cfg` file."
+        description: "The directory containing the Helm chart and `.bumpversion.cfg` file."
         required: false
         default: "."
         type: string
