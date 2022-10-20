@@ -23,7 +23,6 @@ target-branch: "main"
 ## Usage
 
 ```yaml
----
 steps:
   - name: Lint helm charts
     uses: bakdata/ci-templates/actions/helm-lint@main

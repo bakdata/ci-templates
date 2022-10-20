@@ -99,11 +99,11 @@ jobs:
   call-workflow-passing-data:
     uses: bakdata/ci-templates/.github/workflows/helm-release.yaml@main
     with:
+      page-url: https://example.github.io/your-repository
       release-type: ${{ inputs.release-type }}
       ref: "my-awesome-ref" # (Optional)
       lint-config-path: "my-lint-config.yaml" # (Optional)
       helm-version: "v3.10.1" # (Optional)
-      python-version: "3.8" # (Optional)
       charts-dir: charts # (Optional)
       skip-download: "false" # (Optional)
       artifact-dir: "artifact" # (Optional)
