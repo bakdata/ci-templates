@@ -27,7 +27,7 @@ inputs:
     required: false
   helm-version:
     description: "Helm version"
-    default: "v3.8.1"
+    default: "v3.10.1"
     required: false
 runs:
   using: "composite"
@@ -38,7 +38,7 @@ runs:
         python-version: ${{ inputs.python-version }}
 
     - name: Authenticate at GCloud
-      uses: 'google-github-actions/auth@v0'
+      uses: "google-github-actions/auth@v0"
       with:
         credentials_json: ${{ inputs.gke-service-account }}
 
@@ -70,6 +70,6 @@ runs:
         GKE_PROJECT: ${{ inputs.gke-project }}
 
     - name: Install Helm
-      uses: azure/setup-helm@v1
+      uses: azure/setup-helm@v3
       with:
         version: ${{ inputs.helm-version }}

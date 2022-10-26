@@ -1,8 +1,12 @@
-name: Reusable workflow for building and publishing helm charts on Github pages
+name: Reusable workflow for packaging and publishing Helm charts on GitHub pages
 
 on:
   workflow_call:
     inputs:
+      page-url:
+        description: "URL to the GitHub pages website of the repository."
+        required: true
+        type: string
       release-type:
         description: "Scope of the release (major, minor or patch)."
         required: true
@@ -17,16 +21,27 @@ on:
         required: false
         default: ".github/lint-config.yaml"
         type: string
-      python-version:
-        description: "The python version for bump2version."
-        required: false
-        default: "3.10"
-        type: string
       helm-version:
-        description: "The helm version."
+        description: "The Helm version."
         required: false
-        default: "v3.4.0"
+        default: "v3.10.1"
         type: string
+      charts-dir:
+        description: "The directory containing the Helm chart and `.bumpversion.cfg` file."
+        required: false
+        default: "."
+        type: string
+      skip-download:
+        description: "Skip downloading index.yaml and previous Chart versions from GitHub pages. (To be used during setup of this workflow)"
+        required: false
+        default: "false"
+        type: string
+      artifact-dir:
+        description: "Directory inside `charts-dir` for preparation of the GitHub pages artifact."
+        required: false
+        default: "artifact"
+        type: string
+
     secrets:
       github-username:
         description: "The GitHub username for committing the changes."
@@ -49,16 +64,16 @@ on:
 
 jobs:
   helm-lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
-      - name: Lint helm chart
+      - name: Lint Helm chart
         uses: bakdata/ci-templates/actions/helm-lint@v1.0.0
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
 
   helm-release:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: helm-lint
 
     # Map the job outputs to step outputs
@@ -72,19 +87,33 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
-      - name: Set up python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "${{ inputs.python-version }}"
-
       - name: Bump version
         id: release-tag
-        uses: bakdata/ci-templates/actions/bump-version@v1.0.0
+        uses: bakdata/ci-templates/actions/bump-version@v1.5.2
         with:
           release-type: ${{ inputs.release-type }}
+          working-directory: ${{ inputs.charts-dir }}
 
-      - name: Commit and push bumpversion.cfg file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.0.0
+      - name: Download previous Helm index
+        run: curl -O -f ${{ inputs.page-url }}/index.yaml
+        if: ${{ inputs.skip-download == 'false' }}
+        shell: bash
+        working-directory: ${{ inputs.charts-dir }}
+
+      - name: Find previous package versions
+        id: packages
+        uses: mikefarah/yq@v4.28.1
+        if: ${{ inputs.skip-download == 'false' }}
+        with:
+          cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ inputs.charts-dir }}/index.yaml
+
+      - name: Create Helm package & update index
+        uses: bakdata/ci-templates/actions/helm-package@v1.6.0
+        with:
+          charts-dir: ${{ inputs.charts-dir }}
+
+      - name: Commit and push Chart.yaml & .bumpversion.cfg file
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
@@ -92,9 +121,38 @@ jobs:
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
 
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.2.1
+      - name: Prepare artifact
+        run: |
+          mkdir ${{ inputs.artifact-dir }}
+          cp index.yaml ${{ inputs.artifact-dir }}/
+          mv ./*.tgz ${{ inputs.artifact-dir }}/
+        shell: bash
+        working-directory: ${{ inputs.charts-dir }}
+
+      - name: Download packages
+        run: curl -O -f "${{ inputs.page-url }}/{${{ steps.packages.outputs.result }}}"
+        if: ${{ inputs.skip-download == 'false' }}
+        shell: bash
+        working-directory: ${{ inputs.charts-dir }}/${{ inputs.artifact-dir }}
+
+      - name: Create artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          charts_dir: "charts"
-        env:
-          CR_TOKEN: "${{ secrets.github-token }}"
+          path: ${{ inputs.charts-dir }}/${{ inputs.artifact-dir }}
+
+  publish-gh-pages:
+    runs-on: ubuntu-22.04
+    needs: helm-release
+    permissions:
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1

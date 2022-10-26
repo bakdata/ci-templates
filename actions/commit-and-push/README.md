@@ -7,29 +7,30 @@ action.
 ## Input Parameters
 
 | Name            | Required |           Default Value           | Description                                    |
-|-----------------|:--------:|:---------------------------------:|------------------------------------------------|
-| github-username |    ✅     |                 -                 | The GitHub username for committing the changes |
-| github-email    |    ✅     |                 -                 | The GitHub email for committing the changes    |
-| github-token    |    ✅     |                 -                 | The GitHub token for committing the changes    |
-| commit-message  |    ✅     |                 -                 | The commit message                             |
-| ref             |    ❌     | Default branch of your repository | The ref name to commit and push the files on   |
+| --------------- | :------: | :-------------------------------: | ---------------------------------------------- |
+| github-username |    ✅    |                 -                 | The GitHub username for committing the changes |
+| github-email    |    ✅    |                 -                 | The GitHub email for committing the changes    |
+| github-token    |    ✅    |                 -                 | The GitHub token for committing the changes    |
+| commit-message  |    ✅    |                 -                 | The commit message                             |
+| ref             |    ❌    | Default branch of your repository | The ref name to commit and push the files on   |
+| add-untracked   |    ❌    |              "false"              | Whether to add untracked files to commit       |
 
 ## Usage
 
 ```yaml
+steps:
+  # Other Steps ...
+  # Imagine that the previous steps change some files and the changes need to be committed
 
-    steps:
-      # Other Steps ...
-      # Imagine that the previous steps change some files and the changes need to be committed
+  - name: Commit and push changes
+    uses: bakdata/ci-templates/actions/commit-and-push@main
+    with:
+      ref: "my-awesome-ref-name" # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value
+      commit-message: "Committing all the awesome changes in my repository!"
+      add-untracked: "true" # (Optional) if not set, only tracked files will be committed
+      github-username: ${{ secrets.github-username }}
+      github-email: ${{ secrets.github-email }}
+      github-token: ${{ secrets.github-token }}
 
-      - name: Commit and push changes
-        uses: bakdata/ci-templates/actions/commit-and-push@main
-        with:
-          ref: "my-awesome-ref-name" # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value
-          commit-message: "Committing all the awesome changes in my repository!"
-          github-username: ${{ secrets.github-username }}
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
-
-      # Rest of the workflow steps
+  # Rest of the workflow steps
 ```
