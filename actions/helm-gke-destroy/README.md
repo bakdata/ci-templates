@@ -23,17 +23,17 @@ This action will destroy a Helm chart on a Google Kubernetes Engine cluster.
 ...
 steps:
   - name: Destroy Helm chart
-      uses: bakdata/ci-templates/actions/helm-gke-destroy@main
-      with:
-        gke-service-account: ${{ secrets.GKE_SERVICE_ACCOUNT }}
-        gke-project: "my-awesome-project"
-        gke-region: "us-west1"
-        gke-cluster: "my-awesome-cluster"
-        release-name: "my-release"
-        namespace: "my-namespace"
-        python-version: "3.10" # optional
-        gcloud-sdk-version: "376.0.0" # optional
-        kubectl-version: "v1.23.0" # optional
-        helm-version: "v3.10.1" # optional
+    uses: bakdata/ci-templates/actions/helm-gke-destroy@main
+    with:
+      gke-service-account: ${{ secrets.GKE_SERVICE_ACCOUNT }}
+      gke-project: "my-awesome-project"
+      gke-region: "us-west1"
+      gke-cluster: "my-awesome-cluster"
+      release-name: "my-release"
+      namespace: "my-namespace"
+      python-version: "3.10" # optional
+      gcloud-sdk-version: "376.0.0" # optional
+      kubectl-version: "v1.23.0" # optional
+      helm-version: "v3.10.1" # optional
 ...
 ```
