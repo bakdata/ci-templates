@@ -32,22 +32,22 @@ Create a `values.yaml` file according to the documentation of the specific Helm 
 ...
 steps:
   - name: Deploy Helm chart
-      uses: bakdata/ci-templates/actions/helm-gke-deploy@main
-      with:
-        gke-service-account: ${{ secrets.GKE_SERVICE_ACCOUNT }}
-        gke-project: "my-awesome-project"
-        gke-region: "us-west1"
-        gke-cluster: "my-awesome-cluster"
-        release-name: "my-release"
-        namespace: "my-namespace"
-        chart: "foo/bar" # Installs the chart 'bar' from the repository called 'foo'
-        chart-version: "1.0.0"
-        values-yaml: '["bar/values.yaml", "bar/values-1.yaml"]' # or for a single value file just as a string: "bar/values.yaml"
-        repository-name: "foo" # optional
-        repository-url: "https://foo.example.com" # optional
-        python-version: "3.10" # optional
-        gcloud-sdk-version: "376.0.0" # optional
-        kubectl-version: "v1.23.0" # optional
-        helm-version: "v3.10.1" # optional
+    uses: bakdata/ci-templates/actions/helm-gke-deploy@main
+    with:
+      gke-service-account: ${{ secrets.GKE_SERVICE_ACCOUNT }}
+      gke-project: "my-awesome-project"
+      gke-region: "us-west1"
+      gke-cluster: "my-awesome-cluster"
+      release-name: "my-release"
+      namespace: "my-namespace"
+      chart: "foo/bar" # Installs the chart 'bar' from the repository called 'foo'
+      chart-version: "1.0.0"
+      values-yaml: '["bar/values.yaml", "bar/values-1.yaml"]' # or for a single value file just as a string: "bar/values.yaml"
+      repository-name: "foo" # optional
+      repository-url: "https://foo.example.com" # optional
+      python-version: "3.10" # optional
+      gcloud-sdk-version: "376.0.0" # optional
+      kubectl-version: "v1.23.0" # optional
+      helm-version: "v3.10.1" # optional
 ...
 ```
