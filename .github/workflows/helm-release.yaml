@@ -96,7 +96,7 @@ jobs:
           working-directory: ${{ inputs.charts-dir }}
 
       - name: Download previous Helm index
-        run: curl -O -f ${{ inputs.page-url }}/index.yaml
+        run: curl -O -L -f ${{ inputs.page-url }}/index.yaml
         if: ${{ inputs.skip-download == 'false' }}
         shell: bash
         working-directory: ${{ inputs.charts-dir }}
@@ -131,7 +131,7 @@ jobs:
         working-directory: ${{ inputs.charts-dir }}
 
       - name: Download packages
-        run: curl -O -f "${{ inputs.page-url }}/{${{ steps.packages.outputs.result }}}"
+        run: curl -O -L -f "${{ inputs.page-url }}/{${{ steps.packages.outputs.result }}}"
         if: ${{ inputs.skip-download == 'false' }}
         shell: bash
         working-directory: ${{ inputs.charts-dir }}/${{ inputs.artifact-dir }}
