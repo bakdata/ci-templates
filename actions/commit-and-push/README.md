@@ -3,7 +3,7 @@
 This composite action commits the changes of your repository with an arbitrary commit message and then pushes them using an authenticated GitHub user. The GitHub user is set by passing the username, email, and a valid GitHub token to the composite action.
 
 > **Note**
-> Pushing to protected branches requires any `checkout` actions to specify the `persist-credentials: false` option. Additionally, the configured GitHub user needs to be added as an exclusion in Settings → Branches → Branch protection rule → **Allow specified actors to bypass required pull requests** & **Restrict pushes that create matching branches**
+> Pushing to protected branches requires any `checkout` actions to specify the `persist-credentials: false` option. Additionally, the configured GitHub user needs to be added as an exclusion in Settings → Branches → Branch protection rule → **Allow specified actors to bypass required pull requests** & **Restrict who can push to matching branches**
 
 ## Input Parameters
 
