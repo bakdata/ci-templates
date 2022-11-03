@@ -23,7 +23,6 @@ Create a `values.yaml` file according to the documentation of the specific Helm 
 ## Usage
 
 ```yaml
----
 steps:
   - name: Deploy Helm chart
     uses: bakdata/ci-templates/actions/helm-gke-deploy@main
