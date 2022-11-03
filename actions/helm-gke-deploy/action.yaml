@@ -62,4 +62,5 @@ runs:
         if [ -n "$CHART_VERSION" ]; then command="${command} --version ${{ inputs.chart-version }}"; fi
         if [ -n "$POST_RENDERER" ]; then command="${command} --post-renderer ${{ inputs.post-renderer }}"; fi
 
+        echo "Deploying with command: ${command}"
         eval "$command"
