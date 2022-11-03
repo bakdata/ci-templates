@@ -63,5 +63,5 @@ runs:
         if [ -n "${{ inputs.chart-version }}" ]; then parameters="${parameters} --version ${{ inputs.chart-version }}"; fi
         if [ -n "${{ inputs.post-renderer }}" ]; then parameters="${parameters} --post-renderer ${{ inputs.post-renderer }}"; fi
 
-        echo 'Deploying with command: helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} "${parameters[@]}"'
-        helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} "${parameters[@]}"
+        echo "Deploying with command: helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} ${parameters}"
+        helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} ${parameters}
