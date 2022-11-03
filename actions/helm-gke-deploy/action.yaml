@@ -59,8 +59,8 @@ runs:
           command="${command} --values ${{ inputs.values-yaml }}"
         fi
 
-        if [ -n "$CHART_VERSION" ]; then command="${command} --version ${{ inputs.chart-version }}"; fi
-        if [ -n "$POST_RENDERER" ]; then command="${command} --post-renderer ${{ inputs.post-renderer }}"; fi
+        if [ -n "${{ inputs.chart-version }}" ]; then command="${command} --version ${{ inputs.chart-version }}"; fi
+        if [ -n "${{ inputs.post-renderer }}" ]; then command="${command} --post-renderer ${{ inputs.post-renderer }}"; fi
 
         echo "Deploying with command: ${command}"
         eval "$command"
