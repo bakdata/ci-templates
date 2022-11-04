@@ -49,19 +49,18 @@ runs:
     - name: Deploy helm chart
       shell: bash
       run: |
-        parameters="--debug --install --wait --timeout ${{ inputs.timeout }}s --force --namespace ${{ inputs.namespace }}"
+        parameters=(--debug --install --wait --timeout ${{ inputs.timeout }}s --force --namespace ${{ inputs.namespace }})
 
         if $(echo '${{ inputs.values-yaml }}' | jq -e > /dev/null 2>&1); then
           echo "Deploying with multiple value files"
-          values=$(echo '${{ inputs.values-yaml }}' | jq -r '[ .[] | . = "--values \(.)"] | join(" ")')
-          parameters="${parameters} ${values}"
+          parameters+=($(echo '${{ inputs.values-yaml }}' | jq -r '[ .[] | . = "--values \(.)"] | join(" ")'))
         else
           echo "Deploying with single value file"          
-          parameters="${parameters} --values ${{ inputs.values-yaml }}"
+          parameters+=(--values ${{ inputs.values-yaml }})
         fi
 
-        if [ -n "${{ inputs.chart-version }}" ]; then parameters="${parameters} --version ${{ inputs.chart-version }}"; fi
-        if [ -n "${{ inputs.post-renderer }}" ]; then parameters="${parameters} --post-renderer ${{ inputs.post-renderer }}"; fi
+        if [ -n "${{ inputs.chart-version }}" ]; then parameters+=(--version ${{ inputs.chart-version }}); fi
+        if [ -n "${{ inputs.post-renderer }}" ]; then parameters+=(--post-renderer ${{ inputs.post-renderer }}); fi
 
-        echo "Deploying with command: helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} ${parameters}"
-        helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} ${parameters}
+        echo "Deploying with command: helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} ${parameters[@]}"
+        helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} "${parameters[@]}"
