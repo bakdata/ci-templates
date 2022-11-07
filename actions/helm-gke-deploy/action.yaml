@@ -10,26 +10,33 @@ inputs:
   chart:
     description: "Helm chart to deploy"
     required: true
+  values-yaml:
+    description: "File path as string for a single helm value file or as json array for multiple helm value files"
+    required: true
   chart-version:
     description: "Chart Version"
-    required: true
-  values-yaml:
-    description: "File path as string for a single helm value file or as json array for multiple helm value files."
-    required: true
+    required: false
+  post-renderer:
+    description: "File path as string for a Helm post renderer"
+    required: false
+  timeout:
+    description: "Timeout for the Helm command in seconds"
+    default: "1200"
+    required: false
   repository-name:
     description: "Helm repository name"
     required: false
   repository-url:
     description: "Url of the repository"
     required: false
+
 runs:
   using: "composite"
   steps:
     - name: Add helm repository
       shell: bash
       run: |
-        if [ -n "$REPOSITORY_NAME" ] && [ -n "$REPOSITORY_URL" ]
-        then
+        if [ -n "$REPOSITORY_NAME" ] && [ -n "$REPOSITORY_URL" ]; then
           helm repo add "$REPOSITORY_NAME" "$REPOSITORY_URL"
           helm repo update
         else
@@ -42,18 +49,18 @@ runs:
     - name: Deploy helm chart
       shell: bash
       run: |
+        parameters=(--debug --install --wait --timeout ${{ inputs.timeout }}s --force --namespace ${{ inputs.namespace }})
+
         if $(echo '${{ inputs.values-yaml }}' | jq -e > /dev/null 2>&1); then
           echo "Deploying with multiple value files"
-          helm upgrade --debug --install --wait --timeout 1200s --force \
-            --version ${{ inputs.chart-version }} \
-            $(echo '${{ inputs.values-yaml }}' | jq -r '[ .[] | . = "--values \(.)"] | join(" ")') \
-            --namespace ${{ inputs.namespace }} \
-            ${{ inputs.release-name }} ${{ inputs.chart }}
+          parameters+=($(echo '${{ inputs.values-yaml }}' | jq -r '[ .[] | . = "--values \(.)"] | join(" ")'))
         else
-          echo "Deploying with single value file"
-          helm upgrade --debug --install --wait --timeout 1200s --force \
-            --version ${{ inputs.chart-version }} \
-            --values ${{ inputs.values-yaml }} \
-            --namespace ${{ inputs.namespace }} \
-            ${{ inputs.release-name }} ${{ inputs.chart }}
+          echo "Deploying with single value file"          
+          parameters+=(--values ${{ inputs.values-yaml }})
         fi
+
+        if [ -n "${{ inputs.chart-version }}" ]; then parameters+=(--version ${{ inputs.chart-version }}); fi
+        if [ -n "${{ inputs.post-renderer }}" ]; then parameters+=(--post-renderer ${{ inputs.post-renderer }}); fi
+
+        echo "Deploying with command: helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} ${parameters[@]}"
+        helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} "${parameters[@]}"
