@@ -1,0 +1,18 @@
+name: "Deploy kustomized crds and app"
+description: "Deploy kustomized crds and app to the GKE cluster"
+inputs:
+  kustomization-path:
+    description: "Path to the root directory of the kustomization"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Deploy kustomized crds
+      shell: bash
+      run: |
+        kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -i kind=CustomResourceDefinition | kubectl apply -f -
+        kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -i kind=CustomResourceDefinition | kubectl wait --for condition=established --timeout=60s -f -
+    - name: Deploy kustomized app
+      shell: bash
+      run: kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -x kind=CustomResourceDefinition | kubectl apply -f -
