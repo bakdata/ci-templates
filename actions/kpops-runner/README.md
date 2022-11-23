@@ -12,3 +12,17 @@ This action runs Kpops with the given config.
 | execute      |    ✅    |       false       | boolean | Execute Kpops command (this applies the infrastructure changes that were executed inside the dry-run command)                                                                    |
 | defaults   |    ✅    |       defaults      | string | defaults folder path                                                                 |
 | config       |    ✅    |   config   | string | default config.yaml file path            |
+
+
+## Usage
+
+```yaml
+steps:
+  - name: Test
+    uses: bakdata/ci-templates/actions/kpops-runner@main
+    with:
+        mode: deploy
+        working-directory: home/my-kpops-root-dir
+        pipeline: pipelines/my-pipeline-file.yaml
+        execute: true
+```
