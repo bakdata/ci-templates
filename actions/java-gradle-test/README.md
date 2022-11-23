@@ -9,7 +9,7 @@ Sonatype, then these steps are skipped.
 
 | Name                    | Required | Default Value |  Type  | Description                                                                                                   |
 | ----------------------- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------------------- |
-| sonar-token             |    ❌    |       -       | string | Token for Sonarcloud                                                                                          |
+| mode             |    ❌    |       -       | string | Token for Sonarcloud                                                                                          |
 | sonar-organization      |    ❌    |       -       | string | Organization for Sonarcloud                                                                                   |
 | signing-secret-key-ring |    ❌    |       -       | string | Key ring (base64 encoded) for signing the Sonatype publication                                                |
 | signing-key-id          |    ❌    |       -       | string | Key id for signing the Sonatype publication                                                                   |
