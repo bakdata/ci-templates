@@ -38,7 +38,7 @@ runs:
       working-directory: ${{inputs.working-directory}}
       shell: bash
 
-    - run: kpops ${{inputs.mode}} $PIPELINES_FOLDER/${{ inputs.pipeline }}/pipeline.yaml --defaults ${{ inputs.defaults }} --config ${{ inputs.config }} --execute
+    - run: kpops ${{inputs.mode}} ${{ inputs.pipeline }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }} --execute
       name: Process ${{ inputs.pipeline }} pipeline
       working-directory: ${{inputs.working-directory}}
       if: ${{inputs.execute}}
