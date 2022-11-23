@@ -7,22 +7,18 @@ inputs:
     required: true
   working-directory:
     description: "The root directory containing the config.yaml, pipelines folder and defaults"
-    required: true
     default: "."
   pipeline:
     description: "Pipeline file you want to run"
     required: true
   execute:
     description: "Set execution flag"
-    required: true
     default: "false"
   defaults:
     description: "Defaults folder path"
-    required: true
     default: "defaults"
   config:
     description: "Config.yaml file path"
-    required: true
     default: "config.yaml"
 
 runs:
@@ -30,17 +26,18 @@ runs:
   steps:
     - name: Check out repository code
       uses: actions/checkout@v3
-    - run: pip install kpops==0.2.0.dev20221122085523 --extra-index-url https://test.pypi.org/simple/
+    - run: |
+        pip install kpops==0.2.0.dev20221122085523 --extra-index-url https://test.pypi.org/simple/
       name: Install Kpops
       shell: bash
-    - run: kpops generate ${{ inputs.pipeline }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
-      name: Generate ${{ inputs.pipeline }} pipeline
-      working-directory: ${{inputs.working-directory}}
-      shell: bash
-    - run: kpops ${{inputs.mode}} ${{ inputs.pipeline }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
+    
+    - run: |
+         kpops generate ${{ inputs.pipeline }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
+         kpops ${{inputs.mode}} ${{ inputs.pipeline }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
       name: Dry-run ${{ inputs.pipeline }} pipeline
       working-directory: ${{inputs.working-directory}}
       shell: bash
+
     - run: kpops ${{inputs.mode}} $PIPELINES_FOLDER/${{ inputs.pipeline }}/pipeline.yaml --defaults ${{ inputs.defaults }} --config ${{ inputs.config }} --execute
       name: Process ${{ inputs.pipeline }} pipeline
       working-directory: ${{inputs.working-directory}}
