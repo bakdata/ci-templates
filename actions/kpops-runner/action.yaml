@@ -26,6 +26,7 @@ runs:
   steps:
     - name: Check out repository code
       uses: actions/checkout@v3
+      
     - run: |
         pip install kpops==0.2.0.dev20221122085523 --extra-index-url https://test.pypi.org/simple/
       name: Install Kpops
