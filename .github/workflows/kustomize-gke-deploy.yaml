@@ -1,0 +1,30 @@
+name: Kustomized GKE Deploy
+# Reusable workflow for deploying a Kustomized chart on GKE Kubernetes
+
+on:
+  workflow_call:
+    inputs:
+      kustomization-path:
+        description: "Path to the root directory of the kustomization"
+        required: true
+        type: string
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup environment
+        uses: bakdata/ci-templates/actions/helm-gke-setup@v1.2.0
+        with:
+          gke-service-account: ${{ secrets.GKE_DEV_SERVICE_ACCOUNT }}
+          gke-project: ${{ secrets.GKE_DEV_PROJECT }}
+          gke-region: ${{ secrets.GKE_DEV_REGION }}
+          gke-cluster: ${{ secrets.GKE_DEV_CLUSTER }}
+
+      - name: Deploy crds and app
+        uses: bakdata/ci-templates/actions/kustomize-gke-deploy@feat/kustomize-template
+        with:
+          kustomization-path: ${{ inputs.kustomization-path }}
