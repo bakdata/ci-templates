@@ -8,6 +8,20 @@ on:
         description: "Path to the root directory of the kustomization"
         required: true
         type: string
+    secrets:
+      gke-service-account:
+        description: "GKE service account key for authentication"
+        required: true
+      gke-project:
+        description: "GKE project id for authentication"
+        required: true
+      gke-region:
+        description: "GKE region for authentication"
+        required: true
+      gke-cluster:
+        description: "GKE cluster for authentication"
+        required: true
+
 
 jobs:
   deploy:
@@ -19,10 +33,10 @@ jobs:
       - name: Setup environment
         uses: bakdata/ci-templates/actions/helm-gke-setup@v1.7.0
         with:
-          gke-service-account: ${{ secrets.GKE_DEV_SERVICE_ACCOUNT }}
-          gke-project: ${{ secrets.GKE_DEV_PROJECT }}
-          gke-region: ${{ secrets.GKE_DEV_REGION }}
-          gke-cluster: ${{ secrets.GKE_DEV_CLUSTER }}
+          gke-service-account: ${{ secrets.gke-service-account }}
+          gke-project: ${{ secrets.gke-project }}
+          gke-region: ${{ secrets.gke-region }}
+          gke-cluster: ${{ secrets.gke-cluster }}
 
       - name: Deploy crds and app
         uses: bakdata/ci-templates/actions/kustomize-gke-deploy@feat/kustomize-template
