@@ -169,7 +169,7 @@ on:
         default: "kustomization-path"
         required: false
       timeout:
-        description: "Time out(in seconds) for custom ressource definitions"
+        description: "Time out(in seconds) for CustomResourceDefinitions"
         default: "60"
         required: false
 
