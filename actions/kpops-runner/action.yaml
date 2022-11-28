@@ -13,8 +13,6 @@ inputs:
     default: "."
   execute:
     description: "Set execution flag"
-    type: boolean
-    default: false
   defaults:
     description: "Defaults folder path"
     default: "defaults"
@@ -42,5 +40,5 @@ runs:
     - run: kpops ${{inputs.mode}} ${{ inputs.pipeline }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }} --execute
       name: Process ${{ inputs.pipeline }} pipeline
       working-directory: ${{inputs.working-directory}}
-      if: ${{inputs.execute}}
+      if: ${{inputs.execute == 'true'}}
       shell: bash
