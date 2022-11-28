@@ -15,11 +15,8 @@ runs:
     - name: Deploy kustomized crds
       shell: bash
       run: |
-        kubectl kustomize ${{ inputs.kustomization-path }} >> test.txt
-        cat test.txt
-#        | kfilt -i kind=CustomResourceDefinition > test.txt
-# | kubectl apply -f -
-#        kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -i kind=CustomResourceDefinition | kubectl wait --for condition=established --timeout=${{ inputs.timeout }}s -f -
-#    - name: Deploy kustomized app
-#      shell: bash
-#      run: kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -x kind=CustomResourceDefinition | kubectl apply -f -
+        kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -i kind=CustomResourceDefinition | kubectl apply -f -
+        kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -i kind=CustomResourceDefinition | kubectl wait --for condition=established --timeout=${{ inputs.timeout }}s -f -
+    - name: Deploy kustomized app
+      shell: bash
+      run: kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -x kind=CustomResourceDefinition | kubectl apply -f -
