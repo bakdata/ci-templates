@@ -4,7 +4,7 @@ The following workflows can be found here:
 
 - [Helm Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-release)
 - [Kustomize GKE Deploy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-deploy)
-- [Kustomize Destroy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-destroy)
+- [Kustomize GKE Destroy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-destroy)
 - [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
 - [Java Gradle Docker](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-docker)
 - [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
@@ -183,7 +183,7 @@ jobs:
       gke-cluster: ${{ secrets.GKE_DEV_CLUSTER }}
 ```
 
-## Kustomize Destroy
+## Kustomize GKE Destroy
 
 This workflow will uninstall deployments using Kustomize.
 
