@@ -11,7 +11,7 @@ Create a `kustomization.yaml` file according to the documentation of the specifi
 | Name            | Required | Default Value |  Type  | Description                                                                                       |
 | --------------- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------- |
 | kustomization-path    |    ✅    |       -       | string | Path to the root directory of the kustomization                                                           |
-| timeout  |    ❌    |       60s       | string | The url for adding the Helm repository                                                            |
+| timeout  |    ❌    |       60       | string | TTime out(in seconds) for custom ressource definitions                                                            |
 
 ## Usage
 
