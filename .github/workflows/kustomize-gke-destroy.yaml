@@ -1,11 +1,11 @@
-name: Helm GKE Destroy
-# Reusable workflow for destroying a Helm chart on GKE Kubernetes
+name: Kustomize GKE Destroy
+# Reusable workflow for destroying a Kustomize chart on GKE Kubernetes
 
 on:
   workflow_call:
     inputs:
-      release-name:
-        description: "The release name"
+      kustomization-path:
+        description: "Path to the root directory of the kustomization"
         required: true
         type: string
       python-version:
@@ -61,7 +61,7 @@ jobs:
           kubectl-version: ${{ inputs.kubectl-version }}
           helm-version: ${{ inputs.helm-version }}
 
-      - name: Deploy Helm Chart
-        uses: bakdata/ci-templates/actions/kustomize-gke-destroy@feat/kustomize-template
+      - name: Deploy Kustomize Chart
+        uses: bakdata/ci-templates/actions/kustomize-gke-destroy@feat/kustom-template
         with:
-          release-name: ${{ inputs.release-name }}
+          kustomization-path: ${{ inputs.kustomization-path }}

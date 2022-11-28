@@ -1,7 +1,7 @@
 name: "Destroy kustomized app"
 description: "Destroy kustomized deploymentdone in the GKE cluster"
 inputs:
-  release-name:
+  kustomization-path:
     description: "Path to the root directory of the kustomization"
     required: true
 
@@ -10,4 +10,4 @@ runs:
   steps:
     - name: Destroy kustomized app
       shell: bash
-      run: kubectl kustomize ${{ inputs.release-name }} | kubectl delete --ignore-not-found=true -f -
+      run: kubectl kustomize ${{ inputs.kustomization-path }} | kubectl delete --ignore-not-found=true -f -

@@ -1,5 +1,5 @@
-name: Kustomized GKE Deploy
-# Reusable workflow for deploying a Kustomized chart on GKE Kubernetes
+name: Kustomize GKE Deploy
+# Reusable workflow for deploying a Kustomize chart on GKE Kubernetes
 
 on:
   workflow_call:
@@ -7,6 +7,11 @@ on:
       kustomization-path:
         description: "Path to the root directory of the kustomization"
         required: true
+        type: string
+      timeout:
+        description: "Time out for custom ressource definitions"
+        default: "60s"
+        required: false
         type: string
     secrets:
       gke-service-account:
@@ -39,6 +44,7 @@ jobs:
           gke-cluster: ${{ secrets.gke-cluster }}
 
       - name: Deploy crds and app
-        uses: bakdata/ci-templates/actions/kustomize-gke-deploy@feat/kustomize-template
+        uses: bakdata/ci-templates/actions/kustomize-gke-deploy@feat/kustom-template
         with:
           kustomization-path: ${{ inputs.kustomization-path }}
+          timeout: ${{ inputs.timeout }}
