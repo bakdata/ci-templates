@@ -7,7 +7,6 @@ This action will destroy a Kustomize chart on a Google Kubernetes Engine cluster
 | Name            | Required | Default Value |  Type  | Description                                                                                       |
 | --------------- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------- |
 | kustomization-path    |    ✅    |       -       | string | Path to the root directory of the kustomization                                                           |
-                                                          |
 
 ## Usage
 
