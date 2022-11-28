@@ -9,7 +9,7 @@ on:
         required: true
         type: string
       timeout:
-        description: "Time out(in seconds) for custom ressource definitions"
+        description: "Time out(in seconds) for CustomRessourceDefinitions"
         default: "60"
         required: false
         type: string
@@ -46,7 +46,6 @@ on:
       gke-cluster:
         description: "GKE cluster for authentication"
         required: true
-
 
 jobs:
   deploy:

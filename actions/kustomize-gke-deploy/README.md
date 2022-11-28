@@ -8,10 +8,10 @@ Create a `kustomization.yaml` file according to the documentation of the specifi
 
 ## Input Parameters
 
-| Name            | Required | Default Value |  Type  | Description                                                                                       |
-| --------------- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------- |
-| kustomization-path    |    ✅    |       -       | string | Path to the root directory of the kustomization                                                           |
-| timeout  |    ❌    |       60       | string | Time out(in seconds) for custom ressource definitions                                                            |
+| Name               | Required | Default Value |  Type  | Description                                         |
+| ------------------ | :------: | :-----------: | :----: | --------------------------------------------------- |
+| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization     |
+| timeout            |    ❌    |      60       | string | Time out(in seconds) for CustomRessourceDefinitions |
 
 ## Usage
 

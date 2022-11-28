@@ -5,7 +5,7 @@ inputs:
     description: "Path to the root directory of the kustomization"
     required: true
   timeout:
-    description: "Time out(in seconds) for custom ressource definitions"
+    description: "Time out(in seconds) for CustomRessourceDefinitions"
     default: "60"
     required: false
 

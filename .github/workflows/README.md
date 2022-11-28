@@ -129,25 +129,25 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name               | Required | Default Value |  Type  | Description                                           |
-| ------------------ | :------: | :-----------: | :----: | ----------------------------------------------------- |
-| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization       |
-| timeout            |    ❌    |      60       | string | Time out(in seconds) for custom ressource definitions |
-| python-version     |    ❌    |    "3.10"     | string | The python version                                    |
-| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | The gcloud-sdk version                                |
-| kubectl-version    |    ❌    |   "v1.23.0"   | string | The kubectl version                                   |
-| helm-version       |    ❌    |   "v3.8.1"    | string | The Helm version                                      |
+| Name               | Required | Default Value |  Type  | Description                                         |
+| ------------------ | :------: | :-----------: | :----: | --------------------------------------------------- |
+| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization     |
+| timeout            |    ❌    |      60       | string | Time out(in seconds) for CustomRessourceDefinitions |
+| python-version     |    ❌    |    "3.10"     | string | The python version                                  |
+| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | The gcloud-sdk version                              |
+| kubectl-version    |    ❌    |   "v1.23.0"   | string | The kubectl version                                 |
+| helm-version       |    ❌    |   "v3.8.1"    | string | The Helm version                                    |
 
 ### Secret Parameters
 
 The GKE cluster that will be used for the deployment is defined by these secrets. Create those secrets so that the pipeline has the necessary access to the targeted cluster.
 
-| Name                | Required | Description                                    |
-| ------------------- | :------: | ---------------------------------------------- |
+| Name                | Required | Description                                |
+| ------------------- | :------: | ------------------------------------------ |
 | gke-service-account |    ✅    | GKE service account key for authentication |
-| gke-project         |    ✅    | GKE project id for authentication    |
-| gke-region          |    ✅    | GKE region for authentication    |
-| gke-cluster         |    ✅    | GKE cluster for authentication    |
+| gke-project         |    ✅    | GKE project id for authentication          |
+| gke-region          |    ✅    | GKE region for authentication              |
+| gke-cluster         |    ✅    | GKE cluster for authentication             |
 
 ### Calling the workflow
 
@@ -162,7 +162,7 @@ on:
         default: "kustomization-path"
         required: false
       timeout:
-        description: "Time out(in seconds) for custom ressource definitions"
+        description: "Time out(in seconds) for CustomRessourceDefinitions"
         default: "60"
         required: false
 
@@ -196,24 +196,24 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name               | Required | Default Value |  Type  | Description                                           |
-| ------------------ | :------: | :-----------: | :----: | ----------------------------------------------------- |
-| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization       |
-| python-version     |    ❌    |    "3.10"     | string | The python version                                    |
-| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | The gcloud-sdk version                                |
-| kubectl-version    |    ❌    |   "v1.23.0"   | string | The kubectl version                                   |
-| helm-version       |    ❌    |   "v3.8.1"    | string | The Helm version                                      |
+| Name               | Required | Default Value |  Type  | Description                                     |
+| ------------------ | :------: | :-----------: | :----: | ----------------------------------------------- |
+| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization |
+| python-version     |    ❌    |    "3.10"     | string | The python version                              |
+| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | The gcloud-sdk version                          |
+| kubectl-version    |    ❌    |   "v1.23.0"   | string | The kubectl version                             |
+| helm-version       |    ❌    |   "v3.8.1"    | string | The Helm version                                |
 
 ### Secret Parameters
 
 The GKE cluster that will be used for the deployment is defined by these secrets. Create those secrets so that the pipeline has the necessary access to the targeted cluster.
 
-| Name                | Required | Description                                    |
-| ------------------- | :------: | ---------------------------------------------- |
+| Name                | Required | Description                                |
+| ------------------- | :------: | ------------------------------------------ |
 | gke-service-account |    ✅    | GKE service account key for authentication |
-| gke-project         |    ✅    | GKE project id for authentication    |
-| gke-region          |    ✅    | GKE region for authentication    |
-| gke-cluster         |    ✅    | GKE cluster for authentication    |
+| gke-project         |    ✅    | GKE project id for authentication          |
+| gke-region          |    ✅    | GKE region for authentication              |
+| gke-cluster         |    ✅    | GKE cluster for authentication             |
 
 ### Calling the workflow
 
@@ -228,7 +228,7 @@ on:
         default: "kustomization-path"
         required: false
       timeout:
-        description: "Time out(in seconds) for custom ressource definitions"
+        description: "Time out(in seconds) for CustomRessourceDefinitions"
         default: "60"
         required: false
 
