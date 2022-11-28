@@ -9,7 +9,7 @@ on:
         required: true
         type: string
       timeout:
-        description: "Time out(in seconds) for CustomRessourceDefinitions"
+        description: "Time out(in seconds) for CustomResourceDefinitions"
         default: "60"
         required: false
         type: string

@@ -129,14 +129,14 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name               | Required | Default Value |  Type  | Description                                         |
-| ------------------ | :------: | :-----------: | :----: | --------------------------------------------------- |
-| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization     |
-| timeout            |    ❌    |      60       | string | Time out(in seconds) for CustomRessourceDefinitions |
-| python-version     |    ❌    |    "3.10"     | string | The python version                                  |
-| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | The gcloud-sdk version                              |
-| kubectl-version    |    ❌    |   "v1.23.0"   | string | The kubectl version                                 |
-| helm-version       |    ❌    |   "v3.8.1"    | string | The Helm version                                    |
+| Name               | Required | Default Value |  Type  | Description                                        |
+| ------------------ | :------: | :-----------: | :----: | -------------------------------------------------- |
+| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization    |
+| timeout            |    ❌    |      60       | string | Time out(in seconds) for CustomResourceDefinitions |
+| python-version     |    ❌    |    "3.10"     | string | The python version                                 |
+| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | The gcloud-sdk version                             |
+| kubectl-version    |    ❌    |   "v1.23.0"   | string | The kubectl version                                |
+| helm-version       |    ❌    |   "v3.8.1"    | string | The Helm version                                   |
 
 ### Secret Parameters
 
@@ -162,7 +162,7 @@ on:
         default: "kustomization-path"
         required: false
       timeout:
-        description: "Time out(in seconds) for CustomRessourceDefinitions"
+        description: "Time out(in seconds) for CustomResourceDefinitions"
         default: "60"
         required: false
 
@@ -228,7 +228,7 @@ on:
         default: "kustomization-path"
         required: false
       timeout:
-        description: "Time out(in seconds) for CustomRessourceDefinitions"
+        description: "Time out(in seconds) for CustomResourceDefinitions"
         default: "60"
         required: false
 
