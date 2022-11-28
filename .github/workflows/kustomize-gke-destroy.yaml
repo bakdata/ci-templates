@@ -62,6 +62,6 @@ jobs:
           helm-version: ${{ inputs.helm-version }}
 
       - name: Deploy Kustomize Chart
-        uses: bakdata/ci-templates/actions/kustomize-gke-destroy@feat/kustom-template
+        uses: bakdata/ci-templates/actions/kustomize-gke-destroy@feat/kustomize-template
         with:
           kustomization-path: ${{ inputs.kustomization-path }}

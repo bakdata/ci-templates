@@ -44,7 +44,7 @@ jobs:
           gke-cluster: ${{ secrets.gke-cluster }}
 
       - name: Deploy crds and app
-        uses: bakdata/ci-templates/actions/kustomize-gke-deploy@feat/kustom-template
+        uses: bakdata/ci-templates/actions/kustomize-gke-deploy@feat/kustomize-template
         with:
           kustomization-path: ${{ inputs.kustomization-path }}
           timeout: ${{ inputs.timeout }}
