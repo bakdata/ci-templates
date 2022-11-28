@@ -19,7 +19,7 @@ This action runs Kpops with the given config.
 
 ```yaml
 steps:
-  - name: Test
+  - name: Deploy kafka pipeline
     uses: bakdata/ci-templates/actions/kpops-runner@main
     with:
       mode: deploy
