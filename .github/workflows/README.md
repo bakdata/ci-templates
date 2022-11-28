@@ -178,7 +178,11 @@ jobs:
     uses: bakdata/ci-templates/.github/workflows/kustomize-gke-deploy.yaml@main
     with:
       kustomization-path: ${{ inputs.kustomization-path }}
-      timeout: ${{ inputs.timeout }}
+      timeout: ${{ inputs.timeout }} #optional
+      python-version: "3.10" #optional
+      gcloud-sdk-version: "376.0.0" #optional
+      kubectl-version: "v1.23.0" #optional
+      helm-version: "v3.8.1" #optional
     secrets:
       gke-service-account: ${{ secrets.GKE_DEV_SERVICE_ACCOUNT }}
       gke-project: ${{ secrets.GKE_DEV_PROJECT }}
