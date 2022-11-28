@@ -115,15 +115,9 @@ jobs:
       github-token: "${{ secrets.GH_TOKEN }}"
 ```
 
-## Kustomize GKE Deploy
+## Kustomize Release
 
 This workflow will deploy to GKE using a Kustomize root directory.
-
-### Prerequisites
-
-Set up GitHub pages for your repository in Settings → Pages → Build and deployment source → GitHub Actions. A special `gh-pages` branch is not needed, since we will use GitHub actions to deploy a Pages artifact.
-
-Currently it is not possible to download a previously created Pages artifact as they quickly expire after deploying it. When releasing an update to a Helm chart, we want to keep all previous versions of the Helm chart available. Therefore, as a workaround, we download the index.yaml file from Pages, parse all referenced releases, and download these .tgz packages from Pages as well. Then we package the new version and update the index. Afterwards, a new Pages artifact is created from these files and finally deployed.
 
 ### Dependencies
 
@@ -136,25 +130,25 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name             | Required |             Default Value             |  Type  | Description                                                                                                                                |
-| ---------------- | :------: | :-----------------------------------: | :----: | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| kustomization-path    |    ✅    |       -       | string | Path to the root directory of the kustomization                                                           |
-| timeout  |    ❌    |       60       | string | Time out(in seconds) for custom ressource definitions                                                            |
-| python-version              |    ❌    | "3.10" | string | The required python version                                                                                                    |
-| gcloud-sdk-version |    ❌    |      "376.0.0"       | string | The required gcloud-sdk version |
-| kubectl-version     |    ❌    |               "v1.23.0"               | string | The required kubectl version                                                                                                                           |
-| helm-version     |    ❌    |               "v3.8.1"               | string | The Helm version                                                                                                                           |
+| Name               | Required | Default Value |  Type  | Description                                           |
+| ------------------ | :------: | :-----------: | :----: | ----------------------------------------------------- |
+| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization       |
+| timeout            |    ❌    |      60       | string | Time out(in seconds) for custom ressource definitions |
+| python-version     |    ❌    |    "3.10"     | string | The python version                                    |
+| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | The gcloud-sdk version                                |
+| kubectl-version    |    ❌    |   "v1.23.0"   | string | The kubectl version                                   |
+| helm-version       |    ❌    |   "v3.8.1"    | string | The Helm version                                      |
+
 ### Secret Parameters
 
 The GKE cluster that will be used for the deployment is defined by these secrets. Create those secrets so that the pipeline has the necessary access to the targeted cluster.
 
-| Name            | Required | Description                                    |
-| --------------- | :------: | ---------------------------------------------- |
+| Name                | Required | Description                                    |
+| ------------------- | :------: | ---------------------------------------------- |
 | gke-service-account |    ✅    | The GitHub username for committing the changes |
-| gke-project    |    ✅    | The GitHub email for committing the changes    |
-| gke-region    |    ✅    | The GitHub token for committing the changes    |
-| gke-cluster    |    ✅    | The GitHub token for committing the changes    |
-
+| gke-project         |    ✅    | The GitHub email for committing the changes    |
+| gke-region          |    ✅    | The GitHub token for committing the changes    |
+| gke-cluster         |    ✅    | The GitHub token for committing the changes    |
 
 ### Calling the workflow
 
@@ -169,7 +163,7 @@ on:
         default: "kustomization-path"
         required: false
       timeout:
-        description: "Time out(in seconds) for CustomResourceDefinitions"
+        description: "Time out(in seconds) for custom ressource definitions"
         default: "60"
         required: false
 
@@ -182,14 +176,13 @@ jobs:
       python-version: "3.10" #optional
       gcloud-sdk-version: "376.0.0" #optional
       kubectl-version: "v1.23.0" #optional
-      helm-version: "v3.8.1" #optional
+      helm-version: "v3.8.1"
     secrets:
       gke-service-account: ${{ secrets.GKE_DEV_SERVICE_ACCOUNT }}
       gke-project: ${{ secrets.GKE_DEV_PROJECT }}
       gke-region: ${{ secrets.GKE_DEV_REGION }}
       gke-cluster: ${{ secrets.GKE_DEV_CLUSTER }}
 ```
-
 
 ## Python Poetry Release
 
