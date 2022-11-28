@@ -13,6 +13,7 @@ inputs:
     default: "."
   execute:
     description: "Set execution flag"
+    default: "false"
   defaults:
     description: "Defaults folder path"
     default: "defaults"
