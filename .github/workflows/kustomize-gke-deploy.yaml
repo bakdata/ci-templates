@@ -9,8 +9,8 @@ on:
         required: true
         type: string
       timeout:
-        description: "Time out for custom ressource definitions"
-        default: "60s"
+        description: "Time out(in seconds) for custom ressource definitions"
+        default: "60"
         required: false
         type: string
     secrets:

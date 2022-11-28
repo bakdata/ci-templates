@@ -5,8 +5,8 @@ inputs:
     description: "Path to the root directory of the kustomization"
     required: true
   timeout:
-    description: "Time out"
-    default: "60s"
+    description: "Time out(in seconds) for custom ressource definitions"
+    default: "60"
     required: false
 
 runs:
@@ -16,7 +16,7 @@ runs:
       shell: bash
       run: |
         kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -i kind=CustomResourceDefinition | kubectl apply -f -
-        kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -i kind=CustomResourceDefinition | kubectl wait --for condition=established --timeout=${{ inputs.timeout }} -f -
+        kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -i kind=CustomResourceDefinition | kubectl wait --for condition=established --timeout=${{ inputs.timeout }}s -f -
     - name: Deploy kustomized app
       shell: bash
       run: kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -x kind=CustomResourceDefinition | kubectl apply -f -

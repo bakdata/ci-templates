@@ -61,7 +61,7 @@ jobs:
           kubectl-version: ${{ inputs.kubectl-version }}
           helm-version: ${{ inputs.helm-version }}
 
-      - name: Deploy Kustomize Chart
+      - name: Destroy Kustomize Chart
         uses: bakdata/ci-templates/actions/kustomize-gke-destroy@feat/kustomize-template
         with:
           kustomization-path: ${{ inputs.kustomization-path }}
