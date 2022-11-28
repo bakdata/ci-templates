@@ -129,14 +129,14 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name               | Required | Default Value |  Type  | Description                                        |
-| ------------------ | :------: | :-----------: | :----: | -------------------------------------------------- |
-| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization    |
+| Name               | Required | Default Value |  Type  | Description                                         |
+| ------------------ | :------: | :-----------: | :----: | --------------------------------------------------- |
+| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization     |
 | timeout            |    ❌    |      60       | string | Time out(in seconds) for CustomResourceDefinitions |
-| python-version     |    ❌    |    "3.10"     | string | The python version                                 |
-| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | The gcloud-sdk version                             |
-| kubectl-version    |    ❌    |   "v1.23.0"   | string | The kubectl version                                |
-| helm-version       |    ❌    |   "v3.8.1"    | string | The Helm version                                   |
+| python-version     |    ❌    |    "3.10"     | string |  Python version                                  |
+| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | GCloud-SDK version                              |
+| kubectl-version    |    ❌    |   "v1.23.0"   | string | Kubectl version                                 |
+| helm-version       |    ❌    |   "v3.8.1"    | string | Helm version                                    |
 
 ### Secret Parameters
 
@@ -199,10 +199,10 @@ This workflow is built from multiple composite actions listed below:
 | Name               | Required | Default Value |  Type  | Description                                     |
 | ------------------ | :------: | :-----------: | :----: | ----------------------------------------------- |
 | kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization |
-| python-version     |    ❌    |    "3.10"     | string | The python version                              |
-| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | The gcloud-sdk version                          |
-| kubectl-version    |    ❌    |   "v1.23.0"   | string | The kubectl version                             |
-| helm-version       |    ❌    |   "v3.8.1"    | string | The Helm version                                |
+|  python-version     |    ❌    |    "3.10"     | string |  The Python version                              |
+| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | GCloud-SDK version                          |
+| kubectl-version    |    ❌    |   "v1.23.0"   | string | Kubectl version                             |
+| helm-version       |    ❌    |   "v3.8.1"    | string | Helm version                                |
 
 ### Secret Parameters
 
@@ -275,11 +275,11 @@ This workflow is built from multiple composite actions listed below:
 | Name              | Required |             Default Value             |  Type   | Description                                                                                                                       |
 | ----------------- | :------: | :-----------------------------------: | :-----: | --------------------------------------------------------------------------------------------------------------------------------- |
 | release-type      |    ✅    |                   -                   | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values |
-| ref               |    ❌    | The default branch of your repository | string  | The ref name to checkout the repository                                                                                           |
+| ref               |    ❌    | The default branch of your repository | string  | ref name to checkout the repository                                                                                           |
 | publish-to-test   |    ❌    |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                     |
-| python-version    |    ❌    |                "3.10"                 | string  | The python version for setting up poetry                                                                                          |
-| poetry-version    |    ❌    |               "1.1.12"                | string  | The poetry version to be installed                                                                                                |
-| working-directory |    ❌    |                 "./"                  | string  | The working directory of your Python package                                                                                      |
+| python-version    |    ❌    |                "3.10"                 | string  |  Python version for setting up poetry                                                                                          |
+| poetry-version    |    ❌    |               "1.1.12"                | string  | Poetry version to be installed                                                                                                |
+| working-directory |    ❌    |                 "./"                  | string  | Working directory of your Python package                                                                                      |
 
 ### Secret Parameters
 

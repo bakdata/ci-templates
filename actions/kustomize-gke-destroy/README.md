@@ -1,6 +1,6 @@
 # Kustomize-gke-deploy
 
-This action will destroy a Kustomize chart on a Google Kubernetes Engine cluster.
+This action will destroy a `kustomization.yaml` file on a Google Kubernetes Engine cluster.
 
 ## Input Parameters
 
