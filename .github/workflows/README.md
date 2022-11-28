@@ -116,7 +116,7 @@ jobs:
       github-token: "${{ secrets.GH_TOKEN }}"
 ```
 
-## Kustomize Release
+## Kustomize GKE Deploy
 
 This workflow will deploy to GKE using a Kustomize root directory.
 
