@@ -4,6 +4,7 @@ The following workflows can be found here:
 
 - [Helm Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-release)
 - [Kustomize Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-release)
+  [Kustomize Destroy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-destroy)
 - [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
 - [Java Gradle Docker](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-docker)
 - [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
@@ -123,10 +124,8 @@ This workflow will deploy to GKE using a Kustomize root directory.
 
 This workflow is built from multiple composite actions listed below:
 
-- [helm-lint](https://github.com/bakdata/ci-templates/tree/main/actions/helm-lint)
-- [bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/bump-version)
-- [helm-package](https://github.com/bakdata/ci-templates/tree/main/actions/helm-package)
-- [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
+- [helm-setup](https://github.com/bakdata/ci-templates/tree/main/actions/helm-gke-setup)
+- [kustomize-gke-deploy](https://github.com/bakdata/ci-templates/tree/main/actions/kustomize-gke-deploy)
 
 ### Input Parameters
 
@@ -145,10 +144,10 @@ The GKE cluster that will be used for the deployment is defined by these secrets
 
 | Name                | Required | Description                                    |
 | ------------------- | :------: | ---------------------------------------------- |
-| gke-service-account |    ✅    | The GitHub username for committing the changes |
-| gke-project         |    ✅    | The GitHub email for committing the changes    |
-| gke-region          |    ✅    | The GitHub token for committing the changes    |
-| gke-cluster         |    ✅    | The GitHub token for committing the changes    |
+| gke-service-account |    ✅    | GKE service account key for authentication |
+| gke-project         |    ✅    | GKE project id for authentication    |
+| gke-region          |    ✅    | GKE region for authentication    |
+| gke-cluster         |    ✅    | GKE cluster for authentication    |
 
 ### Calling the workflow
 
@@ -177,6 +176,71 @@ jobs:
       gcloud-sdk-version: "376.0.0" #optional
       kubectl-version: "v1.23.0" #optional
       helm-version: "v3.8.1"
+    secrets:
+      gke-service-account: ${{ secrets.GKE_DEV_SERVICE_ACCOUNT }}
+      gke-project: ${{ secrets.GKE_DEV_PROJECT }}
+      gke-region: ${{ secrets.GKE_DEV_REGION }}
+      gke-cluster: ${{ secrets.GKE_DEV_CLUSTER }}
+```
+
+## Kustomize Destroy
+
+This workflow will uninstall deployments using Kustomize.
+
+### Dependencies
+
+This workflow is built from multiple composite actions listed below:
+
+- [helm-setup](https://github.com/bakdata/ci-templates/tree/main/actions/helm-gke-setup)
+- [kustomize-gke-destroy](https://github.com/bakdata/ci-templates/tree/main/actions/kustomize-gke-destroy)
+
+### Input Parameters
+
+| Name               | Required | Default Value |  Type  | Description                                           |
+| ------------------ | :------: | :-----------: | :----: | ----------------------------------------------------- |
+| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization       |
+| python-version     |    ❌    |    "3.10"     | string | The python version                                    |
+| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | The gcloud-sdk version                                |
+| kubectl-version    |    ❌    |   "v1.23.0"   | string | The kubectl version                                   |
+| helm-version       |    ❌    |   "v3.8.1"    | string | The Helm version                                      |
+
+### Secret Parameters
+
+The GKE cluster that will be used for the deployment is defined by these secrets. Create those secrets so that the pipeline has the necessary access to the targeted cluster.
+
+| Name                | Required | Description                                    |
+| ------------------- | :------: | ---------------------------------------------- |
+| gke-service-account |    ✅    | GKE service account key for authentication |
+| gke-project         |    ✅    | GKE project id for authentication    |
+| gke-region          |    ✅    | GKE region for authentication    |
+| gke-cluster         |    ✅    | GKE cluster for authentication    |
+
+### Calling the workflow
+
+```yaml
+name: Call this reusable workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      kustomization-path:
+        description: "Path to the root directory of the kustomization"
+        default: "kustomization-path"
+        required: false
+      timeout:
+        description: "Time out(in seconds) for custom ressource definitions"
+        default: "60"
+        required: false
+
+jobs:
+  call-workflow-passing-data:
+    uses: bakdata/ci-templates/.github/workflows/kustomize-gke-destroy.yaml@main
+    with:
+      kustomization-path: ${{ inputs.kustomization-path }}
+      python-version: "3.10" #optional
+      gcloud-sdk-version: "376.0.0" #optional
+      kubectl-version: "v1.23.0" #optional
+      helm-version: "v3.8.1" #optional
     secrets:
       gke-service-account: ${{ secrets.GKE_DEV_SERVICE_ACCOUNT }}
       gke-project: ${{ secrets.GKE_DEV_PROJECT }}
