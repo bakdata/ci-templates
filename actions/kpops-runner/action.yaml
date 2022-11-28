@@ -27,19 +27,21 @@ runs:
     - name: Check out repository code
       uses: actions/checkout@v3
 
-    - run: pip install kpops==0.2.0.dev20221122085523 --extra-index-url https://test.pypi.org/simple/
-      name: Install Kpops
+    - name: Install Kpops
       shell: bash
+      run: pip install kpops==0.2.0.dev20221122085523 --extra-index-url https://test.pypi.org/simple/
+      
     
-    - run: |
+    - name: Dry-run ${{ inputs.pipeline }} pipeline
+      shell: bash
+      working-directory: ${{inputs.working-directory}}
+      run: |
          kpops generate ${{ inputs.pipeline }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
          kpops ${{inputs.mode}} ${{ inputs.pipeline }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
-      name: Dry-run ${{ inputs.pipeline }} pipeline
-      working-directory: ${{inputs.working-directory}}
-      shell: bash
 
-    - run: kpops ${{inputs.mode}} ${{ inputs.pipeline }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }} --execute
-      name: Process ${{ inputs.pipeline }} pipeline
+    - name: Process ${{ inputs.pipeline }} pipeline
+      shell: bash
       working-directory: ${{inputs.working-directory}}
       if: ${{inputs.execute == 'true'}}
-      shell: bash
+      run: kpops ${{inputs.mode}} ${{ inputs.pipeline }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }} --execute
+      
