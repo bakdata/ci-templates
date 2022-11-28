@@ -3,7 +3,7 @@
 The following workflows can be found here:
 
 - [Helm Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-release)
-- [Kustomize Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-release)
+- [Kustomize Release](https://github.com/bakdata/ci-templates/tree/feat/kustomize-template/.github/workflows#kustomize-release)
 - [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
 - [Java Gradle Docker](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-docker)
 - [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
