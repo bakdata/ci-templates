@@ -3,6 +3,7 @@
 The following workflows can be found here:
 
 - [Helm Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-release)
+- [Kustomize Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-release)
 - [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
 - [Java Gradle Docker](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-docker)
 - [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
@@ -112,6 +113,148 @@ jobs:
       github-email: "${{ secrets.GH_EMAIL }}"
       github-username: "${{ secrets.GH_USERNAME }}"
       github-token: "${{ secrets.GH_TOKEN }}"
+```
+
+## Kustomize Release
+
+This workflow will deploy to GKE using a Kustomize root directory.
+
+### Prerequisites
+
+Set up GitHub pages for your repository in Settings → Pages → Build and deployment source → GitHub Actions. A special `gh-pages` branch is not needed, since we will use GitHub actions to deploy a Pages artifact.
+
+Currently it is not possible to download a previously created Pages artifact as they quickly expire after deploying it. When releasing an update to a Helm chart, we want to keep all previous versions of the Helm chart available. Therefore, as a workaround, we download the index.yaml file from Pages, parse all referenced releases, and download these .tgz packages from Pages as well. Then we package the new version and update the index. Afterwards, a new Pages artifact is created from these files and finally deployed.
+
+### Dependencies
+
+This workflow is built from multiple composite actions listed below:
+
+- [helm-lint](https://github.com/bakdata/ci-templates/tree/main/actions/helm-lint)
+- [bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/bump-version)
+- [helm-package](https://github.com/bakdata/ci-templates/tree/main/actions/helm-package)
+- [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
+
+### Input Parameters
+
+| Name             | Required |             Default Value             |  Type  | Description                                                                                                                                |
+| ---------------- | :------: | :-----------------------------------: | :----: | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| kustomization-path    |    ✅    |       -       | string | Path to the root directory of the kustomization                                                           |
+| timeout  |    ❌    |       60       | string | Time out(in seconds) for custom ressource definitions                                                            |
+| python-version              |    ❌    | The default branch of your repository | string | The required python version                                                                                                    |
+| gcloud-sdk-version |    ❌    |      ".github/lint-config.yaml"       | string | The required gcloud-sdk version |
+| kubectl-version     |    ❌    |               "v3.10.1"               | string | The required kubectl version                                                                                                                           |
+| helm-version     |    ❌    |               "v3.10.1"               | string | The Helm version                                                                                                                           |
+### Secret Parameters
+
+The GKE cluster that will be used for the deployment is defined by these secrets. Create those secrets so that the pipeline has the necessary access to the targeted cluster.
+
+| Name            | Required | Description                                    |
+| --------------- | :------: | ---------------------------------------------- |
+| gke-service-account |    ✅    | The GitHub username for committing the changes |
+| gke-project    |    ✅    | The GitHub email for committing the changes    |
+| gke-region    |    ✅    | The GitHub token for committing the changes    |
+| gke-cluster    |    ✅    | The GitHub token for committing the changes    |
+
+
+### Calling the workflow
+
+```yaml
+name: Call this reusable workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: "Path to the root directory of the kustomization"
+        default: "kustomization-path"
+        required: false
+      timeout:
+        description: "Time out(in seconds) for custom ressource definitions"
+        default: "60"
+        required: false
+
+jobs:
+  call-workflow-passing-data:
+    uses: bakdata/ci-templates/.github/workflows/kustomize-gke-deploy.yaml@main
+    with:
+      kustomization-path: ${{ inputs.kustomization-path }}
+      timeout: ${{ inputs.timeout }}
+    secrets:
+      gke-service-account: ${{ secrets.GKE_DEV_SERVICE_ACCOUNT }}
+      gke-project: ${{ secrets.GKE_DEV_PROJECT }}
+      gke-region: ${{ secrets.GKE_DEV_REGION }}
+      gke-cluster: ${{ secrets.GKE_DEV_CLUSTER }}
+```
+
+## Kustomize Release
+
+This workflow will deploy to GKE using a Kustomize root directory.
+
+### Prerequisites
+
+Set up GitHub pages for your repository in Settings → Pages → Build and deployment source → GitHub Actions. A special `gh-pages` branch is not needed, since we will use GitHub actions to deploy a Pages artifact.
+
+Currently it is not possible to download a previously created Pages artifact as they quickly expire after deploying it. When releasing an update to a Helm chart, we want to keep all previous versions of the Helm chart available. Therefore, as a workaround, we download the index.yaml file from Pages, parse all referenced releases, and download these .tgz packages from Pages as well. Then we package the new version and update the index. Afterwards, a new Pages artifact is created from these files and finally deployed.
+
+### Dependencies
+
+This workflow is built from multiple composite actions listed below:
+
+- [helm-lint](https://github.com/bakdata/ci-templates/tree/main/actions/helm-lint)
+- [bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/bump-version)
+- [helm-package](https://github.com/bakdata/ci-templates/tree/main/actions/helm-package)
+- [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
+
+### Input Parameters
+
+| Name             | Required |             Default Value             |  Type  | Description                                                                                                                                |
+| ---------------- | :------: | :-----------------------------------: | :----: | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| kustomization-path    |    ✅    |       -       | string | Path to the root directory of the kustomization                                                           |
+| timeout  |    ❌    |       60       | string | Time out(in seconds) for custom ressource definitions                                                            |
+| python-version              |    ❌    | The default branch of your repository | string | The required python version                                                                                                    |
+| gcloud-sdk-version |    ❌    |      ".github/lint-config.yaml"       | string | The required gcloud-sdk version |
+| kubectl-version     |    ❌    |               "v3.10.1"               | string | The required kubectl version                                                                                                                           |
+| helm-version     |    ❌    |               "v3.10.1"               | string | The Helm version                                                                                                                           |
+### Secret Parameters
+
+The GKE cluster that will be used for the deployment is defined by these secrets. Create those secrets so that the pipeline has the necessary access to the targeted cluster.
+
+| Name            | Required | Description                                    |
+| --------------- | :------: | ---------------------------------------------- |
+| gke-service-account |    ✅    | The GitHub username for committing the changes |
+| gke-project    |    ✅    | The GitHub email for committing the changes    |
+| gke-region    |    ✅    | The GitHub token for committing the changes    |
+| gke-cluster    |    ✅    | The GitHub token for committing the changes    |
+
+
+### Calling the workflow
+
+```yaml
+name: Call this reusable workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: "Path to the root directory of the kustomization"
+        default: "kustomization-path"
+        required: false
+      timeout:
+        description: "Time out(in seconds) for custom ressource definitions"
+        default: "60"
+        required: false
+
+jobs:
+  call-workflow-passing-data:
+    uses: bakdata/ci-templates/.github/workflows/kustomize-gke-deploy.yaml@main
+    with:
+      kustomization-path: ${{ inputs.kustomization-path }}
+      timeout: ${{ inputs.timeout }}
+    secrets:
+      gke-service-account: ${{ secrets.GKE_DEV_SERVICE_ACCOUNT }}
+      gke-project: ${{ secrets.GKE_DEV_PROJECT }}
+      gke-region: ${{ secrets.GKE_DEV_REGION }}
+      gke-cluster: ${{ secrets.GKE_DEV_CLUSTER }}
 ```
 
 ## Python Poetry Release

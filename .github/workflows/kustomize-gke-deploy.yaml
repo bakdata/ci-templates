@@ -13,6 +13,26 @@ on:
         default: "60"
         required: false
         type: string
+      python-version:
+        description: "Python version"
+        default: "3.10"
+        required: false
+        type: string
+      gcloud-sdk-version:
+        description: "GCloud SDK version"
+        default: "376.0.0"
+        required: false
+        type: string
+      kubectl-version:
+        description: "Kubectl version"
+        default: "v1.23.0"
+        required: false
+        type: string
+      helm-version:
+        description: "Helm version"
+        default: "v3.8.1"
+        required: false
+        type: string
     secrets:
       gke-service-account:
         description: "GKE service account key for authentication"
@@ -42,6 +62,10 @@ jobs:
           gke-project: ${{ secrets.gke-project }}
           gke-region: ${{ secrets.gke-region }}
           gke-cluster: ${{ secrets.gke-cluster }}
+          python-version: ${{ inputs.python-version }}
+          gcloud-sdk-version: ${{ inputs.gcloud-sdk-version }}
+          kubectl-version: ${{ inputs.kubectl-version }}
+          helm-version: ${{ inputs.helm-version }}
 
       - name: Deploy crds and app
         uses: bakdata/ci-templates/actions/kustomize-gke-deploy@feat/kustomize-template
