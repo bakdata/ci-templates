@@ -46,5 +46,5 @@ runs:
       shell: bash
       working-directory: ${{inputs.working-directory}}
       if: ${{inputs.execute == 'true'}}
-      run: kpops ${{inputs.mode}} ${{ inputs.pipeline }} --defaults ${{ inputs.defaults }} ${{ steps.condval.outputs.value }} --config ${{ inputs.config }} --execute
+      run: kpops ${{inputs.mode}} ${{ inputs.pipeline }} ${{inputs.components}} --defaults ${{ inputs.defaults }} ${{ steps.condval.outputs.value }} --config ${{ inputs.config }} --execute
       
