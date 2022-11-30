@@ -1,5 +1,5 @@
 name: Kustomize GKE Destroy
-# Reusable workflow for destroying a Kustomize chart on GKE Kubernetes
+# Reusable workflow for destroying resources with Kustomize on GKE Kubernetes
 
 on:
   workflow_call:
