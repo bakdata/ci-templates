@@ -1,5 +1,5 @@
 name: Kustomize GKE Deploy
-# Reusable workflow for deploying a Kustomize chart on GKE Kubernetes
+# Reusable workflow for deploying resources with Kustomize on GKE Kubernetes
 
 on:
   workflow_call:
