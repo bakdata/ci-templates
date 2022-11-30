@@ -32,7 +32,7 @@ runs:
 
     - name: Install Kpops
       shell: bash
-      run: pip install kpops==0.2.0.dev20221115131328 --extra-index-url https://test.pypi.org/simple/
+      run: pip install kpops==0.2.0.dev20221130090812 --extra-index-url https://test.pypi.org/simple/
       
     
     - name: Dry-run ${{ inputs.pipeline }} pipeline
