@@ -30,13 +30,6 @@ runs:
     - name: Check out repository code
       uses: actions/checkout@v3
 
-    - uses: haya14busa/action-cond@v1
-      id: condval
-      with:
-        cond: ${{ inputs.components != '' }}
-        if_true: "--components ${{inputs.components}}"
-        if_false: ""
-
     - name: Install Kpops
       shell: bash
       run: pip install kpops==0.2.0.dev20221122085523 --extra-index-url https://test.pypi.org/simple/
@@ -46,8 +39,8 @@ runs:
       shell: bash
       working-directory: ${{inputs.working-directory}}
       run: |
-         kpops generate ${{ inputs.pipeline }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
-         kpops ${{inputs.mode}} ${{ inputs.pipeline }} ${{ steps.condval.outputs.value }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
+         kpops generate ${{ inputs.pipeline }} ${{inputs.components}} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
+         kpops ${{inputs.mode}} ${{ inputs.pipeline }} ${{inputs.components}}  --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
 
     - name: Process ${{ inputs.pipeline }} pipeline
       shell: bash
