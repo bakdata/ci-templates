@@ -12,8 +12,8 @@ This action will destroy a `kustomization.yaml` file on a Google Kubernetes Engi
 
 ```yaml
 steps:
-  - name: Destroy Kustomize Chart
-        uses: bakdata/ci-templates/actions/kustomize-gke-destroy@main
-        with:
-          kustomization-path: "my-kustomization-path" #directory containing my kustomization file
+  - name: Destroy Kustomize
+    uses: bakdata/ci-templates/actions/kustomize-gke-destroy@main
+    with:
+      kustomization-path: "my-kustomization-path" #directory containing my kustomization file
 ```
