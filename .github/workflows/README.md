@@ -3,6 +3,8 @@
 The following workflows can be found here:
 
 - [Helm Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-release)
+- [Kustomize GKE Deploy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-deploy)
+- [Kustomize GKE Destroy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-destroy)
 - [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
 - [Java Gradle Docker](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-docker)
 - [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
@@ -114,6 +116,138 @@ jobs:
       github-token: "${{ secrets.GH_TOKEN }}"
 ```
 
+## Kustomize GKE Deploy
+
+This workflow will deploy to GKE using a Kustomize root directory.
+
+### Dependencies
+
+This workflow is built from multiple composite actions listed below:
+
+- [helm-setup](https://github.com/bakdata/ci-templates/tree/main/actions/helm-gke-setup)
+- [kustomize-gke-deploy](https://github.com/bakdata/ci-templates/tree/main/actions/kustomize-gke-deploy)
+
+### Input Parameters
+
+| Name               | Required | Default Value |  Type  | Description                                         |
+| ------------------ | :------: | :-----------: | :----: | --------------------------------------------------- |
+| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization     |
+| timeout            |    ❌    |      60       | string | Time out(in seconds) for CustomResourceDefinitions |
+| python-version     |    ❌    |    "3.10"     | string |  Python version                                  |
+| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | GCloud-SDK version                              |
+| kubectl-version    |    ❌    |   "v1.23.0"   | string | Kubectl version                                 |
+| helm-version       |    ❌    |   "v3.8.1"    | string | Helm version                                    |
+
+### Secret Parameters
+
+The GKE cluster that will be used for the deployment is defined by these secrets. Create those secrets so that the pipeline has the necessary access to the targeted cluster.
+
+| Name                | Required | Description                                |
+| ------------------- | :------: | ------------------------------------------ |
+| gke-service-account |    ✅    | GKE service account key for authentication |
+| gke-project         |    ✅    | GKE project id for authentication          |
+| gke-region          |    ✅    | GKE region for authentication              |
+| gke-cluster         |    ✅    | GKE cluster for authentication             |
+
+### Calling the workflow
+
+```yaml
+name: Call this reusable workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      kustomization-path:
+        description: "Path to the root directory of the kustomization"
+        default: "kustomization-path"
+        required: false
+      timeout:
+        description: "Time out(in seconds) for CustomResourceDefinitions"
+        default: "60"
+        required: false
+
+jobs:
+  call-workflow-passing-data:
+    uses: bakdata/ci-templates/.github/workflows/kustomize-gke-deploy.yaml@main
+    with:
+      kustomization-path: ${{ inputs.kustomization-path }}
+      timeout: ${{ inputs.timeout }} #optional
+      python-version: "3.10" #optional
+      gcloud-sdk-version: "376.0.0" #optional
+      kubectl-version: "v1.23.0" #optional
+      helm-version: "v3.8.1"
+    secrets:
+      gke-service-account: ${{ secrets.GKE_DEV_SERVICE_ACCOUNT }}
+      gke-project: ${{ secrets.GKE_DEV_PROJECT }}
+      gke-region: ${{ secrets.GKE_DEV_REGION }}
+      gke-cluster: ${{ secrets.GKE_DEV_CLUSTER }}
+```
+
+## Kustomize GKE Destroy
+
+This workflow will uninstall deployments using Kustomize.
+
+### Dependencies
+
+This workflow is built from multiple composite actions listed below:
+
+- [helm-setup](https://github.com/bakdata/ci-templates/tree/main/actions/helm-gke-setup)
+- [kustomize-gke-destroy](https://github.com/bakdata/ci-templates/tree/main/actions/kustomize-gke-destroy)
+
+### Input Parameters
+
+| Name               | Required | Default Value |  Type  | Description                                     |
+| ------------------ | :------: | :-----------: | :----: | ----------------------------------------------- |
+| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization |
+|  python-version     |    ❌    |    "3.10"     | string |  The Python version                              |
+| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | GCloud-SDK version                          |
+| kubectl-version    |    ❌    |   "v1.23.0"   | string | Kubectl version                             |
+| helm-version       |    ❌    |   "v3.8.1"    | string | Helm version                                |
+
+### Secret Parameters
+
+The GKE cluster that will be used for the deployment is defined by these secrets. Create those secrets so that the pipeline has the necessary access to the targeted cluster.
+
+| Name                | Required | Description                                |
+| ------------------- | :------: | ------------------------------------------ |
+| gke-service-account |    ✅    | GKE service account key for authentication |
+| gke-project         |    ✅    | GKE project id for authentication          |
+| gke-region          |    ✅    | GKE region for authentication              |
+| gke-cluster         |    ✅    | GKE cluster for authentication             |
+
+### Calling the workflow
+
+```yaml
+name: Call this reusable workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      kustomization-path:
+        description: "Path to the root directory of the kustomization"
+        default: "kustomization-path"
+        required: false
+      timeout:
+        description: "Time out(in seconds) for CustomResourceDefinitions"
+        default: "60"
+        required: false
+
+jobs:
+  call-workflow-passing-data:
+    uses: bakdata/ci-templates/.github/workflows/kustomize-gke-destroy.yaml@main
+    with:
+      kustomization-path: ${{ inputs.kustomization-path }}
+      python-version: "3.10" #optional
+      gcloud-sdk-version: "376.0.0" #optional
+      kubectl-version: "v1.23.0" #optional
+      helm-version: "v3.8.1" #optional
+    secrets:
+      gke-service-account: ${{ secrets.GKE_DEV_SERVICE_ACCOUNT }}
+      gke-project: ${{ secrets.GKE_DEV_PROJECT }}
+      gke-region: ${{ secrets.GKE_DEV_REGION }}
+      gke-cluster: ${{ secrets.GKE_DEV_CLUSTER }}
+```
+
 ## Python Poetry Release
 
 This workflow will bump the version of your python project and publish the built project to either TestPyPI or PyPI. In
@@ -141,11 +275,11 @@ This workflow is built from multiple composite actions listed below:
 | Name              | Required |             Default Value             |  Type   | Description                                                                                                                       |
 | ----------------- | :------: | :-----------------------------------: | :-----: | --------------------------------------------------------------------------------------------------------------------------------- |
 | release-type      |    ✅    |                   -                   | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values |
-| ref               |    ❌    | The default branch of your repository | string  | The ref name to checkout the repository                                                                                           |
+| ref               |    ❌    | The default branch of your repository | string  | ref name to checkout the repository                                                                                           |
 | publish-to-test   |    ❌    |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                     |
-| python-version    |    ❌    |                "3.10"                 | string  | The python version for setting up poetry                                                                                          |
-| poetry-version    |    ❌    |               "1.1.12"                | string  | The poetry version to be installed                                                                                                |
-| working-directory |    ❌    |                 "./"                  | string  | The working directory of your Python package                                                                                      |
+| python-version    |    ❌    |                "3.10"                 | string  |  Python version for setting up poetry                                                                                          |
+| poetry-version    |    ❌    |               "1.1.12"                | string  | Poetry version to be installed                                                                                                |
+| working-directory |    ❌    |                 "./"                  | string  | Working directory of your Python package                                                                                      |
 
 ### Secret Parameters
 

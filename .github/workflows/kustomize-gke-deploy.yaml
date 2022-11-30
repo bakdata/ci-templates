@@ -1,0 +1,73 @@
+name: Kustomize GKE Deploy
+# Reusable workflow for deploying resources with Kustomize on GKE Kubernetes
+
+on:
+  workflow_call:
+    inputs:
+      kustomization-path:
+        description: "Path to the root directory of the kustomization"
+        required: true
+        type: string
+      timeout:
+        description: "Time out(in seconds) for CustomResourceDefinitions"
+        default: "60"
+        required: false
+        type: string
+      python-version:
+        description: "Python version"
+        default: "3.10"
+        required: false
+        type: string
+      gcloud-sdk-version:
+        description: "GCloud SDK version"
+        default: "376.0.0"
+        required: false
+        type: string
+      kubectl-version:
+        description: "Kubectl version"
+        default: "v1.23.0"
+        required: false
+        type: string
+      helm-version:
+        description: "Helm version"
+        default: "v3.8.1"
+        required: false
+        type: string
+    secrets:
+      gke-service-account:
+        description: "GKE service account key for authentication"
+        required: true
+      gke-project:
+        description: "GKE project id for authentication"
+        required: true
+      gke-region:
+        description: "GKE region for authentication"
+        required: true
+      gke-cluster:
+        description: "GKE cluster for authentication"
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup environment
+        uses: bakdata/ci-templates/actions/helm-gke-setup@v1.8.0
+        with:
+          gke-service-account: ${{ secrets.gke-service-account }}
+          gke-project: ${{ secrets.gke-project }}
+          gke-region: ${{ secrets.gke-region }}
+          gke-cluster: ${{ secrets.gke-cluster }}
+          python-version: ${{ inputs.python-version }}
+          gcloud-sdk-version: ${{ inputs.gcloud-sdk-version }}
+          kubectl-version: ${{ inputs.kubectl-version }}
+          helm-version: ${{ inputs.helm-version }}
+
+      - name: Deploy crds and app
+        uses: bakdata/ci-templates/actions/kustomize-gke-deploy@v1.8.0
+        with:
+          kustomization-path: ${{ inputs.kustomization-path }}
+          timeout: ${{ inputs.timeout }}
