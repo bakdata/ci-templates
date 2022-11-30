@@ -20,12 +20,22 @@ inputs:
   config:
     description: "Config.yaml file path"
     default: "config.yaml"
+  components:
+    description: "Components package path"
+    required: false
 
 runs:
   using: "composite"
   steps:
     - name: Check out repository code
       uses: actions/checkout@v3
+
+    - uses: haya14busa/action-cond@v1
+      id: condval
+      with:
+        cond: ${{ inputs.components != '' }}
+        if_true: "--components ${{inputs.components}}"
+        if_false: ""
 
     - name: Install Kpops
       shell: bash
@@ -37,11 +47,11 @@ runs:
       working-directory: ${{inputs.working-directory}}
       run: |
          kpops generate ${{ inputs.pipeline }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
-         kpops ${{inputs.mode}} ${{ inputs.pipeline }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
+         kpops ${{inputs.mode}} ${{ inputs.pipeline }} ${{ steps.condval.outputs.value }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
 
     - name: Process ${{ inputs.pipeline }} pipeline
       shell: bash
       working-directory: ${{inputs.working-directory}}
       if: ${{inputs.execute == 'true'}}
-      run: kpops ${{inputs.mode}} ${{ inputs.pipeline }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }} --execute
+      run: kpops ${{inputs.mode}} ${{ inputs.pipeline }} --defaults ${{ inputs.defaults }} ${{ steps.condval.outputs.value }} --config ${{ inputs.config }} --execute
       
