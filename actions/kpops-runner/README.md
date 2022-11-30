@@ -4,7 +4,7 @@ This action runs Kpops with the given config.
 
 ## Input Parameters
 
-<<<<<<< HEAD
+
 | Name              | Required | Default Value |   Type   | Description                                                                                                   |
 |-------------------|:--------:|:-------------:|:--------:|---------------------------------------------------------------------------------------------------------------|
 | mode              |    ✅     |       -       |  string  | command mode used by Kpops (deploy, destroy, reset, clean)) for possible values                               |
