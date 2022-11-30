@@ -1,6 +1,6 @@
 # Kustomize-gke-deploy
 
-This action will deploy a Kustomize chart on a Google Kubernetes Engine cluster.
+This action will deploy resources with Kustomize on a Google Kubernetes Engine cluster.
 
 ## Prerequisites
 
