@@ -4,6 +4,7 @@ This action runs Kpops with the given config.
 
 ## Input Parameters
 
+<<<<<<< HEAD
 | Name              | Required | Default Value |   Type   | Description                                                                                                   |
 |-------------------|:--------:|:-------------:|:--------:|---------------------------------------------------------------------------------------------------------------|
 | mode              |    ✅     |       -       |  string  | command mode used by Kpops (deploy, destroy, reset, clean)) for possible values                               |
@@ -12,7 +13,6 @@ This action runs Kpops with the given config.
 | execute           |    ❌     |    	false     |  string  | Execute Kpops command (this applies the infrastructure changes that were executed inside the dry-run command) |
 | defaults          |    ❌     |   defaults    |  string  | defaults folder path 														                                                                           |
 | config            |    ❌     |  config.yaml  | string 	 | default config.yaml file path 			                                                                             |
-
 
 ## Usage
 
