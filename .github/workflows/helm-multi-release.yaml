@@ -117,25 +117,25 @@ jobs:
         uses: bakdata/ci-templates/actions/bump-version@v1.5.2
         with:
           release-type: ${{ inputs.release-type }}
-          working-directory: ${{ env.charts-subdir }}
+          working-directory: ${{ env.root-dir }}/${{ env.charts-subdir }}
 
       - name: Download previous Helm index
         run: curl -O -L -f ${{ inputs.page-url }}/index.yaml
         if: ${{ inputs.skip-download == 'false' }}
         shell: bash
-        working-directory: ${{ env.charts-subdir }}
+        working-directory: ${{ env.root-dir }}/${{ env.charts-subdir }}
 
       - name: Find previous package versions
         id: packages
         uses: mikefarah/yq@v4.30.5
         if: ${{ inputs.skip-download == 'false' }}
         with:
-          cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ env.charts-subdir }}/index.yaml
+          cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ env.root-dir }}/${{ env.charts-subdir }}/index.yaml
 
       - name: Create Helm package & update index
         uses: bakdata/ci-templates/actions/helm-package@v1.6.0
         with:
-          charts-dir: ${{ env.charts-subdir }}
+          charts-dir: ${{ env.root-dir }}/${{ env.charts-subdir }}
 
       - name: Commit and push Chart.yaml & .bumpversion.cfg file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
@@ -162,7 +162,7 @@ jobs:
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}/${{ env.charts-subdir }}
 
-      - name: Prepare move indexe.yaml from sub-dirs
+      - name: Move index.yaml from sub-dirs
         run: |
           mkdir ${{ env.index-dir }}
           mkdir ${{ env.index-dir }}/${{ env.charts-subdir }} 
@@ -175,6 +175,7 @@ jobs:
         with:
           name: artifat-${{ matrix.subdir }}
           path: ${{ env.artifact-dir }}/${{ env.charts-subdir }}
+
 
       - name: Upload index.yaml from tmp
         uses: actions/upload-artifact@v3.1.1
