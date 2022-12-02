@@ -1,7 +1,7 @@
 name: Reusable workflow for packaging and publishing Helm charts having multiple subchart on GitHub pages
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       page-url:
         description: "URL to the GitHub pages website of the repository."
