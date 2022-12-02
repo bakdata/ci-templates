@@ -267,7 +267,7 @@ jobs:
 
   helm-release:
     runs-on: ubuntu-22.04
-    needs: prepare-artifacts
+    needs: [prepare-artifacts-start-run,prepare-artifacts-not-start-run]
     env:
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
