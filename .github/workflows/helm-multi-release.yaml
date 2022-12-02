@@ -43,7 +43,7 @@ on:
       subdirs:
         description: "List of subdir to consider during the start run"
         required: true
-        type: string # sub1,sub2,sub3
+        type: string # "['subdir1', 'subdir2', 'subdir3']"
       index-dir:
         description: "Directory to temporaly store the index.yaml files"
         required: false
@@ -87,23 +87,14 @@ jobs:
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
 
-  setup:
-    runs-on: ubuntu-latest
-    outputs:
-      subdirs: ${{ steps.vars.subdirs.project_list }}
-    steps:
-      - name: Create an array of projects
-        id: vars
-        run: echo "::set-output name=project_list::$(jq 'split(",")' -Rc <(echo '${{ inputs.projects }}'))"
-        
   prepare-artifacts-start-run:
     if: ${{ inputs.start-run == 'true' }}
     strategy:
       matrix:
-        subdir: ${{ fromJson(needs.setup.outputs.subdirs) }}
+        subdir: ${{ fromJson(inputs.subdirs) }}
 
     runs-on: ubuntu-22.04
-    needs: [helm-lint, setup]
+    needs: [helm-lint]
     env:
       charts-subdir: "${{ matrix.subdir }}"
       root-dir: ${{ inputs.charts-dir }}
