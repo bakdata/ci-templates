@@ -187,7 +187,7 @@ jobs:
   prepare-artifacts-not-start-run:
     if: ${{ inputs.start-run == 'false' }}
     runs-on: ubuntu-22.04
-    needs: helm-lint
+    # needs: helm-lint
     env:
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
