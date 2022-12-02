@@ -92,6 +92,7 @@ jobs:
     strategy:
       matrix:
         subdir: ${{ fromJson(inputs.subdirs) }}
+      max-parallel: 1
 
     runs-on: ubuntu-22.04
     needs: [helm-lint]
@@ -237,7 +238,7 @@ jobs:
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
 
-      - name: Prepare artsifacts
+      - name: Prepare artifacts
         run: |
           mkdir ${{ env.artifact-dir }}
           cp index.yaml ${{ env.artifact-dir }}/
