@@ -78,14 +78,14 @@ on:
 
 
 jobs:
-  helm-lint:
-    runs-on: ubuntu-22.04
+  # helm-lint:
+  #   runs-on: ubuntu-22.04
 
-    steps:
-      - name: Lint Helm chart
-        uses: bakdata/ci-templates/actions/helm-lint@v1.8.0
-        with:
-          lint-config-path: "${{ inputs.lint-config-path }}"
+  #   steps:
+  #     - name: Lint Helm chart
+  #       uses: bakdata/ci-templates/actions/helm-lint@v1.8.0
+  #       with:
+  #         lint-config-path: "${{ inputs.lint-config-path }}"
 
   prepare-artifacts-start-run:
     if: ${{ inputs.start-run == 'true' }}
@@ -94,7 +94,7 @@ jobs:
         subdir: ${{ fromJson(inputs.subdirs) }}
 
     runs-on: ubuntu-22.04
-    needs: [helm-lint]
+    # needs: [helm-lint]
     env:
       charts-subdir: "${{ matrix.subdir }}"
       root-dir: ${{ inputs.charts-dir }}
