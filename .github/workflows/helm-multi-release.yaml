@@ -1,0 +1,318 @@
+name: Reusable workflow for packaging and publishing Helm charts having multiple subchart on GitHub pages
+
+on:
+  workflow_dispatch:
+    inputs:
+      page-url:
+        description: "URL to the GitHub pages website of the repository."
+        required: true
+        type: string
+      release-type:
+        description: "Scope of the release (major, minor or patch)."
+        required: true
+        type: string
+      ref:
+        description: "The ref name to checkout the repository."
+        required: false
+        default: ${{ github.event.repository.default_branch }}
+        type: string
+      lint-config-path:
+        description: "The path to the lint configuration file (See https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml)."
+        required: false
+        default: ".github/lint-config.yaml"
+        type: string
+      helm-version:
+        description: "The Helm version."
+        required: false
+        default: "v3.10.1"
+        type: string
+      charts-dir:
+        description: "The directory containing the Helm chart and `.bumpversion.cfg` file."
+        required: true
+        default: "."
+        type: string
+      skip-download:
+        description: "Skip downloading index.yaml and previous Chart versions from GitHub pages. (To be used during setup of this workflow)"
+        required: false
+        default: "false"
+        type: string
+      start-run:
+        description: "Describes if thats the first time the workflow will be run. because if that is the first time then there are multiple subdir with one index.yaml each"
+        required: true
+        type: string
+      subdirs:
+        description: "List of subdir to consider during the start run"
+        required: true
+        type: string # sub1,sub2,sub3
+      index-dir:
+        description: "Directory to temporaly store the index.yaml files"
+        required: false
+        default: "indexes"
+        type: string
+
+      artifact-dir:
+        description: "Directory inside `charts-dir` for preparation of the GitHub pages artifact."
+        required: false
+        default: "artifact"
+        type: string
+
+    secrets:
+      github-username:
+        description: "The GitHub username for committing the changes."
+        required: true
+      github-email:
+        description: "The GitHub email for committing the changes."
+        required: true
+      github-token:
+        description: "The GitHub token for committing the changes."
+        required: true
+
+    # Map the workflow outputs to job outputs
+    outputs:
+      release-tag:
+        description: "The release tag."
+        value: ${{ jobs.helm-release.outputs.release-tag }}
+      old-tag:
+        description: "The old tag."
+        value: ${{ jobs.helm-release.outputs.old-tag }}
+
+
+jobs:
+  helm-lint:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Lint Helm chart
+        uses: bakdata/ci-templates/actions/helm-lint@v1.8.0
+        with:
+          lint-config-path: "${{ inputs.lint-config-path }}"
+
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      subdirs: ${{ steps.vars.subdirs.project_list }}
+    steps:
+      - name: Create an array of projects
+        id: vars
+        run: echo "::set-output name=project_list::$(jq 'split(",")' -Rc <(echo '${{ inputs.projects }}'))"
+        
+  prepare-artifacts-start-run:
+    if: ${{ inputs.start-run == 'true' }}
+    strategy:
+      matrix:
+        subdir: ${{ fromJson(needs.setup.outputs.subdirs) }}
+
+    runs-on: ubuntu-22.04
+    needs: [helm-lint, setup]
+    env:
+      charts-subdir: "${{ matrix.subdir }}"
+      root-dir: ${{ inputs.charts-dir }}
+      artifact-dir: "${{ inputs.artifact-dir }}"
+      index-dir: "${{ inputs.index-dir }}"
+    # Map the job outputs to step outputs
+    outputs:
+      release-tag: ${{ steps.release-tag.outputs.release-tag }}
+      old-tag: ${{ steps.release-tag.outputs.old-tag }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false # required for pushing to protected branch later
+
+      - name: Bump version
+        id: release-tag
+        uses: bakdata/ci-templates/actions/bump-version@v1.5.2
+        with:
+          release-type: ${{ inputs.release-type }}
+          working-directory: ${{ env.charts-subdir }}
+
+      - name: Download previous Helm index
+        run: curl -O -L -f ${{ inputs.page-url }}/index.yaml
+        if: ${{ inputs.skip-download == 'false' }}
+        shell: bash
+        working-directory: ${{ env.charts-subdir }}
+
+      - name: Find previous package versions
+        id: packages
+        uses: mikefarah/yq@v4.30.5
+        if: ${{ inputs.skip-download == 'false' }}
+        with:
+          cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ env.charts-subdir }}/index.yaml
+
+      - name: Create Helm package & update index
+        uses: bakdata/ci-templates/actions/helm-package@v1.6.0
+        with:
+          charts-dir: ${{ env.charts-subdir }}
+
+      - name: Commit and push Chart.yaml & .bumpversion.cfg file
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        with:
+          ref: ${{ inputs.ref }}
+          commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
+
+      - name: Prepare artsifacts
+        run: |
+          mkdir ${{ env.artifact-dir }}
+          mkdir ${{ env.artifact-dir }}/${{ env.charts-subdir }} 
+          mv ${{ env.charts-subdir }}/*.tgz ${{ env.artifact-dir }}/${{ env.charts-subdir }}
+
+          cp ${{ env.charts-subdir }}/index.yaml ${{ env.artifact-dir }}/${{ env.charts-subdir }}
+        shell: bash
+        working-directory: ${{ env.root-dir }}
+      
+      - name: Download packages
+        run: curl -O -L -f "${{ inputs.page-url }}/{${{ steps.packages.outputs.result }}}"
+        if: ${{ inputs.skip-download == 'false' }}
+        shell: bash
+        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}/${{ env.charts-subdir }}
+
+      - name: Prepare move indexe.yaml from sub-dirs
+        run: |
+          mkdir ${{ env.index-dir }}
+          mkdir ${{ env.index-dir }}/${{ env.charts-subdir }} 
+          mv ${{ env.artifact-dir }}/${{ env.charts-subdir }}/index.yaml ${{ env.index-dir }}/${{ env.charts-subdir }}
+        shell: bash
+        working-directory: ${{ env.root-dir }}
+
+      - name: Upload artifacts to tmp
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: artifat-${{ matrix.subdir }}
+          path: ${{ env.artifact-dir }}/${{ env.charts-subdir }}
+
+      - name: Upload index.yaml from tmp
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: index-${{ matrix.subdir }}
+          path: ${{ env.index-dir }}/${{ env.charts-subdir }}
+  
+
+  prepare-artifacts-not-start-run:
+    if: ${{ inputs.start-run == 'false' }}
+    runs-on: ubuntu-22.04
+    needs: helm-lint
+    env:
+      root-dir: ${{ inputs.charts-dir }}
+      artifact-dir: "${{ inputs.artifact-dir }}"
+    # Map the job outputs to step outputs
+    outputs:
+      release-tag: ${{ steps.release-tag.outputs.release-tag }}
+      old-tag: ${{ steps.release-tag.outputs.old-tag }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false # required for pushing to protected branch later
+
+      - name: Bump version
+        id: release-tag
+        uses: bakdata/ci-templates/actions/bump-version@v1.5.2
+        with:
+          release-type: ${{ inputs.release-type }}
+          working-directory: ${{ env.root-dir }}
+
+      - name: Download previous Helm index
+        run: curl -O -L -f ${{ inputs.page-url }}/index.yaml
+        if: ${{ inputs.skip-download == 'false' }}
+        shell: bash
+        working-directory: ${{ env.root-dir }}
+
+      - name: Find previous package versions
+        id: packages
+        uses: mikefarah/yq@v4.30.5
+        if: ${{ inputs.skip-download == 'false' }}
+        with:
+          cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ env.root-dir }}/index.yaml
+
+      - name: Create Helm package & update index
+        uses: bakdata/ci-templates/actions/helm-package@v1.6.0
+        with:
+          charts-dir: ${{ env.root-dir }}
+
+      - name: Commit and push Chart.yaml & .bumpversion.cfg file
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        with:
+          ref: ${{ inputs.ref }}
+          commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
+
+      - name: Prepare artsifacts
+        run: |
+          mkdir ${{ env.artifact-dir }}
+          cp index.yaml ${{ env.artifact-dir }}/
+          mv ./*.tgz ${{ env.artifact-dir }}/
+        shell: bash
+        working-directory: ${{ env.root-dir }}
+      
+      - name: Download packages
+        run: curl -O -L -f "${{ inputs.page-url }}/{${{ steps.packages.outputs.result }}}"
+        if: ${{ inputs.skip-download == 'false' }}
+        shell: bash
+        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
+      
+      - name: Create artifact
+        uses: actions/upload-pages-artifact@v1.0.5
+        with:
+          path: ${{ env.artifact-dir }}
+
+
+  helm-release:
+    runs-on: ubuntu-22.04
+    needs: prepare-artifacts
+    env:
+      root-dir: ${{ inputs.charts-dir }}
+      artifact-dir: "${{ inputs.artifact-dir }}"
+      index-dir: "${{ inputs.index-dir }}"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Get all artifacts
+        uses: actions/download-artifact@v3.0.1
+        with:
+          path: ${{ env.artifact-dir }}
+
+      - name: Get all indexes
+        if: ${{ inputs.start-run == 'true' }}
+        uses: actions/download-artifact@v3.0.1
+        with:
+          path: ${{ env.index-dir }}
+
+      - name: Merge all indexes into one index.yaml within the artifact root dir
+        if: ${{ inputs.start-run == 'true' }}
+        uses: mikefarah/yq@v4.30.5
+        with:
+          cmd: yq ea '. as $item ireduce ({}; . * $item )' ${{ env.index-dir }}/*/index.yaml > ${{ env.artifact-dir }}/index.yaml
+      
+      - name: Create artifact
+        if: ${{ inputs.start-run == 'true' }}
+        uses: actions/upload-pages-artifact@v1.0.5
+        with:
+          path: ${{ env.artifact-dir }}
+
+  publish-gh-pages:
+    runs-on: ubuntu-22.04
+    needs: helm-release
+    permissions:
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1.2.3
