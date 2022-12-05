@@ -225,6 +225,9 @@ jobs:
 
       - name: Prepare artifacts
         run: |
+          pwd
+          ls -al
+          tree .
           mkdir ${{ env.artifact-dir }}
           mkdir ${{ env.artifact-dir }}/${{ env.charts-subdir }} 
           mv ${{ env.charts-subdir }}/*.tgz ${{ env.artifact-dir }}/${{ env.charts-subdir }}
