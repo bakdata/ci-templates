@@ -1,4 +1,4 @@
-# kpops-runner
+# Kpops-Runner
 
 This action runs Kpops with the given config.
 
