@@ -124,8 +124,11 @@ jobs:
           working-directory: ${{ env.root-dir }}/${{ env.charts-subdir }}
 
       - name: Download previous Helm index
-        run: curl -O -L -f ${{ inputs.page-url }}/index.yaml
         if: ${{ inputs.skip-download == 'false' }}
+        run: |
+          curl -O -L -f ${{ inputs.page-url }}/index.yaml
+          pwd
+          ls -al ${{ env.root-dir }}/${{ env.charts-subdir }}
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.charts-subdir }}
 
@@ -217,6 +220,7 @@ jobs:
 
       - name: Prepare artifacts
         run: |
+          pwd
           ls -al ${{ env.charts-subdir }}
           mkdir ${{ env.artifact-dir }}
           mkdir ${{ env.artifact-dir }}/${{ env.charts-subdir }} 
