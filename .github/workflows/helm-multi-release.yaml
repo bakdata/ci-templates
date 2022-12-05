@@ -223,6 +223,11 @@ jobs:
           ref: ${{ inputs.ref }}
           persist-credentials: false # required for pushing to protected branch later
 
+      - name: Download uploaded files
+        uses: actions/download-artifact@v3.0.1
+        with:
+          path: ${{ env.root-dir }}/${{ env.charts-subdir }}
+
       - name: Prepare artifacts
         run: |
           pwd
