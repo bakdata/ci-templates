@@ -359,7 +359,7 @@ jobs:
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
       index-dir: "${{ inputs.index-dir }}"
-
+    if: needs.prepare-artifacts-start-run-artifacts.result == 'success' || needs.prepare-artifacts-not-start-run.result == 'success'
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
