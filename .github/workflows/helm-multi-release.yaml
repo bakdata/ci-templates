@@ -215,8 +215,9 @@ jobs:
           ref: ${{ inputs.ref }}
           persist-credentials: false # required for pushing to protected branch later
 
-      - name: Prepare artsifacts
+      - name: Prepare artifacts
         run: |
+          ls -al ${{ env.charts-subdir }}
           mkdir ${{ env.artifact-dir }}
           mkdir ${{ env.artifact-dir }}/${{ env.charts-subdir }} 
           mv ${{ env.charts-subdir }}/*.tgz ${{ env.artifact-dir }}/${{ env.charts-subdir }}
