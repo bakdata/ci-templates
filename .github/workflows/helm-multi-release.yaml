@@ -170,11 +170,10 @@ jobs:
           ref: ${{ inputs.ref }}
           persist-credentials: false # required for pushing to protected branch later
 
-      - name: Download previous Helm index
-        run: curl -O -L -f ${{ inputs.page-url }}/index.yaml
-        if: ${{ inputs.skip-download == 'false' }}
-        shell: bash
-        working-directory: ${{ env.github-root }}
+      - name: Download uploaded files
+        uses: actions/download-artifact@v3.0.1
+        with:
+          path: ${{ env.root-dir }}
 
       - name: Commit and push Chart.yaml & .bumpversion.cfg file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
@@ -333,12 +332,12 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - name: Get all artifacts
+      - name: Download all artifacts
         uses: actions/download-artifact@v3.0.1
         with:
           path: ${{ env.artifact-dir }}
 
-      - name: Get all indexes
+      - name: Download all indexes
         if: ${{ inputs.start-run == 'true' }}
         uses: actions/download-artifact@v3.0.1
         with:
