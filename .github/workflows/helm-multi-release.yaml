@@ -49,11 +49,15 @@ on:
         required: false
         default: "indexes"
         type: string
-
       artifact-dir:
         description: "Directory inside `charts-dir` for preparation of the GitHub pages artifact."
         required: false
         default: "artifact"
+        type: string
+      project-root-dir:
+        description: "Github  dir where the charts is located"
+        required: false
+        default: "."
         type: string
 
     secrets:
@@ -87,12 +91,11 @@ jobs:
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
 
-  prepare-artifacts-start-run:
+  prepare-artifacts-start-run-packaging:
     if: ${{ inputs.start-run == 'true' }}
     strategy:
       matrix:
         subdir: ${{ fromJson(inputs.subdirs) }}
-      max-parallel: 1
 
     runs-on: ubuntu-22.04
     needs: [helm-lint]
@@ -138,6 +141,41 @@ jobs:
         with:
           charts-dir: ${{ env.root-dir }}/${{ env.charts-subdir }}
 
+      - name: Upploads chunk changes
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: chunk-${{ matrix.subdir }}
+          path: ${{ env.root-dir }}/${{ env.charts-subdir }}
+
+
+  prepare-artifacts-start-run-commit:
+    if: ${{ inputs.start-run == 'true' }}
+    runs-on: ubuntu-22.04
+    needs: [prepare-artifacts-start-run-packaging]
+    env:
+      charts-subdir: "${{ matrix.subdir }}"
+      root-dir: ${{ inputs.charts-dir }}
+      artifact-dir: "${{ inputs.artifact-dir }}"
+      index-dir: "${{ inputs.index-dir }}"
+      github-root: "${{ inputs.project-root-dir }}"
+    # Map the job outputs to step outputs
+    outputs:
+      release-tag: ${{ steps.release-tag.outputs.release-tag }}
+      old-tag: ${{ steps.release-tag.outputs.old-tag }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false # required for pushing to protected branch later
+
+      - name: Download previous Helm index
+        run: curl -O -L -f ${{ inputs.page-url }}/index.yaml
+        if: ${{ inputs.skip-download == 'false' }}
+        shell: bash
+        working-directory: ${{ env.github-root }}
+
       - name: Commit and push Chart.yaml & .bumpversion.cfg file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
@@ -146,6 +184,31 @@ jobs:
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
+
+  prepare-artifacts-start-run-artifacts:
+    if: ${{ inputs.start-run == 'true' }}
+    strategy:
+      matrix:
+        subdir: ${{ fromJson(inputs.subdirs) }}
+
+    runs-on: ubuntu-22.04
+    needs: [prepare-artifacts-start-run-commit]
+    env:
+      charts-subdir: "${{ matrix.subdir }}"
+      root-dir: ${{ inputs.charts-dir }}
+      artifact-dir: "${{ inputs.artifact-dir }}"
+      index-dir: "${{ inputs.index-dir }}"
+    # Map the job outputs to step outputs
+    outputs:
+      release-tag: ${{ steps.release-tag.outputs.release-tag }}
+      old-tag: ${{ steps.release-tag.outputs.old-tag }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false # required for pushing to protected branch later
 
       - name: Prepare artsifacts
         run: |
