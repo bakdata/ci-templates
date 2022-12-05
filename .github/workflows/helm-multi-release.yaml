@@ -250,7 +250,7 @@ jobs:
         run: curl -O -L -f "${{ inputs.page-url }}/{${{ needs.prepare-artifacts-start-run-packaging.outputs.pkg-rslt }}}"
         if: ${{ inputs.skip-download == 'false' }}
         shell: bash
-        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}/${{ env.charts-subdir }}
+        working-directory: ${{ env.artifact-dir }}/${{ env.charts-subdir }}
 
       - name: Move index.yaml from sub-dirs
         run: |
