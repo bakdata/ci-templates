@@ -266,7 +266,7 @@ jobs:
         uses: actions/upload-artifact@v3.1.1
         with:
           name: artifat-${{ matrix.subdir }}
-          path: ${{ env.artifact-dir }}/${{ env.charts-subdir }}/*.tgz
+          path: ${{ env.artifact-dir }}/${{ env.charts-subdir }}/*tgz
 
 
       - name: Upload index.yaml from tmp
