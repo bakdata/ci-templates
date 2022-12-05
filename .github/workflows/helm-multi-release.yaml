@@ -238,17 +238,19 @@ jobs:
         run: |
           mkdir ${{ env.artifact-dir }}
           mkdir ${{ env.artifact-dir }}/${{ env.charts-subdir }} 
+          pwd ${{ env.artifact-dir }}/${{ env.charts-subdir }} 
           mv ${{ env.charts-subdir }}/*.tgz ${{ env.artifact-dir }}/${{ env.charts-subdir }}
 
           pwd
           tree ${{ env.charts-subdir }}
+          tree ${{ env.artifact-dir }}/${{ env.charts-subdir }}
           cp ${{ env.charts-subdir }}/index.yaml ${{ env.artifact-dir }}/${{ env.charts-subdir }}
         shell: bash
         working-directory: ${{ env.root-dir }}
       
       - name: Download packages
         run: curl -O -L -f "${{ inputs.page-url }}/{${{ needs.prepare-artifacts-start-run-packaging.outputs.pkg-rslt }}}"
-        if: ${{ inputs.skip-download == 'false' }}
+        if: ${{ inputs.skip-download == 'true' }}
         shell: bash
         working-directory: ${{ env.artifact-dir }}/${{ env.charts-subdir }}
 
