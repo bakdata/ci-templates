@@ -184,6 +184,7 @@ jobs:
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
 
+
   prepare-artifacts-start-run-artifacts:
     if: ${{ inputs.start-run == 'true' }}
     strategy:
@@ -348,7 +349,7 @@ jobs:
         uses: mikefarah/yq@v4.30.5
         with:
           cmd: yq ea '. as $item ireduce ({}; . * $item )' ${{ env.index-dir }}/*/index.yaml > ${{ env.artifact-dir }}/index.yaml
-      
+
       - name: Create artifact
         if: ${{ inputs.start-run == 'true' }}
         uses: actions/upload-pages-artifact@v1.0.5
