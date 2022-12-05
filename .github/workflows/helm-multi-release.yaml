@@ -143,6 +143,13 @@ jobs:
         uses: bakdata/ci-templates/actions/helm-package@v1.6.0
         with:
           charts-dir: ${{ env.root-dir }}/${{ env.charts-subdir }}
+     
+      - name: pwd & ls
+        run: |
+          pwd
+          ls -al .
+        shell: bash
+        working-directory: ${{ env.root-dir }}/${{ env.charts-subdir }}
 
       - name: Upploads chunk changes
         uses: actions/upload-artifact@v3.1.1
