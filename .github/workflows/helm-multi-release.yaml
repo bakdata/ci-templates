@@ -152,6 +152,7 @@ jobs:
         with:
           name: ${{ env.charts-subdir }}
           path: ${{ env.root-dir }}/${{ env.charts-subdir }}
+          retention-days: 1
 
 
   prepare-artifacts-start-run-commit:
@@ -266,14 +267,16 @@ jobs:
         uses: actions/upload-artifact@v3.1.1
         with:
           name: ${{ env.charts-subdir }}
-          path: ${{ env.artifact-dir }}/${{ env.charts-subdir }}/*tgz
+          path: ${{ env.artifact-dir }}/${{ env.charts-subdir }}
+          retention-days: 1
 
 
       - name: Upload index.yaml from tmp
         uses: actions/upload-artifact@v3.1.1
         with:
           name: ${{ env.charts-subdir }}
-          path: ${{ env.index-dir }}/${{ env.charts-subdir }}/index.yaml
+          path: ${{ env.index-dir }}/${{ env.charts-subdir }}
+          retention-days: 1
   
 
   prepare-artifacts-not-start-run:
@@ -352,6 +355,7 @@ jobs:
         uses: actions/upload-pages-artifact@v1.0.5
         with:
           path: ${{ env.artifact-dir }}
+
 
 
   helm-release:
