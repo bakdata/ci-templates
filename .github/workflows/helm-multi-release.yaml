@@ -263,6 +263,14 @@ jobs:
         shell: bash
         working-directory: ${{ env.root-dir }}
 
+      - name: Test artifacts
+        run: |
+          pwd
+          tree ${{ env.artifact-dir }}/${{ env.charts-subdir }}
+          tree .
+        shell: bash
+        working-directory: ${{ env.root-dir }}
+
       - name: Upload artifacts to tmp
         uses: actions/upload-artifact@v3.1.1
         with:
