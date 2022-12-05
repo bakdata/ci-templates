@@ -250,7 +250,7 @@ jobs:
       
       - name: Download packages
         run: curl -O -L -f "${{ inputs.page-url }}/{${{ needs.prepare-artifacts-start-run-packaging.outputs.pkg-rslt }}}"
-        if: ${{ inputs.skip-download == 'true' }}
+        if: ${{ inputs.skip-download == 'false' }}
         shell: bash
         working-directory: ${{ env.artifact-dir }}/${{ env.charts-subdir }}
 
