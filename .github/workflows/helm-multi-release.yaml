@@ -152,7 +152,7 @@ jobs:
       - name: Upploads chunk changes
         uses: actions/upload-artifact@v3.1.1
         with:
-          name: chunk-${{ matrix.subdir }}
+          name: ${{ matrix.subdir }}
           path: ${{ env.root-dir }}/${{ env.charts-subdir }}
 
 
@@ -225,8 +225,6 @@ jobs:
 
       - name: Prepare artifacts
         run: |
-          pwd
-          ls -al ${{ env.charts-subdir }}
           mkdir ${{ env.artifact-dir }}
           mkdir ${{ env.artifact-dir }}/${{ env.charts-subdir }} 
           mv ${{ env.charts-subdir }}/*.tgz ${{ env.artifact-dir }}/${{ env.charts-subdir }}
