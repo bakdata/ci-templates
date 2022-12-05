@@ -145,7 +145,7 @@ jobs:
       - name: Upploads chunk changes
         uses: actions/upload-artifact@v3.1.1
         with:
-          name: ${{ matrix.subdir }}
+          name: ${{ env.charts-subdir }}
           path: ${{ env.root-dir }}/${{ env.charts-subdir }}
 
 
@@ -226,17 +226,17 @@ jobs:
       - name: Download uploaded files
         uses: actions/download-artifact@v3.0.1
         with:
+          name: ${{ env.charts-subdir }}
           path: ${{ env.root-dir }}/${{ env.charts-subdir }}
 
       - name: Prepare artifacts
         run: |
-          pwd
-          ls -al
-          tree .
           mkdir ${{ env.artifact-dir }}
           mkdir ${{ env.artifact-dir }}/${{ env.charts-subdir }} 
           mv ${{ env.charts-subdir }}/*.tgz ${{ env.artifact-dir }}/${{ env.charts-subdir }}
 
+          pwd
+          tree ${{ env.charts-subdir }}
           cp ${{ env.charts-subdir }}/index.yaml ${{ env.artifact-dir }}/${{ env.charts-subdir }}
         shell: bash
         working-directory: ${{ env.root-dir }}
