@@ -12,7 +12,7 @@ This action runs Kpops with the given config.
 | working-directory |    ❌     |       .       |  string  | root directory used by Kpops to run pipelines                                                                 |
 | execute           |    ❌     |    	false     |  string  | Execute Kpops command (this applies the infrastructure changes that were executed inside the dry-run command) |
 | defaults          |    ❌     |   defaults    |  string  | defaults folder path 														                                                                           |
-| config            |    ❌     |  config.yaml  | string 	 | default config.yaml file path 			                                                                             |
+| config            |    ❌     |  config.yaml  | string 	 | config.yaml file path 			                                                                             |
 
 ## Usage
 
