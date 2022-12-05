@@ -127,8 +127,6 @@ jobs:
         if: ${{ inputs.skip-download == 'false' }}
         run: |
           curl -O -L -f ${{ inputs.page-url }}/index.yaml
-          pwd
-          ls -al ${{ env.root-dir }}/${{ env.charts-subdir }}
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.charts-subdir }}
 
