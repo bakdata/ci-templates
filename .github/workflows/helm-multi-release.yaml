@@ -83,7 +83,6 @@ on:
         description: "Previous package versions"
         value: ${{ jobs.prepare-artifacts-start-run-packaging.outputs.result }}
 
-
 jobs:
   helm-lint:
     runs-on: ubuntu-22.04
@@ -110,7 +109,6 @@ jobs:
     # Map the job outputs to step outputs
     outputs:
       pkg-rslt: ${{ steps.packages.outputs.result }}
-      
 
     steps:
       - name: Check out repository
@@ -152,7 +150,6 @@ jobs:
           path: ${{ env.root-dir }}/${{ env.charts-subdir }}
           retention-days: 1
 
-
   prepare-artifacts-start-run-commit:
     if: ${{ inputs.start-run == 'true' }}
     runs-on: ubuntu-22.04
@@ -193,7 +190,6 @@ jobs:
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
-
 
   prepare-artifacts-start-run-artifacts:
     if: ${{ inputs.start-run == 'true' }}
@@ -258,7 +254,6 @@ jobs:
           name: index-${{ env.charts-subdir }}
           path: ${{ env.root-dir }}/${{ env.index-dir }}/${{ env.charts-subdir }}
           retention-days: 1
-  
 
   prepare-artifacts-not-start-run:
     if: ${{ inputs.start-run == 'false' }}
@@ -338,8 +333,6 @@ jobs:
           name: artifacts
           path: ${{ env.root-dir }}/${{ env.artifact-dir }}
 
-
-
   helm-release:
     runs-on: ubuntu-22.04
     needs: [prepare-artifacts-start-run-artifacts,prepare-artifacts-not-start-run]
@@ -394,6 +387,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
+      - name: Test cmd
+        run: echo "Hello"
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1.2.3
