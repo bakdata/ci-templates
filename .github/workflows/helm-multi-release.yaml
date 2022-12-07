@@ -255,6 +255,7 @@ jobs:
           path: ${{ env.root-dir }}/${{ env.artifact-dir }}
 
   publish-gh-pages:
+    name: Publish github Pages
     runs-on: ubuntu-22.04
     needs: helm-release
     # env:
