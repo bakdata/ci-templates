@@ -269,20 +269,22 @@ jobs:
           tree ${{ env.artifact-dir }}/${{ env.charts-subdir }}
           tree .
         shell: bash
+        working-directory: ${{ env.root-dir }}
 
       - name: Upload artifacts to tmp
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: artifacts-${{ env.charts-subdir }}
-          path: ${{ env.artifact-dir }}/${{ env.charts-subdir }}
+          path: ${{ env.root-dir }}/${{ env.artifact-dir }}/${{ env.charts-subdir }}
           retention-days: 1
 
 
+
       - name: Upload index.yaml from tmp
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: index-${{ env.charts-subdir }}
-          path: ${{ env.index-dir }}/${{ env.charts-subdir }}
+          path: ${{ env.root-dir }}/${{ env.index-dir }}/${{ env.charts-subdir }}
           retention-days: 1
   
 
@@ -362,7 +364,7 @@ jobs:
         uses: actions/upload-pages-artifact@v1.0.5
         with:
           name: artifacts
-          path: ${{ env.artifact-dir }}
+          path: ${{ env.root-dir }}/${{ env.artifact-dir }}
 
 
 
@@ -382,25 +384,25 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v3.0.1
         with:
-          path: ${{ env.artifact-dir }}
+          path: ${{ env.root-dir }}/${{ env.artifact-dir }}
 
       - name: Download all indexes
         if: ${{ inputs.start-run == 'true' }}
         uses: actions/download-artifact@v3.0.1
         with:
-          path: ${{ env.index-dir }}
+          path: ${{ env.root-dir }}/${{ env.index-dir }}
 
       - name: Merge all indexes into one index.yaml within the artifact root dir
         if: ${{ inputs.start-run == 'true' }}
         uses: mikefarah/yq@v4.30.5
         with:
-          cmd: yq ea '. as $item ireduce ({}; . * $item )' ${{ env.index-dir }}/*/index.yaml > ${{ env.artifact-dir }}/index.yaml
+          cmd: yq ea '. as $item ireduce ({}; . * $item )' ${{ env.root-dir }}/${{ env.index-dir }}/*/index.yaml > ${{ env.root-dir }}/${{ env.artifact-dir }}/index.yaml
 
       - name: Create artifact
         if: ${{ inputs.start-run == 'true' }}
         uses: actions/upload-pages-artifact@v1.0.5
         with:
-          path: ${{ env.artifact-dir }}
+          path: ${{ env.root-dir }}/${{ env.artifact-dir }}
 
   publish-gh-pages:
     runs-on: ubuntu-22.04
