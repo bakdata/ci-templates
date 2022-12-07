@@ -94,7 +94,7 @@ jobs:
           lint-config-path: "${{ inputs.lint-config-path }}"
           ref: main
 
-  prepare-artifacts-start-run-packaging:
+  prepare-artifacts-start-run:
     if: ${{ inputs.start-run == 'true' }}
     strategy:
       matrix:
@@ -107,6 +107,9 @@ jobs:
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
       index-dir: "${{ inputs.index-dir }}"
+      ref: ${{ inputs.ref }}
+      skip-download: ${{ inputs.skip-download }}
+      page-url: ${{ inputs.page-url }}
     # Map the job outputs to step outputs
     outputs:
       pkg-rslt: ${{ steps.packages.outputs.result }}
@@ -115,27 +118,20 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          ref: ${{ inputs.ref }}
+          ref: ${{ env.ref }}
           persist-credentials: false # required for pushing to protected branch later
 
-      - name: Bump version
-        id: release-tag
-        uses: bakdata/ci-templates/actions/bump-version@v1.5.2
-        with:
-          release-type: ${{ inputs.release-type }}
-          working-directory: ${{ env.root-dir }}/${{ env.charts-subdir }}
-
       - name: Download previous Helm index
-        if: ${{ inputs.skip-download == 'false' }}
+        if: ${{ env.skip-download == 'false' }}
         run: |
-          curl -O -L -f ${{ inputs.page-url }}/index.yaml
+          curl -O -L -f ${{ env.page-url }}/index.yaml
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.charts-subdir }}
 
       - name: Find previous package versions
         id: packages
         uses: mikefarah/yq@v4.30.5
-        if: ${{ inputs.skip-download == 'false' }}
+        if: ${{ env.skip-download == 'false' }}
         with:
           cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ env.root-dir }}/${{ env.charts-subdir }}/index.yaml
 
@@ -144,116 +140,25 @@ jobs:
         with:
           charts-dir: ${{ env.root-dir }}/${{ env.charts-subdir }}
 
-      - name: Upploads chunk changes
-        uses: actions/upload-artifact@v3.1.1
-        with:
-          name: ${{ env.charts-subdir }}
-          path: ${{ env.root-dir }}/${{ env.charts-subdir }}
-          retention-days: 1
-
-  prepare-artifacts-start-run-commit:
-    if: ${{ inputs.start-run == 'true' }}
-    runs-on: ubuntu-22.04
-    needs: [prepare-artifacts-start-run-packaging]
-    env:
-      charts-subdir: "${{ matrix.subdir }}"
-      root-dir: ${{ inputs.charts-dir }}
-      artifact-dir: "${{ inputs.artifact-dir }}"
-      index-dir: "${{ inputs.index-dir }}"
-      github-root: "${{ inputs.project-root-dir }}"
-    # Map the job outputs to step outputs
-    outputs:
-      release-tag: ${{ steps.release-tag.outputs.release-tag }}
-      old-tag: ${{ steps.release-tag.outputs.old-tag }}
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ inputs.ref }}
-          persist-credentials: false # required for pushing to protected branch later
-
-      - name: Download uploaded files
-        uses: actions/download-artifact@v3.0.1
-        with:
-          path: ${{ env.root-dir }}
-
-      - name: Check if there are changes
-        id: changes
-        uses: UnicornGlobal/has-changes-action@v1.0.11
-
-      - name: Commit and push Chart.yaml & .bumpversion.cfg file
-        if: steps.changes.outputs.changed == 1
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
-        with:
-          ref: ${{ inputs.ref }}
-          commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
-          github-username: ${{ secrets.github-username }}
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
-
-  prepare-artifacts-start-run-artifacts:
-    if: ${{ inputs.start-run == 'true' }}
-    strategy:
-      matrix:
-        subdir: ${{ fromJson(inputs.subdirs) }}
-
-    runs-on: ubuntu-22.04
-    needs: [prepare-artifacts-start-run-packaging,prepare-artifacts-start-run-commit]
-    env:
-      charts-subdir: "${{ matrix.subdir }}"
-      root-dir: ${{ inputs.charts-dir }}
-      artifact-dir: "${{ inputs.artifact-dir }}"
-      index-dir: "${{ inputs.index-dir }}"
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ inputs.ref }}
-          persist-credentials: false # required for pushing to protected branch later
-
-      - name: Download uploaded files
-        uses: actions/download-artifact@v3.0.1
-        with:
-          name: ${{ env.charts-subdir }}
-          path: ${{ env.root-dir }}/${{ env.charts-subdir }}
-
       - name: Prepare artifacts
         run: |
           mkdir ${{ env.artifact-dir }}
           mkdir ${{ env.artifact-dir }}/${{ env.charts-subdir }} 
           mv ${{ env.charts-subdir }}/*.tgz ${{ env.artifact-dir }}/${{ env.charts-subdir }}
-          cp ${{ env.charts-subdir }}/index.yaml ${{ env.artifact-dir }}/${{ env.charts-subdir }}
         shell: bash
         working-directory: ${{ env.root-dir }}
       
       - name: Download packages
-        if: ${{ inputs.skip-download == 'false' }}
-        run: curl -O -L -f "${{ inputs.page-url }}/{${{ needs.prepare-artifacts-start-run-packaging.outputs.pkg-rslt }}}"
+        if: ${{ env.skip-download == 'false' }}
+        run: curl -O -L -f "${{ env.page-url }}/{${{ steps.packages.outputs.result }}}"
         shell: bash
-        working-directory: ${{ env.artifact-dir }}/${{ env.charts-subdir }}
+        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}/${{ env.charts-subdir }}
 
-      - name: Move index.yaml from sub-dirs
-        run: |
-          mkdir ${{ env.index-dir }}
-          mkdir ${{ env.index-dir }}/${{ env.charts-subdir }} 
-          mv ${{ env.artifact-dir }}/${{ env.charts-subdir }}/index.yaml ${{ env.index-dir }}/${{ env.charts-subdir }}
-        shell: bash
-        working-directory: ${{ env.root-dir }}
-
-      - name: Upload artifacts to tmp
+      - name: Upload artifacts with action/upload
         uses: actions/upload-artifact@v3.1.1
         with:
           name: artifacts-${{ env.charts-subdir }}
           path: ${{ env.root-dir }}/${{ env.artifact-dir }}/${{ env.charts-subdir }}
-          retention-days: 1
-
-      - name: Upload index.yaml from tmp
-        uses: actions/upload-artifact@v3.1.1
-        with:
-          name: index-${{ env.charts-subdir }}
-          path: ${{ env.root-dir }}/${{ env.index-dir }}/${{ env.charts-subdir }}
           retention-days: 1
 
   prepare-artifacts-not-start-run:
@@ -263,6 +168,9 @@ jobs:
     env:
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
+      ref: ${{ inputs.ref }}
+      skip-download: ${{ inputs.skip-download }}
+      page-url: ${{ inputs.page-url }}
     # Map the job outputs to step outputs
     outputs:
       release-tag: ${{ steps.release-tag.outputs.release-tag }}
@@ -272,26 +180,19 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          ref: ${{ inputs.ref }}
+          ref: ${{ env.ref }}
           persist-credentials: false # required for pushing to protected branch later
 
-      - name: Bump version
-        id: release-tag
-        uses: bakdata/ci-templates/actions/bump-version@v1.5.2
-        with:
-          release-type: ${{ inputs.release-type }}
-          working-directory: ${{ env.root-dir }}
-
       - name: Download previous Helm index
-        run: curl -O -L -f ${{ inputs.page-url }}/index.yaml
-        if: ${{ inputs.skip-download == 'false' }}
+        run: curl -O -L -f ${{ env.page-url }}/index.yaml
+        if: ${{ env.skip-download == 'false' }}
         shell: bash
         working-directory: ${{ env.root-dir }}
 
       - name: Find previous package versions
         id: packages
         uses: mikefarah/yq@v4.30.5
-        if: ${{ inputs.skip-download == 'false' }}
+        if: ${{ env.skip-download == 'false' }}
         with:
           cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ env.root-dir }}/index.yaml
 
@@ -299,45 +200,31 @@ jobs:
         uses: bakdata/ci-templates/actions/helm-package@v1.6.0
         with:
           charts-dir: ${{ env.root-dir }}
-      
-      - name: Check if there are changes
-        id: changes
-        uses: UnicornGlobal/has-changes-action@v1.0.12
-
-      - name: Commit and push Chart.yaml & .bumpversion.cfg file
-        if: steps.changes.outputs.changed == 1
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
-        with:
-          ref: ${{ inputs.ref }}
-          commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
-          github-username: ${{ secrets.github-username }}
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
 
       - name: Prepare artifacts
         run: |
           mkdir ${{ env.artifact-dir }}
-          cp index.yaml ${{ env.artifact-dir }}/
-          mv ./*.tgz ${{ env.artifact-dir }}/
+          rm index.yaml
+          mv * ${{ env.artifact-dir }}/
         shell: bash
         working-directory: ${{ env.root-dir }}
-      
+
       - name: Download packages
-        run: curl -O -L -f "${{ inputs.page-url }}/{${{ steps.packages.outputs.result }}}"
-        if: ${{ inputs.skip-download == 'false' }}
+        run: curl -O -L -f "${{ env.page-url }}/{${{ steps.packages.outputs.result }}}"
+        if: ${{ env.skip-download == 'false' }}
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
       
-      - name: Create artifact
-        uses: actions/upload-pages-artifact@v1.0.5
+      - name: Upload artifacts with action/upload
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: artifacts
           path: ${{ env.root-dir }}/${{ env.artifact-dir }}
 
   helm-release:
     runs-on: ubuntu-22.04
-    needs: [prepare-artifacts-start-run-artifacts,prepare-artifacts-not-start-run]
-    if: ${{ always() && (needs.prepare-artifacts-start-run-artifacts.result == 'success' || needs.prepare-artifacts-not-start-run.result == 'success') }}
+    needs: [prepare-artifacts-start-run,prepare-artifacts-not-start-run]
+    if: ${{ always() && (needs.prepare-artifacts-start-run.result == 'success' || needs.prepare-artifacts-not-start-run.result == 'success') }}
     env:
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
@@ -352,22 +239,14 @@ jobs:
         with:
           path: ${{ env.root-dir }}/${{ env.artifact-dir }}
 
-      - name: Download all indexes
-        if: ${{ inputs.start-run == 'true' }}
-        uses: actions/download-artifact@v3.0.1
-        with:
-          path: ${{ env.root-dir }}/${{ env.index-dir }}
-
-      - name: Merge all indexes into one index.yaml within the artifact root dir
-        if: ${{ inputs.start-run == 'true' }}
-        uses: mikefarah/yq@v4.30.5
-        with:
-          cmd: yq ea '. as $item ireduce ({}; . * $item )' ${{ env.root-dir }}/${{ env.index-dir }}/*/index.yaml > ${{ env.root-dir }}/${{ env.artifact-dir }}/index.yaml
-      
-      - name: Print merged Index
-        run: cat ${{ env.artifact-dir }}/index.yaml
+      - name: Generate new merged index.yaml
+        run: |
+          tree .
+          helm repo index .
+          tree .
+          cat index.yaml
         shell: bash
-        working-directory: ${{ env.root-dir }}
+        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
 
       - name: Create artifact
         if: ${{ inputs.start-run == 'true' }}
