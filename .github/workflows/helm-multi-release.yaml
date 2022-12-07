@@ -245,6 +245,7 @@ jobs:
           helm repo index .
           tree .
           cat index.yaml
+          exit 1
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
 
