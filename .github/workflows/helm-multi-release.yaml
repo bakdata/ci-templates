@@ -377,6 +377,7 @@ jobs:
   publish-gh-pages:
     runs-on: ubuntu-22.04
     needs: [helm-release]
+    if: ${{ always() && (needs.helm-release.result == 'success' }}
     permissions:
       pages: write # to deploy to Pages
       id-token: write # to verify the deployment originates from an appropriate source
