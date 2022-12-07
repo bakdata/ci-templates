@@ -388,7 +388,9 @@ jobs:
 
     steps:
       - name: Test cmd
-        run: echo "Hello"
+        run: echo "Hello World"
+        shell: bash
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1.2.3
