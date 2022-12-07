@@ -182,13 +182,6 @@ jobs:
         with:
           path: ${{ env.root-dir }}
 
-      - name: pwd & ls
-        run: |
-          pwd
-          ls -al charts/producer-app
-          tree .
-        shell: bash
-
       - name: Check if there are changes
         id: changes
         uses: UnicornGlobal/has-changes-action@v1.0.11
@@ -239,12 +232,7 @@ jobs:
         run: |
           mkdir ${{ env.artifact-dir }}
           mkdir ${{ env.artifact-dir }}/${{ env.charts-subdir }} 
-          pwd ${{ env.artifact-dir }}/${{ env.charts-subdir }} 
           mv ${{ env.charts-subdir }}/*.tgz ${{ env.artifact-dir }}/${{ env.charts-subdir }}
-
-          pwd
-          tree ${{ env.charts-subdir }}
-          tree ${{ env.artifact-dir }}/${{ env.charts-subdir }}
           cp ${{ env.charts-subdir }}/index.yaml ${{ env.artifact-dir }}/${{ env.charts-subdir }}
         shell: bash
         working-directory: ${{ env.root-dir }}
@@ -263,22 +251,12 @@ jobs:
         shell: bash
         working-directory: ${{ env.root-dir }}
 
-      - name: Test artifacts
-        run: |
-          pwd
-          tree ${{ env.artifact-dir }}/${{ env.charts-subdir }}
-          tree .
-        shell: bash
-        working-directory: ${{ env.root-dir }}
-
       - name: Upload artifacts to tmp
         uses: actions/upload-artifact@v3.1.1
         with:
           name: artifacts-${{ env.charts-subdir }}
           path: ${{ env.root-dir }}/${{ env.artifact-dir }}/${{ env.charts-subdir }}
           retention-days: 1
-
-
 
       - name: Upload index.yaml from tmp
         uses: actions/upload-artifact@v3.1.1
@@ -370,8 +348,8 @@ jobs:
 
   helm-release:
     runs-on: ubuntu-22.04
-    if: needs.prepare-artifacts-start-run-artifacts.result == 'success' || needs.prepare-artifacts-not-start-run.result == 'success'
     needs: [prepare-artifacts-start-run-artifacts,prepare-artifacts-not-start-run]
+    if: ${{ always() && (needs.prepare-artifacts-start-run-artifacts.result == 'success' || needs.prepare-artifacts-not-start-run.result == 'success') }}
     env:
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
@@ -397,6 +375,11 @@ jobs:
         uses: mikefarah/yq@v4.30.5
         with:
           cmd: yq ea '. as $item ireduce ({}; . * $item )' ${{ env.root-dir }}/${{ env.index-dir }}/*/index.yaml > ${{ env.root-dir }}/${{ env.artifact-dir }}/index.yaml
+      
+      - name: Print merged Index
+        run: cat ${{ env.artifact-dir }}/index.yaml
+        shell: bash
+        working-directory: ${{ env.root-dir }}
 
       - name: Create artifact
         if: ${{ inputs.start-run == 'true' }}
