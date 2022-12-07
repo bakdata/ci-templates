@@ -41,9 +41,9 @@ on:
         required: true
         type: string
       subdirs:
-        description: "List of subdir to consider during the start run"
+        description: "List of subdir to consider during the start run" # "['subdir1', 'subdir2', 'subdir3']"
         required: true
-        type: string # "['subdir1', 'subdir2', 'subdir3']"
+        type: string
       index-dir:
         description: "Directory to temporaly store the index.yaml files"
         required: false
@@ -109,8 +109,6 @@ jobs:
       index-dir: "${{ inputs.index-dir }}"
     # Map the job outputs to step outputs
     outputs:
-      release-tag: ${{ steps.release-tag.outputs.release-tag }}
-      old-tag: ${{ steps.release-tag.outputs.old-tag }}
       pkg-rslt: ${{ steps.packages.outputs.result }}
       
 
@@ -210,10 +208,6 @@ jobs:
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
       index-dir: "${{ inputs.index-dir }}"
-    # Map the job outputs to step outputs
-    outputs:
-      release-tag: ${{ steps.release-tag.outputs.release-tag }}
-      old-tag: ${{ steps.release-tag.outputs.old-tag }}
 
     steps:
       - name: Check out repository
@@ -269,7 +263,7 @@ jobs:
   prepare-artifacts-not-start-run:
     if: ${{ inputs.start-run == 'false' }}
     runs-on: ubuntu-22.04
-    needs: helm-lint
+    needs: [helm-lint]
     env:
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
@@ -389,7 +383,7 @@ jobs:
 
   publish-gh-pages:
     runs-on: ubuntu-22.04
-    needs: helm-release
+    needs: [helm-release]
     permissions:
       pages: write # to deploy to Pages
       id-token: write # to verify the deployment originates from an appropriate source
