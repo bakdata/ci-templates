@@ -256,7 +256,7 @@ jobs:
 
   publish-gh-pages:
     runs-on: ubuntu-22.04
-    needs: [helm-release]
+    # needs: [helm-release]
     # env:
     #  page-url: ${{ inputs.page-url }}
     #permissions:
