@@ -89,7 +89,7 @@ jobs:
 
     steps:
       - name: Lint Helm chart
-        uses: bakdata/ci-templates/actions/helm-lint@v1.8.0
+        uses: bakdata/ci-templates/actions/helm-lint@v1.0.0
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
           ref: main
@@ -229,8 +229,8 @@ jobs:
         working-directory: ${{ env.root-dir }}
       
       - name: Download packages
-        run: curl -O -L -f "${{ inputs.page-url }}/{${{ needs.prepare-artifacts-start-run-packaging.outputs.pkg-rslt }}}"
         if: ${{ inputs.skip-download == 'false' }}
+        run: curl -O -L -f "${{ inputs.page-url }}/{${{ needs.prepare-artifacts-start-run-packaging.outputs.pkg-rslt }}}"
         shell: bash
         working-directory: ${{ env.artifact-dir }}/${{ env.charts-subdir }}
 
