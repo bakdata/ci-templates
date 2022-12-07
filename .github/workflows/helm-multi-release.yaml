@@ -223,8 +223,9 @@ jobs:
 
   helm-release:
     runs-on: ubuntu-22.04
-    needs: [prepare-artifacts-start-run,prepare-artifacts-not-start-run]
-    if: always()
+    needs: [prepare-artifacts-start-run]
+    #needs: [prepare-artifacts-start-run,prepare-artifacts-not-start-run]
+    #if: always()
     # if: |
     #  always() && 
     #  (needs.prepare-artifacts-start-run.result == 'success' || needs.prepare-artifacts-not-start-run.result == 'success')
