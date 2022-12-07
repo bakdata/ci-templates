@@ -112,7 +112,6 @@ jobs:
       - name: Prepare artifacts
         run: |
           mkdir ${{ env.artifact-dir }}
-          mkdir ${{ env.artifact-dir }}
           mv ${{ env.charts-subdir }}/*.tgz ${{ env.artifact-dir }}
         shell: bash
         working-directory: ${{ env.root-dir }}
