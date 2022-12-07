@@ -257,7 +257,8 @@ jobs:
   publish-gh-pages:
     name: Publish github Pages
     runs-on: ubuntu-22.04
-    needs: prepare-artifacts-not-start-run
+    needs: helm-release
+    if: always() 
     # env:
     #  page-url: ${{ inputs.page-url }}
     #permissions:
