@@ -257,6 +257,8 @@ jobs:
   publish-gh-pages:
     runs-on: ubuntu-22.04
     needs: [helm-release]
+    env:
+      page-url: ${{ inputs.page-url }}
     permissions:
       pages: write # to deploy to Pages
       id-token: write # to verify the deployment originates from an appropriate source
@@ -264,7 +266,8 @@ jobs:
     # Deploy to the github-pages environment
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ env.page-url }}
+      
 
     steps:
       - name: Test cmd
