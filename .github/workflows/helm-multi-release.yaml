@@ -185,13 +185,13 @@ jobs:
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
       
       - name: Merge all indexes into one index.yaml within the artifact root dir
-        if: ${{ $INDEX_EXISTS == 'true' }}
+        if: ${{ env.INDEX_EXISTS == 'true' }}
         uses: mikefarah/yq@v4.30.5
         with:
           cmd: yq ea '. as $item ireduce ({}; . * $item )' index_new.yaml index_old.yaml > ${{ env.artifact-dir }}/index.yaml
 
       - name: After merge remove all useless indexes
-        if: ${{ $INDEX_EXISTS == 'true' }}
+        if: ${{ env.INDEX_EXISTS == 'true' }}
         run: |
           rm index_old.yaml
           rm index_new.yaml
