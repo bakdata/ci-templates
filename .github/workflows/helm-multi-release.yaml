@@ -224,7 +224,8 @@ jobs:
   helm-release:
     runs-on: ubuntu-22.04
     needs: [prepare-artifacts-start-run,prepare-artifacts-not-start-run]
-    if: ${{ always() && (needs.prepare-artifacts-start-run.result == 'success' || needs.prepare-artifacts-not-start-run.result == 'success') }}
+    if: always()
+    #if: ${{ always() && (needs.prepare-artifacts-start-run.result == 'success' || needs.prepare-artifacts-not-start-run.result == 'success') }}
     env:
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
@@ -259,7 +260,7 @@ jobs:
     name: Publish github Pages
     runs-on: ubuntu-22.04
     needs: helm-release
-    if: always() 
+    # if: always() && needs.prepare-artifacts-start-run.result == 'success' 
     # env:
     #  page-url: ${{ inputs.page-url }}
     #permissions:
