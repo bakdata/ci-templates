@@ -55,7 +55,7 @@ on:
         default: "artifact"
         type: string
       project-root-dir:
-        description: "Github  dir where the charts is located"
+        description: "Github  dir where the charts dir is located"
         required: false
         default: "."
         type: string
@@ -274,7 +274,7 @@ jobs:
       - name: Upload artifacts to tmp
         uses: actions/upload-artifact@v3.1.1
         with:
-          name: ${{ env.charts-subdir }}
+          name: artifacts-${{ env.charts-subdir }}
           path: ${{ env.artifact-dir }}/${{ env.charts-subdir }}
           retention-days: 1
 
@@ -282,7 +282,7 @@ jobs:
       - name: Upload index.yaml from tmp
         uses: actions/upload-artifact@v3.1.1
         with:
-          name: ${{ env.charts-subdir }}
+          name: index-${{ env.charts-subdir }}
           path: ${{ env.index-dir }}/${{ env.charts-subdir }}
           retention-days: 1
   
@@ -362,6 +362,7 @@ jobs:
       - name: Create artifact
         uses: actions/upload-pages-artifact@v1.0.5
         with:
+          name: artifacts
           path: ${{ env.artifact-dir }}
 
 
@@ -369,11 +370,12 @@ jobs:
   helm-release:
     runs-on: ubuntu-22.04
     if: needs.prepare-artifacts-start-run-artifacts.result == 'success' || needs.prepare-artifacts-not-start-run.result == 'success'
-    needs: [prepare-artifacts-start-run-artifacts,prepare-artifacts-not-start-run]
+    # needs: [prepare-artifacts-start-run-artifacts,prepare-artifacts-not-start-run]
     env:
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
       index-dir: "${{ inputs.index-dir }}"
+      github-root: "${{ inputs.project-root-dir }}"
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
