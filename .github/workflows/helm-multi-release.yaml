@@ -36,12 +36,8 @@ on:
         required: false
         default: "false"
         type: string
-      start-run:
-        description: "Describes if thats the first time the workflow will be run. because if that is the first time then there are multiple subdir with one index.yaml each"
-        required: true
-        type: string
       subdirs:
-        description: "List of subdir to consider during the start run" # "['subdir1', 'subdir2', 'subdir3']"
+        description: "List of subdir to consider" # "['subdir1', 'subdir2', 'subdir3']"
         required: true
         type: string
       index-dir:
@@ -79,9 +75,6 @@ on:
       old-tag:
         description: "The old tag."
         value: ${{ jobs.helm-release.outputs.old-tag }}
-      pkg-rslt:
-        description: "Previous package versions"
-        value: ${{ jobs.prepare-artifacts-start-run-packaging.outputs.result }}
 
 jobs:
   helm-lint:
@@ -108,9 +101,6 @@ jobs:
       ref: ${{ inputs.ref }}
       skip-download: ${{ inputs.skip-download }}
       page-url: ${{ inputs.page-url }}
-    # Map the job outputs to step outputs
-    outputs:
-      pkg-rslt: ${{ steps.packages.outputs.result }}
 
     steps:
       - name: Check out repository
@@ -143,6 +133,7 @@ jobs:
       ref: ${{ inputs.ref }}
       skip-download: ${{ inputs.skip-download }}
       page-url: ${{ inputs.page-url }}
+      index-url: ${{ inputs.page-url }}/index.yaml
     # Map the job outputs to step outputs
     outputs:
       release-tag: ${{ steps.release-tag.outputs.release-tag }}
@@ -174,42 +165,43 @@ jobs:
           tree .
           helm repo index .
           tree .
-          mv index.yaml index_new.yaml
-          cat index_new.yaml
+          cat index.yaml
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
       
-      # to do
+
       - name: Verify if there are older versions
         run: |
-          curl -K myconfig.txt -o output.txt
-          response = $(wget ${{ inputs.page-url }})
-          if [[ $string == *"200"* ]]; then
+          if [[ "$(curl -s -o /dev/null -w "%{http_code}" ${{ inputs.index-url }})" == "200" ]];
+          then 
+          mv index.yaml index_new.yaml
+          wget ${{ inputs.index-url }}; 
           mv index.yaml index_old.yaml
+          echo "INDEX_EXISTS=true" >> $GITHUB_ENV
+          else
+          echo "INDEX_EXISTS=false" >> $GITHUB_ENV
           fi
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
       
       - name: Merge all indexes into one index.yaml within the artifact root dir
-        if: ${{ inputs.start-run == 'true' }}
+        if: ${{ $INDEX_EXISTS == 'true' }}
         uses: mikefarah/yq@v4.30.5
         with:
           cmd: yq ea '. as $item ireduce ({}; . * $item )' index_new.yaml index_old.yaml > ${{ env.artifact-dir }}/index.yaml
 
       - name: After merge remove all useless indexes
+        if: ${{ $INDEX_EXISTS == 'true' }}
         run: |
           rm index_old.yaml
           rm index_new.yaml
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
-      # done
     
-      - name: Create artifact
-        if: ${{ inputs.start-run == 'true' }}
+      - name: Create artifact # for both cases
         uses: actions/upload-pages-artifact@v1.0.5
         with:
           path: ${{ env.root-dir }}/${{ env.artifact-dir }}
-
 
       - name: Deploy to GitHub Pages
         id: deployment
