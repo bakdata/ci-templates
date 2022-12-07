@@ -269,10 +269,9 @@ jobs:
           tree ${{ env.artifact-dir }}/${{ env.charts-subdir }}
           tree .
         shell: bash
-        working-directory: ${{ env.root-dir }}
 
       - name: Upload artifacts to tmp
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@v3
         with:
           name: artifacts-${{ env.charts-subdir }}
           path: ${{ env.artifact-dir }}/${{ env.charts-subdir }}
@@ -280,7 +279,7 @@ jobs:
 
 
       - name: Upload index.yaml from tmp
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@v3
         with:
           name: index-${{ env.charts-subdir }}
           path: ${{ env.index-dir }}/${{ env.charts-subdir }}
