@@ -257,16 +257,16 @@ jobs:
   publish-gh-pages:
     runs-on: ubuntu-22.04
     needs: [helm-release]
-    env:
-      page-url: ${{ inputs.page-url }}
-    permissions:
-      pages: write # to deploy to Pages
-      id-token: write # to verify the deployment originates from an appropriate source
+    # env:
+    #  page-url: ${{ inputs.page-url }}
+    #permissions:
+    #  pages: write # to deploy to Pages
+    #  id-token: write # to verify the deployment originates from an appropriate source
 
     # Deploy to the github-pages environment
-    environment:
-      name: github-pages
-      url: ${{ env.page-url }}
+    #environment:
+    #  name: github-pages
+    #  url: ${{ env.page-url }}
       
 
     steps:
