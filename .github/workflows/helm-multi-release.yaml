@@ -225,7 +225,9 @@ jobs:
     runs-on: ubuntu-22.04
     needs: [prepare-artifacts-start-run,prepare-artifacts-not-start-run]
     if: always()
-    #if: ${{ always() && (needs.prepare-artifacts-start-run.result == 'success' || needs.prepare-artifacts-not-start-run.result == 'success') }}
+    # if: |
+    #  always() && 
+    #  (needs.prepare-artifacts-start-run.result == 'success' || needs.prepare-artifacts-not-start-run.result == 'success')
     env:
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
@@ -246,7 +248,6 @@ jobs:
           helm repo index .
           tree .
           cat index.yaml
-          exit 1
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
 
