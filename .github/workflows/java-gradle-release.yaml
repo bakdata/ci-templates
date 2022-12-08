@@ -81,7 +81,7 @@ jobs:
           else
               release_version=$(semver bump "${{ github.event.inputs.release-type }}" "${old_version}")
           fi
-          echo "release-version=$release_version" >> $GITHUB_OUTPUT
+          echo "release-version=$release_version" >> "$GITHUB_OUTPUT"
 
       - name: Set up Gradle with version ${{ inputs.gradle-version }}
         uses: bakdata/ci-templates/actions/java-gradle-setup@v1.4.0
