@@ -77,7 +77,7 @@ jobs:
         run: |
           old_version=$(grep "version=" gradle.properties | cut -d "=" -f2)
           if [[ "${{ github.event.inputs.release-type }}" == "patch" ]]; then
-              release_version=${old_version%-*}
+              release_version="${old_version%-*}"
           else
               release_version=$(semver bump "${{ github.event.inputs.release-type }}" "${old_version}")
           fi
