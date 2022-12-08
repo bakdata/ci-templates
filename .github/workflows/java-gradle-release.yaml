@@ -50,6 +50,10 @@ jobs:
     name: Release
     runs-on: ubuntu-22.04
 
+    # Map the job outputs to step outputs
+    outputs:
+      release-version: ${{ steps.evaluate-version.outputs.release-version }}
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -97,7 +101,7 @@ jobs:
       - name: Commit and push
         run: |
           git add CHANGELOG.md
-          git commit -m "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}" 
+          git commit -m "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}"
           git push
         shell: bash
 
