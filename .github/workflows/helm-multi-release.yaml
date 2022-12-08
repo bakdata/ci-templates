@@ -136,11 +136,6 @@ jobs:
       release-tag: ${{ steps.release-tag.outputs.release-tag }}
       old-tag: ${{ steps.release-tag.outputs.old-tag }}
 
-    permissions:
-      pages: write # to deploy to Pages
-      id-token: write # to verify the deployment originates from an appropriate source      
-      contents: read
-
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -159,7 +154,6 @@ jobs:
           cat index.yaml
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
-      
 
       - name: Verify if there are older versions
         run: |
