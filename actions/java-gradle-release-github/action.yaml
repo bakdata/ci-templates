@@ -51,7 +51,7 @@ runs:
         GITHUB_USER: ${{ inputs.github-username }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
 
-    - name: Create Github release
+    - name: Create GitHub release
       uses: softprops/action-gh-release@v1
       with:
         body_path: CHANGELOG.md
