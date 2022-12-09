@@ -124,10 +124,16 @@ jobs:
       - name: Create an array of subdirs
         id: list
         run: echo "::set-output name=subdirs_list::$(jq 'split(",")' -Rc <(echo '${{ inputs.subdirs }}'))"
+      
       - name: Test array
         run: |
-          echo ${{ steps.list.outputs.subdirs_list }}
+          for i in "${${{ steps.list.outputs.subdirs_list }}[@]}"
+          do
+            echo $i
+            echo "---""
+          done
         shell: bash
+      
       - name: Check if repository is empty
         id: checkrepo
         run: |
