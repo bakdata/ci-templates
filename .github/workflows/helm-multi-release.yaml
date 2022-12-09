@@ -144,7 +144,7 @@ jobs:
           IFS=',()][' read -r -a array <<<"${{ fromJson(inputs.subdirs) }}"
           for i in "${array[@]}"
           do
-            mv $i/* ../$i
+            echo "$i" 
           done
           IFS="$bkpIFS"
           tree .
