@@ -113,7 +113,7 @@ jobs:
       gh-pages: ${{ inputs.gh-pages-branch }}
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
-      charts-subdirs: ${{ fromJson(inputs.subdirs) }}
+#      charts-subdirs: ${{ fromJson(inputs.subdirs) }}
 
     steps:
       - name: Check out repository
