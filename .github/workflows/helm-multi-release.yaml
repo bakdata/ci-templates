@@ -174,7 +174,7 @@ jobs:
         if: ${{ env.INDEX_EXISTS == 'true' }}
         uses: mikefarah/yq@v4.30.5
         with:
-          cmd: yq ea '. as $item ireduce ({}; . * $item )' index_new.yaml index_old.yaml > ${{ env.root-dir }}/${{ env.artifact-dir }}/index.yaml
+          cmd: yq ea '. as $item ireduce ({}; . * $item )' ${{ env.root-dir }}/${{ env.artifact-dir }}/index_new.yaml ${{ env.root-dir }}/${{ env.artifact-dir }}/index_old.yaml > ${{ env.root-dir }}/${{ env.artifact-dir }}/index.yaml
 
       - name: After merge remove all useless indexes
         if: ${{ env.INDEX_EXISTS == 'true' }}
