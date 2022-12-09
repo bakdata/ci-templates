@@ -159,10 +159,10 @@ jobs:
 
       - name: Verify if there are older versions
         run: |
-          if [[ "$(curl -s -o /dev/null -w "%{http_code}" ${{ inputs.index-url }})" == "200" ]];
+          if [[ "$(curl -s -o /dev/null -w "%{http_code}" ${{ env.index-url }})" == "200" ]];
           then 
           mv index.yaml index_new.yaml
-          wget ${{ inputs.index-url }}; 
+          wget ${{ env.index-url }}; 
           mv index.yaml index_old.yaml
           echo "INDEX_EXISTS=true" >> $GITHUB_ENV
           else
