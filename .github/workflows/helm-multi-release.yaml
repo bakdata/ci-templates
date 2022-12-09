@@ -125,9 +125,9 @@ jobs:
         id: checkrepo
         run: |
           if [ "$(ls -A ../)" ]; then
-            echo "empty=false" >> $GITHUB_OUTPUT
+            echo "empty=true" >> $GITHUB_OUTPUT
           else
-              echo "empty=true" >> $GITHUB_OUTPUT
+              echo "empty=false" >> $GITHUB_OUTPUT
           fi
           
       - name: Download all artifacts
