@@ -113,7 +113,7 @@ jobs:
       gh-pages: ${{ inputs.gh-pages-branch }}
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
-      charts-subdirs: "${{ fromJson(inputs.subdirs) }}"
+      # charts-subdirs: "${{ fromJson(inputs.subdirs) }}"
 
     steps:
       - name: Check out repository
@@ -139,10 +139,14 @@ jobs:
         if: ${{ steps.checkrepo.outputs.empty }} == 'false' }}
         run: |
           tree .
-          for i in "${${{ env.charts-subdirs }}[@]}"
+
+          bkpIFS="$IFS"
+          IFS=',()][' read -r -a charts-subdirs <<<"${{ fromJson(inputs.subdirs) }}"
+          for i in "${charts-subdirs[@]}"
           do
             mv $i/* ../$i
           done
+          IFS="$bkpIFS"
           tree .
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
@@ -151,11 +155,14 @@ jobs:
         if: ${{  steps.checkrepo.outputs.empty }} == 'true' }}
         run: |
           tree .
-          for i in "${${{ env.charts-subdirs }}[@]}"
+          bkpIFS="$IFS"
+          IFS=',()][' read -r -a charts-subdirs <<<"${{ fromJson(inputs.subdirs) }}"
+          for i in "${charts-subdirs[@]}"
           do
             echo "$i"
             mv ./$i ../
           done
+          IFS="$bkpIFS"
           tree .
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
