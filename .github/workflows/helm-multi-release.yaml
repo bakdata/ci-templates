@@ -141,8 +141,8 @@ jobs:
           tree .
 
           bkpIFS="$IFS"
-          IFS=',()][' read -r -a charts-subdirs <<<"${{ fromJson(inputs.subdirs) }}"
-          for i in "${charts-subdirs[@]}"
+          IFS=',()][' read -r -a array <<<"${{ fromJson(inputs.subdirs) }}"
+          for i in "${array[@]}"
           do
             mv $i/* ../$i
           done
@@ -156,8 +156,8 @@ jobs:
         run: |
           tree .
           bkpIFS="$IFS"
-          IFS=',()][' read -r -a charts-subdirs <<<"${{ fromJson(inputs.subdirs) }}"
-          for i in "${charts-subdirs[@]}"
+          IFS=',()][' read -r -a array <<<"${{ fromJson(inputs.subdirs) }}"
+          for i in "${array[@]}"
           do
             echo "$i"
             mv ./$i ../
