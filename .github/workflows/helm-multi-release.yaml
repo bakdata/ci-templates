@@ -136,7 +136,7 @@ jobs:
           path: ${{ env.root-dir }}/${{ env.artifact-dir }}
       
       - name: Merge contents if the artifacts already exist 
-        if: ${{ ${{ steps.checkrepo.outputs.empty }} == 'false' }}
+        if: ${{ steps.checkrepo.outputs.empty }} == 'false' }}
         run: |
           tree .
           for subdir in ./*
@@ -148,7 +148,7 @@ jobs:
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
       
       - name: Create new tree for the first run 
-        if: ${{ ${{ steps.checkrepo.outputs.empty }} == 'true' }}
+        if: ${{  steps.checkrepo.outputs.empty }} == 'true' }}
         run: |
           tree .
           mv * ../
