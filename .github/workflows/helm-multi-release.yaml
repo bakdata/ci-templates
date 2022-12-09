@@ -135,6 +135,7 @@ jobs:
         with:
           path: ${{ env.root-dir }}/${{ env.artifact-dir }}
       
+# mv $i/* ../$i
       - name: Merge contents if the artifacts already exist 
         if: ${{ steps.checkrepo.outputs.empty }} == 'false' }}
         run: |
@@ -144,7 +145,7 @@ jobs:
           IFS=',()][' read -r -a array <<<"${{ fromJson(inputs.subdirs) }}"
           for i in "${array[@]}"
           do
-            mv $i/* ../$i
+            echo $i
           done
           IFS="$bkpIFS"
           tree .
