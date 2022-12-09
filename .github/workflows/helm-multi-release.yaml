@@ -113,21 +113,28 @@ jobs:
       gh-pages: ${{ inputs.gh-pages-branch }}
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
-      # charts-subdirs: "${{ fromJson(inputs.subdirs) }}"
+      charts-subdirs: ${{ fromJson(inputs.subdirs) }}
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
           ref: ${{ env.gh-pages }}
-
+      
+      - name: Create an array of subdirs
+        id: list
+        run: echo "::set-output name=subdirs_list::$(jq 'split(",")' -Rc <(echo '${{ inputs.subdirs }}'))"
+      - name: Test array
+        run: |
+          echo ${{ steps.list.outputs.subdirs_list }}
+        shell: bash
       - name: Check if repository is empty
         id: checkrepo
         run: |
           if [ "$(ls -A ../)" ]; then
-            echo "empty=true" >> $GITHUB_OUTPUT
+            echo "empty=false" >> $GITHUB_OUTPUT
           else
-              echo "empty=false" >> $GITHUB_OUTPUT
+              echo "empty=true" >> $GITHUB_OUTPUT
           fi
           
       - name: Download all artifacts
@@ -135,19 +142,14 @@ jobs:
         with:
           path: ${{ env.root-dir }}/${{ env.artifact-dir }}
       
-# mv $i/* ../$i
       - name: Merge contents if the artifacts already exist 
         if: ${{ steps.checkrepo.outputs.empty }} == 'false' }}
         run: |
           tree .
-
-          bkpIFS="$IFS"
-          IFS=',()][' read -r -a array <<<"${{ fromJson(inputs.subdirs) }}"
-          for i in "${array[@]}"
+          for i in "${${{ env.charts-subdirs }}[@]}"
           do
-            echo $i
+            mv $i/* ../$i
           done
-          IFS="$bkpIFS"
           tree .
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
@@ -156,13 +158,11 @@ jobs:
         if: ${{  steps.checkrepo.outputs.empty }} == 'true' }}
         run: |
           tree .
-          bkpIFS="$IFS"
-          IFS=',()][' read -r -a array <<<"${{ fromJson(inputs.subdirs) }}"
-          for i in "${array[@]}"
+          for i in "${${{ env.charts-subdirs }}[@]}"
           do
             echo "$i"
+            mv ./$i ../
           done
-          IFS="$bkpIFS"
           tree .
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
