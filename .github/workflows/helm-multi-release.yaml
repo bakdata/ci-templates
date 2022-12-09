@@ -108,6 +108,8 @@ jobs:
           ref: ${{ env.ref }}
       - name: Prepare artifacts
         run: |
+          cd ${{ env.charts-subdir }}
+          helm package .
           mkdir ${{ env.artifact-dir }}
           mv ${{ env.charts-subdir }}/*.tgz ${{ env.artifact-dir }}
         shell: bash
