@@ -67,7 +67,7 @@ jobs:
           helm-version: ${{ inputs.helm-version }}
 
       - name: Deploy crds and app
-        uses: bakdata/ci-templates/actions/kustomize-gke-deploy@v1.8.0
+        uses: bakdata/ci-templates/actions/kustomize-gke-deploy@fix/kustomize-deploy-empty-crds
         with:
           kustomization-path: ${{ inputs.kustomization-path }}
           timeout: ${{ inputs.timeout }}
