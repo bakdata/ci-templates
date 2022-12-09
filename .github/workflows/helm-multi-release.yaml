@@ -103,7 +103,6 @@ jobs:
       - name: Upload artifacts with action/upload
         uses: actions/upload-artifact@v3.1.1
         with:
-          name: ${{ env.charts-subdir }}
           path: ${{ env.root-dir }}/${{ env.artifact-dir }}
           retention-days: 1
 
@@ -141,7 +140,7 @@ jobs:
           tree .
           for subdir in ./*
           do
-            mv sudir/* ../subdir
+            mv $sudir/* ../$subdir
           done
           tree .
         shell: bash
