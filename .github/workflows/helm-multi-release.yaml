@@ -91,7 +91,7 @@ jobs:
       matrix:
         subdir: ${{ fromJson(inputs.subdirs) }}
     runs-on: ubuntu-22.04
-    needs: [helm-lint]
+    #needs: [helm-lint]
     env:
       charts-subdir: "${{ matrix.subdir }}"
       root-dir: ${{ inputs.charts-dir }}
