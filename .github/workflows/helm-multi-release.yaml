@@ -77,14 +77,14 @@ on:
         value: ${{ jobs.helm-release.outputs.old-tag }}
 
 jobs:
-  # helm-lint:
-  #   runs-on: ubuntu-22.04
+  helm-lint:
+    runs-on: ubuntu-22.04
 
-  #   steps:
-  #     - name: Lint Helm chart
-  #       uses: bakdata/ci-templates/actions/helm-lint@v1.0.0
-  #       with:
-  #         lint-config-path: "${{ inputs.lint-config-path }}"
+    steps:
+      - name: Lint Helm chart
+        uses: bakdata/ci-templates/actions/helm-lint@v1.0.0
+        with:
+          lint-config-path: "${{ inputs.lint-config-path }}"
 
   package-new-artifacts:
     strategy:
