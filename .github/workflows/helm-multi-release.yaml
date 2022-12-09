@@ -183,6 +183,13 @@ jobs:
           rm index_new.yaml
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
+
+      - name: Debug
+        run: |
+          tree
+          cat index.yaml
+        shell: bash
+        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
     
       - name: Create artifact # for both cases
         uses: actions/upload-pages-artifact@v1.0.5
