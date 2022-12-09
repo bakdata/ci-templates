@@ -3,14 +3,6 @@ name: Reusable workflow for packaging and publishing Helm charts having multiple
 on:
   workflow_call:
     inputs:
-      page-url:
-        description: "URL to the GitHub pages website of the repository."
-        required: true
-        type: string
-      release-type:
-        description: "Scope of the release (major, minor or patch)."
-        required: true
-        type: string
       ref:
         description: "The ref name to checkout the repository."
         required: false
@@ -31,11 +23,6 @@ on:
         required: true
         default: "."
         type: string
-      skip-download:
-        description: "Skip downloading index.yaml and previous Chart versions from GitHub pages. (To be used during setup of this workflow)"
-        required: false
-        default: "false"
-        type: string
       subdirs:
         description: "List of subdir to consider" # "['subdir1', 'subdir2', 'subdir3']"
         required: true
@@ -55,6 +42,11 @@ on:
         required: false
         default: "."
         type: string
+      gh-pages-branch:
+        description: "Name of branch containing the artifacts"
+        required: true
+        default: "gh-pages"
+        type: string
 
     secrets:
       github-username:
@@ -66,15 +58,6 @@ on:
       github-token:
         description: "The GitHub token for committing the changes."
         required: true
-
-    # Map the workflow outputs to job outputs
-    outputs:
-      release-tag:
-        description: "The release tag."
-        value: ${{ jobs.helm-release.outputs.release-tag }}
-      old-tag:
-        description: "The old tag."
-        value: ${{ jobs.helm-release.outputs.old-tag }}
 
 jobs:
   # helm-lint:
@@ -112,7 +95,8 @@ jobs:
           helm package .
           cd ..
           mkdir ${{ env.artifact-dir }}
-          mv ${{ env.charts-subdir }}/*.tgz ${{ env.artifact-dir }}
+          mkdir ${{ env.artifact-dir }}/${{ env.charts-subdir }}
+          mv ${{ env.charts-subdir }}/*.tgz ${{ env.artifact-dir }}/${{ env.charts-subdir }}
         shell: bash
         working-directory: ${{ env.root-dir }}
       
@@ -127,89 +111,72 @@ jobs:
     runs-on: ubuntu-22.04
     needs: [package-new-artifacts]
     env:
+      gh-pages: ${{ inputs.gh-pages-branch }}
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
-      ref: ${{ inputs.ref }}
-      skip-download: ${{ inputs.skip-download }}
-      page-url: ${{ inputs.page-url }}
-      index-url: ${{ inputs.page-url }}/index.yaml
-    # Map the job outputs to step outputs
-    outputs:
-      release-tag: ${{ steps.release-tag.outputs.release-tag }}
-      old-tag: ${{ steps.release-tag.outputs.old-tag }}
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          ref: ${{ env.ref }}
+          ref: ${{ env.gh-pages }}
+
+      - name: Check if repository is empty
+        id: checkrepo
+        run: |
+          if [ "$(ls -A ../)" ]; then
+            echo "empty=false" >> $GITHUB_OUTPUT
+          else
+              echo "empty=true" >> $GITHUB_OUTPUT
+          fi
+          
       - name: Download all artifacts
         uses: actions/download-artifact@v3.0.1
         with:
           path: ${{ env.root-dir }}/${{ env.artifact-dir }}
       
-      - name: Generateindex.yaml for new packages
+      - name: Merge contents if the artifacts already exist 
+        if: ${{ ${{ steps.checkrepo.outputs.empty }} == 'false' }}
         run: |
           tree .
+          for subdir in ./*
+          do
+            mv sudir/* ../subdir
+          done
+          tree .
+        shell: bash
+        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
+      
+      - name: Create new tree for the first run 
+        if: ${{ ${{ steps.checkrepo.outputs.empty }} == 'true' }}
+        run: |
+          tree .
+          mv * ../
+          tree .
+        shell: bash
+        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
+      
+      - name: Remove useless directories
+        run: |
+          rm -rf ${{ env.artifact-dir }}
+          tree .
+        shell: bash
+        working-directory: ${{ env.root-dir }}
+      
+      - name: Generate index.yaml file
+        run: |
           helm repo index .
           tree .
           cat index.yaml
         shell: bash
-        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
+        working-directory: ${{ env.root-dir }}
 
-      - name: Verify if there are older versions
-        run: |
-          if [[ "$(curl -s -o /dev/null -w "%{http_code}" ${{ env.index-url }})" == "200" ]]; then 
-            mv index.yaml index_new.yaml
-            wget ${{ env.index-url }}; 
-            mv index.yaml index_old.yaml
-            echo "INDEX_EXISTS=true" >> $GITHUB_ENV
-          else
-            echo "INDEX_EXISTS=false" >> $GITHUB_ENV
-          fi
-        shell: bash
-        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
-      
-      - name: Merge all indexes into one index.yaml within the artifact root dir
-        if: ${{ env.INDEX_EXISTS == 'true' }}
-        uses: mikefarah/yq@v4.30.5
+      - name: Commit and push Chart.yaml & .bumpversion.cfg file
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
-          cmd: yq ea '. as $item ireduce ({}; . * $item )' ${{ env.root-dir }}/${{ env.artifact-dir }}/index_new.yaml ${{ env.root-dir }}/${{ env.artifact-dir }}/index_old.yaml > ${{ env.root-dir }}/${{ env.artifact-dir }}/index.yaml
-
-      - name: After merge remove all useless indexes
-        if: ${{ env.INDEX_EXISTS == 'true' }}
-        run: |
-          rm index_old.yaml
-          rm index_new.yaml
-        shell: bash
-        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
-
-      - name: Debug
-        run: |
-          tree
-          cat index.yaml
-        shell: bash
-        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
-    
-      - name: Create artifact # for both cases
-        uses: actions/upload-pages-artifact@v1.0.5
-        with:
-          path: ${{ env.root-dir }}/${{ env.artifact-dir }}
-
-  publish-gh-pages:
-    runs-on: ubuntu-22.04
-    needs: publish-artifacts
-    permissions:
-      pages: write # to deploy to Pages
-      id-token: write # to verify the deployment originates from an appropriate source
-      contents: read
-    # Deploy to the github-pages environment
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1
+          ref: ${{ env.gh-pages }}
+          commit-message: "Commit new artifacts"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
 
