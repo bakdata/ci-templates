@@ -113,6 +113,7 @@ jobs:
       gh-pages: ${{ inputs.gh-pages-branch }}
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
+      charts-subdirs: ${{ fromJson(inputs.subdirs) }}
 
     steps:
       - name: Check out repository
@@ -138,9 +139,9 @@ jobs:
         if: ${{ steps.checkrepo.outputs.empty }} == 'false' }}
         run: |
           tree .
-          for subdir in ./*
+          for i in "${${{ env.charts-subdirs }}[@]}"
           do
-            mv $sudir/* ../$subdir
+            mv $i/* ../$i
           done
           tree .
         shell: bash
@@ -150,7 +151,11 @@ jobs:
         if: ${{  steps.checkrepo.outputs.empty }} == 'true' }}
         run: |
           tree .
-          mv * ../
+          for i in "${${{ env.charts-subdirs }}[@]}"
+          do
+            echo "$i"
+            mv ./$i ../
+          done
           tree .
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
