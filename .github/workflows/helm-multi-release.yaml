@@ -93,10 +93,10 @@ jobs:
         run: |
           cd ${{ env.charts-subdir }}
           helm package .
-          cd ..
+          cd ../../
           mkdir ${{ env.artifact-dir }}
           mkdir ${{ env.artifact-dir }}/${{ env.charts-subdir }}
-          mv ${{ env.charts-subdir }}/*.tgz ${{ env.artifact-dir }}/${{ env.charts-subdir }}
+          mv ${{ env.root-dir }}/${{ env.charts-subdir }}/*.tgz ./${{ env.artifact-dir }}/${{ env.charts-subdir }}
           ls -al
           tree .
         shell: bash
