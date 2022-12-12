@@ -110,7 +110,6 @@ jobs:
       charts-subdir: "${{ matrix.subdir }}"
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
-      index-dir: "${{ inputs.index-dir }}"
       ref: ${{ inputs.ref }}
 
     steps:
