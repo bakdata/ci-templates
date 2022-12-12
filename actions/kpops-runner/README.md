@@ -13,6 +13,7 @@ This action runs Kpops with the given config.
 | defaults          |    ❌    |   defaults    | string | defaults folder path                                                                                          |
 | config            |    ❌    |  config.yaml  | string | config.yaml file path                                                                                         |
 | components        |    ❌    |       -       | string | components package path                                                                                       |
+| kpops-version     |    ❌    |   0.2.0.dev20221202163038  | string | kpops version used to deploy pipeline  |
 
 ## Usage
 
