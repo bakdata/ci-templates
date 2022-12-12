@@ -137,47 +137,44 @@ jobs:
         shell: bash
         working-directory: ${{ env.root-dir }}/
       
-      # - name: Merge contents if the artifacts already exist or Create new tree if not
-      #   run: |
-      #     for subdir in */; do
-      #       if [ -d "../../../$subdir" ]; then
-      #         echo "$subdir arleady exists Moving content of $subdir"
-      #         mv $subdir/* ../../../$subdir
-      #       else
-      #         echo "$subdir does not exist. Moving the whole directory $subdir"
-      #         mkdir ../../../$subdir
-      #         mv $subdir/* ../../../$subdir
-      #       fi
-      #     done
-      #     tree ../
-      #   shell: bash
-      #   working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}/${{ env.artifact-dir }}
+      - name: Merge contents if the artifacts already exist or Create new tree if not
+        run: |
+          for subdir in */; do
+            if [ -d "../../$subdir" ]; then
+              echo "$subdir arleady exists Moving content of $subdir"
+              mv $subdir/* ../../$subdir
+            else
+              echo "$subdir does not exist. Moving the whole directory $subdir"
+              mkdir ../../$subdir
+              mv $subdir/* ../../$subdir
+            fi
+          done
+          tree ../
+        shell: bash
+        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}/${{ env.artifact-dir }}
       
-      # - name: Remove useless directories
-      #   run: |
-      #     rm -rf ${{ env.artifact-dir }}
-      #     tree .
-      #   shell: bash
+      - name: Remove useless directories
+        run: |
+          rm -rf ${{ env.artifact-dir }}
+          tree .
+        shell: bash
+        working-directory: ${{ env.root-dir }}
       
-      # - name: Generate index.yaml file
-      #   run: |
-      #     helm repo index .
-      #     tree .
-      #     cat index.yaml
-      #     pwd
-      #     tree ..
-      #     cd ..
+      - name: Generate index.yaml file
+        run: |
+          helm repo index .
+          tree .
+          cat index.yaml
+        shell: bash
+        working-directory: ${{ env.root-dir }}
 
-      #   shell: bash
-      #   working-directory: ${{ env.root-dir }}
-
-      # - name: Commit and push artifacts and the index.yaml file
-      #   uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
-      #   with:
-      #     add-untracked: true
-      #     ref: ${{ env.gh-pages }}
-      #     commit-message: "Commit new artifacts"
-      #     github-username: ${{ secrets.github-username }}
-      #     github-email: ${{ secrets.github-email }}
-      #     github-token: ${{ secrets.github-token }}
+      - name: Commit and push artifacts and the index.yaml file
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        with:
+          add-untracked: true
+          ref: ${{ env.gh-pages }}
+          commit-message: "Commit new artifacts"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
 
