@@ -120,31 +120,11 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ env.gh-pages }}
-
-      
-      # - name: Check if repository is empty
-      #   id: checkrepo
-      #   run: |
-      #     if [ -z "$(ls -A /path/to/dir)" ]; then
-      #       echo "empty=empty" >> $GITHUB_OUTPUT
-      #     else
-      #         echo "empty=not empty" >> $GITHUB_OUTPUT
-      #     fi
           
       - name: Download all artifacts
         uses: actions/download-artifact@v3.0.1
         with:
           path: ${{ env.root-dir }}/${{ env.artifact-dir }}
-      
-      # - name: Test tree
-      #   run: |
-      #     ls -al ./${{ env.artifact-dir }}/${{ env.artifact-dir }}
-      #     tree .
-      #     for d in ./${{ env.artifact-dir }}/${{ env.artifact-dir }}/*/ ; do
-      #         echo "$d"
-      #     done
-      #   shell: bash
-      #   working-directory: ${{ env.root-dir }}/
       
       - name: Merge contents if the artifacts already exist or Create new tree if not
         run: |
@@ -161,17 +141,6 @@ jobs:
           tree .
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
-      
-      # - name: Create new tree for the first run 
-      #   if: ${{  steps.checkrepo.outputs.empty }} == 'empty' }}
-      #   run: |
-      #     tree .
-      #     for subdir in ./${{ env.artifact-dir }}/*/ ; do
-      #       echo "Moving $subdir"
-      #       mv ./$subdir ../
-      #     tree .
-      #   shell: bash
-      #   working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
       
       - name: Remove useless directories
         run: |
@@ -193,6 +162,7 @@ jobs:
       - name: Commit and push Chart.yaml & .bumpversion.cfg file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
+          add-untracked: true
           ref: ${{ env.gh-pages }}
           commit-message: "Commit new artifacts"
           github-username: ${{ secrets.github-username }}
