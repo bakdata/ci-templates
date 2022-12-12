@@ -175,6 +175,8 @@ jobs:
       
       - name: Remove useless directories
         run: |
+          ls -al
+          tree .
           rm -rf ${{ env.artifact-dir }}
           tree .
         shell: bash
