@@ -153,11 +153,11 @@ This workflow is built from multiple composite actions listed below:
 | Name             | Required |             Default Value             |  Type  | Description                                                                                                                                |
 | ---------------- | :------: |:-------------------------------------:| :----: |--------------------------------------------------------------------------------------------------------------------------------------------|
 | charts-dir       |    ✅     |                                       | string | The directory containing the Helm charts                                                                                                   |
-| ref              |    ✅   |                                       | string | The ref name to checkout the repository                                                                                                    |
 | subdirs              |    ✅   |  | string | List of subdir to consider" Format:  "['subdir1', 'subdir2', 'subdir3']"                                                                   |
 | artifact-dir     |    ❌    |              "artifacts"              | string | Directory inside `charts-dir` for preparation of the GitHub pages artifact.                                                                |
 | gh-pages-branch    |    ❌    |              "gh-pages"               | string | The branch containing all the artifacts                                                                                                    |
 | project-root-dir     |    ❌    |                  "."                  | string | Github  dir where the charts dir is located.                                                                                               |
+| ref              |    ❌   |                                       | string | The ref name to checkout the repository                                                                                                    |
 | helm-version     |    ❌    |               "v3.10.1"               | string | The Helm version                                                                                                                           |
 | lint-config-path |    ❌    |      ".github/lint-config.yaml"       | string | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
 
