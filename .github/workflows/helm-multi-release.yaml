@@ -10,8 +10,7 @@ on:
         type: string
       ref:
         description: "The ref name to checkout the repository."
-        required: false
-        default: ${{ github.event.repository.default_branch }}
+        required: true
         type: string
       subdirs:
         description: "List of subdir to consider" # "['subdir1', 'subdir2', 'subdir3']"
