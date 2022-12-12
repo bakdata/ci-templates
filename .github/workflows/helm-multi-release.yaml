@@ -68,6 +68,7 @@ jobs:
   #       uses: bakdata/ci-templates/actions/helm-lint@v1.0.0
   #       with:
   #         lint-config-path: "${{ inputs.lint-config-path }}"
+
   update-version:
     runs-on: ubuntu-22.04
     #needs: [helm-lint]
@@ -151,17 +152,17 @@ jobs:
     needs: [package-new-artifacts]
     env:
       gh-pages: ${{ inputs.gh-pages-branch }}
-      root-dir: "."
+      root-dir: ${{ inputs.project-root-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
       charts-dir: "${{ inputs.artifact-dir }}"
 
     steps:
-      - name: Check out repository
+      - name: Check out branch containing the artifatcs and the index.yaml file
         uses: actions/checkout@v3
         with:
           ref: ${{ env.gh-pages }}
           
-      - name: Download all artifacts
+      - name: Download new artifacts
         uses: actions/download-artifact@v3.0.1
         with:
           path: ${{ env.artifact-dir }}
