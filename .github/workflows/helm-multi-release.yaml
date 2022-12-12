@@ -154,6 +154,9 @@ jobs:
         run: |
           ls -al ./${{ env.artifact-dir }}/${{ env.artifact-dir }}
           tree .
+          for d in ./${{ env.artifact-dir }}/${{ env.artifact-dir }}/*/ ; do
+              echo "$d"
+          done
         shell: bash
         working-directory: ${{ env.root-dir }}/
       
