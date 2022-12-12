@@ -134,7 +134,8 @@ jobs:
               mv $subdir/* ../$subdir
             else
               echo "Moving the whole directory $subdir"
-              mv -rf ./$subdir ../
+              mkdir ../$subdir
+              mv $subdir/* ../$subdir
             fi
           done
           tree ../
