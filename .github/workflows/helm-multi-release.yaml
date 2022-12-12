@@ -152,7 +152,7 @@ jobs:
       
       - name: Test tree
         run: |
-          ls -al ./${{ env.artifact-dir }}
+          ls -al ./${{ env.artifact-dir }}/${{ env.artifact-dir }}
           tree .
         shell: bash
         working-directory: ${{ env.root-dir }}/
