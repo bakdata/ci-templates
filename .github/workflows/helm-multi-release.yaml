@@ -98,12 +98,12 @@ jobs:
           mkdir ${{ env.artifact-dir }}/${{ env.charts-subdir }}
           mv ${{ env.charts-subdir }}/*.tgz ${{ env.artifact-dir }}/${{ env.charts-subdir }}
         shell: bash
-        working-directory: ${{ env.root-dir }}
+# working-directory: ${{ env.root-dir }}
       
       - name: Upload artifacts with action/upload
         uses: actions/upload-artifact@v3.1.1
         with:
-          path: ${{ env.root-dir }}/${{ env.artifact-dir }}
+          path: ${{ env.artifact-dir }}
           retention-days: 1
 
   publish-artifacts:
@@ -133,7 +133,7 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v3.0.1
         with:
-          path: ${{ env.root-dir }}/${{ env.artifact-dir }}
+          path: ${{ env.artifact-dir }}
       
       - name: Test tree
         run: |
@@ -143,7 +143,7 @@ jobs:
               echo "$d"
           done
         shell: bash
-        working-directory: ${{ env.root-dir }}/
+#        working-directory: ${{ env.root-dir }}/
       
       - name: Merge contents if the artifacts already exist 
         if: ${{ steps.checkrepo.outputs.empty }} == 'not empty' }}
