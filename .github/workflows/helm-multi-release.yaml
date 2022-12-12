@@ -103,7 +103,7 @@ jobs:
       - name: Upload artifacts with action/upload
         uses: actions/upload-artifact@v3.1.1
         with:
-          path: ${{ env.root-dir }}/${{ env.artifact-dir }}
+          path: ${{ env.artifact-dir }}
           retention-days: 1
 
   publish-artifacts:
@@ -111,8 +111,9 @@ jobs:
     needs: [package-new-artifacts]
     env:
       gh-pages: ${{ inputs.gh-pages-branch }}
-      root-dir: ${{ inputs.charts-dir }}
+      root-dir: "."
       artifact-dir: "${{ inputs.artifact-dir }}"
+      charts-dir: "${{ inputs.artifact-dir }}"
 #      charts-subdirs: ${{ fromJson(inputs.subdirs) }}
 
     steps:
@@ -124,47 +125,56 @@ jobs:
       - name: Download all artifacts
         uses: actions/download-artifact@v3.0.1
         with:
-          path: ${{ env.root-dir }}/${{ env.artifact-dir }}
-      
-      - name: Merge contents if the artifacts already exist or Create new tree if not
-        run: |
-          for subdir in */; do
-            if [ -d "../../../$subdir" ]; then
-              echo "$subdir arleady exists Moving content of $subdir"
-              mv $subdir/* ../../../$subdir
-            else
-              echo "$subdir does not exist. Moving the whole directory $subdir"
-              mkdir ../../../$subdir
-              mv $subdir/* ../../../$subdir
-            fi
-          done
-          tree ../
-        shell: bash
-        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}/${{ env.artifact-dir }}
-      
+          path: ${{ env.artifact-dir }}
       - name: Remove useless directories
         run: |
-          rm -rf ${{ env.artifact-dir }}
-          tree .
-        shell: bash
-      
-      - name: Generate index.yaml file
-        run: |
-          helm repo index .
-          tree .
-          cat index.yaml
           pwd
-          tree ..
+          ls -al
+          tree .
         shell: bash
-        working-directory: ${{ env.root-dir }}
+        working-directory: ${{ env.root-dir }}/
+      
+      # - name: Merge contents if the artifacts already exist or Create new tree if not
+      #   run: |
+      #     for subdir in */; do
+      #       if [ -d "../../../$subdir" ]; then
+      #         echo "$subdir arleady exists Moving content of $subdir"
+      #         mv $subdir/* ../../../$subdir
+      #       else
+      #         echo "$subdir does not exist. Moving the whole directory $subdir"
+      #         mkdir ../../../$subdir
+      #         mv $subdir/* ../../../$subdir
+      #       fi
+      #     done
+      #     tree ../
+      #   shell: bash
+      #   working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}/${{ env.artifact-dir }}
+      
+      # - name: Remove useless directories
+      #   run: |
+      #     rm -rf ${{ env.artifact-dir }}
+      #     tree .
+      #   shell: bash
+      
+      # - name: Generate index.yaml file
+      #   run: |
+      #     helm repo index .
+      #     tree .
+      #     cat index.yaml
+      #     pwd
+      #     tree ..
+      #     cd ..
 
-      - name: Commit and push artifacts and the index.yaml file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
-        with:
-          add-untracked: true
-          ref: ${{ env.gh-pages }}
-          commit-message: "Commit new artifacts"
-          github-username: ${{ secrets.github-username }}
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
+      #   shell: bash
+      #   working-directory: ${{ env.root-dir }}
+
+      # - name: Commit and push artifacts and the index.yaml file
+      #   uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+      #   with:
+      #     add-untracked: true
+      #     ref: ${{ env.gh-pages }}
+      #     commit-message: "Commit new artifacts"
+      #     github-username: ${{ secrets.github-username }}
+      #     github-email: ${{ secrets.github-email }}
+      #     github-token: ${{ secrets.github-token }}
 
