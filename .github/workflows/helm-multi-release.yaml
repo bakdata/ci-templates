@@ -154,6 +154,8 @@ jobs:
           helm repo index .
           tree .
           cat index.yaml
+          pwd
+          tree ..
         shell: bash
         working-directory: ${{ env.root-dir }}
 
