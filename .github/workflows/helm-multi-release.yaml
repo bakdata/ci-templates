@@ -82,7 +82,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ env.ref }}
-      - name: Update chart.yaml
+
+      - name: Use the tag to update chart.yaml files
         run: |
           sudo add-apt-repository ppa:rmescandon/yq
           sudo apt update
@@ -95,7 +96,7 @@ jobs:
         shell: bash
         working-directory: ${{ env.root-dir }}
 
-      - name: Commit and push updated versions in charts
+      - name: Commit and push updated charts
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           add-untracked: true
@@ -124,6 +125,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ env.ref }}
+
       - name: Prepare artifacts
         run: |
           cd ${{ env.charts-subdir }}
@@ -186,7 +188,7 @@ jobs:
           tree .
         shell: bash
         working-directory: ${{ env.root-dir }}
-      
+
       - name: Generate index.yaml file
         run: |
           helm repo index .
