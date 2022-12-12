@@ -3,7 +3,7 @@ description: "Run Kpops command line with the given params"
 
 inputs:
   mode:
-    description: "The command mode you want to use to launch kpops"
+    description: "The command mode you want to use to launch KPOps"
     required: true
   pipeline:
     description: "Pipeline file you want to run"
@@ -24,7 +24,7 @@ inputs:
     description: "Components package path"
     required: false
   kpops-version:
-    description: "Use specific kpops version to deploy pipeline"
+    description: "Use specific KPOps version to deploy pipeline"
     required: true
 
 runs:
