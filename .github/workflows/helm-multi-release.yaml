@@ -128,24 +128,21 @@ jobs:
       
       - name: Merge contents if the artifacts already exist or Create new tree if not
         run: |
-          tree .
           for subdir in ./${{ env.artifact-dir }}/*/ ; do
             if [ -d "../$subdir" ]; then
               echo "Moving content of $subdir"
               mv $subdir/* ../$subdir
             else
               echo "Moving the whole directory $subdir"
-            mv ./$subdir ../
+            mv -rf ./$subdir ../
             fi
           done
-          tree .
+          tree ../
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
       
       - name: Remove useless directories
         run: |
-          ls -al
-          tree .
           rm -rf ${{ env.artifact-dir }}
           tree .
         shell: bash
@@ -159,7 +156,7 @@ jobs:
         shell: bash
         working-directory: ${{ env.root-dir }}
 
-      - name: Commit and push Chart.yaml & .bumpversion.cfg file
+      - name: Commit and push artifacts and the index.yaml file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           add-untracked: true
