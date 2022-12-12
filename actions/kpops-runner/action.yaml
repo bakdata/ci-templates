@@ -25,8 +25,7 @@ inputs:
     required: false
   kpops-version:
     description: "Use specific kpops version to deploy pipeline"
-    required: false
-    default: 0.2.0.dev20221202163038
+    required: true
 
 runs:
   using: "composite"
