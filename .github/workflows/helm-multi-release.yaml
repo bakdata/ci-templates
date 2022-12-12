@@ -75,7 +75,7 @@ jobs:
       root-dir: ${{ inputs.charts-dir }}
       ref: ${{ inputs.ref }}
       skip-download: ${{ inputs.skip-download }}
-      release-tag: ${GITHUB_REF##*/}
+      release-tag: ${{github.ref_name}}
 
     steps:
       - name: Check out repository
@@ -84,9 +84,6 @@ jobs:
           ref: ${{ env.ref }}
       - name: Update chart.yaml
         run: |
-          echo "**************"
-          echo "${{github.ref_name}}"
-          echo "**************"
           sudo add-apt-repository ppa:rmescandon/yq
           sudo apt update
           sudo apt install yq -y
