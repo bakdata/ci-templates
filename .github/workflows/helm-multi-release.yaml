@@ -92,6 +92,7 @@ jobs:
       - name: Prepare artifacts
         run: |
           cd ${{ env.charts-subdir }}
+          ls -al
           helm package .
           cd ..
           mkdir ${{ env.artifact-dir }}
@@ -103,7 +104,7 @@ jobs:
       - name: Upload artifacts with action/upload
         uses: actions/upload-artifact@v3.1.1
         with:
-          path: ${{ env.artifact-dir }}
+          path: ${{ env.artifact-dir }}/${{ env.charts-subdir }}
           retention-days: 1
 
   publish-artifacts:
