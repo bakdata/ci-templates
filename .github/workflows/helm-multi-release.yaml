@@ -130,7 +130,7 @@ jobs:
           for i in ${{ inputs.subdirs }}
           do
             echo $i
-            echo "---""
+            echo "---"
           done
         shell: bash
       
