@@ -1,4 +1,5 @@
-name: Reusable workflow for packaging and publishing Helm charts having multiple subchart on GitHub pages
+name: Helm Multi Release
+# Reusable workflow for packaging and publishing Helm charts having multiple subcharts on GitHub pages
 
 on:
   workflow_call:
@@ -60,18 +61,18 @@ on:
         required: true
 
 jobs:
-  # helm-lint:
-  #   runs-on: ubuntu-22.04
+  helm-lint:
+    runs-on: ubuntu-22.04
 
-  #   steps:
-  #     - name: Lint Helm chart
-  #       uses: bakdata/ci-templates/actions/helm-lint@v1.0.0
-  #       with:
-  #         lint-config-path: "${{ inputs.lint-config-path }}"
+    steps:
+      - name: Lint Helm chart
+        uses: bakdata/ci-templates/actions/helm-lint@v1.0.0
+        with:
+          lint-config-path: "${{ inputs.lint-config-path }}"
 
   update-version:
     runs-on: ubuntu-22.04
-    #needs: [helm-lint]
+    needs: [helm-lint]
     env:
       root-dir: ${{ inputs.charts-dir }}
       ref: ${{ inputs.ref }}
