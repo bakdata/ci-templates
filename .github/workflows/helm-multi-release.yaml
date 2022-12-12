@@ -90,7 +90,7 @@ jobs:
           for subdir in */; do
             cat "$subdir/Chart.yaml"
             yq e -i '.version = "${{  env.release-tag }}"' $subdir/Chart.yaml
-            cat "$subdir/Chart.yaml
+            cat "$subdir/Chart.yaml"
           done
         shell: bash
         working-directory: ${{ env.root-dir }}
@@ -169,11 +169,11 @@ jobs:
           for subdir in */; do
             if [ -d "../$subdir" ]; then
               echo "$subdir arleady exists Moving content of $subdir"
-              mv $subdir/* ../$subdir
+              mv "$subdir"/* ../"$subdir"
             else
               echo "$subdir does not exist. Moving the whole directory $subdir"
-              mkdir ../$subdir
-              mv $subdir/* ../$subdir
+              mkdir ../"$subdir"
+              mv "$subdir"/* ../"$subdir"
             fi
           done
           tree ../
