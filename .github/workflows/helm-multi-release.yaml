@@ -151,11 +151,11 @@ jobs:
           tree .
           for subdir in ./${{ env.artifact-dir }}/*/ ; do
             echo "Moving content of $subdir"
-            mv $subdir/* ../$subdir
+            mv $subdir* ../$subdir
           done
           tree .
         shell: bash
-        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
+        working-directory: ${{ env.artifact-dir }}
       
       - name: Create new tree for the first run 
         if: ${{  steps.checkrepo.outputs.empty }} == 'empty' }}
@@ -166,7 +166,7 @@ jobs:
             mv ./$subdir ../
           tree .
         shell: bash
-        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
+        working-directory: ${{ env.artifact-dir }}
       
       - name: Remove useless directories
         run: |
