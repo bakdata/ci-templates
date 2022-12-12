@@ -35,7 +35,7 @@ on:
       artifact-dir:
         description: "Directory inside `charts-dir` for preparation of the GitHub pages artifact."
         required: false
-        default: "artifact"
+        default: "artifacts"
         type: string
       project-root-dir:
         description: "Github  dir where the charts dir is located"
@@ -97,7 +97,7 @@ jobs:
           mkdir ${{ env.artifact-dir }}
           mkdir ${{ env.artifact-dir }}/${{ env.charts-subdir }}
           mv ${{ env.root-dir }}/${{ env.charts-subdir }}/*.tgz ./${{ env.artifact-dir }}/${{ env.charts-subdir }}
-          ls -al
+          ls -al ./${{ env.artifact-dir }}/${{ env.charts-subdir }}
           tree .
         shell: bash
         working-directory: ${{ env.root-dir }}
@@ -105,6 +105,7 @@ jobs:
       - name: Upload artifacts with action/upload
         uses: actions/upload-artifact@v3.1.1
         with:
+          name: ${{ env.charts-subdir }}
           path: ${{ env.artifact-dir }}/${{ env.charts-subdir }}
           retention-days: 1
 
@@ -128,7 +129,8 @@ jobs:
         uses: actions/download-artifact@v3.0.1
         with:
           path: ${{ env.artifact-dir }}
-      - name: Remove useless directories
+
+      - name: list test
         run: |
           pwd
           ls -al
