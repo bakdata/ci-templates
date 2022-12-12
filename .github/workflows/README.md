@@ -138,7 +138,7 @@ even if there is a protection rule in place.
 
 Finally, create a special `gh-pages` branch then set up GitHub pages for your repository in Settings → Pages → Build and deployment source → Deploy from a branch. 
 
-For each we use the tag to bump the version and package new artifacts. We then check out the `gh-pages` branch and add the newly created artifacts and generate a new `index.yaml` file.
+For each we use the tag to bump the version and package new artifacts. We then check out the `gh-pages` branch, add the newly created artifacts and generate a new `index.yaml` file.
 We upload the newly created artifacts as well as the `index.yaml` file the `gh-pages`. The index is then made available thanks to a GitHub pipeline that automatically  build and deploy pages.
 
 ### Dependencies
