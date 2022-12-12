@@ -3,6 +3,7 @@
 The following workflows can be found here:
 
 - [Helm Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-release)
+- [Helm Multi Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-multi-release)
 - [Kustomize GKE Deploy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-deploy)
 - [Kustomize GKE Destroy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-destroy)
 - [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
@@ -116,6 +117,83 @@ jobs:
       github-token: "${{ secrets.GH_TOKEN }}"
 ```
 
+## Helm Multi Release
+
+This workflow is for projects with multiple (sub-) helm charts. The workflow will lint all Helm charts, use the tag to bump the version, package the charts, update/create the Helm index, and deploy it on GitHub pages.
+
+### Prerequisites
+
+All  Helm charts need to be located in a corresponding subdir inside the `charts-dir` folder of your repository. 
+
+Additionally, you need to create the lint configuration file `.github/lint-config.yaml` and configure it to your liking.
+A minimal configuration could look like this:
+
+```yaml
+# check https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml for possible configurations
+target-branch: "main"
+```
+
+Moreover, choose a GitHub user who will commit and push the changes. Make sure to configure admin access to the repository for the selected user because admins can still push on the default branch
+even if there is a protection rule in place.
+
+Finally, create a special `gh-pages` branch then set up GitHub pages for your repository in Settings → Pages → Build and deployment source → Deploy from a branch. 
+
+For each we use the tag to bump the version and package new artifacts. We then check out the `gh-pages` branch and add the newly created artifacts and generate a new `index.yaml` file.
+We upload the newly created artifacts as well as the `index.yaml` file the `gh-pages`. The index is then made available thanks to a GitHub pipeline that automatically  build and deploy pages.
+
+### Dependencies
+
+This workflow is built from multiple composite actions listed below:
+
+- [helm-lint](https://github.com/bakdata/ci-templates/tree/main/actions/helm-lint)
+- [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
+
+### Input Parameters
+
+| Name             | Required |             Default Value             |  Type  | Description                                                                                                                                |
+| ---------------- | :------: |:-------------------------------------:| :----: |--------------------------------------------------------------------------------------------------------------------------------------------|
+| charts-dir       |    ✅     |                                       | string | The directory containing the Helm charts                                                                                                   |
+| ref              |    ✅   |                                       | string | The ref name to checkout the repository                                                                                                    |
+| subdirs              |    ✅   |  | string | List of subdir to consider" Format:  "['subdir1', 'subdir2', 'subdir3']"                                                                   |
+| artifact-dir     |    ❌    |              "artifacts"              | string | Directory inside `charts-dir` for preparation of the GitHub pages artifact.                                                                |
+| gh-pages-branch    |    ❌    |              "gh-pages"               | string | The branch containing all the artifacts                                                                                                    |
+| project-root-dir     |    ❌    |                  "."                  | string | Github  dir where the charts dir is located.                                                                                               |
+| helm-version     |    ❌    |               "v3.10.1"               | string | The Helm version                                                                                                                           |
+| lint-config-path |    ❌    |      ".github/lint-config.yaml"       | string | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
+
+### Secret Parameters
+
+These secrets define the GitHub user that pushes our changes to the repository. Create a repository secret for the GitHub username (`GH_USERNAME`), the GitHub email (`GH_EMAIL`), and a personal access
+token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the email: `[username]@users.noreply.github.com`.
+
+| Name            | Required | Description                                    |
+| --------------- | :------: | ---------------------------------------------- |
+| github-username |    ✅    | The GitHub username for committing the changes |
+| github-email    |    ✅    | The GitHub email for committing the changes    |
+| github-token    |    ✅    | The GitHub token for committing the changes    |
+
+
+### Calling the workflow
+
+```yaml
+name: Release multiple Helm Charts
+on:
+  workflow_dispatch:
+
+jobs:
+  call-workflow-passing-data:
+    name: Release & Publish Helm chart
+    uses: bakdata/ci-templates/.github/workflows/helm-multi-release.yaml@multi-release
+    with:
+      charts-dir: charts
+      subdirs: "['subdir1', 'subdir2', 'subdir3']"
+      project-root-dir: "."
+      gh-pages-branch: gh-pages
+    secrets:
+      github-email: "${{ secrets.GH_EMAIL }}"
+      github-username: "${{ secrets.GH_USERNAME }}"
+      github-token: "${{ secrets.GH_TOKEN }}"
+```
 ## Kustomize GKE Deploy
 
 This workflow will deploy to GKE using a Kustomize root directory.

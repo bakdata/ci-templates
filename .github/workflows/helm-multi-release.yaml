@@ -4,47 +4,42 @@ name: Helm Multi Release
 on:
   workflow_call:
     inputs:
+      charts-dir:
+        description: "The directory containing the Helm chart and `.bumpversion.cfg` file."
+        required: true
+        type: string
       ref:
         description: "The ref name to checkout the repository."
         required: false
         default: ${{ github.event.repository.default_branch }}
         type: string
-      lint-config-path:
-        description: "The path to the lint configuration file (See https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml)."
-        required: false
-        default: ".github/lint-config.yaml"
-        type: string
-      helm-version:
-        description: "The Helm version."
-        required: false
-        default: "v3.10.1"
-        type: string
-      charts-dir:
-        description: "The directory containing the Helm chart and `.bumpversion.cfg` file."
-        required: true
-        type: string
       subdirs:
         description: "List of subdir to consider" # "['subdir1', 'subdir2', 'subdir3']"
         required: true
-        type: string
-      index-dir:
-        description: "Directory to temporaly store the index.yaml files"
-        required: false
-        default: "indexes"
         type: string
       artifact-dir:
         description: "Directory inside `charts-dir` for preparation of the GitHub pages artifact."
         required: false
         default: "artifacts"
         type: string
+      gh-pages-branch:
+        description: "Name of branch containing the artifacts"
+        default: "gh-pages"
+        type: string
       project-root-dir:
         description: "Github  dir where the charts dir is located"
         required: false
         default: "."
         type: string
-      gh-pages-branch:
-        description: "Name of branch containing the artifacts"
-        default: "gh-pages"
+      helm-version:
+        description: "The Helm version."
+        required: false
+        default: "v3.10.1"
+        type: string
+      lint-config-path:
+        description: "The path to the lint configuration file (See https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml)."
+        required: false
+        default: ".github/lint-config.yaml"
         type: string
 
     secrets:
