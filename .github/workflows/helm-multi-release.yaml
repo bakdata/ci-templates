@@ -10,7 +10,7 @@ on:
         type: string
       ref:
         description: "The ref name to checkout the repository."
-        required: true
+        required: false
         type: string
       subdirs:
         description: "List of subdir to consider" # "['subdir1', 'subdir2', 'subdir3']"
