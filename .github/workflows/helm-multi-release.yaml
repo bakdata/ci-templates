@@ -74,7 +74,6 @@ jobs:
     env:
       root-dir: ${{ inputs.charts-dir }}
       ref: ${{ inputs.ref }}
-      skip-download: ${{ inputs.skip-download }}
       release-tag: ${{github.ref_name}}
 
     steps:
@@ -89,9 +88,9 @@ jobs:
           sudo apt update
           sudo apt install yq -y
           for subdir in */; do
-            cat $subdir/Chart.yaml
+            cat "$subdir/Chart.yaml"
             yq e -i '.version = "${{  env.release-tag }}"' $subdir/Chart.yaml
-            cat $subdir/Chart.yaml
+            cat "$subdir/Chart.yaml
           done
         shell: bash
         working-directory: ${{ env.root-dir }}
@@ -118,7 +117,6 @@ jobs:
       artifact-dir: "${{ inputs.artifact-dir }}"
       index-dir: "${{ inputs.index-dir }}"
       ref: ${{ inputs.ref }}
-      skip-download: ${{ inputs.skip-download }}
 
     steps:
       - name: Check out repository
