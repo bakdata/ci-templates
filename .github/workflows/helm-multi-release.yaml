@@ -130,12 +130,12 @@ jobs:
         run: |
           for subdir in ./${{ env.artifact-dir }}/*/ ; do
             if [ -d "../$subdir" ]; then
-              echo "Moving content of $subdir"
+              echo "$subdir arleady exists Moving content of $subdir"
               mv $subdir/* ../$subdir
             else
-              echo "Moving the whole directory $subdir"
-              mkdir ../$subdir
-              mv $subdir/* ../$subdir
+              echo "$subdir does not exist. Moving the whole directory $subdir"
+              mkdir ../../$subdir
+              mv $subdir/* ../../$subdir
             fi
           done
           tree ../
