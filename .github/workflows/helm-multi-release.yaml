@@ -93,6 +93,7 @@ jobs:
         run: |
           cd ${{ env.charts-subdir }}
           ls -al
+          tree .
           helm package .
           cd ..
           mkdir ${{ env.artifact-dir }}
