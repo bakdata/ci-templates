@@ -133,6 +133,7 @@ jobs:
           pwd
           ls -al
           tree .
+          tree ../
         shell: bash
         working-directory: ${{ env.root-dir }}/
       
