@@ -150,7 +150,7 @@ jobs:
         with:
           path: ${{ env.root-dir }}/${{ env.artifact-dir }}
       
-      - name: Test array
+      - name: Test tree
         run: |
           ls -al .
           tree .
