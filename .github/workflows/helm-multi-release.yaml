@@ -150,6 +150,13 @@ jobs:
         with:
           path: ${{ env.root-dir }}/${{ env.artifact-dir }}
       
+      - name: Test array
+        run: |
+          ls -al .
+          tree .
+        shell: bash
+        working-directory: ${{ env.root-dir }}/
+      
       - name: Merge contents if the artifacts already exist 
         if: ${{ steps.checkrepo.outputs.empty }} == 'false' }}
         run: |
