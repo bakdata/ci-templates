@@ -89,7 +89,7 @@ jobs:
           sudo apt install yq -y
           for subdir in */; do
             cat "$subdir/Chart.yaml"
-            yq e -i '.version = "${{  env.release-tag }}"' $subdir/Chart.yaml
+            yq e -i '.version = "${{  env.release-tag }}"' "$subdir/Chart.yaml"
             cat "$subdir/Chart.yaml"
           done
         shell: bash
