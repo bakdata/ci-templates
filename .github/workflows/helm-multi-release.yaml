@@ -68,13 +68,49 @@ jobs:
   #       uses: bakdata/ci-templates/actions/helm-lint@v1.0.0
   #       with:
   #         lint-config-path: "${{ inputs.lint-config-path }}"
+  update-version:
+    runs-on: ubuntu-22.04
+    #needs: [helm-lint]
+    env:
+      root-dir: ${{ inputs.charts-dir }}
+      ref: ${{ inputs.ref }}
+      skip-download: ${{ inputs.skip-download }}
+      release-tag: ${GITHUB_REF##*/}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ env.ref }}
+      - name: Prepare artifacts
+        run: |
+          sudo add-apt-repository ppa:rmescandon/yq
+          sudo apt update
+          sudo apt install yq -y
+          for subdir in */; do
+            cat $subdir/Chart.yaml
+            yq e -i '.version = "${{  env.release-tag }}"' $subdir/Chart.yaml
+            cat $subdir/Chart.yaml
+          done
+        shell: bash
+        working-directory: ${{ env.root-dir }}
+
+      - name: Commit and push updated versions in charts
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        with:
+          add-untracked: true
+          ref: ${{ env.ref }}
+          commit-message: "Commit new artifacts"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
 
   package-new-artifacts:
     strategy:
       matrix:
         subdir: ${{ fromJson(inputs.subdirs) }}
     runs-on: ubuntu-22.04
-    #needs: [helm-lint]
+    needs: [update-version]
     env:
       charts-subdir: "${{ matrix.subdir }}"
       root-dir: ${{ inputs.charts-dir }}
@@ -82,7 +118,6 @@ jobs:
       index-dir: "${{ inputs.index-dir }}"
       ref: ${{ inputs.ref }}
       skip-download: ${{ inputs.skip-download }}
-      page-url: ${{ inputs.page-url }}
 
     steps:
       - name: Check out repository
@@ -117,7 +152,6 @@ jobs:
       root-dir: "."
       artifact-dir: "${{ inputs.artifact-dir }}"
       charts-dir: "${{ inputs.artifact-dir }}"
-#      charts-subdirs: ${{ fromJson(inputs.subdirs) }}
 
     steps:
       - name: Check out repository
@@ -129,15 +163,6 @@ jobs:
         uses: actions/download-artifact@v3.0.1
         with:
           path: ${{ env.artifact-dir }}
-
-      - name: list test
-        run: |
-          pwd
-          ls -al
-          tree .
-          tree ../
-        shell: bash
-        working-directory: ${{ env.root-dir }}/
       
       - name: Merge contents if the artifacts already exist or Create new tree if not
         run: |
@@ -179,4 +204,3 @@ jobs:
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
-
