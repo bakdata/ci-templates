@@ -98,12 +98,12 @@ jobs:
           mkdir ${{ env.artifact-dir }}/${{ env.charts-subdir }}
           mv ${{ env.charts-subdir }}/*.tgz ${{ env.artifact-dir }}/${{ env.charts-subdir }}
         shell: bash
-# working-directory: ${{ env.root-dir }}
+        working-directory: ${{ env.root-dir }}
       
       - name: Upload artifacts with action/upload
         uses: actions/upload-artifact@v3.1.1
         with:
-          path: ${{ env.artifact-dir }}
+          path: ${{ env.root-dir }}/${{ env.artifact-dir }}
           retention-days: 1
 
   publish-artifacts:
@@ -120,53 +120,58 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ env.gh-pages }}
+
       
-      - name: Check if repository is empty
-        id: checkrepo
-        run: |
-          if [ -z "$(ls -A /path/to/dir)" ]; then
-            echo "empty=empty" >> $GITHUB_OUTPUT
-          else
-              echo "empty=not empty" >> $GITHUB_OUTPUT
-          fi
+      # - name: Check if repository is empty
+      #   id: checkrepo
+      #   run: |
+      #     if [ -z "$(ls -A /path/to/dir)" ]; then
+      #       echo "empty=empty" >> $GITHUB_OUTPUT
+      #     else
+      #         echo "empty=not empty" >> $GITHUB_OUTPUT
+      #     fi
           
       - name: Download all artifacts
         uses: actions/download-artifact@v3.0.1
         with:
-          path: ${{ env.artifact-dir }}
+          path: ${{ env.root-dir }}/${{ env.artifact-dir }}
       
-      - name: Test tree
-        run: |
-          ls -al ./${{ env.artifact-dir }}/${{ env.artifact-dir }}
-          tree .
-          for d in ./${{ env.artifact-dir }}/${{ env.artifact-dir }}/*/ ; do
-              echo "$d"
-          done
-        shell: bash
-#        working-directory: ${{ env.root-dir }}/
+      # - name: Test tree
+      #   run: |
+      #     ls -al ./${{ env.artifact-dir }}/${{ env.artifact-dir }}
+      #     tree .
+      #     for d in ./${{ env.artifact-dir }}/${{ env.artifact-dir }}/*/ ; do
+      #         echo "$d"
+      #     done
+      #   shell: bash
+      #   working-directory: ${{ env.root-dir }}/
       
-      - name: Merge contents if the artifacts already exist 
-        if: ${{ steps.checkrepo.outputs.empty }} == 'not empty' }}
-        run: |
-          tree .
-          for subdir in ./${{ env.artifact-dir }}/*/ ; do
-            echo "Moving content of $subdir"
-            mv $subdir* ../$subdir
-          done
-          tree .
-        shell: bash
-        working-directory: ${{ env.artifact-dir }}
-      
-      - name: Create new tree for the first run 
-        if: ${{  steps.checkrepo.outputs.empty }} == 'empty' }}
+      - name: Merge contents if the artifacts already exist or Create new tree if not
         run: |
           tree .
           for subdir in ./${{ env.artifact-dir }}/*/ ; do
-            echo "Moving $subdir"
+            if [ -d "../$subdir" ]; then
+              echo "Moving content of $subdir"
+              mv $subdir/* ../$subdir
+            else
+              echo "Moving the whole directory $subdir"
             mv ./$subdir ../
+            fi
+          done
           tree .
         shell: bash
-        working-directory: ${{ env.artifact-dir }}
+        working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
+      
+      # - name: Create new tree for the first run 
+      #   if: ${{  steps.checkrepo.outputs.empty }} == 'empty' }}
+      #   run: |
+      #     tree .
+      #     for subdir in ./${{ env.artifact-dir }}/*/ ; do
+      #       echo "Moving $subdir"
+      #       mv ./$subdir ../
+      #     tree .
+      #   shell: bash
+      #   working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
       
       - name: Remove useless directories
         run: |
