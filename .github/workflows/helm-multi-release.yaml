@@ -22,7 +22,6 @@ on:
       charts-dir:
         description: "The directory containing the Helm chart and `.bumpversion.cfg` file."
         required: true
-        default: "."
         type: string
       subdirs:
         description: "List of subdir to consider" # "['subdir1', 'subdir2', 'subdir3']"
@@ -45,7 +44,6 @@ on:
         type: string
       gh-pages-branch:
         description: "Name of branch containing the artifacts"
-        required: true
         default: "gh-pages"
         type: string
 
