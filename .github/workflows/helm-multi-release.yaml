@@ -127,7 +127,9 @@ jobs:
       
       - name: Test array
         run: |
-          for i in ${{ inputs.subdirs }}[@]
+          declare -a arr=${{ inputs.subdirs }}
+          
+          for i in "${arr[@]}"
           do
             echo $i
             echo "---"
