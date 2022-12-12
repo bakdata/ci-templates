@@ -121,28 +121,13 @@ jobs:
         with:
           ref: ${{ env.gh-pages }}
       
-      - name: Create an array of subdirs
-        id: list
-        run: echo "::set-output name=subdirs_list::$(jq 'split(",")' -Rc <(echo '${{ inputs.subdirs }}'))"
-      
-      - name: Test array
-        run: |
-          declare -a arr=${{ inputs.subdirs }}
-          
-          for i in "${arr[@]}"
-          do
-            echo $i
-            echo "---"
-          done
-        shell: bash
-      
       - name: Check if repository is empty
         id: checkrepo
         run: |
-          if [ "$(ls -A ../)" ]; then
-            echo "empty=false" >> $GITHUB_OUTPUT
+          if [ -z "$(ls -A /path/to/dir)" ]; then
+            echo "empty=empty" >> $GITHUB_OUTPUT
           else
-              echo "empty=true" >> $GITHUB_OUTPUT
+              echo "empty=not empty" >> $GITHUB_OUTPUT
           fi
           
       - name: Download all artifacts
@@ -161,26 +146,24 @@ jobs:
         working-directory: ${{ env.root-dir }}/
       
       - name: Merge contents if the artifacts already exist 
-        if: ${{ steps.checkrepo.outputs.empty }} == 'false' }}
+        if: ${{ steps.checkrepo.outputs.empty }} == 'not empty' }}
         run: |
           tree .
-          for i in "${${{ env.charts-subdirs }}[@]}"
-          do
-            mv $i/* ../$i
+          for subdir in ./${{ env.artifact-dir }}/*/ ; do
+            echo "Moving content of $subdir"
+            mv $subdir/* ../$subdir
           done
           tree .
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
       
       - name: Create new tree for the first run 
-        if: ${{  steps.checkrepo.outputs.empty }} == 'true' }}
+        if: ${{  steps.checkrepo.outputs.empty }} == 'empty' }}
         run: |
           tree .
-          for i in "${${{ env.charts-subdirs }}[@]}"
-          do
-            echo "$i"
-            mv ./$i ../
-          done
+          for subdir in ./${{ env.artifact-dir }}/*/ ; do
+            echo "Moving $subdir"
+            mv ./$subdir ../
           tree .
         shell: bash
         working-directory: ${{ env.root-dir }}/${{ env.artifact-dir }}
