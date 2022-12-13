@@ -8,8 +8,9 @@ on:
         description: "The directory containing the Helm chart and `.bumpversion.cfg` file."
         required: true
         type: string
-      ref:
-        description: "The ref name to checkout the repository."
+      root-branch:
+        description: "The main branch."
+        default: "main"
         required: false
         type: string
       subdirs:
@@ -67,7 +68,7 @@ jobs:
     needs: [helm-lint]
     env:
       root-dir: ${{ inputs.charts-dir }}
-      ref: ${{ inputs.ref }}
+      ref: ${{ inputs.root-branch }}
       release-tag: ${{github.ref_name}}
 
     steps:
@@ -109,7 +110,7 @@ jobs:
       charts-subdir: "${{ matrix.subdir }}"
       root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
-      ref: ${{ inputs.ref }}
+      ref: ${{ inputs.root-branch }}
 
     steps:
       - name: Check out repository
