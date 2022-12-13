@@ -189,11 +189,13 @@ jobs:
       subdirs: "['subdir1', 'subdir2', 'subdir3']"
       project-root-dir: "."
       gh-pages-branch: gh-pages
+      root-branch: main
     secrets:
       github-email: "${{ secrets.GH_EMAIL }}"
       github-username: "${{ secrets.GH_USERNAME }}"
       github-token: "${{ secrets.GH_TOKEN }}"
 ```
+
 ## Kustomize GKE Deploy
 
 This workflow will deploy to GKE using a Kustomize root directory.
