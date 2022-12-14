@@ -8,11 +8,6 @@ on:
         description: "The directory containing the Helm chart and `.bumpversion.cfg` file."
         required: true
         type: string
-      root-branch:
-        description: "The main branch."
-        default: "main"
-        required: false
-        type: string
       subdirs:
         description: "List of subdir to consider" # "['subdir1', 'subdir2', 'subdir3']"
         required: true
@@ -24,12 +19,18 @@ on:
         type: string
       gh-pages-branch:
         description: "Name of branch containing the artifacts"
+        required: false
         default: "gh-pages"
         type: string
       project-root-dir:
         description: "Github dir where the charts dir is located"
         required: false
         default: "."
+        type: string
+      root-branch:
+        description: "The main branch."
+        default: "main"
+        required: false
         type: string
       helm-version:
         description: "The Helm version."
@@ -67,8 +68,7 @@ jobs:
     runs-on: ubuntu-22.04
     needs: [helm-lint]
     env:
-      root-dir: ${{ inputs.charts-dir }}
-      ref: ${{ inputs.root-branch }}
+      ref: ${{ github.event.repository.default_branch }}
       release-tag: ${{github.ref_name}}
 
     steps:
@@ -83,12 +83,10 @@ jobs:
           sudo apt update
           sudo apt install yq -y
           for subdir in */; do
-            cat "$subdir/Chart.yaml"
             yq e -i '.version = "${{  env.release-tag }}"' "$subdir/Chart.yaml"
-            cat "$subdir/Chart.yaml"
           done
         shell: bash
-        working-directory: ${{ env.root-dir }}
+        working-directory: ${{ inputs.charts-dir }}
 
       - name: Commit and push updated charts
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
@@ -108,9 +106,8 @@ jobs:
     needs: [update-version]
     env:
       charts-subdir: "${{ matrix.subdir }}"
-      root-dir: ${{ inputs.charts-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
-      ref: ${{ inputs.root-branch }}
+      ref: ${{ github.event.repository.default_branch }}
 
     steps:
       - name: Check out repository
@@ -120,15 +117,10 @@ jobs:
 
       - name: Prepare artifacts
         run: |
-          cd ${{ env.charts-subdir }}
-          helm package .
-          cd ../../
           mkdir -p ${{ env.artifact-dir }}/${{ env.charts-subdir }}
-          mv ${{ env.root-dir }}/${{ env.charts-subdir }}/*.tgz ./${{ env.artifact-dir }}/${{ env.charts-subdir }}
-          ls -al ./${{ env.artifact-dir }}/${{ env.charts-subdir }}
-          tree .
+          helm package ./${{ inputs.charts-dir }}/${{ env.charts-subdir }} -d ${{ env.artifact-dir }}/${{ env.charts-subdir }}
         shell: bash
-        working-directory: ${{ env.root-dir }}
+        working-directory: ${{ inputs.project-root-dir }}
       
       - name: Upload artifacts with action/upload
         uses: actions/upload-artifact@v3.1.1
@@ -159,7 +151,7 @@ jobs:
       
       - name: Merge contents if the artifacts already exist or Create new tree if not
         run: |
-          for subdir in */; do
+          for subdir in ./${{ env.artifact-dir }}/*/; do
             if [ -d "../$subdir" ]; then
               echo "$subdir arleady exists Moving content of $subdir"
               mv "$subdir"/* ../"$subdir"
@@ -169,22 +161,12 @@ jobs:
               mv "$subdir"/* ../"$subdir"
             fi
           done
-          tree ../
-        shell: bash
-        working-directory: ${{ env.artifact-dir }}
-      
-      - name: Remove useless directories
-        run: |
           rm -rf ${{ env.artifact-dir }}
-          tree .
         shell: bash
         working-directory: ${{ env.root-dir }}
 
       - name: Generate index.yaml file
-        run: |
-          helm repo index .
-          tree .
-          cat index.yaml
+        run: helm repo index .
         shell: bash
         working-directory: ${{ env.root-dir }}
 
