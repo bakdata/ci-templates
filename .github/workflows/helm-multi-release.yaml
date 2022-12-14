@@ -60,7 +60,7 @@ jobs:
 
     steps:
       - name: Lint Helm chart
-        uses: bakdata/ci-templates/actions/helm-lint@v1.0.0
+        uses: bakdata/ci-templates/actions/helm-lint@v1.10.0
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
 
@@ -106,7 +106,6 @@ jobs:
     needs: [update-version]
     env:
       charts-subdir: "${{ matrix.subdir }}"
-      artifact-dir: "${{ inputs.artifact-dir }}"
       ref: ${{ github.event.repository.default_branch }}
 
     steps:
@@ -117,8 +116,8 @@ jobs:
 
       - name: Prepare artifacts
         run: |
-          mkdir -p ${{ env.artifact-dir }}/${{ env.charts-subdir }}
-          helm package ./${{ inputs.charts-dir }}/${{ env.charts-subdir }} -d ${{ env.artifact-dir }}/${{ env.charts-subdir }}
+          mkdir -p ${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
+          helm package ./${{ inputs.charts-dir }}/${{ env.charts-subdir }} -d ${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
         shell: bash
         working-directory: ${{ inputs.project-root-dir }}
       
@@ -126,15 +125,13 @@ jobs:
         uses: actions/upload-artifact@v3.1.1
         with:
           name: ${{ env.charts-subdir }}
-          path: ${{ env.artifact-dir }}/${{ env.charts-subdir }}
+          path: ${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
           retention-days: 1
 
   publish-artifacts:
     runs-on: ubuntu-22.04
     needs: [package-new-artifacts]
     env:
-      gh-pages: ${{ inputs.gh-pages-branch }}
-      root-dir: ${{ inputs.project-root-dir }}
       artifact-dir: "${{ inputs.artifact-dir }}"
       charts-dir: "${{ inputs.artifact-dir }}"
 
@@ -142,12 +139,12 @@ jobs:
       - name: Check out branch containing the artifatcs and the index.yaml file
         uses: actions/checkout@v3
         with:
-          ref: ${{ env.gh-pages }}
+          ref: ${{ inputs.gh-pages-branch }}
           
       - name: Download new artifacts
         uses: actions/download-artifact@v3.0.1
         with:
-          path: ${{ env.artifact-dir }}
+          path: ${{ inputs.artifact-dir }}
       
       - name: Merge contents if the artifacts already exist or Create new tree if not
         run: |
@@ -162,21 +159,21 @@ jobs:
             fi
           done
           cd ..
-          rm -rf ${{ env.artifact-dir }}
+          rm -rf ${{ inputs.artifact-dir }}
         shell: bash
-        working-directory: ${{ env.artifact-dir }}
+        working-directory: ${{ inputs.artifact-dir }}
 
       - name: Generate index.yaml file
         run: |
           helm repo index .
         shell: bash
-        working-directory: ${{ env.root-dir }}
+        working-directory: "."
 
       - name: Commit and push artifacts and the index.yaml file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           add-untracked: true
-          ref: ${{ env.gh-pages }}
+          ref: ${{ inputs.gh-pages-branch }}
           commit-message: "Commit new artifacts"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
