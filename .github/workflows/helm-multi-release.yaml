@@ -123,8 +123,7 @@ jobs:
           cd ${{ env.charts-subdir }}
           helm package .
           cd ../../
-          mkdir ${{ env.artifact-dir }}
-          mkdir ${{ env.artifact-dir }}/${{ env.charts-subdir }}
+          mkdir -p ${{ env.artifact-dir }}/${{ env.charts-subdir }}
           mv ${{ env.root-dir }}/${{ env.charts-subdir }}/*.tgz ./${{ env.artifact-dir }}/${{ env.charts-subdir }}
           ls -al ./${{ env.artifact-dir }}/${{ env.charts-subdir }}
           tree .
