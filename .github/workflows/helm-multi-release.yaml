@@ -168,9 +168,7 @@ jobs:
 
       - name: Generate index.yaml file
         run: |
-          tree .
           helm repo index .
-          tree .
         shell: bash
         working-directory: ${{ env.root-dir }}
 
