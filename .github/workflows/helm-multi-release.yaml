@@ -151,6 +151,7 @@ jobs:
       
       - name: Merge contents if the artifacts already exist or Create new tree if not
         run: |
+          tree .
           for subdir in ./${{ env.artifact-dir }}/*/; do
             if [ -d "../$subdir" ]; then
               echo "$subdir arleady exists Moving content of $subdir"
