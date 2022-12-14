@@ -151,8 +151,7 @@ jobs:
       
       - name: Merge contents if the artifacts already exist or Create new tree if not
         run: |
-          tree .
-          for subdir in ./${{ env.artifact-dir }}/*/; do
+          for subdir in */; do
             if [ -d "../$subdir" ]; then
               echo "$subdir arleady exists Moving content of $subdir"
               mv "$subdir"/* ../"$subdir"
@@ -162,12 +161,16 @@ jobs:
               mv "$subdir"/* ../"$subdir"
             fi
           done
+          cd ..
           rm -rf ${{ env.artifact-dir }}
         shell: bash
-        working-directory: ${{ env.root-dir }}
+        working-directory: ${{ env.artifact-dir }}
 
       - name: Generate index.yaml file
-        run: helm repo index .
+        run: |
+          tree .
+          helm repo index .
+          tree .
         shell: bash
         working-directory: ${{ env.root-dir }}
 
