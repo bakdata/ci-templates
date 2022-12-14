@@ -27,7 +27,7 @@ on:
         default: "gh-pages"
         type: string
       project-root-dir:
-        description: "Github  dir where the charts dir is located"
+        description: "Github dir where the charts dir is located"
         required: false
         default: "."
         type: string
