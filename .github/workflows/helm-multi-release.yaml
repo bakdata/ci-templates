@@ -77,7 +77,7 @@ jobs:
         with:
           ref: ${{ env.ref }}
 
-      - name: Use the tag to update chart.yaml files
+      - name: Use the tag to update Chart.yaml files
         run: |
           sudo add-apt-repository ppa:rmescandon/yq
           sudo apt update
