@@ -15,10 +15,10 @@ runs:
     - name: Deploy kustomized crds
       shell: bash
       run: |
-        customResourceDefinitions="$(kubectl kustomize ${{ inputs.kustomization-path }}  | kfilt -i kind=CustomResourceDefinition)"
-        if [ ! -z $customResourceDefinitions ]; then
-          echo $customResourceDefinitions | kubectl apply -f -
-          echo $customResourceDefinitions | kubectl wait --for condition=established --timeout=${{ inputs.timeout }}s -f -
+        customResourceDefinitions="$(kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -i kind=CustomResourceDefinition)"
+        if [[ ! -z "$customResourceDefinitions" ]]; then
+          echo "$customResourceDefinitions" | kubectl apply -f -
+          echo "$customResourceDefinitions" | kubectl wait --for condition=established --timeout=${{ inputs.timeout }}s -f -
         fi        
     - name: Deploy kustomized app
       shell: bash
