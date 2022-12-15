@@ -11,9 +11,6 @@ inputs:
   working-directory:
     description: "The root directory containing the config.yaml, pipelines folder and defaults"
     default: "."
-  execute:
-    description: "Set execution flag"
-    default: "false"
   defaults:
     description: "Defaults folder path"
     default: "defaults"
@@ -34,14 +31,7 @@ runs:
       shell: bash
       run: pip install kpops==${{ inputs.kpops-version }} --extra-index-url https://test.pypi.org/simple/
 
-    - uses: haya14busa/action-cond@v1
-      id: execution-mode
-      with:
-        cond: ${{ inputs.execute == 'true' }}
-        if_true: "--execute"
-        if_false: "--dry-run"
-
     - name: ${{ inputs.command }} ${{ inputs.pipeline }} pipeline
       shell: bash
       working-directory: ${{inputs.working-directory}}
-      run: kpops ${{inputs.command}} ${{ inputs.pipeline }} ${{inputs.components}} --defaults ${{ inputs.defaults }} ${{ steps.execution-mode.outputs.value }} --config ${{ inputs.config }}
+      run: kpops ${{inputs.command}} ${{ inputs.pipeline }} ${{inputs.components}} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
