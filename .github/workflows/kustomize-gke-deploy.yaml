@@ -55,7 +55,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup environment
-        uses: bakdata/ci-templates/actions/helm-gke-setup@v1.11.0
+        uses: bakdata/ci-templates/actions/helm-gke-setup@fix/kustomize-deploy-empty-crds
         with:
           gke-service-account: ${{ secrets.gke-service-account }}
           gke-project: ${{ secrets.gke-project }}
@@ -67,7 +67,7 @@ jobs:
           helm-version: ${{ inputs.helm-version }}
 
       - name: Deploy crds and app
-        uses: bakdata/ci-templates/actions/kustomize-gke-deploy@1.11.0
+        uses: bakdata/ci-templates/actions/kustomize-gke-deploy@fix/kustomize-deploy-empty-crds
         with:
           kustomization-path: ${{ inputs.kustomization-path }}
           timeout: ${{ inputs.timeout }}
