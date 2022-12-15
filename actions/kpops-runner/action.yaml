@@ -44,4 +44,4 @@ runs:
     - name: ${{ inputs.command }} ${{ inputs.pipeline }} pipeline
       shell: bash
       working-directory: ${{inputs.working-directory}}
-      run: kpops ${{inputs.mode}} ${{ inputs.pipeline }} ${{inputs.components}} --defaults ${{ inputs.defaults }} ${{ steps.execution-mode.outputs.value }} --config ${{ inputs.config }}
+      run: kpops ${{inputs.command}} ${{ inputs.pipeline }} ${{inputs.components}} --defaults ${{ inputs.defaults }} ${{ steps.execution-mode.outputs.value }} --config ${{ inputs.config }}
