@@ -87,7 +87,9 @@ jobs:
           sudo apt update
           sudo apt install yq -y
 
-          for subdir in ${charts_without_brackets_and_quotation//,/ }; do 
+          for subdir in ${charts_without_brackets_and_quotation//,/ }; do
+          echo $subdir
+          cat "./$subdir/Chart.yaml" 
             yq e -i '.version = "${{ env.release-tag }}"' "./$subdir/Chart.yaml"
           done
         shell: bash
