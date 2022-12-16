@@ -75,7 +75,7 @@ jobs:
 
       - name: Use the tag to update Chart.yaml files
         run: |
-          
+          tree .
           sudo add-apt-repository ppa:rmescandon/yq
           sudo apt update
           sudo apt install yq -y
