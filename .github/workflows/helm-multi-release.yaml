@@ -80,7 +80,7 @@ jobs:
       - name: Use the tag to update Chart.yaml files
         run: |
           echo "heyyyy"
-          charts= "${{ inputs.subdirs }}""
+          charts= "${{ inputs.subdirs }}"
           echo "heyyyy"
           charts_without_brackets=${charts:1:-1}
           echo "heyyyy"
