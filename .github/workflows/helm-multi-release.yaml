@@ -132,7 +132,7 @@ jobs:
         working-directory: ${{ inputs.charts-path }}
       
       - name: Upload artifacts with action/upload as multi chart
-        if: ${{needs.update-version.outputs.output1 == "false" }}
+        if: ${{needs.update-version.outputs.output1 == false }}
         uses: actions/upload-artifact@v3.1.1
         with:
           name: ${{ env.charts-subdir }}
@@ -140,7 +140,7 @@ jobs:
           retention-days: 1
       
       - name: Upload artifacts with action/upload as single chart
-        if: ${{needs.update-version.outputs.output1 == "true" }}
+        if: ${{needs.update-version.outputs.output1 == true }}
         uses: actions/upload-artifact@v3.1.1
         with:
           path: ${{ inputs.artifact-dir }}
