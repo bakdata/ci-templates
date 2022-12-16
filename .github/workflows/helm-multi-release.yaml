@@ -80,24 +80,18 @@ jobs:
 
       - name: Use the tag to update Chart.yaml files
         run: |
-          echo "heyyyy"
-          charts= "$CHARTS"
-          echo "$charts"
-          charts_without_brackets=${charts:1:-1}
-          echo "$charts_without_brackets"
-          charts_without_brackets_and_quotation=${charts_without_brackets//\'/}
-          echo $charts_without_brackets_and_quotation
-          echo "heyyyy"
-          echo $charts_without_brackets_and_quotation
+          
           sudo add-apt-repository ppa:rmescandon/yq
           sudo apt update
           sudo apt install yq -y
-
-          for subdir in ${charts_without_brackets_and_quotation//,/ }; do
-          echo "Hello"
-          echo $subdir
-          cat "./$subdir/Chart.yaml" 
-            yq e -i '.version = "${{ env.release-tag }}"' "./$subdir/Chart.yaml"
+          
+          for subdir in */; do
+            echo "test $subdir"
+            if test -f "$subdir/Chart.yaml"; then
+              echo "$subdir/Chart.yaml exists"
+              cat "./$subdir/Chart.yaml" 
+              yq e -i '.version = "2.1.0"' "./$subdir/Chart.yaml"
+            fi
           done
         shell: bash
         working-directory: ${{ inputs.charts-path }}
@@ -131,7 +125,7 @@ jobs:
       - name: Prepare artifacts
         run: |
           mkdir -p ../${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
-          helm package /${{ env.charts-subdir }} -d ../${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
+          helm package ${{ env.charts-subdir }} -d ../${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
         shell: bash
         working-directory: ${{ inputs.charts-path }}
       
