@@ -81,11 +81,11 @@ jobs:
         run: |
           echo "heyyyy"
           charts= "${{ inputs.subdirs }}"
-          echo "heyyyy"
+          echo "$charts"
           charts_without_brackets=${charts:1:-1}
-          echo "heyyyy"
+          echo "$charts_without_brackets"
           charts_without_brackets_and_quotation=${charts_stripped//\'/}
-
+          echo $charts_without_brackets_and_quotation
           echo "heyyyy"
           echo $charts_without_brackets_and_quotation
           sudo add-apt-repository ppa:rmescandon/yq
