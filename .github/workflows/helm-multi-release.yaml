@@ -87,7 +87,7 @@ jobs:
           
           for subdir in */; do
             if test -f "$subdir/Chart.yaml"; then
-              yq e -i '.version = "${{ env.ref }}"' "./$subdir/Chart.yaml"
+              yq e -i '.version = "${{ env.release-tag }}"' "./$subdir/Chart.yaml"
               cat "./$subdir/Chart.yaml" 
             fi
           done
