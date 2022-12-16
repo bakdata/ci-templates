@@ -86,11 +86,9 @@ jobs:
           sudo apt install yq -y
           
           for subdir in */; do
-            echo "test $subdir"
             if test -f "$subdir/Chart.yaml"; then
-              echo "$subdir/Chart.yaml exists"
+              yq e -i '.version = "${{ env.ref }}"' "./$subdir/Chart.yaml"
               cat "./$subdir/Chart.yaml" 
-              yq e -i '.version = "2.1.0"' "./$subdir/Chart.yaml"
             fi
           done
         shell: bash
@@ -158,10 +156,8 @@ jobs:
         run: |
           for subdir in */; do
             if [ -d "../$subdir" ]; then
-              echo "$subdir arleady exists Moving content of $subdir"
               mv "$subdir"/* ../"$subdir"
             else
-              echo "$subdir does not exist. Moving the whole directory $subdir"
               mkdir ../"$subdir"
               mv "$subdir"/* ../"$subdir"
             fi
