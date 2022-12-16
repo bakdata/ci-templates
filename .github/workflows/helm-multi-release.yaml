@@ -128,12 +128,12 @@ jobs:
         run: |
           mkdir -p ../${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
           helm package ${{ env.charts-subdir }} -d ../${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
-          echo ${{needs.update-version.steps.step2.singlechart}}
+          echo ${{needs.update-version.steps.step2.outputs.singlechart}}
         shell: bash
         working-directory: ${{ inputs.charts-path }}
       
       - name: Upload artifacts with action/upload as multi chart
-        if: ${{needs.update-version.steps.step2.singlechart}} == "false"
+        if: ${{needs.update-version.steps.step2.outputs.singlechart}} == "false"
         uses: actions/upload-artifact@v3.1.1
         with:
           name: ${{ env.charts-subdir }}
@@ -141,7 +141,7 @@ jobs:
           retention-days: 1
       
       - name: Upload artifacts with action/upload as single chart
-        if: ${{needs.update-version.steps.step2.singlechart}} == "true"
+        if: ${{needs.update-version.steps.step2.outputs.singlechart}} == "true"
         uses: actions/upload-artifact@v3.1.1
         with:
           path: ${{ inputs.artifact-dir }}
