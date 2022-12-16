@@ -4,7 +4,7 @@ name: Helm Multi Release
 on:
   workflow_call:
     inputs:
-      charts-dir:
+      charts-path:
         description: "The directory containing the Helm chart and `.bumpversion.cfg` file."
         required: true
         type: string
@@ -13,7 +13,7 @@ on:
         required: true
         type: string
       artifact-dir:
-        description: "Directory inside `charts-dir` for preparation of the GitHub pages artifact."
+        description: "Directory next to `charts-path` for preparation of the GitHub pages artifact."
         required: false
         default: "artifacts"
         type: string
@@ -79,14 +79,19 @@ jobs:
 
       - name: Use the tag to update Chart.yaml files
         run: |
+          charts="['producer-app','producer-app-cleanup-job','rclone-copy','streams-app','streams-app-cleanup-job']"
+          charts_without_brackets=${charts:1:-1}
+          charts_without_brackets_and_quotation=${charts_stripped//\'/}
+
           sudo add-apt-repository ppa:rmescandon/yq
           sudo apt update
           sudo apt install yq -y
-          for subdir in */; do
-            yq e -i '.version = "${{ env.release-tag }}"' "$subdir/Chart.yaml"
+
+          for subdir in ${charts_without_brackets_and_quotation//,/ }; do 
+            yq e -i '.version = "${{ env.release-tag }}"' "./$subdir/Chart.yaml"
           done
         shell: bash
-        working-directory: ${{ inputs.charts-dir }}
+        working-directory: ${{ inputs.charts-path }}
 
       - name: Commit and push updated charts
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
@@ -116,10 +121,10 @@ jobs:
 
       - name: Prepare artifacts
         run: |
-          mkdir -p ${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
-          helm package ./${{ inputs.charts-dir }}/${{ env.charts-subdir }} -d ${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
+          mkdir -p ../${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
+          helm package /${{ env.charts-subdir }} -d ../${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
         shell: bash
-        working-directory: ${{ inputs.project-root-dir }}
+        working-directory: ${{ inputs.charts-path }}
       
       - name: Upload artifacts with action/upload
         uses: actions/upload-artifact@v3.1.1
@@ -133,7 +138,7 @@ jobs:
     needs: [package-new-artifacts]
     env:
       artifact-dir: "${{ inputs.artifact-dir }}"
-      charts-dir: "${{ inputs.artifact-dir }}"
+      charts-path: "${{ inputs.artifact-dir }}"
 
     steps:
       - name: Check out branch containing the artifatcs and the index.yaml file
