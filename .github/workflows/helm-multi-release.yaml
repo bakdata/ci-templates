@@ -85,104 +85,102 @@ jobs:
           for chart in ${charts_without_brackets_and_quotation//,/ }; do
             ls $chart
           done
-  #         sudo add-apt-repository ppa:rmescandon/yq
-  #         sudo apt update
-  #         sudo apt install yq -y
+          sudo add-apt-repository ppa:rmescandon/yq
+          sudo apt update
+          sudo apt install yq -y
           
-  #         for subdir in */; do
-  #           if test -f "$subdir/Chart.yaml"; then
-  #             yq e -i '.version = "${{ env.release-tag }}"' "./$subdir/Chart.yaml"
-  #             cat "./$subdir/Chart.yaml" 
-  #           fi
-  #         done
+          for chart in ${charts_without_brackets_and_quotation//,/ }; do
+            yq e -i '.version = "${{ env.release-tag }}"' "./$subdir/Chart.yaml"
+            cat "./$subdir/Chart.yaml" 
+          done
         shell: bash
-        # working-directory: ${{ inputs.charts-path }}
+        working-directory: ${{ inputs.charts-path }}
 
-  #     - name: Commit and push updated charts
-  #       uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
-  #       with:
-  #         add-untracked: true
-  #         ref: ${{ env.ref }}
-  #         commit-message: "Update Chart versions"
-  #         github-username: ${{ secrets.github-username }}
-  #         github-email: ${{ secrets.github-email }}
-  #         github-token: ${{ secrets.github-token }}
+      - name: Commit and push updated charts
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        with:
+          add-untracked: true
+          ref: ${{ env.ref }}
+          commit-message: "Update Chart versions"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
 
-  # package-new-artifacts:
-  #   strategy:
-  #     matrix:
-  #       subdir: ${{ fromJson(inputs.subdirs) }}
-  #   runs-on: ubuntu-22.04
-  #   needs: [update-version]
-  #   env:
-  #     charts-subdir: "${{ matrix.subdir }}"
-  #     ref: ${{ github.event.repository.default_branch }}
+  package-new-artifacts:
+    strategy:
+      matrix:
+        subdir: ${{ fromJson(inputs.subdirs) }}
+    runs-on: ubuntu-22.04
+    needs: [update-version]
+    env:
+      charts-subdir: "${{ matrix.subdir }}"
+      ref: ${{ github.event.repository.default_branch }}
 
-  #   steps:
-  #     - name: Check out repository
-  #       uses: actions/checkout@v3
-  #       with:
-  #         ref: ${{ env.ref }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ env.ref }}
 
-  #     - name: Prepare artifacts
-  #       run: |
-  #         mkdir -p ../${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
-  #         helm package ${{ env.charts-subdir }} -d ../${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
-  #       shell: bash
-  #       working-directory: ${{ inputs.charts-path }}
+      - name: Prepare artifacts
+        run: |
+          mkdir -p ../${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
+          helm package ${{ env.charts-subdir }} -d ../${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
+        shell: bash
+        working-directory: ${{ inputs.charts-path }}
       
-  #     - name: Upload artifacts with action/upload
-  #       uses: actions/upload-artifact@v3.1.1
-  #       with:
-  #         name: ${{ env.charts-subdir }}
-  #         path: ${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
-  #         retention-days: 1
+      - name: Upload artifacts with action/upload
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: ${{ env.charts-subdir }}
+          path: ${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
+          retention-days: 1
 
-  # publish-artifacts:
-  #   runs-on: ubuntu-22.04
-  #   needs: [package-new-artifacts]
-  #   env:
-  #     artifact-dir: "${{ inputs.artifact-dir }}"
-  #     charts-path: "${{ inputs.artifact-dir }}"
+  publish-artifacts:
+    runs-on: ubuntu-22.04
+    needs: [package-new-artifacts]
+    env:
+      artifact-dir: "${{ inputs.artifact-dir }}"
+      charts-path: "${{ inputs.artifact-dir }}"
 
-  #   steps:
-  #     - name: Check out branch containing the artifatcs and the index.yaml file
-  #       uses: actions/checkout@v3
-  #       with:
-  #         ref: ${{ inputs.gh-pages-branch }}
+    steps:
+      - name: Check out branch containing the artifatcs and the index.yaml file
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.gh-pages-branch }}
           
-  #     - name: Download new artifacts
-  #       uses: actions/download-artifact@v3.0.1
-  #       with:
-  #         path: ${{ inputs.artifact-dir }}
+      - name: Download new artifacts
+        uses: actions/download-artifact@v3.0.1
+        with:
+          path: ${{ inputs.artifact-dir }}
       
-  #     - name: Merge contents if the artifacts already exist or Create new tree if not
-  #       run: |
-  #         for subdir in */; do
-  #           if [ -d "../$subdir" ]; then
-  #             mv "$subdir"/* ../"$subdir"
-  #           else
-  #             mkdir ../"$subdir"
-  #             mv "$subdir"/* ../"$subdir"
-  #           fi
-  #         done
-  #         cd ..
-  #         rm -rf ${{ inputs.artifact-dir }}
-  #       shell: bash
-  #       working-directory: ${{ inputs.artifact-dir }}
+      - name: Merge contents if the artifacts already exist or Create new tree if not
+        run: |
+          for subdir in */; do
+            if [ -d "../$subdir" ]; then
+              mv "$subdir"/* ../"$subdir"
+            else
+              mkdir ../"$subdir"
+              mv "$subdir"/* ../"$subdir"
+            fi
+          done
+          cd ..
+          rm -rf ${{ inputs.artifact-dir }}
+        shell: bash
+        working-directory: ${{ inputs.artifact-dir }}
 
-  #     - name: Generate index.yaml file
-  #       run: |
-  #         helm repo index .
-  #       shell: bash
-  #       working-directory: "."
+      - name: Generate index.yaml file
+        run: |
+          helm repo index .
+        shell: bash
+        working-directory: "."
 
-  #     - name: Commit and push artifacts and the index.yaml file
-  #       uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
-  #       with:
-  #         add-untracked: true
-  #         ref: ${{ inputs.gh-pages-branch }}
-  #         commit-message: "Commit new artifacts"
-  #         github-username: ${{ secrets.github-username }}
-  #         github-email: ${{ secrets.github-email }}
-  #         github-token: ${{ secrets.github-token }}
+      - name: Commit and push artifacts and the index.yaml file
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        with:
+          add-untracked: true
+          ref: ${{ inputs.gh-pages-branch }}
+          commit-message: "Commit new artifacts"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
