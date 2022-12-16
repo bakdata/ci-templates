@@ -50,18 +50,18 @@ on:
         required: true
 
 jobs:
-  # helm-lint:
-  #   runs-on: ubuntu-22.04
+  helm-lint:
+    runs-on: ubuntu-22.04
 
-  #   steps:
-  #     - name: Lint Helm chart
-  #       uses: bakdata/ci-templates/actions/helm-lint@v1.10.0
-  #       with:
-  #         lint-config-path: "${{ inputs.lint-config-path }}"
+    steps:
+      - name: Lint Helm chart
+        uses: bakdata/ci-templates/actions/helm-lint@v1.10.0
+        with:
+          lint-config-path: "${{ inputs.lint-config-path }}"
 
   update-version:
     runs-on: ubuntu-22.04
-    # needs: [helm-lint]
+    needs: [helm-lint]
     env:
       ref: ${{ github.event.repository.default_branch }}
       release-tag: ${{github.ref_name}}
