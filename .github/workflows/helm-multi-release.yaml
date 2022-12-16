@@ -86,7 +86,7 @@ jobs:
           echo $charts_without_brackets_and_quotation
 
           for chart in ${charts_without_brackets_and_quotation//,/ }; do
-            echo $chart
+            ls $chart
           done
   #         sudo add-apt-repository ppa:rmescandon/yq
   #         sudo apt update
