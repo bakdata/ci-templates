@@ -98,8 +98,8 @@ jobs:
   #             cat "./$subdir/Chart.yaml" 
   #           fi
   #         done
-  #       shell: bash
-  #       working-directory: ${{ inputs.charts-path }}
+        shell: bash
+        working-directory: ${{ inputs.charts-path }}
 
   #     - name: Commit and push updated charts
   #       uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
