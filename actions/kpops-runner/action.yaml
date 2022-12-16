@@ -1,19 +1,16 @@
-name: "Kpops runner"
-description: "Run Kpops command line with the given params"
+name: "KPOps runner"
+description: "Run KPOps command with the given params"
 
 inputs:
-  mode:
-    description: "The command mode you want to use to launch KPOps"
+  command:
+    description: "The KPOps command to run"
     required: true
   pipeline:
-    description: "Pipeline file you want to run"
+    description: "Pipeline to run"
     required: true
   working-directory:
     description: "The root directory containing the config.yaml, pipelines folder and defaults"
     default: "."
-  execute:
-    description: "Set execution flag"
-    default: "false"
   defaults:
     description: "Defaults folder path"
     default: "defaults"
@@ -24,30 +21,17 @@ inputs:
     description: "Components package path"
     required: false
   kpops-version:
-    description: "Use specific KPOps version to deploy pipeline"
+    description: "KPOps version"
     required: true
 
 runs:
   using: "composite"
   steps:
-    - name: Check out repository code
-      uses: actions/checkout@v3
-
-    - name: Install Kpops
+    - name: Install KPOps
       shell: bash
       run: pip install kpops==${{ inputs.kpops-version }} --extra-index-url https://test.pypi.org/simple/
-      
-    
-    - name: Dry-run ${{ inputs.pipeline }} pipeline
-      shell: bash
-      working-directory: ${{inputs.working-directory}}
-      run: |
-         kpops generate ${{ inputs.pipeline }} ${{inputs.components}} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
-         kpops ${{inputs.mode}} ${{ inputs.pipeline }} ${{inputs.components}}  --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
 
-    - name: Process ${{ inputs.pipeline }} pipeline
+    - name: ${{ inputs.command }} ${{ inputs.pipeline }} pipeline
       shell: bash
       working-directory: ${{inputs.working-directory}}
-      if: ${{inputs.execute == 'true'}}
-      run: kpops ${{inputs.mode}} ${{ inputs.pipeline }} ${{inputs.components}} --defaults ${{ inputs.defaults }} ${{ steps.condval.outputs.value }} --config ${{ inputs.config }} --execute
-      
+      run: kpops ${{inputs.command}} ${{ inputs.pipeline }} ${{ inputs.components }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}

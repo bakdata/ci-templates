@@ -1,19 +1,18 @@
 # KPOps-Runner
 
-This action runs Kpops with the given config.
+This action runs KPOps with the given config.
 
 ## Input Parameters
 
-| Name              | Required | Default Value |  Type  | Description                                                                                                   |
-| ----------------- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------------------- |
-| mode              |    ✅    |       -       | string | command mode used by Kpops (deploy, destroy, reset, clean) for possible values                                |
-| pipeline          |    ✅    |       -       | string | Pipeline file to be run by Kpops publication                                                                  |
-| KPOps-version     |    ✅    |       -       | string | KPOps version used to deploy pipeline  |
-| working-directory |    ❌    |       .       | string | root directory used by Kpops to run pipelines                                                                 |
-| execute           |    ❌    |     false     | string | Execute KPOps command (this applies the infrastructure changes that were executed inside the dry-run command) |
-| defaults          |    ❌    |   defaults    | string | defaults folder path                                                                                          |
-| config            |    ❌    |  config.yaml  | string | config.yaml file path                                                                                         |
-| components        |    ❌    |       -       | string | components package path                                                                                       |
+| Name              | Required | Default Value |  Type  | Description                                                                                                                                   |
+|-------------------|:--------:|:-------------:|:------:|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| command           |    ✅     |       -       | string | KPOps command to run. generate, deploy, destroy, reset, clean are possible values. Flags such as --dry-run and --execute need to be specified |
+| pipeline          |    ✅     |       -       | string | Pipeline to run by KPOps                                                                                                                      |
+| kpops-version     |    ✅     |       -       | string | KPOps version to use                                                                                                                          |
+| working-directory |    ❌     |       .       | string | root directory used by KPOps to run pipelines                                                                                                 |
+| defaults          |    ❌     |   defaults    | string | defaults folder path                                                                                                                          |
+| config            |    ❌     |  config.yaml  | string | config.yaml file path                                                                                                                         |
+| components        |    ❌     |       -       | string | components package path                                                                                                                       |
 
 
 ## Usage
@@ -23,9 +22,8 @@ steps:
   - name: Deploy Kafka pipeline
     uses: bakdata/ci-templates/actions/kpops-runner@main
     with:
-      mode: deploy
+      command: deploy --execute
       working-directory: home/my-kpops-root-dir
       pipeline: pipelines/my-pipeline-file.yaml
-      execute: true
       kpops-version: 0.2.0.dev20221202163038
 ```
