@@ -78,7 +78,7 @@ jobs:
           tree .
           #!/bin/bash
 
-          charts="['playground','helmHome','Perso']"
+          charts=$CHARTS
           charts_without_brackets=${charts:1:-1}
           charts_without_brackets_and_quotation=${charts_without_brackets//\'/}
 
