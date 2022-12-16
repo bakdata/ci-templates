@@ -79,8 +79,11 @@ jobs:
           #!/bin/bash
 
           charts=$CHARTS
+          echo $charts
           charts_without_brackets=${charts:1:-1}
+          echo $charts_without_brackets
           charts_without_brackets_and_quotation=${charts_without_brackets//\'/}
+          echo $charts_without_brackets_and_quotation
 
           for chart in ${charts_without_brackets_and_quotation//,/ }; do
             echo $chart
