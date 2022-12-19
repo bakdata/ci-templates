@@ -183,12 +183,17 @@ jobs:
       - name: Move artifacts to root dir in case  of a single  chart
         if: ${{needs.update-version.outputs.output1 == 'true' }}
         run: |
-          tree .
+          for tgzfile in *; do
+            mv $tgzfile ../../
+            cd ../..
+            rm -rf ${{ inputs.artifact-dir }}
+          done
         shell: bash
-        working-directory: "."
+        working-directory: "${{ inputs.artifact-dir }}/artifact"
 
       - name: Generate index.yaml file
-        run: |          
+        run: |         
+          tree . 
           helm repo index .
         shell: bash
         working-directory: "."
