@@ -148,7 +148,7 @@ jobs:
 
   publish-artifacts:
     runs-on: ubuntu-22.04
-    needs: [package-new-artifacts]
+    needs: [package-new-artifacts,update-version]
     env:
       artifact-dir: "${{ inputs.artifact-dir }}"
       charts-path: "${{ inputs.artifact-dir }}"
@@ -158,13 +158,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ inputs.gh-pages-branch }}
-      
-      - name: test1
-        run: |
-          pwd
-          tree .
-        shell: bash
-        working-directory: "."
 
       - name: Download new artifacts
         uses: actions/download-artifact@v3.0.1
@@ -172,9 +165,8 @@ jobs:
           path: ${{ inputs.artifact-dir }}
       
       - name: Merge contents if the artifacts already exist or Create new tree if not
+        if: ${{needs.update-version.outputs.output1 == 'false' }}
         run: |
-          pwd
-          tree .
           for subdir in */; do
             if [ -d "../$subdir" ]; then
               mv "$subdir"/* ../"$subdir"
@@ -183,28 +175,34 @@ jobs:
               mv "$subdir"/* ../"$subdir"
             fi
           done
+          cd ..
+          rm -rf ${{ inputs.artifact-dir }}
         shell: bash
         working-directory: ${{ inputs.artifact-dir }}
 
-      - name: Generate index.yaml file
+      - name: Move artifacts to root dir in case  of a single  chart
+        if: ${{needs.update-version.outputs.output1 == 'true' }}
         run: |
-          pwd
-          tree .
-          for tgzfile in ${{ inputs.artifact-dir }}/*; do
+          for tgzfile in *; do
             mv $tgzfile .
+            cd ..
+            rm -rf artifact
           done
-          rm -rf ${{ inputs.artifact-dir }}
+        shell: bash
+        working-directory: "artifact"
+
+      - name: Generate index.yaml file
+        run: |          
           helm repo index .
-          tree .
         shell: bash
         working-directory: "."
 
-      # - name: Commit and push artifacts and the index.yaml file
-      #   uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
-      #   with:
-      #     add-untracked: true
-      #     ref: ${{ inputs.gh-pages-branch }}
-      #     commit-message: "Commit new artifacts"
-      #     github-username: ${{ secrets.github-username }}
-      #     github-email: ${{ secrets.github-email }}
-      #     github-token: ${{ secrets.github-token }}
+      - name: Commit and push artifacts and the index.yaml file
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        with:
+          add-untracked: true
+          ref: ${{ inputs.gh-pages-branch }}
+          commit-message: "Commit new artifacts"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
