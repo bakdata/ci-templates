@@ -185,7 +185,7 @@ jobs:
         run: |
           tree .
           for tgzfile in *; do
-            mv $tgzfile ../../
+            mv "$tgzfile" ../../
             cd ../..
             rm -rf ${{ inputs.artifact-dir }}
           done
