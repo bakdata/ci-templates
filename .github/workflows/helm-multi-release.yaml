@@ -184,7 +184,7 @@ jobs:
         if: ${{needs.update-version.outputs.output1 == 'true' }}
         run: |
           for tgzfile in *; do
-            mv $tgzfile .
+            mv $tgzfile ../
             cd ..
             rm -rf artifact
           done
