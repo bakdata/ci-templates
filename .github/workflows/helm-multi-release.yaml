@@ -174,13 +174,15 @@ jobs:
               mv "$subdir"/* ../"$subdir"
             fi
           done
-          cd ..
-          rm -rf ${{ inputs.artifact-dir }}
         shell: bash
         working-directory: ${{ inputs.artifact-dir }}
 
       - name: Generate index.yaml file
         run: |
+          for tgzfile in ${{ inputs.artifact-dir }}/*; do
+            mv $tgzfile .
+          done
+          rm -rf ${{ inputs.artifact-dir }}
           helm repo index .
           tree
         shell: bash
