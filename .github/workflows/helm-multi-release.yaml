@@ -183,13 +183,9 @@ jobs:
       - name: Move artifacts to root dir in case  of a single  chart
         if: ${{needs.update-version.outputs.output1 == 'true' }}
         run: |
-          for tgzfile in *; do
-            mv $tgzfile ../
-            cd ..
-            rm -rf artifact
-          done
+          tree .
         shell: bash
-        working-directory: "artifact"
+        working-directory: "."
 
       - name: Generate index.yaml file
         run: |          
