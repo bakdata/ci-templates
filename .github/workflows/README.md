@@ -123,7 +123,7 @@ This workflow is for projects with multiple (sub-) helm charts. The workflow wil
 
 ### Prerequisites
 
-All Helm charts need to be located in a corresponding subdir inside the `charts-dir` folder of your repository. 
+All Helm charts need to be located in a corresponding subdir inside the `charts-path` folder of your repository. In case there is just one 
 
 Additionally, you need to create the lint configuration file `.github/lint-config.yaml` and configure it to your liking.
 A minimal configuration could look like this:
@@ -138,7 +138,7 @@ even if there is a protection rule in place.
 
 Finally, create a special `gh-pages` branch then set up GitHub pages for your repository in Settings → Pages → Build and deployment source → Deploy from a branch. 
 
-For each we use the tag to bump the version and package new artifacts. We then check out the `gh-pages` branch, add the newly created artifacts and generate a new `index.yaml` file.
+For each run we use the tag to bump the version and package new artifacts. We then check out the `gh-pages` branch, add the newly created artifacts and generate a new `index.yaml` file.
 We upload the newly created artifacts as well as the `index.yaml` file the `gh-pages`. The index is then made available thanks to a GitHub pipeline that automatically builds and deploys pages.
 
 ### Dependencies
@@ -152,11 +152,10 @@ This workflow is built from multiple composite actions listed below:
 
 | Name             | Required |             Default Value             |  Type  | Description                                                                                                                                |
 | ---------------- | :------: |:-------------------------------------:| :----: |--------------------------------------------------------------------------------------------------------------------------------------------|
-| charts-dir       |    ✅     |                                       | string | The directory containing the Helm charts                                                                                                   |
+| charts-path       |    ✅     |                                       | string | The path to the directory containing the Helm charts                                                                                                   |
 | subdirs              |    ✅   |  | string | List of subdir to consider" Format:  "['subdir1', 'subdir2', 'subdir3']"                                                                   |
 | artifact-dir     |    ❌    |              "artifacts"              | string | Directory inside `charts-dir` for preparation of the GitHub pages artifact.                                                                |
 | gh-pages-branch    |    ❌    |              "gh-pages"               | string | The branch containing all the artifacts                                                                                                    |
-| project-root-dir     |    ❌    |                  "."                  | string | Github  dir where the charts dir is located.                                                                                               |
 | root-branch              |    ❌   |                 "main                      | string | The main branch where the changes in the Helm Charts should be stored repository                                                                                                    |
 | helm-version     |    ❌    |               "v3.10.1"               | string | The Helm version                                                                                                                           |
 | lint-config-path |    ❌    |      ".github/lint-config.yaml"       | string | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
@@ -175,6 +174,8 @@ token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the em
 
 ### Calling the workflow
 
+#### Multi chart
+
 ```yaml
 name: Release multiple Helm Charts
 on:
@@ -185,15 +186,37 @@ jobs:
     name: Release & Publish Helm chart
     uses: bakdata/ci-templates/.github/workflows/helm-multi-release.yaml@multi-release
     with:
-      charts-dir: charts
+      charts-path: "./charts"
       subdirs: "['subdir1', 'subdir2', 'subdir3']"
-      project-root-dir: "."
       gh-pages-branch: gh-pages
       root-branch: main
     secrets:
       github-email: "${{ secrets.GH_EMAIL }}"
       github-username: "${{ secrets.GH_USERNAME }}"
       github-token: "${{ secrets.GH_TOKEN }}"
+```
+
+#### Single chart
+
+```yaml
+name: Release multiple Helm Charts
+on:
+  workflow_dispatch:
+
+jobs:
+  call-workflow-passing-data:
+    name: Release & Publish Helm chart
+    uses: bakdata/ci-templates/.github/workflows/helm-multi-release.yaml@multi-release
+    with:
+      root-branch: main
+      charts-path: "./helm-chart"
+      subdirs: "['.']"
+      gh-pages-branch: gh-pages
+    secrets:
+      github-email: "${{ secrets.GH_EMAIL }}"
+      github-username: "${{ secrets.GH_USERNAME }}"
+      github-token: "${{ secrets.GH_TOKEN }}"
+
 ```
 
 ## Kustomize GKE Deploy
