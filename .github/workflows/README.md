@@ -123,7 +123,7 @@ This workflow is for projects with multiple (sub-) helm charts. The workflow wil
 
 ### Prerequisites
 
-All Helm charts need to be located in a corresponding subdir inside the `charts-path` folder of your repository. In case there is just one 
+All Helm charts need to be located in a corresponding subdir inside the `charts-path` folder of your repository. In case there is just one Helm chart, then pass the path to the directory containing the `Chart.yaml` to `charts-path`. Then give an empty subdir by setting `subdir` as follows: `subdirs: "['.']"`
 
 Additionally, you need to create the lint configuration file `.github/lint-config.yaml` and configure it to your liking.
 A minimal configuration could look like this:
