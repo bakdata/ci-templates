@@ -79,7 +79,7 @@ jobs:
         id: step2
         run: |
           echo "singlechart=false" >> $GITHUB_OUTPUT
-          charts=$CHARTS
+          charts=${{ env.CHARTS }}
           charts_without_brackets=${charts:1:-1}
           charts_without_brackets_and_quotation=${charts_without_brackets//\'/}
           
