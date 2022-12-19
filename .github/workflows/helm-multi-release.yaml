@@ -79,16 +79,14 @@ jobs:
         id: step2
         run: |
           echo "singlechart=false" >> $GITHUB_OUTPUT
-          charts=${{ env.CHARTS }}
-          charts_without_brackets=${charts:1:-1}
-          charts_without_brackets_and_quotation=${charts_without_brackets//\'/}
+          charts="${{ env.CHARTS }}"
+          charts_without_brackets="${charts:1:-1}"
+          charts_without_brackets_and_quotation="${charts_without_brackets//\'/}"
           
           sudo add-apt-repository ppa:rmescandon/yq
           sudo apt update
           sudo apt install yq -y
-          tree .
           for subdir in ${charts_without_brackets_and_quotation//,/ }; do
-            echo ./$subdir/Chart.yaml
             yq e -i '.version = "${{ env.release-tag }}"' "./$subdir/Chart.yaml"
             if [ "$subdir" = "." ]; then
               echo "singlechart=true" >> $GITHUB_OUTPUT
