@@ -92,7 +92,6 @@ jobs:
             if [ "$chart" = "." ]; then
               echo "singlechart=true" >> $GITHUB_OUTPUT
             fi
-            cat "./$subdir/Chart.yaml" 
           done
         shell: bash
         working-directory: ${{ inputs.charts-path }}
@@ -127,7 +126,6 @@ jobs:
         run: |
           mkdir -p ../${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
           helm package ${{ env.charts-subdir }} -d ../${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
-          echo ${{needs.update-version.outputs.output1}}
         shell: bash
         working-directory: ${{ inputs.charts-path }}
       
@@ -183,7 +181,6 @@ jobs:
       - name: Move artifacts to root dir in case  of a single  chart
         if: ${{needs.update-version.outputs.output1 == 'true' }}
         run: |
-          tree .
           for tgzfile in *; do
             mv "$tgzfile" ../../
           done
@@ -194,7 +191,6 @@ jobs:
 
       - name: Generate index.yaml file
         run: |         
-          tree . 
           helm repo index .
         shell: bash
         working-directory: "."
