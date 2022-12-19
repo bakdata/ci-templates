@@ -59,43 +59,43 @@ jobs:
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
 
-  # update-version:
-  #   runs-on: ubuntu-22.04
-  #   outputs:
-  #     output1: ${{ steps.step2.outputs.singlechart }}
-  #   needs: [helm-lint]
-  #   env:
-  #     ref: ${{ github.event.repository.default_branch }}
-  #     release-tag: ${{github.ref_name}}
-  #     CHARTS: ${{ inputs.subdirs }}
+  update-version:
+    runs-on: ubuntu-22.04
+    outputs:
+      output1: ${{ steps.step2.outputs.singlechart }}
+    needs: [helm-lint]
+    env:
+      ref: ${{ github.event.repository.default_branch }}
+      release-tag: ${{github.ref_name}}
+      CHARTS: ${{ inputs.subdirs }}
 
-  #   steps:
-  #     - name: Check out repository
-  #       uses: actions/checkout@v3
-  #       with:
-  #         ref: ${{ env.ref }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ env.ref }}
 
-  #     - name: Use the tag to update Chart.yaml files
-  #       id: step2
-  #       run: |
-  #         echo "singlechart=false" >> $GITHUB_OUTPUT
-  #         charts=$CHARTS
-  #         charts_without_brackets=${charts:1:-1}
-  #         charts_without_brackets_and_quotation=${charts_without_brackets//\'/}
+      - name: Use the tag to update Chart.yaml files
+        id: step2
+        run: |
+          echo "singlechart=false" >> $GITHUB_OUTPUT
+          charts=$CHARTS
+          charts_without_brackets=${charts:1:-1}
+          charts_without_brackets_and_quotation=${charts_without_brackets//\'/}
           
-  #         sudo add-apt-repository ppa:rmescandon/yq
-  #         sudo apt update
-  #         sudo apt install yq -y
+          sudo add-apt-repository ppa:rmescandon/yq
+          sudo apt update
+          sudo apt install yq -y
           
-  #         for chart in ${charts_without_brackets_and_quotation//,/ }; do
-  #           yq e -i '.version = "${{ env.release-tag }}"' "./$subdir/Chart.yaml"
-  #           if [ "$chart" = "." ]; then
-  #             echo "singlechart=true" >> $GITHUB_OUTPUT
-  #           fi
-  #           cat "./$subdir/Chart.yaml" 
-  #         done
-  #       shell: bash
-  #       working-directory: ${{ inputs.charts-path }}
+          for chart in ${charts_without_brackets_and_quotation//,/ }; do
+            yq e -i '.version = "${{ env.release-tag }}"' "./$subdir/Chart.yaml"
+            if [ "$chart" = "." ]; then
+              echo "singlechart=true" >> $GITHUB_OUTPUT
+            fi
+            cat "./$subdir/Chart.yaml" 
+          done
+        shell: bash
+        working-directory: ${{ inputs.charts-path }}
 
       - name: Commit and push updated charts
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
@@ -159,13 +159,12 @@ jobs:
         with:
           ref: ${{ inputs.gh-pages-branch }}
       
-      - name: Merge contents if the artifacts already exist or Create new tree if not
+      - name: test1
         run: |
           pwd
           tree .
-          
         shell: bash
-        working-directory: ${{ inputs.artifact-dir }}
+        working-directory: "."
 
       - name: Download new artifacts
         uses: actions/download-artifact@v3.0.1
