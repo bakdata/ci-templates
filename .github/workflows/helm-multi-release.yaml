@@ -182,15 +182,16 @@ jobs:
       - name: Generate index.yaml file
         run: |
           helm repo index .
+          tree
         shell: bash
         working-directory: "."
 
-      - name: Commit and push artifacts and the index.yaml file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
-        with:
-          add-untracked: true
-          ref: ${{ inputs.gh-pages-branch }}
-          commit-message: "Commit new artifacts"
-          github-username: ${{ secrets.github-username }}
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
+      # - name: Commit and push artifacts and the index.yaml file
+      #   uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+      #   with:
+      #     add-untracked: true
+      #     ref: ${{ inputs.gh-pages-branch }}
+      #     commit-message: "Commit new artifacts"
+      #     github-username: ${{ secrets.github-username }}
+      #     github-email: ${{ secrets.github-email }}
+      #     github-token: ${{ secrets.github-token }}
