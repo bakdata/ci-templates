@@ -179,6 +179,7 @@ jobs:
 
       - name: Generate index.yaml file
         run: |
+          tree
           for tgzfile in ${{ inputs.artifact-dir }}/*; do
             mv $tgzfile .
           done
