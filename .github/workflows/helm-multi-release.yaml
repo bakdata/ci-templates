@@ -78,7 +78,7 @@ jobs:
       - name: Use the tag to update Chart.yaml files
         id: step2
         run: |
-          echo "singlechart=false" >> $GITHUB_OUTPUT
+          echo "singlechart=false" >> "$GITHUB_OUTPUT"
           charts="${{ env.CHARTS }}"
           charts_without_brackets="${charts:1:-1}"
           charts_without_brackets_and_quotation="${charts_without_brackets//\'/}"
@@ -89,7 +89,7 @@ jobs:
           for subdir in ${charts_without_brackets_and_quotation//,/ }; do
             yq e -i '.version = "${{ env.release-tag }}"' "./$subdir/Chart.yaml"
             if [ "$subdir" = "." ]; then
-              echo "singlechart=true" >> $GITHUB_OUTPUT
+              echo "singlechart=true" >> "$GITHUB_OUTPUT"
             fi
           done
         shell: bash
