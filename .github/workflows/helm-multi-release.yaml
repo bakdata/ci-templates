@@ -162,14 +162,31 @@ jobs:
           rm -rf ${{ inputs.artifact-dir }}
         shell: bash
         working-directory: ${{ inputs.artifact-dir }}
+      
+      - name: test code
+        if: ${{needs.update-version.outputs.singlechart == 'true' }}
+        run: |
+          subdircount=$(find . -maxdepth 1 -type d | wc -l)
+
+          if [[ "$subdircount" -eq 1 ]]
+          then
+              echo "Emptyyyyyyyyyy"
+          else
+              echo "something is in there"
+          fi
+        shell: bash
+        working-directory: "${{ inputs.artifact-dir }}/artifact"
 
       - name: Move artifacts to root dir in case  of a single  chart
         if: ${{needs.update-version.outputs.singlechart == 'true' }}
         run: |
-          pwd
-          tree .
-          for tgzfile in *; do
-            mv "$tgzfile" ../../
+          for fileordir in *; do
+            if [ ! -d "../$fileordir" ]; then
+              mv "$fileordir" ../../
+            else
+              mkdir ../../$fileordir
+            fi
+            
           done
           cd ../..
           rm -rf ${{ inputs.artifact-dir }}
