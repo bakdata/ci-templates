@@ -77,9 +77,6 @@ jobs:
           charts_without_brackets_and_quotation="${charts_without_brackets//\'/}"
 
           if [ "${#charts_without_brackets_and_quotation[@]}" = "1" ]; then
-            echo "------------------------------------------------------------------"
-            echo "${#charts_without_brackets_and_quotation[@]}"
-            echo "------------------------------------------------------------------"
             echo "singlechart=true" >> "$GITHUB_OUTPUT"
           else
             echo "singlechart=false" >> "$GITHUB_OUTPUT"
