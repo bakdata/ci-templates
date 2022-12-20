@@ -136,7 +136,7 @@ target-branch: "main"
 Moreover, choose a GitHub user who will commit and push the changes. Make sure to configure admin access to the repository for the selected user because admins can still push on the default branch
 even if there is a protection rule in place.
 
-Finally, create a special `gh-pages` branch then set up GitHub pages for your repository in Settings → Pages → Build and deployment source → Deploy from a branch. 
+Finally, create a special `gh-pages` branch then set up GitHub pages for your repository in Settings → Pages → Build and deployment source → Deploy from a branch.
 
 For each run we use the tag to bump the version and package new artifacts. We then check out the `gh-pages` branch, add the newly created artifacts and generate a new `index.yaml` file.
 We upload the newly created artifacts as well as the `index.yaml` file to `gh-pages`. The index is then made available thanks to a GitHub pipeline that automatically builds and deploys pages.
@@ -150,15 +150,14 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name             | Required |             Default Value             |  Type  | Description                                                                                                                                |
-| ---------------- | :------: |:-------------------------------------:| :----: |--------------------------------------------------------------------------------------------------------------------------------------------|
-| charts-path       |    ✅     |                                       | string | The path to the directory containing the Helm charts                                                                                                   |
-| subdirs              |    ✅   |  | string | List of subdir to consider" Format:  "['subdir1', 'subdir2', 'subdir3']"                                                                   |
-| artifact-dir     |    ❌    |              "artifacts"              | string | Directory inside `charts-dir` for preparation of the GitHub pages artifact.                                                                |
-| gh-pages-branch    |    ❌    |              "gh-pages"               | string | The branch containing all the artifacts                                                                                                    |
-| root-branch              |    ❌   |                 "main                      | string | The main branch where the changes in the Helm Charts should be stored repository                                                                                                    |
-| helm-version     |    ❌    |               "v3.10.1"               | string | The Helm version                                                                                                                           |
-| lint-config-path |    ❌    |      ".github/lint-config.yaml"       | string | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
+| Name             | Required |       Default Value        |  Type  | Description                                                                                                                                |
+| ---------------- | :------: | :------------------------: | :----: | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| charts-path      |    ✅    |                            | string | The path to the directory containing the Helm chart(s)                                                                                     |
+| subdirs          |    ✅    |                            | string | List of subdir to consider" Format: "['subdir1', 'subdir2', 'subdir3']"                                                                    |
+| artifact-dir     |    ❌    |        "artifacts"         | string | Directory inside `charts-dir` for preparation of the GitHub pages artifact.                                                                |
+| gh-pages-branch  |    ❌    |         "gh-pages"         | string | The branch containing all the artifacts                                                                                                    |
+| helm-version     |    ❌    |         "v3.10.1"          | string | The Helm version                                                                                                                           |
+| lint-config-path |    ❌    | ".github/lint-config.yaml" | string | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
 
 ### Secret Parameters
 
@@ -170,7 +169,6 @@ token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the em
 | github-username |    ✅    | The GitHub username for committing the changes |
 | github-email    |    ✅    | The GitHub email for committing the changes    |
 | github-token    |    ✅    | The GitHub token for committing the changes    |
-
 
 ### Calling the workflow
 
@@ -189,7 +187,6 @@ jobs:
       charts-path: "./charts"
       subdirs: "['subdir1', 'subdir2', 'subdir3']"
       gh-pages-branch: gh-pages
-      root-branch: main
     secrets:
       github-email: "${{ secrets.GH_EMAIL }}"
       github-username: "${{ secrets.GH_USERNAME }}"
@@ -208,7 +205,6 @@ jobs:
     name: Release & Publish Helm chart
     uses: bakdata/ci-templates/.github/workflows/helm-multi-release.yaml@multi-release
     with:
-      root-branch: main
       charts-path: "./helm-chart"
       subdirs: "['.']"
       gh-pages-branch: gh-pages
@@ -216,7 +212,6 @@ jobs:
       github-email: "${{ secrets.GH_EMAIL }}"
       github-username: "${{ secrets.GH_USERNAME }}"
       github-token: "${{ secrets.GH_TOKEN }}"
-
 ```
 
 ## Kustomize GKE Deploy
@@ -232,14 +227,14 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name               | Required | Default Value |  Type  | Description                                         |
-| ------------------ | :------: | :-----------: | :----: | --------------------------------------------------- |
-| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization     |
+| Name               | Required | Default Value |  Type  | Description                                        |
+| ------------------ | :------: | :-----------: | :----: | -------------------------------------------------- |
+| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization    |
 | timeout            |    ❌    |      60       | string | Time out(in seconds) for CustomResourceDefinitions |
-| python-version     |    ❌    |    "3.10"     | string |  Python version                                  |
-| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | GCloud-SDK version                              |
-| kubectl-version    |    ❌    |   "v1.23.0"   | string | Kubectl version                                 |
-| helm-version       |    ❌    |   "v3.8.1"    | string | Helm version                                    |
+| python-version     |    ❌    |    "3.10"     | string | Python version                                     |
+| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | GCloud-SDK version                                 |
+| kubectl-version    |    ❌    |   "v1.23.0"   | string | Kubectl version                                    |
+| helm-version       |    ❌    |   "v3.8.1"    | string | Helm version                                       |
 
 ### Secret Parameters
 
@@ -302,10 +297,10 @@ This workflow is built from multiple composite actions listed below:
 | Name               | Required | Default Value |  Type  | Description                                     |
 | ------------------ | :------: | :-----------: | :----: | ----------------------------------------------- |
 | kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization |
-|  python-version     |    ❌    |    "3.10"     | string |  The Python version                              |
-| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | GCloud-SDK version                          |
-| kubectl-version    |    ❌    |   "v1.23.0"   | string | Kubectl version                             |
-| helm-version       |    ❌    |   "v3.8.1"    | string | Helm version                                |
+| python-version     |    ❌    |    "3.10"     | string | The Python version                              |
+| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | GCloud-SDK version                              |
+| kubectl-version    |    ❌    |   "v1.23.0"   | string | Kubectl version                                 |
+| helm-version       |    ❌    |   "v3.8.1"    | string | Helm version                                    |
 
 ### Secret Parameters
 
@@ -378,11 +373,11 @@ This workflow is built from multiple composite actions listed below:
 | Name              | Required |             Default Value             |  Type   | Description                                                                                                                       |
 | ----------------- | :------: | :-----------------------------------: | :-----: | --------------------------------------------------------------------------------------------------------------------------------- |
 | release-type      |    ✅    |                   -                   | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values |
-| ref               |    ❌    | The default branch of your repository | string  | ref name to checkout the repository                                                                                           |
+| ref               |    ❌    | The default branch of your repository | string  | ref name to checkout the repository                                                                                               |
 | publish-to-test   |    ❌    |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                     |
-| python-version    |    ❌    |                "3.10"                 | string  |  Python version for setting up poetry                                                                                          |
-| poetry-version    |    ❌    |               "1.1.12"                | string  | Poetry version to be installed                                                                                                |
-| working-directory |    ❌    |                 "./"                  | string  | Working directory of your Python package                                                                                      |
+| python-version    |    ❌    |                "3.10"                 | string  | Python version for setting up poetry                                                                                              |
+| poetry-version    |    ❌    |               "1.1.12"                | string  | Poetry version to be installed                                                                                                    |
+| working-directory |    ❌    |                 "./"                  | string  | Working directory of your Python package                                                                                          |
 
 ### Secret Parameters
 

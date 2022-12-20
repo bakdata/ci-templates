@@ -5,7 +5,7 @@ on:
   workflow_call:
     inputs:
       charts-path:
-        description: "The directory containing the Helm chart and `.bumpversion.cfg` file."
+        description: "The directory containing the Helm chart(s)."
         required: true
         type: string
       subdirs:
@@ -21,11 +21,6 @@ on:
         description: "Name of branch containing the artifacts"
         required: false
         default: "gh-pages"
-        type: string
-      root-branch:
-        description: "The main branch."
-        default: "main"
-        required: false
         type: string
       helm-version:
         description: "The Helm version."
@@ -62,10 +57,9 @@ jobs:
   update-version:
     runs-on: ubuntu-22.04
     outputs:
-      output1: ${{ steps.step2.outputs.singlechart }}
+      singlechart: ${{ steps.step2.outputs.singlechart }}
     needs: [helm-lint]
     env:
-      ref: ${{ github.event.repository.default_branch }}
       release-tag: ${{ github.ref_name }}
       CHARTS: ${{ inputs.subdirs }}
 
@@ -73,7 +67,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          ref: ${{ env.ref }}
+          ref: ${{ env.release-tag }}
 
       - name: Use the tag to update Chart.yaml files
         id: step2
@@ -99,7 +93,7 @@ jobs:
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           add-untracked: true
-          ref: ${{ env.ref }}
+          ref: ${{ env.release-tag }}
           commit-message: "Update Chart versions"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
@@ -113,13 +107,13 @@ jobs:
     needs: [update-version]
     env:
       charts-subdir: "${{ matrix.subdir }}"
-      ref: ${{ github.event.repository.default_branch }}
+      release-tag: ${{ github.ref_name }}
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          ref: ${{ env.ref }}
+          ref: ${{ env.release-tag }}
 
       - name: Prepare artifacts
         run: |
@@ -129,7 +123,7 @@ jobs:
         working-directory: ${{ inputs.charts-path }}
       
       - name: Upload artifacts with action/upload as multi chart
-        if: ${{needs.update-version.outputs.output1 == 'false' }}
+        if: ${{needs.update-version.outputs.singlechart == 'false' }}
         uses: actions/upload-artifact@v3.1.1
         with:
           name: ${{ env.charts-subdir }}
@@ -137,7 +131,7 @@ jobs:
           retention-days: 1
       
       - name: Upload artifacts with action/upload as single chart
-        if: ${{needs.update-version.outputs.output1 == 'true' }}
+        if: ${{needs.update-version.outputs.singlechart == 'true' }}
         uses: actions/upload-artifact@v3.1.1
         with:
           path: ${{ inputs.artifact-dir }}
@@ -162,15 +156,13 @@ jobs:
           path: ${{ inputs.artifact-dir }}
       
       - name: Merge contents if the artifacts already exist or Create new tree if not
-        if: ${{needs.update-version.outputs.output1 == 'false' }}
+        if: ${{needs.update-version.outputs.singlechart == 'false' }}
         run: |
           for subdir in */; do
-            if [ -d "../$subdir" ]; then
-              mv "$subdir"/* ../"$subdir"
-            else
+            if [ ! -d "../$subdir" ]; then
               mkdir ../"$subdir"
-              mv "$subdir"/* ../"$subdir"
             fi
+            mv "$subdir"/* ../"$subdir"
           done
           cd ..
           rm -rf ${{ inputs.artifact-dir }}
