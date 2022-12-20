@@ -42,8 +42,8 @@ runs:
     - name: Bump version with poetry
       id: release-tag
       run: |
-        echo ::set-output name=oldTag::$(poetry version -s)
+        echo "oldTag=$(poetry version -s)" >> $GITHUB_OUTPUT 
         poetry version ${{ inputs.release-type }}
-        echo ::set-output name=newTag::$(poetry version -s)
+        echo "newTag=$(poetry version -s)" >> $GITHUB_OUTPUT  
       shell: bash
       working-directory: ${{ inputs.working-directory }}

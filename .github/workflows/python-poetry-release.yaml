@@ -18,9 +18,9 @@ on:
         default: "3.10"
         type: string
       poetry-version:
-        description: "The python version for setting up poetry. (Default is 1.1.12)"
+        description: "The python version for setting up poetry. (Default is 1.2.2)"
         required: false
-        default: "1.1.12"
+        default: "1.2.2"
         type: string
       publish-to-test:
         description: "If set to false, the package is published to PyPI. (Default is true)"
@@ -57,7 +57,7 @@ on:
 
 jobs:
   create-release:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     # Map the job outputs to step outputs
     outputs:
       release-tag: ${{ steps.release-tag.outputs.release-tag }}
@@ -71,7 +71,7 @@ jobs:
 
       - name: Bump version with poetry
         id: release-tag
-        uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.4.1
+        uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.13.1
         with:
           release-type: ${{ inputs.release-type }}
           python-version: ${{ inputs.python-version }}
@@ -79,8 +79,7 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
 
       - name: Release to PyPI
-        if: success()
-        uses: bakdata/ci-templates/actions/python-poetry-release@v1.4.1
+        uses: bakdata/ci-templates/actions/python-poetry-release@v1.13.1
         with:
           pypi-token: ${{ secrets.pypi-token }}
           publish-to-test: ${{ inputs.publish-to-test }}
@@ -89,8 +88,7 @@ jobs:
           poetry-version: ${{ inputs.poetry-version }}
 
       - name: Commit and push pyproject.toml file
-        if: success()
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.0.0
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.13.1
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"

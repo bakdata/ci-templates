@@ -28,8 +28,8 @@ runs:
     - name: Bump version
       id: release-tag
       run: |
-        echo ::set-output name=oldTag::$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")
+        echo "oldTag=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> $GITHUB_OUTPUT
         bump2version ${{ inputs.release-type }} --no-commit
-        echo ::set-output name=newTag::$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")
+        echo "newTag=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> $GITHUB_OUTPUT
       shell: bash
       working-directory: ${{ inputs.working-directory }}

@@ -376,7 +376,7 @@ This workflow is built from multiple composite actions listed below:
 | ref               |    ❌    | The default branch of your repository | string  | ref name to checkout the repository                                                                                               |
 | publish-to-test   |    ❌    |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                     |
 | python-version    |    ❌    |                "3.10"                 | string  | Python version for setting up poetry                                                                                              |
-| poetry-version    |    ❌    |               "1.1.12"                | string  | Poetry version to be installed                                                                                                    |
+| poetry-version    |    ❌    |               "1.2.2"                 | string  | Poetry version to be installed                                                                                                    |
 | working-directory |    ❌    |                 "./"                  | string  | Working directory of your Python package                                                                                          |
 
 ### Secret Parameters
