@@ -66,8 +66,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-        with:
-          ref: ${{ env.release-tag }}
+        # with:
+          # ref: ${{ env.release-tag }}
 
       - name: Use the tag to update Chart.yaml files
         id: step2
@@ -93,7 +93,7 @@ jobs:
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           add-untracked: true
-          ref: ${{ env.release-tag }}
+          # ref: ${{ env.release-tag }}
           commit-message: "Update Chart versions"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
@@ -112,8 +112,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-        with:
-          ref: ${{ env.release-tag }}
+        # with:
+        #   ref: ${{ env.release-tag }}
 
       - name: Prepare artifacts
         run: |
