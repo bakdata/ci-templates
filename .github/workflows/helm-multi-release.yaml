@@ -68,7 +68,6 @@ jobs:
         uses: actions/checkout@v3
         # with:
           # ref: ${{ env.release-tag }}
-
       - name: Use the tag to update Chart.yaml files
         id: step2
         run: |
