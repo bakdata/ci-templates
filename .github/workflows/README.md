@@ -119,7 +119,7 @@ jobs:
 
 ## Helm Multi Release
 
-This workflow is for projects with multiple (sub-) helm charts. The workflow will lint all Helm charts, use the tag to bump the version, package the charts, update/create the Helm index, and deploy it on GitHub pages.
+This workflow is for projects with one or multiple Helm charts. The workflow will lint all Helm charts, use the tag to bump the version, package the charts, update/create the Helm index, and deploy it on GitHub pages.
 
 ### Prerequisites
 
