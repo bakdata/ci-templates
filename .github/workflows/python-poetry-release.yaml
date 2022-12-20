@@ -18,9 +18,9 @@ on:
         default: "3.10"
         type: string
       poetry-version:
-        description: "The python version for setting up poetry. (Default is 1.2.2)"
+        description: "The python version for setting up poetry. (Default is 1.1.12)"
         required: false
-        default: "1.2.2"
+        default: "1.1.12"
         type: string
       publish-to-test:
         description: "If set to false, the package is published to PyPI. (Default is true)"
@@ -88,7 +88,7 @@ jobs:
           poetry-version: ${{ inputs.poetry-version }}
 
       - name: Commit and push pyproject.toml file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.13.1
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.0.0
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
