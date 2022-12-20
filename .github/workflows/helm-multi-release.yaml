@@ -180,7 +180,7 @@ jobs:
           fi
 
           cd ../..
-          rm -rf ${{ inputs.artifact-dir }
+          rm -rf ${{ inputs.artifact-dir }}
         shell: bash
         working-directory: "${{ inputs.artifact-dir }}/artifact"
 
