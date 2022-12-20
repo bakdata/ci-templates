@@ -60,14 +60,14 @@ jobs:
       singlechart: ${{ steps.step2.outputs.singlechart }}
     needs: [helm-lint]
     env:
-      release-tag: ${{ github.ref_name }}
+      current-ref: ${{ github.ref_name }}
       CHARTS: ${{ inputs.subdirs }}
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-        # with:
-          # ref: ${{ env.release-tag }}
+        with:
+          ref:${{ env.current-ref }}
       - name: Use the tag to update Chart.yaml files
         id: step2
         run: |
@@ -80,7 +80,7 @@ jobs:
           sudo apt update
           sudo apt install yq -y
           for subdir in ${charts_without_brackets_and_quotation//,/ }; do
-            yq e -i '.version = "${{ env.release-tag }}"' "./$subdir/Chart.yaml"
+            yq e -i '.version = "${{ env.current-ref }}"' "./$subdir/Chart.yaml"
             if [ "$subdir" = "." ]; then
               echo "singlechart=true" >> "$GITHUB_OUTPUT"
             fi
@@ -92,7 +92,7 @@ jobs:
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           add-untracked: true
-          # ref: ${{ env.release-tag }}
+          ref: ${{ env.current-ref }}
           commit-message: "Update Chart versions"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
@@ -106,13 +106,13 @@ jobs:
     needs: [update-version]
     env:
       charts-subdir: "${{ matrix.subdir }}"
-      release-tag: ${{ github.ref_name }}
+      current-ref: ${{ github.ref_name }}
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-        # with:
-        #   ref: ${{ env.release-tag }}
+        with:
+          ref: ${{ env.current-ref }}
 
       - name: Prepare artifacts
         run: |
