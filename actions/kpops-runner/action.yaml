@@ -37,4 +37,4 @@ runs:
     - name: ${{ inputs.command }} ${{ inputs.pipeline }} pipeline
       shell: bash
       working-directory: ${{inputs.working-directory}}
-      run: kpops ${{inputs.command}} ${{ inputs.pipeline }} ${{ inputs.components }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }} --pipeline-base-dir ${{ inputs.pipeline-base-dir }}
+      run: kpops ${{ inputs.command }} ${{ inputs.pipeline }} ${{ inputs.components }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }} --pipeline-base-dir ${{ inputs.pipeline-base-dir }}
