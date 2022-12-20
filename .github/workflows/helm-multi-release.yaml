@@ -185,22 +185,6 @@ jobs:
         shell: bash
         working-directory: "${{ inputs.artifact-dir }}/artifact"
 
-      # - name: Move artifacts to root dir in case  of a single  chart
-      #   if: ${{needs.update-version.outputs.singlechart == 'true' }}
-      #   run: |
-      #     for fileordir in *; do
-      #       if [ ! -d "../$fileordir" ]; then
-      #         mv "$fileordir" ../../
-      #       else
-      #         mkdir ../../$fileordir
-      #       fi
-            
-      #     done
-      #     cd ../..
-      #     rm -rf ${{ inputs.artifact-dir }}
-      #   shell: bash
-      #   working-directory: "${{ inputs.artifact-dir }}/artifact"
-
       - name: Generate index.yaml file
         run: |         
           helm repo index .
