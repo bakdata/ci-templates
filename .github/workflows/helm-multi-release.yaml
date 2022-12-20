@@ -170,28 +170,35 @@ jobs:
 
           if [[ "$subdircount" -eq 1 ]]
           then
-              echo "Emptyyyyyyyyyy"
+              mv ./* ../../
           else
-              echo "something is in there"
+            for subdir in ./*; do
+              if [ ! -d "../../$subdir" ]; then
+                mkdir ../../$subdir
+              fi
+              mv "$subdir/*" ../../$subdir
           fi
+
+          cd ../..
+          rm -rf ${{ inputs.artifact-dir }
         shell: bash
         working-directory: "${{ inputs.artifact-dir }}/artifact"
 
-      - name: Move artifacts to root dir in case  of a single  chart
-        if: ${{needs.update-version.outputs.singlechart == 'true' }}
-        run: |
-          for fileordir in *; do
-            if [ ! -d "../$fileordir" ]; then
-              mv "$fileordir" ../../
-            else
-              mkdir ../../$fileordir
-            fi
+      # - name: Move artifacts to root dir in case  of a single  chart
+      #   if: ${{needs.update-version.outputs.singlechart == 'true' }}
+      #   run: |
+      #     for fileordir in *; do
+      #       if [ ! -d "../$fileordir" ]; then
+      #         mv "$fileordir" ../../
+      #       else
+      #         mkdir ../../$fileordir
+      #       fi
             
-          done
-          cd ../..
-          rm -rf ${{ inputs.artifact-dir }}
-        shell: bash
-        working-directory: "${{ inputs.artifact-dir }}/artifact"
+      #     done
+      #     cd ../..
+      #     rm -rf ${{ inputs.artifact-dir }}
+      #   shell: bash
+      #   working-directory: "${{ inputs.artifact-dir }}/artifact"
 
       - name: Generate index.yaml file
         run: |         
