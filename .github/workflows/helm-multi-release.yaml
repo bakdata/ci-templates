@@ -67,7 +67,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          ref:${{ env.current-ref }}
+          ref: ${{ env.current-ref }}
       - name: Use the tag to update Chart.yaml files
         id: step2
         run: |
