@@ -176,7 +176,7 @@ jobs:
               if [ ! -d "../../$subdir" ]; then
                 mkdir ../../$subdir
               fi
-              mv "$subdir/*" ../../$subdir
+              mv "$subdir"/* ../../"$subdir"
           fi
 
           cd ../..
