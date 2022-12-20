@@ -177,6 +177,7 @@ jobs:
                 mkdir ../../$subdir
               fi
               mv "$subdir"/* ../../"$subdir"
+            done
           fi
 
           cd ../..
