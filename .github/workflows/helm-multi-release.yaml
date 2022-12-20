@@ -149,7 +149,7 @@ jobs:
         with:
           path: ${{ inputs.artifact-dir }}
       
-      - name: Merge contents if the artifacts already exist or Create new tree if not
+      - name: Move artifacts to root dir in case  of multiple  charts
         if: ${{needs.update-version.outputs.singlechart == 'false' }}
         run: |
           for subdir in */; do
@@ -166,6 +166,8 @@ jobs:
       - name: Move artifacts to root dir in case  of a single  chart
         if: ${{needs.update-version.outputs.singlechart == 'true' }}
         run: |
+          pwd
+          tree .
           for tgzfile in *; do
             mv "$tgzfile" ../../
           done
