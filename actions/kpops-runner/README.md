@@ -10,6 +10,7 @@ This action runs KPOps with the given config.
 | pipeline          |    ✅     |       -       | string | Pipeline to run by KPOps                                                                                                                      |
 | kpops-version     |    ✅     |       -       | string | KPOps version to use                                                                                                                          |
 | working-directory |    ❌     |       .       | string | root directory used by KPOps to run pipelines                                                                                                 |
+| pipeline-base-dir |    ❌     |       .       | string | directory where relative pipeline variables are initialized from                                                                              |
 | defaults          |    ❌     |   defaults    | string | defaults folder path                                                                                                                          |
 | config            |    ❌     |  config.yaml  | string | config.yaml file path                                                                                                                         |
 | components        |    ❌     |       -       | string | components package path                                                                                                                       |
@@ -25,5 +26,5 @@ steps:
       command: deploy --execute
       working-directory: home/my-kpops-root-dir
       pipeline: pipelines/my-pipeline-file.yaml
-      kpops-version: 0.2.0.dev20221202163038
+      kpops-version: 0.2.0.dev20221219163313
 ```

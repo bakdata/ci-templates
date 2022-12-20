@@ -11,6 +11,9 @@ inputs:
   working-directory:
     description: "The root directory containing the config.yaml, pipelines folder and defaults"
     default: "."
+  pipeline-base-dir:
+    description: "Directory where relative pipeline variables are initialized from"
+    default: "."
   defaults:
     description: "Defaults folder path"
     default: "defaults"
@@ -34,4 +37,4 @@ runs:
     - name: ${{ inputs.command }} ${{ inputs.pipeline }} pipeline
       shell: bash
       working-directory: ${{inputs.working-directory}}
-      run: kpops ${{inputs.command}} ${{ inputs.pipeline }} ${{ inputs.components }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }}
+      run: kpops ${{inputs.command}} ${{ inputs.pipeline }} ${{ inputs.components }} --defaults ${{ inputs.defaults }} --config ${{ inputs.config }} --pipeline-base-dir ${{ inputs.pipeline-base-dir }}
