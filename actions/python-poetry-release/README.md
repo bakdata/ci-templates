@@ -22,6 +22,10 @@ This action uses another composite action listed below:
 
 ```yaml
 steps:
+  - uses: actions/checkout@v3
+    with:
+      persist-credentials: false
+
   # Other steps in your workflow
 
   - name: Release to (Test)PyPI
