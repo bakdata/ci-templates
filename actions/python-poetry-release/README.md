@@ -22,9 +22,10 @@ This action uses another composite action listed below:
 
 ```yaml
 steps:
-  - uses: actions/checkout@v3
+  - name: Check out repository
+    uses: actions/checkout@v3
     with:
-      persist-credentials: false
+      persist-credentials: false # required for pushing changed pyproject.toml
 
   # Other steps in your workflow
 
