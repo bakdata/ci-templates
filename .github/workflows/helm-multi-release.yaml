@@ -68,35 +68,21 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ env.current-ref }}
-      - name: Use the tag to update Chart.yaml files
+
+      - name: Verify if have a single or multiple chart(s)
         id: step2
         run: |
-          echo "singlechart=false" >> "$GITHUB_OUTPUT"
           charts="${{ env.CHARTS }}"
           charts_without_brackets="${charts:1:-1}"
           charts_without_brackets_and_quotation="${charts_without_brackets//\'/}"
-          
-          sudo add-apt-repository ppa:rmescandon/yq
-          sudo apt update
-          sudo apt install yq -y
-          for subdir in ${charts_without_brackets_and_quotation//,/ }; do
-            yq e -i '.version = "${{ env.current-ref }}"' "./$subdir/Chart.yaml"
-            if [ "$subdir" = "." ]; then
-              echo "singlechart=true" >> "$GITHUB_OUTPUT"
-            fi
-          done
+
+          if [ "${#charts_without_brackets_and_quotation[@]}" = "1" ]; then
+            echo "singlechart=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "singlechart=false" >> "$GITHUB_OUTPUT"
+          fi
         shell: bash
         working-directory: ${{ inputs.charts-path }}
-
-      - name: Commit and push updated charts
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
-        with:
-          add-untracked: true
-          ref: ${{ env.current-ref }}
-          commit-message: "Update Chart versions"
-          github-username: ${{ secrets.github-username }}
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
 
   package-new-artifacts:
     strategy:
@@ -113,6 +99,15 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ env.current-ref }}
+
+      - name: Bump Chart version
+        run: |
+          sudo add-apt-repository ppa:rmescandon/yq
+          sudo apt update
+          sudo apt install yq -y
+          yq e -i '.version = "${{ env.current-ref }}"' "./${{ env.charts-subdir }}/Chart.yaml"
+        shell: bash
+        working-directory: ${{ inputs.charts-path }}
 
       - name: Prepare artifacts
         run: |
@@ -154,7 +149,7 @@ jobs:
         with:
           path: ${{ inputs.artifact-dir }}
       
-      - name: Merge contents if the artifacts already exist or Create new tree if not
+      - name: Move artifacts to root dir in case  of multiple  charts
         if: ${{needs.update-version.outputs.singlechart == 'false' }}
         run: |
           for subdir in */; do
@@ -171,9 +166,20 @@ jobs:
       - name: Move artifacts to root dir in case  of a single  chart
         if: ${{needs.update-version.outputs.singlechart == 'true' }}
         run: |
-          for tgzfile in *; do
-            mv "$tgzfile" ../../
-          done
+          subdircount=$(find . -maxdepth 1 -type d | wc -l)
+
+          if [[ "$subdircount" -eq 1 ]]
+          then
+              mv ./* ../../
+          else
+            for subdir in ./*; do
+              if [ ! -d ../../"$subdir" ]; then
+                mkdir ../../"$subdir"
+              fi
+              mv "$subdir"/* ../../"$subdir"
+            done
+          fi
+
           cd ../..
           rm -rf ${{ inputs.artifact-dir }}
         shell: bash
