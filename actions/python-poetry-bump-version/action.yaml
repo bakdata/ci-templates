@@ -39,7 +39,7 @@ runs:
     # Update the pyproject.toml version. Versioning format for dev packages: X.Y.Z
     # For more information visit: https://www.python.org/dev/peps/pep-0440/#semantic-versioning
     # https://python-poetry.org/docs/cli/#version
-    - name: Bump version with poetry
+    - name: Bump version with Poetry
       id: release-tag
       run: |
         echo ::set-output name=oldTag::$(poetry version -s)

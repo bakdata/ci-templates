@@ -1,6 +1,6 @@
 # python-poetry-release
 
-This composite action uses poetry to build and push your Python packages either to TestPyPI or PyPI.
+This composite action uses Poetry to build and push your Python packages either to TestPyPI or PyPI.
 
 ## Dependencies
 
@@ -12,10 +12,10 @@ This action uses another composite action listed below:
 
 | Name              | Required | Default Value | Description                                                                                          |
 | ----------------- | :------: | :-----------: | ---------------------------------------------------------------------------------------------------- |
-| pypi-token        |    ✅    |       -       | The (test) PyPI api token for publishing packages                                                    |
+| pypi-token        |    ✅    |       -       | The (Test)PyPI API token for publishing packages                                                     |
 | publish-to-test   |    ❌    |     true      | If set to true, the packages are published to TestPyPI other wise the packages are published to PyPI |
-| python-version    |    ❌    |     3.10      | The python version for setting up poetry.                                                            |
-| poetry-version    |    ❌    |     1.2.2     | The poetry version to be installed.                                                                  |
+| python-version    |    ❌    |     3.10      | The Python version for setting up Poetry.                                                            |
+| poetry-version    |    ❌    |     1.2.2     | The Poetry version to be installed.                                                                  |
 | working-directory |    ❌    |     "./"      | The working directory of your Python package.                                                        |
 
 ## Usage

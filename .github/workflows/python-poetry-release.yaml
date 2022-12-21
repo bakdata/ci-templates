@@ -1,4 +1,4 @@
-name: Reusable workflow for building and publishing python packages to TestPyPI or PyPI
+name: Reusable workflow for building and publishing Python packages to TestPyPI or PyPI
 
 on:
   workflow_call:
@@ -13,12 +13,12 @@ on:
         default: ${{ github.event.repository.default_branch }}
         type: string
       python-version:
-        description: "The python version for setting up poetry. (Default is 3.10)"
+        description: "The Python version for setting up Poetry. (Default is 3.10)"
         required: false
         default: "3.10"
         type: string
       poetry-version:
-        description: "The python version for setting up poetry. (Default is 1.1.12)"
+        description: "The Python version for setting up Poetry. (Default is 1.1.12)"
         required: false
         default: "1.1.12"
         type: string
@@ -69,7 +69,7 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
-      - name: Bump version with poetry
+      - name: Bump version with Poetry
         id: release-tag
         uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.4.1
         with:
