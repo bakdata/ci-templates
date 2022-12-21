@@ -1,6 +1,6 @@
 # ci-templates
 
-This is a collection of reusable workflows and composite actions for Github that Bakdata uses for open source projects.
+This is a collection of reusable workflows and composite actions for Github that bakdata uses for open source projects.
 
 ## Using reusable workflows
 
