@@ -173,8 +173,8 @@ jobs:
               mv ./* ../../
           else
             for subdir in ./*; do
-              if [ ! -d "../../$subdir" ]; then
-                mkdir ../../$subdir
+              if [ ! -d ../../"$subdir" ]; then
+                mkdir ../../"$subdir"
               fi
               mv "$subdir"/* ../../"$subdir"
             done
