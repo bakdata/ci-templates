@@ -4,9 +4,9 @@ This action will destroy a `kustomization.yaml` file on a Google Kubernetes Engi
 
 ## Input Parameters
 
-| Name            | Required | Default Value |  Type  | Description                                                                                       |
-| --------------- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------- |
-| kustomization-path    |    ✅    |       -       | string | Path to the root directory of the kustomization                                                           |
+| Name               | Required | Default Value |  Type  | Description                                     |
+| ------------------ | :------: | :-----------: | :----: | ----------------------------------------------- |
+| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization |
 
 ## Usage
 
