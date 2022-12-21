@@ -162,8 +162,8 @@ jobs:
           rm -rf ${{ inputs.artifact-dir }}
         shell: bash
         working-directory: ${{ inputs.artifact-dir }}
-      
-      - name: test code
+
+      - name: Move artifacts to root dir in case  of a single  chart
         if: ${{needs.update-version.outputs.singlechart == 'true' }}
         run: |
           subdircount=$(find . -maxdepth 1 -type d | wc -l)
