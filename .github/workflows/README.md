@@ -355,7 +355,7 @@ workflow.
 
 ### Prerequisites
 
-Your Python project needs to be set up with poetry and contain a `pyproject.toml` file to use this workflow. Moreover,
+Your Python project needs to be set up with Poetry and contain a `pyproject.toml` file to use this workflow. Moreover,
 choose a GitHub user who will change, commit, and push the version in your `pyproject.toml` file. Make sure to configure
 admin access to the repository for the selected user because admins can still push on the default branch even if there
 is a protection rule in place.
@@ -372,10 +372,10 @@ This workflow is built from multiple composite actions listed below:
 
 | Name              | Required |             Default Value             |  Type   | Description                                                                                                                       |
 | ----------------- | :------: | :-----------------------------------: | :-----: | --------------------------------------------------------------------------------------------------------------------------------- |
-| release-type      |    ✅    |                   -                   | string  | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values |
+| release-type      |    ✅    |                   -                   | string  | Scope of the release, see the official [documentation of Poetry](https://python-poetry.org/docs/cli/#version) for possible values |
 | ref               |    ❌    | The default branch of your repository | string  | ref name to checkout the repository                                                                                               |
 | publish-to-test   |    ❌    |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                     |
-| python-version    |    ❌    |                "3.10"                 | string  | Python version for setting up poetry                                                                                              |
+| python-version    |    ❌    |                "3.10"                 | string  | Python version for setting up Poetry                                                                                              |
 | poetry-version    |    ❌    |               "1.1.12"                | string  | Poetry version to be installed                                                                                                    |
 | working-directory |    ❌    |                 "./"                  | string  | Working directory of your Python package                                                                                          |
 
@@ -386,12 +386,12 @@ repository secret for the GitHub username (`GH_USERNAME`), the GitHub Email (`GH
 token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the
 email: `[username]@users.noreply.github.com`.
 
-| Name            | Required | Description                                       |
-| --------------- | :------: | ------------------------------------------------- |
-| github-username |    ✅    | The GitHub username for committing the changes    |
-| github-email    |    ✅    | The GitHub email for committing the changes       |
-| github-token    |    ✅    | The GitHub token for committing the changes       |
-| pypi-token      |    ✅    | The (test) PyPI api token for publishing packages |
+| Name            | Required | Description                                      |
+| --------------- | :------: | ------------------------------------------------ |
+| github-username |    ✅    | The GitHub username for committing the changes   |
+| github-email    |    ✅    | The GitHub email for committing the changes      |
+| github-token    |    ✅    | The GitHub token for committing the changes      |
+| pypi-token      |    ✅    | The (Test)PyPI API token for publishing packages |
 
 ### Outputs
 
@@ -419,8 +419,8 @@ jobs:
       release-type: patch # (Required) See more values at: https://python-poetry.org/docs/cli/#version
       ref: my-awesome-ref # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value. In this case the changes will be pushed to my-awesome-ref
       publish-to-test: false # (Optional) By default the packages are published to TestPyPI. In this case the packages are published to PyPI
-      python-version: 3.8 # (Optional) Default value is 3.10. In this case poetry is installed with Python 3.8
-      poetry-version: 1.1.11 # (Optional) Default value is 1.1.12. In this case poetry version 1.1.11 is installed
+      python-version: 3.8 # (Optional) Default value is 3.10. In this case Poetry is installed with Python 3.8
+      poetry-version: 1.1.11 # (Optional) Default value is 1.1.12. In this case Poetry version 1.1.11 is installed
       working-directory: "./my-awesome-python-project" # (Optional) Default value is the root directory of your repository. In this case all the files to the given path are published
     secrets:
       github-email: ${{ secrets.GH_EMAIL }}

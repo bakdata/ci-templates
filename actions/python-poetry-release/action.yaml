@@ -41,7 +41,7 @@ runs:
       if: ${{ inputs.publish-to-test == 'false' }}
       run: |
         # first build the project then publish to PyPI
-        # If the repository is not specified, by default poetry pushes the packages to PyPI
+        # If the repository is not specified, by default Poetry pushes the packages to PyPI
         poetry publish --build --username __token__ --password ${{ inputs.pypi-token }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}

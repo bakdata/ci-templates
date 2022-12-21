@@ -20,6 +20,11 @@ This composite action commits the changes of your repository with an arbitrary c
 
 ```yaml
 steps:
+  - name: Check out repository
+    uses: actions/checkout@v3
+    with:
+      persist-credentials: false # required for pushing to protected branch later
+
   # Other Steps ...
   # Imagine that the previous steps change some files and the changes need to be committed
 

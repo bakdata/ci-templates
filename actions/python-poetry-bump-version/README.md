@@ -1,7 +1,6 @@
 # python-poetry-bump-version
 
-This composite action bumps the python package version depending on the release type. The [poetry version](https://python-poetry.org/docs/cli/#version) command is used to bump the version and change it
-in the `pyproject.toml` file. It will output the old and new bumped versions.
+This composite action bumps the Python package version depending on the release type. The [`poetry version`](https://python-poetry.org/docs/cli/#version) command is used to bump the version and change it in the `pyproject.toml` file. It will output the old and new bumped versions.
 
 ## Dependencies
 
@@ -13,10 +12,10 @@ This action uses another composite action listed below:
 
 | Name              | Required | Default Value |                   Type                    | Description                                                                                                                       |
 | ----------------- | :------: | :-----------: | :---------------------------------------: | --------------------------------------------------------------------------------------------------------------------------------- |
-| release-type      |    ✅    |       -       |                  string                   | Scope of the release, see the official [documentation of poetry](https://python-poetry.org/docs/cli/#version) for possible values |
-| python-version    |    ❌    |     3.10      |                  number                   | The python version for setting up poetry.                                                                                         |
-| poetry-version    |    ❌    |     1.2.2     |                  number                   | The poetry version to be installed.                                                                                               |
-| working-directory |    ❌    |       .       | The root directory of the poetry project. |                                                                                                                                   |
+| release-type      |    ✅    |       -       |                  string                   | Scope of the release, see the official [documentation of Poetry](https://python-poetry.org/docs/cli/#version) for possible values |
+| python-version    |    ❌    |     3.10      |                  number                   | The Python version for setting up Poetry.                                                                                         |
+| poetry-version    |    ❌    |     1.2.2     |                  number                   | The Poetry version to be installed.                                                                                               |
+| working-directory |    ❌    |       .       | The root directory of the Poetry project. |                                                                                                                                   |
 
 ## Output Parameters
 
@@ -39,5 +38,5 @@ steps:
       poetry-version: ${{ inputs.poetry-version }}
 
   - name: Use bump version output
-    run: echo Bumped Version from ${{ steps.bump-version.outputs.old-tag }} to ${{ steps.bump-version.outputs.release-tag }}
+    run: echo Bumped version from ${{ steps.bump-version.outputs.old-tag }} to ${{ steps.bump-version.outputs.release-tag }}
 ```
