@@ -5,7 +5,7 @@ on:
 
 jobs:
   format:
-    name: format
+    name: dprint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
