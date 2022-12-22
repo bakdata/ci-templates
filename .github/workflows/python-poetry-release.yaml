@@ -57,7 +57,7 @@ on:
 
 jobs:
   create-release:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     # Map the job outputs to step outputs
     outputs:
       release-tag: ${{ steps.release-tag.outputs.release-tag }}
@@ -72,7 +72,7 @@ jobs:
 
       - name: Bump version with Poetry
         id: release-tag
-        uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.4.1
+        uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.13.3
         with:
           release-type: ${{ inputs.release-type }}
           python-version: ${{ inputs.python-version }}
@@ -80,8 +80,7 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
 
       - name: Release to PyPI
-        if: success()
-        uses: bakdata/ci-templates/actions/python-poetry-release@v1.4.1
+        uses: bakdata/ci-templates/actions/python-poetry-release@v1.13.3
         with:
           pypi-token: ${{ secrets.pypi-token }}
           publish-to-test: ${{ inputs.publish-to-test }}
@@ -90,7 +89,6 @@ jobs:
           poetry-version: ${{ inputs.poetry-version }}
 
       - name: Commit and push pyproject.toml file
-        if: success()
         uses: bakdata/ci-templates/actions/commit-and-push@v1.0.0
         with:
           ref: ${{ inputs.ref }}
