@@ -4,6 +4,7 @@ The following workflows can be found here:
 
 - [Helm Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-release)
 - [Helm Multi Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-multi-release)
+- [Release Tag Versions](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#release-tag-versions)
 - [Kustomize GKE Deploy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-deploy)
 - [Kustomize GKE Destroy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-destroy)
 - [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
@@ -182,7 +183,7 @@ on:
 jobs:
   call-workflow-passing-data:
     name: Release & Publish Helm chart
-    uses: bakdata/ci-templates/.github/workflows/helm-multi-release.yaml@multi-release
+    uses: bakdata/ci-templates/.github/workflows/helm-multi-release.yaml@main
     with:
       charts-path: "./charts"
       subdirs: "['subdir1', 'subdir2', 'subdir3']"
@@ -203,11 +204,93 @@ on:
 jobs:
   call-workflow-passing-data:
     name: Release & Publish Helm chart
-    uses: bakdata/ci-templates/.github/workflows/helm-multi-release.yaml@multi-release
+    uses: bakdata/ci-templates/.github/workflows/helm-multi-release.yaml@main
     with:
       charts-path: "./helm-chart"
       subdirs: "['.']"
       gh-pages-branch: gh-pages
+    secrets:
+      github-email: "${{ secrets.GH_EMAIL }}"
+      github-username: "${{ secrets.GH_USERNAME }}"
+      github-token: "${{ secrets.GH_TOKEN }}"
+```
+
+---
+
+## Release Tag Versions
+
+This method enables the release of tag versions as well as the creation of a new snapshot version for developers to work on the next release. The workflow allows you to choose the sort of release that will be performed as well as how to generate the snapshot version.
+
+### Prerequisites
+
+Your Helm chart and `.bumpversion.cfg` need to be located inside the `charts-dir` folder of your repository (repository root by default) to use this workflow. A minimal configuration with `charts-dir=charts` could look like this:
+
+```cfg
+[bumpversion]
+current_version = 0.0.1
+
+[bumpversion:file:charts/Chart.yaml]
+search = version: {current_version}
+replace = version: {new_version}
+```
+
+Additionally, you need to create the lint configuration file `.github/lint-config.yaml` and configure it to your liking.
+A minimal configuration could look like this:
+
+```yaml
+# check https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml for possible configurations
+target-branch: "main"
+```
+
+### Dependencies
+
+This workflow is built from multiple composite actions listed below:
+
+- [bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/bump-version)
+- [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
+
+### Input Parameters
+
+| Name                  | Required | Default Value |  Type  | Description                                                                      |
+| --------------------- | :------: | :-----------: | :----: | -------------------------------------------------------------------------------- |
+| charts-dir            |    ✅    |               | string | The Path to the directory containing the Helm chart and `.bumpversion.cfg` file. |
+| release-type          |    ✅    |       -       | string | Scope of the release (major, minor or patch).                                    |
+| next-dev-release-type |    ✅    |       -       | string | Scope of the next release (minor or patch) for developers.                       |
+
+### Secret Parameters
+
+These secrets define the GitHub user that pushes the changes to the repository. Create a repository secret for the GitHub username (`GH_USERNAME`), the GitHub email (`GH_EMAIL`), and a personal access token (`GH_TOKEN`) of the user.
+You can use the no reply GitHub email for the email: `[username]@users.noreply.github.com`.
+
+| Name            | Required | Description                                    |
+| --------------- | :------: | ---------------------------------------------- |
+| github-username |    ✅    | The GitHub username for committing the changes |
+| github-email    |    ✅    | The GitHub email for committing the changes    |
+| github-token    |    ✅    | The GitHub token for committing the changes    |
+
+### Calling the workflow
+
+```yaml
+name: Release multiple Helm Charts
+on:
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: "Scope of the release (major, minor or patch)."
+        required: true
+        type: string
+      next-dev-release-type:
+        description: "Scope of the next release (minor or patch) for developers"
+        required: true
+        type: string
+jobs:
+  call-workflow-passing-data:
+    name: Release & Publish Helm chart
+    uses: bakdata/ci-templates/.github/workflows/release-tag-versions.yaml@main
+    with:
+      charts-dir: "./helm-chart"
+      release-type: "${{ inputs.release-type }}"
+      next-dev-release-type: "${{ inputs.next-dev-release-type }}"
     secrets:
       github-email: "${{ secrets.GH_EMAIL }}"
       github-username: "${{ secrets.GH_USERNAME }}"

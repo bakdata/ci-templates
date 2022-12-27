@@ -1,0 +1,78 @@
+name: Release tag versions
+
+on:
+  workflow_call:
+    inputs:
+      release-type:
+        description: "Scope of the release (major, minor or patch)."
+        required: true
+        type: string
+      next-dev-release-type:
+        description: "Scope of the next release (minor or patch) for developers"
+        required: true
+        type: string
+      charts-dir:
+        description: "The Path to the directory containing the Helm chart and `.bumpversion.cfg` file."
+        required: true
+        type: string
+    secrets:
+      github-email:
+        description: "The GitHub email for committing the changes."
+        required: true
+      github-username:
+        description: "The GitHub username for committing the changes."
+        required: true
+      github-token:
+        description: "The GitHub token for committing the changes."
+        required: true
+
+jobs:
+  bump_and_release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out default branch
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.github-token }}
+
+      - name: Bump version
+        id: release-tag
+        uses: bakdata/ci-templates/actions/bump-version@v1.12.0
+        with:
+          release-type: ${{ inputs.release-type }}
+          working-directory: ${{ inputs.charts-dir }}
+
+      - name: Create and push new Tag
+        run: |
+          tag=${{ steps.release-tag.outputs.release-tag }}
+          message='Create new Tag: ${{ steps.release-tag.outputs.release-tag }}'
+          git config user.name "${{ secrets.github-username }}"
+          git config user.email "${{ secrets.github-email }}"
+          git tag -a "${tag}" -m "${message}"
+          git push origin "${tag}"
+
+          git stash
+        shell: bash
+
+      - name: Create next developer release tag
+        id: dev-tag
+        uses: bakdata/ci-templates/actions/bump-version@v1.12.0
+        with:
+          release-type: ${{ inputs.next-dev-release-type }}
+          working-directory: ${{ inputs.charts-dir }}
+
+      - name: Add -SNAPSHOT versioin in Chart.yaml and .bumpversion.cfg
+        run: |
+          sed -i -e 's/current_version =.*/current_version = ${{ steps.dev-tag.outputs.release-tag }}-SNAPSHOT/' .bumpversion.cfg
+          sed -i -e 's/version:.*/version: ${{ steps.dev-tag.outputs.release-tag }}-SNAPSHOT/' Chart.yaml
+        shell: bash
+        working-directory: ${{ inputs.charts-dir }}
+
+      - name: Commit and push Chart.yaml & .bumpversion.cfg file
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        with:
+          commit-message: "Bump version and create dev version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }} → ${{ steps.dev-tag.outputs.release-tag }}-SNAPSHOT"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
