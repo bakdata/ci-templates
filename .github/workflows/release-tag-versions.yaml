@@ -43,6 +43,14 @@ jobs:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.charts-dir }}
 
+      - name: Commit and push Chart.yaml & .bumpversion.cfg file to release new tag
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        with:
+          commit-message: "Bump version and create dev version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }} → ${{ steps.dev-tag.outputs.release-tag }}-SNAPSHOT"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
+
       - name: Create and push new Tag
         run: |
           tag=${{ steps.release-tag.outputs.release-tag }}
@@ -51,8 +59,6 @@ jobs:
           git config user.email "${{ secrets.github-email }}"
           git tag -a "${tag}" -m "${message}"
           git push origin "${tag}"
-
-          git stash
         shell: bash
         working-directory: ${{ inputs.charts-dir }}
 
@@ -70,7 +76,7 @@ jobs:
         shell: bash
         working-directory: ${{ inputs.charts-dir }}
 
-      - name: Commit and push Chart.yaml & .bumpversion.cfg file
+      - name: Commit and push Chart.yaml & .bumpversion.cfg file (containing the -SNAPSHOT version)
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           commit-message: "Bump version and create dev version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }} → ${{ steps.dev-tag.outputs.release-tag }}-SNAPSHOT"
