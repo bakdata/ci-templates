@@ -1,0 +1,27 @@
+name: Helm lint
+# Reusable workflow to lint Helm charts
+
+on:
+  workflow_call:
+    inputs:
+      lint-config-path:
+        description: "The path to the lint configuration file"
+        required: false
+        type: string
+        default: ".github/lint-config.yaml"
+      ref:
+        description: "The ref name to checkout the repository"
+        required: false
+        type: string
+        default: "${{ github.event.repository.default_branch }}"
+
+jobs:
+  helm-lint:
+    name: Helm Lint
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Lint Helm chart
+        uses: bakdata/ci-templates/actions/helm-lint@v1.13.2
+        with:
+          lint-config-path: "${{ inputs.lint-config-path }}"
+          ref: "${{ inputs.ref }}"
