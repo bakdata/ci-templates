@@ -1,4 +1,4 @@
-name: Release tag versions
+name: Reusable workflow for releasing tag versions
 
 on:
   workflow_call:
