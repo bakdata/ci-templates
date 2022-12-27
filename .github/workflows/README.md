@@ -33,7 +33,6 @@ This workflow is built from the following action:
 
 - [helm-lint](https://github.com/bakdata/ci-templates/tree/main/actions/helm-lint)
 
-
 ### Input Parameters
 
 | Name             | Required |             Default Value             |  Type  | Description                                                                                                                              |
