@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Lint Helm chart
-        uses: bakdata/ci-templates/actions/helm-lint@feat/set-output
+        uses: bakdata/ci-templates/actions/helm-lint@v1.13.2
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
           ref: "${{ inputs.ref }}"
