@@ -35,10 +35,10 @@ This workflow is built from the following action:
 
 ### Input Parameters
 
-| Name             | Required |             Default Value             |  Type  | Description                                                                                                                              |
-| ---------------- | :------: | :-----------------------------------: | :----: | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| ref              |    ❌    | The default branch of your repository | string | The ref name to checkout the repository                                                                                                  |
-| lint-config-path |    ❌    |      ".github/lint-config.yaml"       | string | The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml) |
+| Name             | Required |       Default Value        |  Type  | Description                                                                                                                              |
+| ---------------- | :------: | :------------------------: | :----: | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| ref              |    ❌    |     The current branch     | string | The ref name to checkout the repository                                                                                                  |
+| lint-config-path |    ❌    | ".github/lint-config.yaml" | string | The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml) |
 
 ### Calling the workflow
 
