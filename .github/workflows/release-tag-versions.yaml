@@ -38,7 +38,7 @@ jobs:
 
       - name: Bump version
         id: release-tag
-        uses: bakdata/ci-templates/actions/bump-version@v1.12.0
+        uses: bakdata/ci-templates/actions/bump-version@feat/set-output
         with:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.charts-dir }}
@@ -64,7 +64,7 @@ jobs:
 
       - name: Create next developer release tag
         id: dev-tag
-        uses: bakdata/ci-templates/actions/bump-version@v1.12.0
+        uses: bakdata/ci-templates/actions/bump-version@feat/set-output
         with:
           release-type: ${{ inputs.next-dev-release-type }}
           working-directory: ${{ inputs.charts-dir }}
