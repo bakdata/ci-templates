@@ -52,8 +52,10 @@ jobs:
           git tag -a "${tag}" -m "${message}"
           git push origin "${tag}"
 
-          git stash
+          git add .bumpversion.cfg
+          git add Chart.yaml
         shell: bash
+        working-directory: ${{ inputs.charts-dir }}
 
       - name: Create next developer release tag
         id: dev-tag
