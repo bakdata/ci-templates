@@ -52,8 +52,7 @@ jobs:
           git tag -a "${tag}" -m "${message}"
           git push origin "${tag}"
 
-          git add .bumpversion.cfg
-          git add Chart.yaml
+          git stash
         shell: bash
         working-directory: ${{ inputs.charts-dir }}
 
