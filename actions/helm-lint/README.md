@@ -14,11 +14,12 @@ target-branch: "main"
 
 ## Input Parameters
 
-| Name             | Required |             Default Value             |  Type  | Description                                                                                                                              |
-| ---------------- | :------: | :-----------------------------------: | :----: | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| ref              |    ❌    | The default branch of your repository | string | The ref name to checkout the repository                                                                                                  |
-| lint-config-path |    ❌    |      ".github/lint-config.yaml"       | string | The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml) |
-| helm-version     |    ❌    |               "v3.10.1"               | string | The Helm version                                                                                                                         |
+| Name                    | Required |             Default Value             |  Type  | Description                                                                                                                              |
+| ----------------------- | :------: | :-----------------------------------: | :----: | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| ref                     |    ❌    | The default branch of your repository | string | The ref name to checkout the repository                                                                                                  |
+| lint-config-path        |    ❌    |      ".github/lint-config.yaml"       | string | The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml) |
+| helm-version            |    ❌    |               "v3.10.1"               | string | The Helm version                                                                                                                         |
+| check-version-increment |    ❌    |                "true"                 | string | Activates a check for chart version increments.                                                                                          |
 
 ## Usage
 
