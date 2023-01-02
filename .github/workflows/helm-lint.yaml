@@ -4,16 +4,22 @@ name: Helm lint
 on:
   workflow_call:
     inputs:
-      lint-config-path:
-        description: "The path to the lint configuration file"
-        required: false
-        type: string
-        default: ".github/lint-config.yaml"
       ref:
-        description: "The ref name to checkout the repository"
+        description: "The ref name to checkout the repository."
         required: false
-        type: string
-        default: "${{ github.ref_name }}"
+        default: ${{ github.ref_name }}
+      lint-config-path:
+        description: "The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml)."
+        required: false
+        default: ".github/lint-config.yaml"
+      helm-version:
+        description: "The Helm version."
+        required: false
+        default: "v3.10.1"
+      check-version-increment:
+        description: "Activates a check for chart version increments."
+        required: false
+        default: "true"
 
 jobs:
   helm-lint:
@@ -25,3 +31,5 @@ jobs:
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
           ref: "${{ inputs.ref }}"
+          check-version-increment: "${{ inputs.check-version-increment }}"
+          helm-version: "${{ inputs.helm-version }}"
