@@ -8,22 +8,18 @@ on:
         description: "The ref name to checkout the repository."
         required: false
         default: ${{ github.ref_name }}
-        type: string
       lint-config-path:
         description: "The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml)."
         required: false
         default: ".github/lint-config.yaml"
-        type: string
       helm-version:
         description: "The Helm version."
         required: false
         default: "v3.10.1"
-        type: string
       check-version-increment:
         description: "Activates a check for chart version increments."
         required: false
         default: "true"
-        type: string
 
 jobs:
   helm-lint:
