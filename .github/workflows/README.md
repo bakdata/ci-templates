@@ -2,7 +2,6 @@
 
 The following workflows can be found here:
 
-- [Helm Lint](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-lint)
 - [Helm Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-release)
 - [Helm Multi Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-multi-release)
 - [Kustomize GKE Deploy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-deploy)
@@ -12,48 +11,6 @@ The following workflows can be found here:
 - [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
 - [Java Gradle Plugin](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-plugin)
 - [Java Gradle Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-release)
-
-## Helm Lint
-
-This workflow will lint a Helm chart.
-
-### Prerequisites
-
-You need to create the lint configuration file `.github/lint-config.yaml` and configure it to your liking.
-A minimal configuration could look like this:
-
-```yaml
-# check https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml for possible configurations
-target-branch: "main"
-```
-
-### Dependencies
-
-This workflow is built from the following action:
-
-- [helm-lint](https://github.com/bakdata/ci-templates/tree/main/actions/helm-lint)
-
-### Input Parameters
-
-| Name                    | Required |       Default Value        |  Type  | Description                                                                                                                              |
-| ----------------------- | :------: | :------------------------: | :----: | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| ref                     |    ❌    |     The current branch     | string | The ref name to checkout the repository                                                                                                  |
-| lint-config-path        |    ❌    | ".github/lint-config.yaml" | string | The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml) |
-| helm-version            |    ❌    |         "v3.10.1"          | string | The Helm version                                                                                                                         |
-| check-version-increment |    ❌    |           "true"           | string | Activates a check for chart version increments.                                                                                          |
-
-### Calling the workflow
-
-```yaml
-name: Call this reusable workflow
-
-on:
-  push:
-
-jobs:
-  call-helm-lint-workflow:
-    uses: bakdata/ci-templates/.github/workflows/helm-lint.yaml@main
-```
 
 ## Helm Release
 
