@@ -1,4 +1,4 @@
-# action-lint
+# helm-lint
 
 This action will lint Helm charts inside the `charts` folder of your repository.
 

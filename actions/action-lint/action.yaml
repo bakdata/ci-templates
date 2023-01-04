@@ -5,10 +5,6 @@ inputs:
     description: "The ref name to checkout the repository."
     required: false
     default: ${{ github.ref_name }}
-  lint-matcher-path:
-    description: "The path to the lint configuration file."
-    required: false
-    default: ".github/actionlint-matcher.json"
 
 runs:
   using: "composite"
@@ -18,9 +14,13 @@ runs:
       with:
         ref: "${{ inputs.ref }}"
 
+    - name: Download "actionlint-matcher.json"
+      run: wget https://raw.githubusercontent.com/rhysd/actionlint/v1.6.22/.github/actionlint-matcher.json
+      shell: bash
+
     - name: Check workflow files
       run: |
-        echo "::add-matcher::.github/actionlint-matcher.json"
+        echo "::add-matcher::actionlint-matcher.json"
         bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/v1.6.19/scripts/download-actionlint.bash)
         ./actionlint -color
       shell: bash
