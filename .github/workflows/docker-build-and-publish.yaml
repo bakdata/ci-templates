@@ -62,7 +62,7 @@ jobs:
   docker-publish:
     name: Docker publish
     runs-on: ubuntu-22.04
-
+    needs: [docker-build]
     steps:
       - name: Use uploaded tar files to push new image to docker
         uses: bakdata/ci-templates/actions/docker-publish@feat/lint-workflow
