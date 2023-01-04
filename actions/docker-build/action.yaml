@@ -30,7 +30,7 @@ runs:
 
     - name: Build Dockerfile and store them in "build" directory
       run: |
-        docker build -t ${{ inputs.image-name }} ${{ inputs.dockerfile-dir }}/Dockerfile
+        docker build -t ${{ inputs.image-name }} ${{ inputs.dockerfile-dir }}/
         mkdir build
         docker save ${{ inputs.image-name }} > build/fakeimage.tar
       shell: bash
