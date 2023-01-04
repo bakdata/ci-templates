@@ -8,17 +8,16 @@ Ensure that your Dockerfile is uploaded to the repository you want to use this a
 
 ## Input Parameters
 
-| Name              | Required |             Default Value              |  Type  | Description                                            |
-| ----------------- | :------: | :------------------------------------: | :----: | ------------------------------------------------------ |
-| image-tag         |    ✅    |                   -                    | string | Tag of the image to be pushed.                         |
-| image-name        |    ✅    |      github.event.repository.name      | string | Name of Docker image on Dockerhub                      |
-| publisher         |    ✅    |                   -                    | string | Publisher to prefix Docker image (e.g. 'my-publisher') |
-| username          |    ✅    |                   -                    | string | Username for the Docker registry login                 |
-| password          |    ✅    |                   -                    | string | Password for the Docker registry login                 |
-| working-directory |    ✅    |                   -                    | string | Working directory for your Docker artifacts            |
-| docker-registry   |    ✅    |                   -                    | string | Host where the image should be pushed to.              |
-| github-token      |    ✅    |                   -                    | string | Github token to use for checkout.                      |
-| ref               |    ❌    | github.event.repository.default_branch | string | Branch to use for the checkout.                        |
+| Name              | Required |        Default Value         |  Type  | Description                                            |
+| ----------------- | :------: | :--------------------------: | :----: | ------------------------------------------------------ |
+| image-name        |    ✅    | github.event.repository.name | string | Name of Docker image on Dockerhub                      |
+| publisher         |    ✅    |              -               | string | Publisher to prefix Docker image (e.g. 'my-publisher') |
+| username          |    ✅    |              -               | string | Username for the Docker registry login                 |
+| password          |    ✅    |              -               | string | Password for the Docker registry login                 |
+| docker-registry   |    ✅    |              -               | string | Host where the image should be pushed to.              |
+| github-token      |    ✅    |              -               | string | Github token to use for checkout.                      |
+| ref               |    ❌    |       github.ref_name        | string | Branch to use for the checkout.                        |
+| working-directory |    ❌    |              -               | string | Working directory for your Docker artifacts            |
 
 ## Usage
 
@@ -27,7 +26,7 @@ steps:
   - name: Publish tarball image
     uses: bakdata/ci-templates/actions/docker-publish@main
     with:
-      image-tag: "${{ github.ref_name }}"
+      image-tag: "v.1.0"
       image-name: "tarball"
       publisher: "my-publisher"
       username: "${{ secrets.docker-user }}"

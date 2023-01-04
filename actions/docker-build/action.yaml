@@ -1,0 +1,43 @@
+name: "Publish Docker image"
+description: "Use a Dockerfile to publish image to any host"
+
+inputs:
+  image-name:
+    description: "Name of Docker image (Default is the repository name)."
+    required: true
+  image-artifact-name:
+    description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
+    required: false
+    default: "image-artifact"
+  dockerfile-dir:
+    description: "Directory contining the dockerfile"
+    required: true
+  github-token:
+    description: "Github token."
+    required: true
+  ref:
+    description: "Ref to checkout"
+    required: false
+    default: ${{ github.ref_name }}
+runs:
+  using: "composite"
+  steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ inputs.ref }}
+        token: ${{ inputs.github-token }}
+
+    - name: Build Dockerfile and store them in "build" directory
+      run: |
+        docker build -f ${{ inputs.dockerfile-dir }}/Dockerfile -t ${{ inputs.image-name }}
+        mkdir build
+        docker save ${{ inputs.image-name }} > build/fakeimage.tar
+      shell: bash
+
+    - name: Upload Docker image tar artifact
+      uses: actions/upload-artifact@v3.1.1
+      with:
+        name: ${{ inputs.image-artifact-name }}
+        path: build
+        retention-days: 1

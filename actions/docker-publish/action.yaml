@@ -2,9 +2,10 @@ name: "Publish Docker image"
 description: "Use a Dockerfile to publish image to any host"
 
 inputs:
-  image-tag:
-    description: "Tag of the image to be pushed."
-    required: true
+  image-artifact-name:
+    description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
+    required: false
+    default: "image-artifact"
   image-name:
     description: "Name of Docker image (Default is the repository name)."
     required: true
@@ -18,8 +19,9 @@ inputs:
     description: "Password for the Docker registry login."
     required: true
   working-directory:
-    description: "Path of the directory containing the Dockerfile."
-    required: true
+    description: "Working directory for your Docker artifacts. (Default is .)"
+    required: false
+    default: "."
   docker-registry:
     description: "Host where the image should be pushed to."
     required: true
@@ -29,15 +31,21 @@ inputs:
   ref:
     description: "Ref to checkout"
     required: false
-    default: ${{ github.event.repository.default_branch }}
+    default: ${{ github.ref_name }}
 runs:
   using: "composite"
   steps:
-    - name: Check out repository
-      uses: actions/checkout@v3
+    # - name: Check out repository
+    #   uses: actions/checkout@v3
+    #   with:
+    #     ref: ${{ inputs.ref }}
+    #     token: ${{ inputs.github-token }}
+    
+    - name: Download Docker image tar artifact
+      uses: actions/download-artifact@v3
       with:
-        ref: ${{ inputs.ref }}
-        token: ${{ inputs.github-token }}
+        name: ${{ inputs.image-artifact-name }}
+        path: build
 
     # setup-buildx action will create and boot a builder using by default the docker-container driver.
     # This is not required but recommended using it to be able to build multi-platform images, export cache, etc.
@@ -51,11 +59,30 @@ runs:
         username: "${{ inputs.username }}"
         password: "${{ inputs.password }}"
 
-    - name: Build and push
-      uses: docker/build-push-action@v3.2.0
-      with:
-        context: "${{ inputs.working-directory }}"
-        push: true
-        tags: |
-          ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:${{ inputs.image-tag }}
-          ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:latest
+    - name: Publish Docker image
+      run: |
+        if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
+          >&2 echo "Error: A single image tar file is needed in the downloaded artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
+          exit 1
+        fi
+        docker load --input build/*.tar
+        if [[ "$GITHUB_REF" =~ ^refs/tags/.* ]]; then
+          docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ inputs.image-name }}:latest
+          docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
+          docker push ${{ inputs.publisher }}/${{ inputs.image-name }}:latest
+          docker push ${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
+        else
+          docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ inputs.image-name }}:${{ github.run_id }}
+          docker push ${{ inputs.publisher }}/${{ inputs.image-name }}:${{ github.run_id }}
+        fi
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+
+    # - name: Build and push
+    #   uses: docker/build-push-action@v3.2.0
+    #   with:
+    #     context: "${{ inputs.working-directory }}"
+    #     push: true
+    #     tags: |
+    #       ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:${{ inputs.image-tag }}
+    #       ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:latest

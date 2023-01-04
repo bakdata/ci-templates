@@ -1,0 +1,30 @@
+# docker-publish
+
+This action uses a Dockerfile to build an image and then upload it as `.tar` file to github artifacts.
+
+## Prerequisites
+
+Ensure that your Dockerfile is uploaded to the repository you want to use this action from.
+
+## Input Parameters
+
+| Name                | Required |        Default Value         |  Type  | Description                                                                                                                                           |
+| ------------------- | :------: | :--------------------------: | :----: | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| dockerfile-dir      |    ✅    |              -               | string | Directory contining the dockerfile                                                                                                                    |
+| github-token        |    ✅    |              -               | string | Github token to use for checkout.                                                                                                                     |
+| image-name          |    ✅    | github.event.repository.name | string | Name of Docker image on Dockerhub                                                                                                                     |
+| image-artifact-name |    ❌    |              -               | string | PuName of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
+| ref                 |    ❌    |       github.ref_name        | string | Branch to use for the checkout.                                                                                                                       |
+
+## Usage
+
+```yaml
+steps:
+  - name: Build tarball image
+    uses: bakdata/ci-templates/actions/docker-build@main
+    with:
+      image-artifact-name: "${{ inputs.image-artifact-name }}"
+      dockerfile-dir: "./docker-dir"
+      image-name: "tarball"
+      github-token: "${{ secrets.GITHUB_TOKEN }}"
+```

@@ -1,0 +1,77 @@
+name: Docker build and publish
+# Reusable workflow for using a dockerfile to build and push an image
+
+on:
+  workflow_call:
+    inputs:
+      dockerfile-dir:
+        description: "Directory contining the dockerfile"
+        required: true
+        type: string
+      docker-registry:
+        description: "Host where the image should be pushed to."
+        required: true
+        type: string
+      image-name:
+        description: "Name of Docker image (Default is the repository name)."
+        required: true
+        type: string
+      image-artifact-name:
+        description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
+        required: false
+        default: "image-artifact"
+        type: string
+      ref:
+        description: "Ref to checkout"
+        required: false
+        default: ${{ github.ref_name }}
+        type: string
+      working-directory:
+        description: "Working directory for your Docker artifacts. (Default is .)"
+        required: false
+        default: "."
+        type: string
+    secrets:
+      docker-publisher:
+        description: "Publisher to prefix Docker image (e.g. 'my-publisher')."
+        required: true
+      docker-user:
+        description: "Username for the Docker registry login."
+        required: true
+      docker-password:
+        description: "Password for the Docker registry login."
+        required: true
+      github-token:
+        description: "Github token."
+        required: true
+
+jobs:
+  docker-build:
+    name: Docker build
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Build docker image and upload tar file
+        uses: bakdata/ci-templates/actions/docker-build@feat/lint-workflow
+        with:
+          image-artifact-name: "${{ inputs.image-artifact-name }}"
+          image-name: "${{ inputs.image-name }}"
+          github-token: "${{ secrets.github-token }}"
+          dockerfile-dir: "${{ inputs.dockerfile-dir }}"
+
+  docker-publish:
+    name: Docker publish
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Use uploaded tar files to push new image to docker
+        uses: bakdata/ci-templates/actions/docker-publish@feat/lint-workflow
+        with:
+          image-artifact-name: "${{ inputs.image-artifact-name }}"
+          image-name: "${{ inputs.image-name }}"
+          publisher: "${{ secrets.docker-publisher }}"
+          username: "${{ secrets.docker-user }}"
+          password: "${{ secrets.docker-password }}"
+          working-directory: "${{ inputs.working-directory }}"
+          docker-registry: "${{ inputs.docker-registry }}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
