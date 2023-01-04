@@ -52,7 +52,7 @@ jobs:
 
     steps:
       - name: Build docker image and upload tar file
-        uses: bakdata/ci-templates/actions/docker-build@feat/lint-workflow
+        uses: bakdata/ci-templates/actions/docker-build@feat/docker-publish
         with:
           image-artifact-name: "${{ inputs.image-artifact-name }}"
           image-name: "${{ inputs.image-name }}"
@@ -65,7 +65,7 @@ jobs:
     needs: [docker-build]
     steps:
       - name: Use uploaded tar files to push new image to docker
-        uses: bakdata/ci-templates/actions/docker-publish@feat/lint-workflow
+        uses: bakdata/ci-templates/actions/docker-publish@feat/docker-publish
         with:
           image-artifact-name: "${{ inputs.image-artifact-name }}"
           image-name: "${{ inputs.image-name }}"
