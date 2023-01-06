@@ -2,12 +2,14 @@ name: "Publish Docker image"
 description: "Use a Dockerfile to publish image to any host"
 
 inputs:
-  image-artifact-name:
-    description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
-    required: false
-    default: "image-artifact"
-  image-name:
-    description: "Name of Docker image (Default is the repository name)."
+  docker-registry:
+    description: "Host where the image should be pushed to."
+    required: true
+  github-token:
+    description: "Github token."
+    required: true
+  password:
+    description: "Password for the Docker registry login."
     required: true
   publisher:
     description: "Publisher to prefix Docker image (e.g. 'my-publisher')."
@@ -15,32 +17,25 @@ inputs:
   username:
     description: "Username for the Docker registry login."
     required: true
-  password:
-    description: "Password for the Docker registry login."
-    required: true
-  working-directory:
-    description: "Working directory for your Docker artifacts. (Default is .)"
+  image-artifact-name:
+    description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
     required: false
-    default: "."
-  docker-registry:
-    description: "Host where the image should be pushed to."
-    required: true
-  github-token:
-    description: "Github token."
-    required: true
+    default: "image-artifact"
+  image-name:
+    description: "Name of Docker image (Default is the repository name)."
+    required: false
+    default: ${{ github.event.repository.name}}
   ref:
     description: "Ref to checkout"
     required: false
     default: ${{ github.ref_name }}
+  working-directory:
+    description: "Working directory for your Docker artifacts. (Default is .)"
+    required: false
+    default: "."
 runs:
   using: "composite"
   steps:
-    # - name: Check out repository
-    #   uses: actions/checkout@v3
-    #   with:
-    #     ref: ${{ inputs.ref }}
-    #     token: ${{ inputs.github-token }}
-    
     - name: Download Docker image tar artifact
       uses: actions/download-artifact@v3
       with:
@@ -79,12 +74,3 @@ runs:
         fi
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-
-    # - name: Build and push
-    #   uses: docker/build-push-action@v3.2.0
-    #   with:
-    #     context: "${{ inputs.working-directory }}"
-    #     push: true
-    #     tags: |
-    #       ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:${{ inputs.image-tag }}
-    #       ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:latest

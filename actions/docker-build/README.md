@@ -12,8 +12,8 @@ Ensure that your Dockerfile is uploaded to the repository you want to use this a
 | ------------------- | :------: | :--------------------------: | :----: | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | dockerfile-dir      |    ✅    |              -               | string | Directory contining the dockerfile                                                                                                                    |
 | github-token        |    ✅    |              -               | string | Github token to use for checkout.                                                                                                                     |
-| image-name          |    ✅    | github.event.repository.name | string | Name of Docker image on Dockerhub                                                                                                                     |
 | image-artifact-name |    ❌    |              -               | string | PuName of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
+| image-name          |    ❌    | github.event.repository.name | string | Name of Docker image on Dockerhub                                                                                                                     |
 | ref                 |    ❌    |       github.ref_name        | string | Branch to use for the checkout.                                                                                                                       |
 
 ## Usage

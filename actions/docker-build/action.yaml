@@ -2,19 +2,20 @@ name: "Publish Docker image"
 description: "Use a Dockerfile to publish image to any host"
 
 inputs:
-  image-name:
-    description: "Name of Docker image (Default is the repository name)."
-    required: true
-  image-artifact-name:
-    description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
-    required: false
-    default: "image-artifact"
   dockerfile-dir:
     description: "Directory contining the dockerfile"
     required: true
   github-token:
     description: "Github token."
     required: true
+  image-artifact-name:
+    description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
+    required: false
+    default: "image-artifact"
+  image-name:
+    description: "Name of Docker image (Default is the repository name)."
+    required: false
+    default: ${{ github.event.repository.name }}
   ref:
     description: "Ref to checkout"
     required: false
