@@ -22,6 +22,6 @@ runs:
 
     - name: Check workflow files
       run: |
-        bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/v1.6.19/scripts/download-actionlint.bash)
+        bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/v1.6.22/scripts/download-actionlint.bash)
         ./actionlint -color
       shell: bash
