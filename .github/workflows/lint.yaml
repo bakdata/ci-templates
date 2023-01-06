@@ -7,9 +7,6 @@ jobs:
   actionlint:
     name: actionlint
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
     steps:
       - name: Lint actions and workflows
         uses: bakdata/ci-templates/actions/action-lint@feat/lint-workflow
