@@ -251,11 +251,12 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name                  | Required | Default Value |  Type  | Description                                                                      |
-| --------------------- | :------: | :-----------: | :----: | -------------------------------------------------------------------------------- |
-| charts-dir            |    ✅    |               | string | The Path to the directory containing the Helm chart and `.bumpversion.cfg` file. |
-| release-type          |    ✅    |       -       | string | Scope of the release (major, minor or patch).                                    |
-| next-dev-release-type |    ✅    |       -       | string | Scope of the next release (minor or patch) for developers.                       |
+| Name                    | Required | Default Value |  Type  | Description                                                                      |
+| ----------------------- | :------: | :-----------: | :----: | -------------------------------------------------------------------------------- |
+| charts-dir              |    ✅    |               | string | The Path to the directory containing the Helm chart and `.bumpversion.cfg` file. |
+| release-type            |    ✅    |       -       | string | Scope of the release (major, minor or patch).                                    |
+| next-dev-release-type   |    ✅    |       -       | string | Scope of the next release (minor or patch) for developers.                       |
+| next-dev-release-suffix |    ❌    |       -       | string | The suffix to add for the developer version.                                     |
 
 ### Secret Parameters
 
@@ -291,6 +292,7 @@ jobs:
       charts-dir: "./helm-chart"
       release-type: "${{ inputs.release-type }}"
       next-dev-release-type: "${{ inputs.next-dev-release-type }}"
+      next-dev-release-suffix: "SNAPSHOT"
     secrets:
       github-email: "${{ secrets.GH_EMAIL }}"
       github-username: "${{ secrets.GH_USERNAME }}"
