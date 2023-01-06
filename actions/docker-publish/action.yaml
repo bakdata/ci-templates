@@ -69,13 +69,13 @@ runs:
         fi
         docker load --input build/*.tar
         if [[ "$GITHUB_REF" =~ ^refs/tags/.* ]]; then
-          docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ inputs.image-name }}:latest
-          docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
-          docker push ${{ inputs.publisher }}/${{ inputs.image-name }}:latest
-          docker push ${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
+          docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:latest
+          docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
+          docker push ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:latest
+          docker push ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
         else
-          docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.publisher }}/${{ inputs.image-name }}:${{ github.run_id }}
-          docker push ${{ inputs.publisher }}/${{ inputs.image-name }}:${{ github.run_id }}
+          docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:${{ github.run_id }}
+          docker push${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:${{ github.run_id }}
         fi
       shell: bash
       working-directory: ${{ inputs.working-directory }}
