@@ -3,7 +3,7 @@ description: "Use a Dockerfile to publish image to any host"
 
 inputs:
   dockerfile-dir:
-    description: "Directory contining the dockerfile"
+    description: "Directory containing the Dockerfile"
     required: true
   github-token:
     description: "GitHub token"
