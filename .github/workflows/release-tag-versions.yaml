@@ -3,8 +3,12 @@ name: Reusable workflow for releasing tag versions
 on:
   workflow_call:
     inputs:
-      charts-dir:
-        description: "The Path to the directory containing the Helm chart and `.bumpversion.cfg` file."
+      version-configs-dir:
+        description: "The Path to the directory containing the file where the versioning is defined and `.bumpversion.cfg` file."
+        required: true
+        type: string
+      versioning-file:
+        description: "The name of the file where the version is declared (E.g: Dockerfile, Chart.yaml ). This file is also specified in the `.bumpversion.cfg` "
         required: true
         type: string
       release-type:
@@ -46,9 +50,9 @@ jobs:
         uses: bakdata/ci-templates/actions/bump-version@feat/set-output
         with:
           release-type: ${{ inputs.release-type }}
-          working-directory: ${{ inputs.charts-dir }}
+          working-directory: ${{ inputs.version-configs-dir }}
 
-      - name: Commit and push Chart.yaml & .bumpversion.cfg file to release new tag
+      - name: Commit and push the file where the versioning is defined & .bumpversion.cfg file to release new tag
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           commit-message: "Bump version and create dev version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
@@ -65,23 +69,23 @@ jobs:
           git tag -a "${tag}" -m "${message}"
           git push origin "${tag}"
         shell: bash
-        working-directory: ${{ inputs.charts-dir }}
+        working-directory: ${{ inputs.version-configs-dir }}
 
       - name: Create next developer release tag
         id: dev-tag
         uses: bakdata/ci-templates/actions/bump-version@feat/set-output
         with:
           release-type: ${{ inputs.next-dev-release-type }}
-          working-directory: ${{ inputs.charts-dir }}
+          working-directory: ${{ inputs.version-configs-dir }}
 
-      - name: Add -${{ inputs.next-dev-release-suffix }} versioin in Chart.yaml and .bumpversion.cfg
+      - name: Add -${{ inputs.next-dev-release-suffix }} version in the file where the versioning is defined and .bumpversion.cfg
         run: |
           sed -i -e 's/current_version =.*/current_version = ${{ steps.dev-tag.outputs.release-tag }}-${{ inputs.next-dev-release-suffix }}/' .bumpversion.cfg
-          sed -i -e 's/version:.*/version: ${{ steps.dev-tag.outputs.release-tag }}-${{ inputs.next-dev-release-suffix }}/' Chart.yaml
+          sed -i -e 's/version:.*/version: ${{ steps.dev-tag.outputs.release-tag }}-${{ inputs.next-dev-release-suffix }}/' ${{ inputs.versioning-file }} 
         shell: bash
-        working-directory: ${{ inputs.charts-dir }}
+        working-directory: ${{ inputs.version-configs-dir }}
 
-      - name: Commit and push Chart.yaml & .bumpversion.cfg file (containing the -${{ inputs.next-dev-release-suffix }} version)
+      - name: Commit and push the file where the versioning is defined & .bumpversion.cfg file (containing the -${{ inputs.next-dev-release-suffix }} version)
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           commit-message: "Bump version and create dev version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }} → ${{ steps.dev-tag.outputs.release-tag }}-${{ inputs.next-dev-release-suffix }}"

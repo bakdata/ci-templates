@@ -251,17 +251,18 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name                    | Required | Default Value |  Type  | Description                                                                      |
-| ----------------------- | :------: | :-----------: | :----: | -------------------------------------------------------------------------------- |
-| charts-dir              |    ✅    |               | string | The Path to the directory containing the Helm chart and `.bumpversion.cfg` file. |
-| release-type            |    ✅    |       -       | string | Scope of the release (major, minor or patch).                                    |
-| next-dev-release-type   |    ✅    |       -       | string | Scope of the next release (minor or patch) for developers.                       |
-| next-dev-release-suffix |    ❌    |       -       | string | The suffix to add for the developer version.                                     |
+| Name                    | Required | Default Value |  Type  | Description                                                                                                                              |
+| ----------------------- | :------: | :-----------: | :----: | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| version-configs-dir     |    ✅    |               | string | The Path to the directory containing the file where the versioning is defined and `.bumpversion.cfg` file.                               |
+| versioning-file         |    ✅    |               | string | The name of the file where the version is declared (E.g: `Dockerfile`, `Chart.yaml` ). This file is also specified in `.bumpversion.cfg` |
+| release-type            |    ✅    |       -       | string | Scope of the release (major, minor or patch).                                                                                            |
+| next-dev-release-type   |    ✅    |       -       | string | Scope of the next release (minor or patch) for developers.                                                                               |
+| next-dev-release-suffix |    ❌    |       -       | string | The suffix to add for the developer version.                                                                                             |
 
 ### Secret Parameters
 
 These secrets define the GitHub user that pushes the changes to the repository. Create a repository secret for the GitHub username (`GH_USERNAME`), the GitHub email (`GH_EMAIL`), and a personal access token (`GH_TOKEN`) of the user.
-You can use the no reply GitHub email for the email: `[username]@users.noreply.github.com`.
+You can use the no-reply GitHub email for the email: `[username]@users.noreply.github.com`.
 
 | Name            | Required | Description                                    |
 | --------------- | :------: | ---------------------------------------------- |
@@ -289,7 +290,8 @@ jobs:
     name: Release & Publish Helm chart
     uses: bakdata/ci-templates/.github/workflows/release-tag-versions.yaml@main
     with:
-      charts-dir: "./helm-chart"
+      version-configs-dir: "./helm-chart"
+      versioning-file: "Chart.yaml"
       release-type: "${{ inputs.release-type }}"
       next-dev-release-type: "${{ inputs.next-dev-release-type }}"
       next-dev-release-suffix: "SNAPSHOT"
