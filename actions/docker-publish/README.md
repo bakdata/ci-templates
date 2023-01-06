@@ -1,17 +1,17 @@
 # docker-publish
 
-This action uses a Dockerfile to publish an image to a Registry of your choice. The action requires you to specify a Tag. The image has then both the given and a `latest` Tags.
+This action downloads an `image.tar` file from an artifact and publishes it on Dockerhub. When this action is used on a tag branch, the image is tagged with latest and the tag version of the branch (e.g. 1.2.3). For all other branches the github.run_id is used as an image tag.
 
 ## Prerequisites
 
-Ensure that your Dockerfile is uploaded to the repository you want to use this action from.
+Create an action that [uploads a tarball image as artifact](https://github.com/actions/upload-artifact). A [Gradle Jib](https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin) example can be found [here](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build-jib).
 
 ## Input Parameters
 
 | Name                | Required |        Default Value         |  Type  | Description                                                                                                                                         |
 | ------------------- | :------: | :--------------------------: | :----: | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | docker-registry     |    ✅    |              -               | string | Host where the image should be pushed to.                                                                                                           |
-| github-token        |    ✅    |              -               | string | Github token to use for checkout.                                                                                                                   |
+| github-token        |    ✅    |              -               | string | GitHub token to use for checkout.                                                                                                                   |
 | password            |    ✅    |              -               | string | Password for the Docker registry login                                                                                                              |
 | publisher           |    ✅    |              -               | string | Publisher to prefix Docker image (e.g. 'my-publisher')                                                                                              |
 | username            |    ✅    |              -               | string | Username for the Docker registry login                                                                                                              |

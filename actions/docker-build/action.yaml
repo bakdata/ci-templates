@@ -1,5 +1,5 @@
 name: "Publish Docker image"
-description: "Use a Dockerfile to publish image to any host"
+description: "Use a Dockerfile to build an `image.tar` file and upload it to GitHub"
 
 inputs:
   dockerfile-dir:

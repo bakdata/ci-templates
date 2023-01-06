@@ -1,6 +1,6 @@
 # docker-publish
 
-This action uses a Dockerfile to build an image and then upload it as `.tar` file to github artifacts.
+This action uses a Dockerfile to build an `image.tar` file and upload it to GitHub artifacts.
 
 ## Prerequisites
 

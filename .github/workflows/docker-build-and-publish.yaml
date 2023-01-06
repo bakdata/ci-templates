@@ -1,5 +1,5 @@
 name: Docker build and publish
-# Reusable workflow for using a dockerfile to build and push an image
+# Reusable workflow for using a dockerfile to build and push image to any container registry
 
 on:
   workflow_call:
@@ -42,7 +42,7 @@ on:
         description: "Password for the Docker registry login."
         required: true
       github-token:
-        description: "Github token."
+        description: "GitHub token."
         required: true
 
 jobs:

@@ -1,5 +1,5 @@
 name: "Publish Docker image"
-description: "Use a Dockerfile to publish image to any host"
+description: "Publish Docker image from download artifact to any host"
 
 inputs:
   docker-registry:
