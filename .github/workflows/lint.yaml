@@ -1,4 +1,4 @@
-name: Lint
+name: Action lint
 
 on:
   pull_request:
@@ -8,4 +8,4 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Lint actions and workflows
-        uses: bakdata/ci-templates/actions/action-lint@feat/lint-workflow
+        uses: bakdata/ci-templates/actions/action-lint@838fc43bf3cdd82b253a21c2f98157b449c7253b
