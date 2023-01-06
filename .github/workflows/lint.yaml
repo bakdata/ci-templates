@@ -12,4 +12,4 @@ jobs:
         shell: bash
     steps:
       - name: Lint actions and workflows
-        uses: bakdata/ci-templates/actions/action-lint@v1.13.6
+        uses: bakdata/ci-templates/actions/action-lint@838fc43bf3cdd82b253a21c2f98157b449c7253b
