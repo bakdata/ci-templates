@@ -6,7 +6,7 @@ inputs:
     required: false
     default: ${{ github.ref_name }}
   action-lint-version:
-    description: "The version of the matcher and download sctipt to use from the action lint repo."
+    description: "The action lint repository version to use."
     required: false
     default: "v1.6.22"
 
