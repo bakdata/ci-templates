@@ -1,5 +1,5 @@
 name: Docker build and publish
-# Reusable workflow for using a dockerfile to build and push image to any container registry
+# Reusable workflow to build and push an image from a Dockerfile to any container registry
 
 on:
   workflow_call:
