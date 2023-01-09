@@ -62,7 +62,7 @@ on:
 
 jobs:
   call-workflow-passing-data:
-    name: Publish Helm chart
+    name: Build and push Docker image
     uses: bakdata/ci-templates/.github/workflows/docker-build-and-publish.yaml@main
     with:
       dockerfile-dir: "./kafka-client"
