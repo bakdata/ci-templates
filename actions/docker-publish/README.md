@@ -10,11 +10,10 @@ Create an action that [uploads a tarball image as artifact](https://github.com/a
 
 | Name                | Required |        Default Value         |  Type  | Description                                                                                                                                         |
 | ------------------- | :------: | :--------------------------: | :----: | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| docker-registry     |    ✅    |              -               | string | Host where the image should be pushed to.                                                                                                           |
-| github-token        |    ✅    |              -               | string | GitHub token to use for checkout.                                                                                                                   |
 | password            |    ✅    |              -               | string | Password for the Docker registry login                                                                                                              |
 | publisher           |    ✅    |              -               | string | Publisher to prefix Docker image (e.g. 'my-publisher')                                                                                              |
 | username            |    ✅    |              -               | string | Username for the Docker registry login                                                                                                              |
+| docker-registry     |    ❌    |       "hub.docker.com"       | string | Host where the image should be pushed to.                                                                                                           |
 | image-artifact-name |    ❌    |       "image-artifact"       | string | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
 | image-name          |    ❌    | github.event.repository.name | string | Name of Docker image on Dockerhub                                                                                                                   |
 | ref                 |    ❌    |       github.ref_name        | string | Branch to use for the checkout.                                                                                                                     |

@@ -4,9 +4,10 @@ name: Docker build and publish
 on:
   workflow_call:
     inputs:
-      dockerfile-dir:
-        description: "Directory contining the dockerfile"
-        required: true
+      dockerfile-path:
+        description: "Path to the Dockerfile."
+        required: false
+        default: "./Dockerfile"
         type: string
       docker-registry:
         description: "Host where the image should be pushed to."
@@ -57,7 +58,7 @@ jobs:
           image-artifact-name: "${{ inputs.image-artifact-name }}"
           image-name: "${{ inputs.image-name }}"
           github-token: "${{ secrets.github-token }}"
-          dockerfile-dir: "${{ inputs.dockerfile-dir }}"
+          dockerfile-path: "${{ inputs.dockerfile-path }}"
 
   docker-publish:
     name: Docker publish

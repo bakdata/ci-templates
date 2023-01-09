@@ -2,9 +2,10 @@ name: "Publish Docker image"
 description: "Use a Dockerfile to build an `image.tar` file and upload it to GitHub"
 
 inputs:
-  dockerfile-dir:
-    description: "Directory containing the Dockerfile"
-    required: true
+  dockerfile-path:
+    description: "Path to the Dockerfile."
+    required: false
+    default: "./Dockerfile"
   github-token:
     description: "GitHub token"
     required: true
@@ -31,7 +32,7 @@ runs:
 
     - name: Build Dockerfile and store them in "build" directory
       run: |
-        docker build -t ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.dockerfile-dir }}/
+        docker build -t ${{ inputs.image-name }}:${{ github.run_id }} -f ${{ inputs.dockerfile-path }} .
         mkdir build
         docker save ${{ inputs.image-name }}:${{ github.run_id }} > build/${{ inputs.image-name }}.tar
       shell: bash

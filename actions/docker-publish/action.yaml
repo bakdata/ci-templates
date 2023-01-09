@@ -2,12 +2,6 @@ name: "Publish Docker image"
 description: "Publish Docker image from download artifact to any host"
 
 inputs:
-  docker-registry:
-    description: "Host where the image should be pushed to."
-    required: true
-  github-token:
-    description: "Github token."
-    required: true
   password:
     description: "Password for the Docker registry login."
     required: true
@@ -17,6 +11,10 @@ inputs:
   username:
     description: "Username for the Docker registry login."
     required: true
+  docker-registry:
+    description: "Host where the image should be pushed to."
+    required: false
+    default: "hub.docker.com"
   image-artifact-name:
     description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
     required: false
@@ -25,10 +23,6 @@ inputs:
     description: "Name of Docker image (Default is the repository name)."
     required: false
     default: ${{ github.event.repository.name }}
-  ref:
-    description: "Ref to checkout"
-    required: false
-    default: ${{ github.ref_name }}
   working-directory:
     description: "Working directory for your Docker artifacts. (Default is .)"
     required: false
@@ -54,10 +48,8 @@ runs:
         username: "${{ inputs.username }}"
         password: "${{ inputs.password }}"
 
-    - name: Publish Docker image
+    - name: Publish image
       run: |
-        ls -al
-        tree .
         if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
           >&2 echo "Error: A single image tar file is needed in the downloaded artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
           exit 1

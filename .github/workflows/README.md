@@ -34,8 +34,8 @@ This workflow is built from multiple composite actions listed below:
 
 | Name                | Required |           Default Value            |  Type  | Description                                                                                                                                         |
 | ------------------- | :------: | :--------------------------------: | :----: | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| dockerfile-dir      |    ✅    |                 -                  | string | Directory contining the dockerfile                                                                                                                  |
-| docker-registry     |    ✅    |                 -                  | string | Host where the image should be pushed to.                                                                                                           |
+| dockerfile-path     |    ❌    |                 -                  | string | Path to the Dockerfile.                                                                                                                             |
+| docker-registry     |    ❌    |          "hub.docker.com"          | string | Host where the image should be pushed to.                                                                                                           |
 | image-artifact-name |    ❌    |          "image-artifact"          | string | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
 | image-name          |    ❌    | ${{ github.event.repository.name}} | string | Name of Docker image (Default is the repository name).                                                                                              |
 | ref                 |    ❌    |       ${{ github.ref_name }}       | string | The ref name to checkout the repository                                                                                                             |
@@ -65,9 +65,9 @@ jobs:
     name: Build and push Docker image
     uses: bakdata/ci-templates/.github/workflows/docker-build-and-publish.yaml@main
     with:
-      dockerfile-dir: "./kafka-client"
+      dockerfile-path: "./path/to/my/Dockerfile"
       docker-registry: "my-registry.com"
-      image-name: "kafka-client"
+      image-name: "my-image"
       image-artifact-name: "my-image-artifact"
       ref: "${{ github.ref_name }}"
       working-directory: "."
@@ -117,8 +117,6 @@ This workflow is built from multiple composite actions listed below:
 
 - [helm-lint](https://github.com/bakdata/ci-templates/tree/main/actions/helm-lint)
 - [bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/bump-version)
-- [helm-package](https://github.com/bakdata/ci-templates/tree/main/actions/helm-package)
-- [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
 
 ### Input Parameters
 
