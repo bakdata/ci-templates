@@ -69,7 +69,7 @@ jobs:
           new-version: ${{ steps.suffixstep.outputs.version_var }}
 
       - name: Bump version when release type is not 'patch' or suffix is empty
-        if: ! ${{ inputs.release-type == 'patch'}} || ! ${{ steps.suffixstep.outputs.has_suffix == false}}
+        if: ${{ inputs.release-type != 'patch'}} || ! ${{ steps.suffixstep.outputs.has_suffix == false}}
         id: release-tag
         uses: bakdata/ci-templates/actions/bump-version@main
         with:
