@@ -27,8 +27,6 @@ This workflow is built from multiple composite actions listed below:
 
 - [docker-build](https://github.com/bakdata/ci-templates/tree/main/actions/docker-build)
 - [docker-publish](https://github.com/bakdata/ci-templates/tree/main/actions/docker-publish)
-- [helm-package](https://github.com/bakdata/ci-templates/tree/main/actions/helm-package)
-- [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
 
 ### Input Parameters
 
@@ -117,6 +115,8 @@ This workflow is built from multiple composite actions listed below:
 
 - [helm-lint](https://github.com/bakdata/ci-templates/tree/main/actions/helm-lint)
 - [bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/bump-version)
+- [helm-package](https://github.com/bakdata/ci-templates/tree/main/actions/helm-package)
+- [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
 
 ### Input Parameters
 
