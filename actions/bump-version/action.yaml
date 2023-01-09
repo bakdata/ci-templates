@@ -9,6 +9,10 @@ inputs:
     description: "The directory containing the `.bumpversion.cfg` file."
     required: false
     default: "."
+  new-version:
+    description: "aa"
+    required: false
+    default: ""
 
 outputs:
   release-tag:
@@ -28,8 +32,10 @@ runs:
     - name: Bump version
       id: release-tag
       run: |
+        parameters=(--no-commit )
         echo "oldTag=$(python ./actions/bump-version/scripts/get_version.py)" >> $GITHUB_OUTPUT
-        bump2version ${{ inputs.release-type }} --no-commit
+        if [ -n "${{ inputs.new-version }}" ]; then parameters+=(--new-version ${{ inputs.new-version }}); fi
+        bump2version ${{ inputs.release-type }} "${parameters[@]}"
         echo "newTag=$(python ./actions/bump-version/scripts/get_version.py)" >> $GITHUB_OUTPUT
       shell: bash
       working-directory: ${{ inputs.working-directory }}

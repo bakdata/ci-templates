@@ -45,7 +45,31 @@ jobs:
         with:
           token: ${{ secrets.github-token }}
 
-      - name: Bump version
+      - name: Verify current version
+        if: ${{ inputs.release-type == 'patch'}}
+        id: suffixstep
+        run: |
+          VERSION_VAR=`sed -n 's/^current_version = \(.*\)/\1/p' < .bumpversion.cfg`
+          if [[ $VERSION_VAR == *"${{ inputs.next-dev-release-type }}"* ]]; then
+            final=${$VERSION_VAR#${{ inputs.next-dev-release-type }}
+            echo "has_suffix=true" >> "$GITHUB_OUTPUT"
+            echo "version_var=$final" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_suffix=false" >> "$GITHUB_OUTPUT"
+          fi
+        shell: bash
+
+      - name: Bump version when current version contains dev suffix
+        if: ${{ inputs.release-type == 'patch'}} && ${{ steps.suffixstep.outputs.has_suffix == true}}
+        id: release-tag
+        uses: bakdata/ci-templates/actions/bump-version@main
+        with:
+          release-type: ${{ inputs.release-type }}
+          working-directory: ${{ inputs.version-configs-dir }}
+          new-version: ${{ steps.suffixstep.outputs.version_var }}
+
+      - name: Bump version when release type is not 'patch' or suffix is empty
+        if: ! ${{ inputs.release-type == 'patch'}} || ! ${{ steps.suffixstep.outputs.has_suffix == false}}
         id: release-tag
         uses: bakdata/ci-templates/actions/bump-version@main
         with:
@@ -70,20 +94,25 @@ jobs:
           git push origin "${tag}"
         shell: bash
         working-directory: ${{ inputs.version-configs-dir }}
+      
+      - name: Setup semver
+        run: |
+          wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
+          chmod +x /usr/local/bin/semver
 
-      - name: Create next developer release tag
-        id: dev-tag
+      - name: Sembump dev-version
+        id: sembump
+        run: |
+          tag=${{ steps.release-tag.outputs.release-tag }}
+          release_version=$(semver bump "${{ inputs.next-dev-release-type }}" "${tag}")
+          echo "version=$release_version" >> "$GITHUB_OUTPUT"
+
+      - name: Bump to "tag-${{ inputs.next-dev-release-suffix }}" version
         uses: bakdata/ci-templates/actions/bump-version@main
         with:
           release-type: ${{ inputs.next-dev-release-type }}
           working-directory: ${{ inputs.version-configs-dir }}
-
-      - name: Add -${{ inputs.next-dev-release-suffix }} version in the file where the versioning is defined and .bumpversion.cfg
-        run: |
-          sed -i -e 's/current_version =.*/current_version = ${{ steps.dev-tag.outputs.release-tag }}-${{ inputs.next-dev-release-suffix }}/' .bumpversion.cfg
-          sed -i -e 's/version:.*/version: ${{ steps.dev-tag.outputs.release-tag }}-${{ inputs.next-dev-release-suffix }}/' ${{ inputs.versioning-file }} 
-        shell: bash
-        working-directory: ${{ inputs.version-configs-dir }}
+          new-version: ${{ steps.sembump.outputs.version }}-${{ inputs.next-dev-release-suffix }}
 
       - name: Commit and push the file where the versioning is defined & .bumpversion.cfg file (containing the -${{ inputs.next-dev-release-suffix }} version)
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
