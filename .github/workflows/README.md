@@ -257,7 +257,7 @@ This workflow is built from multiple composite actions listed below:
 | versioning-file         |    ✅    |               | string | The name of the file where the version is declared (E.g: `Dockerfile`, `Chart.yaml` ). This file is also specified in `.bumpversion.cfg` |
 | release-type            |    ✅    |       -       | string | Scope of the release (major, minor or patch).                                                                                            |
 | next-dev-release-type   |    ✅    |       -       | string | Scope of the next release (minor or patch) for developers.                                                                               |
-| next-dev-release-suffix |    ❌    |       -       | string | The suffix to add for the developer version.                                                                                             |
+| next-dev-release-suffix |    ❌    |  "SNAPSHOT"   | string | The suffix to add for the developer version.                                                                                             |
 
 ### Secret Parameters
 
