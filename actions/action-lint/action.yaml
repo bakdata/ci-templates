@@ -5,6 +5,10 @@ inputs:
     description: "The ref name to checkout the repository."
     required: false
     default: ${{ github.ref_name }}
+  action-lint-version:
+    description: "The version of the matcher and download sctipt to use from the action lint repo."
+    required: false
+    default: "v1.6.22"
 
 runs:
   using: "composite"
@@ -16,12 +20,12 @@ runs:
 
     - name: Download "actionlint-matcher.json"
       run: |
-        wget https://raw.githubusercontent.com/rhysd/actionlint/v1.6.22/.github/actionlint-matcher.json
+        wget https://raw.githubusercontent.com/rhysd/actionlint/${{ inputs.action-lint-version }}/.github/actionlint-matcher.json
         echo "::add-matcher::actionlint-matcher.json"
       shell: bash
 
     - name: Check workflow files
       run: |
-        bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/v1.6.22/scripts/download-actionlint.bash)
+        bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/${{ inputs.action-lint-version }}/scripts/download-actionlint.bash)
         ./actionlint -color
       shell: bash
