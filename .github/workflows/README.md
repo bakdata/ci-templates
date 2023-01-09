@@ -32,14 +32,14 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name                | Required |           Default Value            |  Type  | Description                                                                                                                                         |
-| ------------------- | :------: | :--------------------------------: | :----: | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| dockerfile-path     |    ❌    |                 -                  | string | Path to the Dockerfile.                                                                                                                             |
-| docker-registry     |    ❌    |          "hub.docker.com"          | string | Host where the image should be pushed to.                                                                                                           |
-| image-artifact-name |    ❌    |          "image-artifact"          | string | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
-| image-name          |    ❌    | ${{ github.event.repository.name}} | string | Name of Docker image (Default is the repository name).                                                                                              |
-| ref                 |    ❌    |       ${{ github.ref_name }}       | string | The ref name to checkout the repository                                                                                                             |
-| working-directory   |    ❌    |                "."                 | string | Working directory for your Docker artifacts. (Default is .)                                                                                         |
+| Name                | Required |            Default Value            |  Type  | Description                                                                                                                                         |
+| ------------------- | :------: | :---------------------------------: | :----: | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| dockerfile-path     |    ❌    |                  -                  | string | Path to the Dockerfile.                                                                                                                             |
+| docker-registry     |    ❌    |          "hub.docker.com"           | string | Host where the image should be pushed to.                                                                                                           |
+| image-artifact-name |    ❌    |          "image-artifact"           | string | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
+| image-name          |    ❌    | ${{ github.event.repository.name }} | string | Name of Docker image (Default is the repository name).                                                                                              |
+| ref                 |    ❌    |       ${{ github.ref_name }}        | string | The ref name to checkout the repository                                                                                                             |
+| working-directory   |    ❌    |                 "."                 | string | Working directory for your Docker artifacts. (Default is .)                                                                                         |
 
 ### Secret Parameters
 
