@@ -24,7 +24,7 @@ inputs:
   image-name:
     description: "Name of Docker image (Default is the repository name)."
     required: false
-    default: ${{ github.event.repository.name}}
+    default: ${{ github.event.repository.name }}
   ref:
     description: "Ref to checkout"
     required: false
