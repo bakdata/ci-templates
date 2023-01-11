@@ -50,12 +50,14 @@ jobs:
         id: suffixstep
         run: |
           VERSION_VAR=`sed -n 's/^current_version = \(.*\)/\1/p' < .bumpversion.cfg`
+          RELEASE_TYPE=${{ inputs.next-dev-release-type }}
           echo "!!!!!!!!!!!!!!!!!!!!!!!"
           echo $VERSION_VAR
+          echo $RELEASE_TYPE
           echo "!!!!!!!!!!!!!!!!!!!!!!!"
           
-          if [[ $VERSION_VAR == *"${{ inputs.next-dev-release-type }}"* ]]; then
-            final=${$VERSION_VAR#${{ inputs.next-dev-release-type }}}
+          if [[ $VERSION_VAR == *$RELEASE_TYPE* ]]; then
+            final=${$VERSION_VAR#$RELEASE_TYPE}
             echo "has_suffix=true" >> "$GITHUB_OUTPUT"
             echo "version_var=$final" >> "$GITHUB_OUTPUT"
             echo "////////////////////////"
