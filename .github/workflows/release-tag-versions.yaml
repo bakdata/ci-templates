@@ -51,7 +51,7 @@ jobs:
         run: |
           VERSION_VAR=`sed -n 's/^current_version = \(.*\)/\1/p' < .bumpversion.cfg`
           if [[ $VERSION_VAR == *"${{ inputs.next-dev-release-type }}"* ]]; then
-            final=${$VERSION_VAR#${{ inputs.next-dev-release-type }}
+            final=${$VERSION_VAR#${{ inputs.next-dev-release-type }}}
             echo "has_suffix=true" >> "$GITHUB_OUTPUT"
             echo "version_var=$final" >> "$GITHUB_OUTPUT"
           else
