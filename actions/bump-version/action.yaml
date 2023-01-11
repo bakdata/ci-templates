@@ -39,8 +39,8 @@ runs:
         echo "?????????????????????????????????????????"
         echo "oldTag=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
         if [ -n "$version" ]; then 
-          parameters+=(patch)
           parameters+=(--new-version $version)
+          parameters+=(patch)
         fi
         echo ${parameters[@]}
         bump2version ${{ inputs.release-type }} "${parameters[@]}"
