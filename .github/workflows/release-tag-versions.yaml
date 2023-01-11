@@ -55,7 +55,7 @@ jobs:
           echo $VERSION_VAR
           echo $DEV_SUFFIX
           echo "!!!!!!!!!!!!!!!!!!!!!!!"
-          
+
           if [[ $VERSION_VAR == *$DEV_SUFFIX* ]]; then
             final=${VERSION_VAR%"$DEV_SUFFIX"}
             echo "has_suffix=true" >> "$GITHUB_OUTPUT"
