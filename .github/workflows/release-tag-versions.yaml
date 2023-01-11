@@ -50,7 +50,7 @@ jobs:
         id: suffixstep
         run: |
           VERSION_VAR=`sed -n 's/^current_version = \(.*\)/\1/p' < .bumpversion.cfg`
-          RELEASE_TYPE=${{ inputs.next-dev-release-type }}
+          RELEASE_TYPE=${{ inputs.next-dev-release-suffix }}
           echo "!!!!!!!!!!!!!!!!!!!!!!!"
           echo $VERSION_VAR
           echo $RELEASE_TYPE
