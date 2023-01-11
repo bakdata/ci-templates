@@ -50,7 +50,7 @@ jobs:
         id: suffixstep
         run: |
           VERSION_VAR=`sed -n 's/^current_version = \(.*\)/\1/p' < .bumpversion.cfg`
-          DEV_SUFFIX=${{ inputs.next-dev-release-suffix }}
+          DEV_SUFFIX=-${{ inputs.next-dev-release-suffix }}
           echo "!!!!!!!!!!!!!!!!!!!!!!!"
           echo $VERSION_VAR
           echo $DEV_SUFFIX
