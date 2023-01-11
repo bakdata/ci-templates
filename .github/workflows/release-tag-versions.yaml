@@ -54,12 +54,15 @@ jobs:
             final=${$VERSION_VAR#${{ inputs.next-dev-release-type }}}
             echo "has_suffix=true" >> "$GITHUB_OUTPUT"
             echo "version_var=$final" >> "$GITHUB_OUTPUT"
+            echo "!!!!!!!!!!!!!!!!!!!!!!!"
+            echo $final
+            echo "!!!!!!!!!!!!!!!!!!!!!!!"
           else
             echo "has_suffix=false" >> "$GITHUB_OUTPUT"
           fi
         shell: bash
 
-      - name: Bump version when release type is fetch and current version contains dev suffix
+      - name: Bump version when release type is 'patch' and current version contains dev suffix
         if: ${{ inputs.release-type == 'patch'}} && ${{ steps.suffixstep.outputs.has_suffix == true}}
         id: release-with-suffix
         uses: bakdata/ci-templates/actions/bump-version@feat/tag-release
