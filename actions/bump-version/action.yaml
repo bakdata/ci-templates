@@ -34,8 +34,6 @@ runs:
     - name: Bump version
       id: release-tag
       run: |
-        version=${{ inputs.new-version }}
-        type=${{ inputs.release-type }}
         parameters=(--no-commit ${{ inputs.release-type }})
         echo "oldTag=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
         if [ -n "${{ inputs.new-version }}" ]; then 

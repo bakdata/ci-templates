@@ -20,6 +20,7 @@ current_version = 0.0.1
 | ----------------- | :------: | :-----------: | ----------------------------------------------------- |
 | release-type      |    ✅    |       -       | The scope of the release (major, minor or patch)      |
 | working-directory |    ❌    |       .       | The directory containing the `.bumpversion.cfg` file. |
+| new-version       |    ❌    |       .       | New version to use for the bump                       |
 
 ### Outputs
 
@@ -35,7 +36,8 @@ This action outputs the following variables:
 Add the following steps to your workflow:
 
 ```yaml
-...
+
+---
 steps:
   # check out current repository
   - uses: actions/checkout@v3
@@ -45,5 +47,6 @@ steps:
     uses: bakdata/ci-templates/actions/bump-version@main
     with:
     release-type: "patch"
-...
+    working-directory: "."
+    new-version: "2.0.0"
 ```
