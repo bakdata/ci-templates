@@ -51,7 +51,10 @@ jobs:
         run: |
           VERSION_VAR=`sed -n 's/^current_version = \(.*\)/\1/p' < .bumpversion.cfg`
           DEV_SUFFIX=-${{ inputs.next-dev-release-suffix }}
-
+          echo "!!!!!!!!!!!!!!!!!!!!!!!"
+          echo $VERSION_VAR
+          echo $DEV_SUFFIX
+          echo "!!!!!!!!!!!!!!!!!!!!!!!"
           
           if [[ $VERSION_VAR == *$DEV_SUFFIX* ]]; then
             final=${VERSION_VAR%"$DEV_SUFFIX"}
@@ -66,7 +69,9 @@ jobs:
         shell: bash
 
       - name: Bump version when release type is 'patch' and current version contains dev suffix
-        if: ${{ inputs.release-type == 'patch'}} && ${{ steps.suffixstep.outputs.has_suffix == true}}
+        if: >-
+          ${{ inputs.release-type == 'patch'}} && 
+          ${{ steps.suffixstep.outputs.has_suffix == true}}
         id: release-with-suffix
         uses: bakdata/ci-templates/actions/bump-version@feat/tag-release
         with:
@@ -75,7 +80,9 @@ jobs:
           new-version: ${{ steps.suffixstep.outputs.version_var }}
 
       - name: Bump version when release type is not 'patch' or suffix is empty
-        if: ${{ inputs.release-type != 'patch'}} || ! ${{ steps.suffixstep.outputs.has_suffix == false}}
+        if: >-
+          ${{ inputs.release-type != 'patch'}} || 
+          ${{ steps.suffixstep.outputs.has_suffix == false}}
         id: release-without-suffix
         uses: bakdata/ci-templates/actions/bump-version@feat/tag-release
         with:
