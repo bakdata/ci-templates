@@ -51,18 +51,11 @@ jobs:
         run: |
           VERSION_VAR=`sed -n 's/^current_version = \(.*\)/\1/p' < .bumpversion.cfg`
           DEV_SUFFIX=-${{ inputs.next-dev-release-suffix }}
-          echo "!!!!!!!!!!!!!!!!!!!!!!!"
-          echo $VERSION_VAR
-          echo $DEV_SUFFIX
-          echo "!!!!!!!!!!!!!!!!!!!!!!!"
 
           if [[ $VERSION_VAR == *$DEV_SUFFIX* ]]; then
             final=${VERSION_VAR%"$DEV_SUFFIX"}
             echo "has_suffix=true" >> "$GITHUB_OUTPUT"
             echo "version_var=$final" >> "$GITHUB_OUTPUT"
-            echo "////////////////////////"
-            echo $final
-            echo "////////////////////////"
           else
             echo "has_suffix=false" >> "$GITHUB_OUTPUT"
           fi
@@ -89,17 +82,11 @@ jobs:
         id: get-release
         run: |
           TAG_WITH="${{ steps.release-with-suffix.outcome }}"
-          echo $TAG_WITH
           TAG_WITHOUT="${{ steps.release-without-suffix.outcome }}"
-          echo $TAG_WITHOUT
 
           if [[ "$TAG_WITH" == "success" ]]; then
-            echo ${{ steps.release-with-suffix.outputs.release-tag }}
-            echo "++++++"
             echo "release-tag=${{ steps.release-with-suffix.outputs.release-tag }}" >> "$GITHUB_OUTPUT"
           elif [[ "$TAG_WITHOUT" == "success" ]]; then
-            echo ${{ steps.release-without-suffix.outputs.release-tag }}
-            echo "++++++"
             echo "release-tag=${{ steps.release-without-suffix.outputs.release-tag }}" >> "$GITHUB_OUTPUT"
           fi
         shell: bash
