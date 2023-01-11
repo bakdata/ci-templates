@@ -88,9 +88,9 @@ jobs:
       - name: Verify which of the steps above has been excecuted and return the release Tag
         id: get-release
         run: |
-          TAG_WITH=${{ steps.release-with-suffix.outcome }}
+          TAG_WITH="${{ steps.release-with-suffix.outcome }}"
           echo $TAG_WITH
-          TAG_WITHOUT=${{ steps.release-without-suffix.outcome }}
+          TAG_WITHOUT="${{ steps.release-without-suffix.outcome }}"
           echo $TAG_WITHOUT
 
           if ["$TAG_WITH" == "success"]; then
