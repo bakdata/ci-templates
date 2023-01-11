@@ -42,7 +42,7 @@ runs:
           # parameters+=(patch)
           parameters+=(--new-version $version)
         fi
-        echo "bump2version ${{ inputs.release-type }} '${parameters[@]}'"
+        echo "bump2version ${{ inputs.release-type }} ${parameters[@]}"
         # bump2version ${{ inputs.release-type }} "${parameters[@]}"
         bump2version --no-commit --new-version 4.8.4
 
