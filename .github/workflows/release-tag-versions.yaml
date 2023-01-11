@@ -88,16 +88,16 @@ jobs:
       - name: Verify which of the steps above has been excecuted and return the release Tag
         id: get-release
         run: |
-          tagwith=${{ steps.release-with-suffix.outcome }}
-          echo $tagwith
-          tagwithout=${{ steps.release-without-suffix.outcome }}
-          echo $tagwithout
+          TAG_WITH=${{ steps.release-with-suffix.outcome }}
+          echo $TAG_WITH
+          TAG_WITHOUT=${{ steps.release-without-suffix.outcome }}
+          echo $TAG_WITHOUT
 
-          if [$tagwith == "success"]; then
+          if ["$TAG_WITH" == "success"]; then
             echo ${{ steps.release-with-suffix.outputs.release-tag }}
             echo "++++++"
             echo "release-tag=${{ steps.release-with-suffix.outputs.release-tag }}" >> "$GITHUB_OUTPUT"
-          elif [$tagwithout == "success"]; then
+          elif [$TAG_WITHOUT == "success"]; then
             echo ${{ steps.release-without-suffix.outputs.release-tag }}
             echo "++++++"
             echo "release-tag=${{ steps.release-without-suffix.outputs.release-tag }}" >> "$GITHUB_OUTPUT"
