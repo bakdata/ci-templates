@@ -93,11 +93,11 @@ jobs:
           TAG_WITHOUT="${{ steps.release-without-suffix.outcome }}"
           echo $TAG_WITHOUT
 
-          if ["$TAG_WITH" == "success"]; then
+          if [[ "$TAG_WITH" == "success" ]]; then
             echo ${{ steps.release-with-suffix.outputs.release-tag }}
             echo "++++++"
             echo "release-tag=${{ steps.release-with-suffix.outputs.release-tag }}" >> "$GITHUB_OUTPUT"
-          elif [$TAG_WITHOUT == "success"]; then
+          elif [[ "$TAG_WITHOUT" == "success" ]]; then
             echo ${{ steps.release-without-suffix.outputs.release-tag }}
             echo "++++++"
             echo "release-tag=${{ steps.release-without-suffix.outputs.release-tag }}" >> "$GITHUB_OUTPUT"
