@@ -253,7 +253,7 @@ This workflow is built from multiple composite actions listed below:
 
 | Name                    | Required | Default Value |  Type  | Description                                                                                                                              |
 | ----------------------- | :------: | :-----------: | :----: | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| version-configs-dir     |    ✅    |               | string | The Path to the directory containing the file where the versioning is defined and `.bumpversion.cfg` file.                               |
+| version-configs-dir     |    ✅    |               | string | The Path to the directory containing the file where the versioning is defined and the `.bumpversion.cfg` file.                           |
 | versioning-file         |    ✅    |               | string | The name of the file where the version is declared (E.g: `Dockerfile`, `Chart.yaml` ). This file is also specified in `.bumpversion.cfg` |
 | release-type            |    ✅    |       -       | string | Scope of the release (major, minor or patch).                                                                                            |
 | next-dev-release-type   |    ✅    |       -       | string | Scope of the next release (minor or patch) for developers.                                                                               |
@@ -290,7 +290,7 @@ jobs:
     name: Release & Publish Helm chart
     uses: bakdata/ci-templates/.github/workflows/release-tag-versions.yaml@main
     with:
-      version-configs-dir: "./helm-chart"
+      version-configs-dir: "."
       versioning-file: "Chart.yaml"
       release-type: "${{ inputs.release-type }}"
       next-dev-release-type: "${{ inputs.next-dev-release-type }}"
