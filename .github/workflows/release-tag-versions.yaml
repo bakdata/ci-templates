@@ -59,9 +59,9 @@ jobs:
           fi
         shell: bash
 
-      - name: Bump version when current version contains dev suffix
+      - name: Bump version when release type is fetch and current version contains dev suffix
         if: ${{ inputs.release-type == 'patch'}} && ${{ steps.suffixstep.outputs.has_suffix == true}}
-        id: release-tag
+        id: release-with-suffix
         uses: bakdata/ci-templates/actions/bump-version@main
         with:
           release-type: ${{ inputs.release-type }}
@@ -70,31 +70,43 @@ jobs:
 
       - name: Bump version when release type is not 'patch' or suffix is empty
         if: ${{ inputs.release-type != 'patch'}} || ! ${{ steps.suffixstep.outputs.has_suffix == false}}
-        id: release-tag
+        id: release-without-suffix
         uses: bakdata/ci-templates/actions/bump-version@main
         with:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.version-configs-dir }}
 
+      - name: Verify which of the steps above has been excecuted and return the release Tag
+        id: get-release
+        run: |
+          tagwithout = ${{ steps.release-without-suffix.outcome }}
+          tagwith = ${{ steps.release-with-suffix.outcome }}
+          if ["${tagwithout}" == "success"]; then
+            echo "release-tag=${{ steps.release-without-suffix.outputs.old-tag }}" >> "$GITHUB_OUTPUT"
+          elif ["${tagwith}" == "success"]; then
+            echo "release-tag=${{ steps.release-with-suffix.outputs.old-tag }}" >> "$GITHUB_OUTPUT"
+          fi
+        shell: bash
+
       - name: Commit and push the file where the versioning is defined & .bumpversion.cfg file to release new tag
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
-          commit-message: "Bump version and create dev version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
+          commit-message: "Bump version and create release version ${{ steps.get-release.outputs.release-tag }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
 
       - name: Create and push new Tag
         run: |
-          tag=${{ steps.release-tag.outputs.release-tag }}
-          message='Create new Tag: ${{ steps.release-tag.outputs.release-tag }}'
+          tag=${{ steps.get-release.outputs.release-tag }}
+          message='Create new Tag: ${tag}'
           git config user.name "${{ secrets.github-username }}"
           git config user.email "${{ secrets.github-email }}"
           git tag -a "${tag}" -m "${message}"
           git push origin "${tag}"
         shell: bash
         working-directory: ${{ inputs.version-configs-dir }}
-      
+
       - name: Setup semver
         run: |
           wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
@@ -103,7 +115,7 @@ jobs:
       - name: Sembump dev-version
         id: sembump
         run: |
-          tag=${{ steps.release-tag.outputs.release-tag }}
+          tag=${{ steps.get-release.outputs.release-tag }}
           release_version=$(semver bump "${{ inputs.next-dev-release-type }}" "${tag}")
           echo "version=$release_version" >> "$GITHUB_OUTPUT"
 
@@ -117,7 +129,7 @@ jobs:
       - name: Commit and push the file where the versioning is defined & .bumpversion.cfg file (containing the -${{ inputs.next-dev-release-suffix }} version)
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
-          commit-message: "Bump version and create dev version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }} → ${{ steps.dev-tag.outputs.release-tag }}-${{ inputs.next-dev-release-suffix }}"
+          commit-message: "Bump version and create dev version ${{ steps.get-release.outputs.release-tag }} → ${{ steps.sembump.outputs.version }}-${{ inputs.next-dev-release-suffix }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
