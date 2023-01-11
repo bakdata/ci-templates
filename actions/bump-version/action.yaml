@@ -10,7 +10,7 @@ inputs:
     required: false
     default: "."
   new-version:
-    description: "aa"
+    description: ""
     required: false
     default: ""
 
