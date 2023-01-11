@@ -1,10 +1,10 @@
-name: Action lint
+name: Lint
 
 on:
   pull_request:
 
 jobs:
-  call-action-lint-workflow:
+  actionlint:
     runs-on: ubuntu-22.04
     steps:
       - name: Lint actions and workflows
