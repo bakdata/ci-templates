@@ -44,8 +44,8 @@ runs:
         fi
         echo "bump2version ${{ inputs.release-type }} ${parameters[@]}"
         # bump2version ${{ inputs.release-type }} "${parameters[@]}"
-        bump2version "${parameters[@]}"
-        # bump2version patch --no-commit --new-version 4.8.4
+        # bump2version "${parameters[@]}"
+        bump2version --new-version 4.8.4 patch
 
         echo "newTag=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
       shell: bash
