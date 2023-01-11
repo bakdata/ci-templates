@@ -34,9 +34,10 @@ runs:
       run: |
         parameters=(--no-commit )
         version=${{ inputs.new-version }}
+        echo "?????????????????????????????????????????"
         echo $version
         echo "oldTag=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
-        if [ -n "${{ inputs.new-version }}" ]; then parameters+=(--new-version $version); fi
+        if [ -n "$version" ]; then parameters+=(--new-version $version); fi
         echo ${parameters[@]}
         bump2version ${{ inputs.release-type }} "${parameters[@]}"
         echo "newTag=$(python ./actions/bump-version/scripts/get_version.py)" >> $GITHUB_OUTPUT
