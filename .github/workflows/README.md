@@ -223,7 +223,7 @@ This method enables the release of tag versions as well as the creation of a new
 
 ### Prerequisites
 
-Your Helm chart and `.bumpversion.cfg` need to be located inside the `charts-dir` folder of your repository (repository root by default) to use this workflow. A minimal configuration with `charts-dir=charts` could look like this:
+Create, configure your `.bumpversion.cfg` file and make sure it'is in the `version-configs-dir` directory. A minimal configuration with `Chart.yaml` being the versioning file could look like this:
 
 ```cfg
 [bumpversion]
