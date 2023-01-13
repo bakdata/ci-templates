@@ -5,6 +5,7 @@ on:
 
 jobs:
   actionlint:
+    name: actionlint
     runs-on: ubuntu-22.04
     steps:
       - name: Lint actions and workflows
