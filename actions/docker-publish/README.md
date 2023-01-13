@@ -8,16 +8,16 @@ Create an action that [uploads a tarball image as artifact](https://github.com/a
 
 ## Input Parameters
 
-| Name                | Required |        Default Value         |  Type  | Description                                                                                                                                         |
-| ------------------- | :------: | :--------------------------: | :----: | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| password            |    ✅    |              -               | string | Password for the Docker registry login                                                                                                              |
-| publisher           |    ✅    |              -               | string | Publisher to prefix Docker image (e.g. 'my-publisher')                                                                                              |
-| username            |    ✅    |              -               | string | Username for the Docker registry login                                                                                                              |
-| docker-registry     |    ❌    |       "hub.docker.com"       | string | Host where the image should be pushed to.                                                                                                           |
-| image-artifact-name |    ❌    |       "image-artifact"       | string | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
-| image-name          |    ❌    | github.event.repository.name | string | Name of Docker image on Dockerhub                                                                                                                   |
-| ref                 |    ❌    |       github.ref_name        | string | Branch to use for the checkout.                                                                                                                     |
-| working-directory   |    ❌    |              -               | string | Working directory for your Docker artifacts                                                                                                         |
+| Name                | Required |        Default Value         | Description                                                                                                                                         |
+| ------------------- | :------: | :--------------------------: | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| password            |    ✅    |              -               | Password for the Docker registry login                                                                                                              |
+| publisher           |    ✅    |              -               | Publisher to prefix Docker image (e.g. 'my-publisher')                                                                                              |
+| username            |    ✅    |              -               | Username for the Docker registry login                                                                                                              |
+| docker-registry     |    ❌    |       "hub.docker.com"       | Host where the image should be pushed to.                                                                                                           |
+| image-artifact-name |    ❌    |       "image-artifact"       | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
+| image-name          |    ❌    | github.event.repository.name | Name of Docker image on Dockerhub                                                                                                                   |
+| ref                 |    ❌    |       github.ref_name        | Branch to use for the checkout.                                                                                                                     |
+| working-directory   |    ❌    |              -               | Working directory for your Docker artifacts                                                                                                         |
 
 ## Usage
 
