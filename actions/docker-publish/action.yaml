@@ -22,7 +22,7 @@ inputs:
   image-name:
     description: "Name of Docker image (Default is the repository name)."
     required: false
-    default: ${{ github.event.repository.name }}
+    default: "${{ github.event.repository.name }}"
   working-directory:
     description: "Working directory for your Docker artifacts. (Default is .)"
     required: false
