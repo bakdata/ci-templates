@@ -1,0 +1,86 @@
+name: Docker build and publish
+# Reusable workflow to build and push an image from a Dockerfile to any container registry
+
+on:
+  workflow_call:
+    inputs:
+      docker-context:
+        description: "The docker context."
+        required: false
+        default: "."
+        type: string
+      dockerfile-path:
+        description: "Path to the Dockerfile."
+        required: false
+        default: "Dockerfile"
+        type: string
+      docker-registry:
+        description: "Host where the image should be pushed to."
+        required: true
+        type: string
+      image-artifact-name:
+        description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
+        required: false
+        default: "image-artifact"
+        type: string
+      image-name:
+        description: "Name of Docker image (Default is the repository name)."
+        required: false
+        type: string
+      ref:
+        description: "Ref to checkout"
+        required: false
+        default: ${{ github.ref_name }}
+        type: string
+      working-directory:
+        description: "Working directory for your Docker artifacts. (Default is .)"
+        required: false
+        default: "."
+        type: string
+    secrets:
+      docker-publisher:
+        description: "Publisher to prefix Docker image (e.g. 'my-publisher')."
+        required: true
+      docker-user:
+        description: "Username for the Docker registry login."
+        required: true
+      docker-password:
+        description: "Password for the Docker registry login."
+        required: true
+      # if this workflow should be automatically triggered after a new tag was pushed by another action, this action will not be triggered. Configure the github token to overcome it (as described here: https://github.com/orgs/community/discussions/27028)
+      github-token:
+        description: "GitHub token."
+        required: true
+
+jobs:
+  docker-build:
+    name: Docker build
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Build docker image and upload tar file
+        uses: bakdata/ci-templates/actions/docker-build@feat/docker-publish
+        with:
+          dockerfile-context: "${{ inputs.docker-context }}"
+          dockerfile-path: "${{ inputs.dockerfile-path }}"
+          github-token: "${{ secrets.github-token }}"
+          image-artifact-name: "${{ inputs.image-artifact-name }}"
+          image-name: "${{ inputs.image-name }}"
+          ref: "${{ inputs.ref }}"
+
+  docker-publish:
+    name: Docker publish
+    runs-on: ubuntu-22.04
+    needs: [docker-build]
+    steps:
+      - name: Use uploaded tar files to push new image to docker
+        uses: bakdata/ci-templates/actions/docker-publish@feat/docker-publish
+        with:
+          image-artifact-name: "${{ inputs.image-artifact-name }}"
+          image-name: "${{ inputs.image-name }}"
+          publisher: "${{ secrets.docker-publisher }}"
+          username: "${{ secrets.docker-user }}"
+          password: "${{ secrets.docker-password }}"
+          working-directory: "${{ inputs.working-directory }}"
+          docker-registry: "${{ inputs.docker-registry }}"
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
