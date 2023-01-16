@@ -22,7 +22,7 @@ inputs:
   image-name:
     description: "Name of Docker image (Default is the repository name)."
     required: false
-    default: "${{ GITHUB_REPOSITORY }}"
+    default: "${{ github.repository }}"
   ref:
     description: "Ref to checkout"
     required: false
@@ -39,9 +39,9 @@ runs:
     - name: Build Dockerfile and store them in "build" directory
       run: |
         echo "[[[[[[[[[[[[[[[[[["
-        echo ${{ inputs.image-name }}
+        echo ${{ github.repository }}
         echo "[[[[[[[[[[[[[[[[[["
-        docker build -t ${{ inputs.image-name }}:${{ github.run_id }} -f ${{ inputs.dockerfile-path }} ${{ inputs.docker-context }}
+        docker build -t ${{ github.repository }}:${{ github.run_id }} -f ${{ inputs.dockerfile-path }} ${{ inputs.docker-context }}
         mkdir build
         docker save ${{ inputs.image-name }}:${{ github.run_id }} > build/${{ inputs.image-name }}.tar
       shell: bash
