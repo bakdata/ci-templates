@@ -53,7 +53,7 @@ runs:
         DOCKER_REG=""
         PUB=${{ inputs.publisher }}
         IMG_NAME=${{ inputs.image-name }}
-        REG_NAME_TAG="${DOCKER_REG}${IMG_NAME}/{PUB}"
+        REG_NAME_TAG="${DOCKER_REG}${IMG_NAME}/${PUB}"
         if [ -n "${{ inputs.docker-registry }}" ]; then 
           DOCKER_REG="${{ inputs.docker-registry }}/"
           echo "---------------------"
