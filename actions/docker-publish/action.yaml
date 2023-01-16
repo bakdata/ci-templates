@@ -51,7 +51,7 @@ runs:
     - name: Publish image
       run: |
         if [ -n "${{ inputs.docker-registry }}" ]; then 
-          DOCKER_REG=${{ inputs.docker-registry }}/
+          DOCKER_REG="${{ inputs.docker-registry }}"/
         else
           DOCKER_REG=""
         fi
@@ -61,7 +61,7 @@ runs:
         fi
         docker load --input build/*.tar
         if [[ "$GITHUB_REF" =~ ^refs/tags/.* ]]; then
-          echo "=============================="
+          echo $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }
           docker tag ${{ inputs.image-name }}:${{ github.run_id }} $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:latest
           docker tag ${{ inputs.image-name }}:${{ github.run_id }} $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
           docker push $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:latest
