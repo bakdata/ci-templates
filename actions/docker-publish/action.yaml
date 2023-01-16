@@ -61,11 +61,13 @@ runs:
         fi
         docker load --input build/*.tar
         if [[ "$GITHUB_REF" =~ ^refs/tags/.* ]]; then
+          echo "=============================="
           docker tag ${{ inputs.image-name }}:${{ github.run_id }} $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:latest
           docker tag ${{ inputs.image-name }}:${{ github.run_id }} $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
           docker push $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:latest
           docker push $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
         else
+          echo "??????????????????????????????"
           docker tag ${{ inputs.image-name }}:${{ github.run_id }} $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:${{ github.run_id }}
           docker push $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:${{ github.run_id }}
         fi
