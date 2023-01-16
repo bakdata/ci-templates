@@ -14,7 +14,7 @@ inputs:
   docker-registry:
     description: "Host where the image should be pushed to."
     required: false
-    default: "hub.docker.com"
+    default: ""
   image-artifact-name:
     description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
     required: false
@@ -50,19 +50,24 @@ runs:
 
     - name: Publish image
       run: |
+        if [ -n "${{ inputs.docker-registry }}" ]; then 
+          DOCKER_REG=${{ inputs.docker-registry }}/
+        else
+          DOCKER_REG=""
+        fi
         if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
           >&2 echo "Error: A single image tar file is needed in the downloaded artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
           exit 1
         fi
         docker load --input build/*.tar
         if [[ "$GITHUB_REF" =~ ^refs/tags/.* ]]; then
-          docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:latest
-          docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
-          docker push ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:latest
-          docker push ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
+          docker tag ${{ inputs.image-name }}:${{ github.run_id }} $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:latest
+          docker tag ${{ inputs.image-name }}:${{ github.run_id }} $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
+          docker push $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:latest
+          docker push $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
         else
-          docker tag ${{ inputs.image-name }}:${{ github.run_id }} ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:${{ github.run_id }}
-          docker push ${{ inputs.docker-registry }}/${{ inputs.publisher }}/${{ inputs.image-name }}:${{ github.run_id }}
+          docker tag ${{ inputs.image-name }}:${{ github.run_id }} $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:${{ github.run_id }}
+          docker push $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:${{ github.run_id }}
         fi
       shell: bash
       working-directory: ${{ inputs.working-directory }}

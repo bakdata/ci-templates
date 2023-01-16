@@ -4,7 +4,7 @@ This action downloads an `image.tar` file from an artifact and publishes it on D
 
 ## Prerequisites
 
-Create an action that [uploads a tarball image as artifact](https://github.com/actions/upload-artifact). A [Gradle Jib](https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin) example can be found [here](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build-jib).
+Create an action that [uploads a tarball image as an artifact](https://github.com/actions/upload-artifact). A [Gradle Jib](https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin) example can be found [here](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build-jib).
 
 ## Input Parameters
 
@@ -13,7 +13,7 @@ Create an action that [uploads a tarball image as artifact](https://github.com/a
 | password            |    ✅    |              -               | Password for the Docker registry login                                                                                                              |
 | publisher           |    ✅    |              -               | Publisher to prefix Docker image (e.g. 'my-publisher')                                                                                              |
 | username            |    ✅    |              -               | Username for the Docker registry login                                                                                                              |
-| docker-registry     |    ❌    |       "hub.docker.com"       | Host where the image should be pushed to.                                                                                                           |
+| docker-registry     |    ❌    |              ""              | Host where the image should be pushed to.                                                                                                           |
 | image-artifact-name |    ❌    |       "image-artifact"       | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
 | image-name          |    ❌    | github.event.repository.name | Name of Docker image on Dockerhub                                                                                                                   |
 | ref                 |    ❌    |       github.ref_name        | Branch to use for the checkout.                                                                                                                     |
@@ -32,7 +32,6 @@ steps:
       username: "${{ secrets.docker-user }}"
       password: "${{ secrets.docker-password }}"
       working-directory: "./tarball"
-      docker-registry: "hub.docker.com"
       github-token: "${{ secrets.GITHUB_TOKEN }}"
       ref: "master" # (Optional)
 ```
