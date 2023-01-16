@@ -37,7 +37,7 @@ This workflow is built from multiple composite actions listed below:
 | docker-registry     |    ❌    |                 ""                  | string | Host where the image should be pushed to.                                                                                                           |
 | image-artifact-name |    ❌    |          "image-artifact"           | string | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
 | image-name          |    ❌    | ${{ github.event.repository.name }} | string | Name of Docker image (Default is the repository name).                                                                                              |
-| ref                 |    ❌    |       ${{ github.ref_name }}        | string | The ref name to checkout the repository                                                                                                             |
+| ref                 |    ❌    |                 ""                  | string | The ref name to checkout the repository                                                                                                             |
 | working-directory   |    ❌    |                 "."                 | string | Working directory for your Docker artifacts. (Default is .)                                                                                         |
 
 ### Secret Parameters
@@ -69,7 +69,6 @@ jobs:
       docker-registry: "my-registry.com"
       image-name: "my-image"
       image-artifact-name: "my-image-artifact"
-      ref: "${{ github.ref_name }}"
       working-directory: "."
 
     secrets:

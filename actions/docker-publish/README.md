@@ -16,7 +16,7 @@ Create an action that [uploads a tarball image as an artifact](https://github.co
 | docker-registry     |    ❌    |              ""              | Host where the image should be pushed to.                                                                                                           |
 | image-artifact-name |    ❌    |       "image-artifact"       | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
 | image-name          |    ❌    | github.event.repository.name | Name of Docker image on Dockerhub                                                                                                                   |
-| ref                 |    ❌    |       github.ref_name        | Branch to use for the checkout.                                                                                                                     |
+| ref                 |    ❌    |              ""              | Branch to use for the checkout.                                                                                                                     |
 | working-directory   |    ❌    |              -               | Working directory for your Docker artifacts                                                                                                         |
 
 ## Usage

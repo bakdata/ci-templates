@@ -30,7 +30,7 @@ on:
       ref:
         description: "Ref to checkout"
         required: false
-        default: ${{ github.ref_name }}
+        default: ""
         type: string
       working-directory:
         description: "Working directory for your Docker artifacts. (Default is .)"
