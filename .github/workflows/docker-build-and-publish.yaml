@@ -61,7 +61,7 @@ jobs:
       - name: Build docker image and upload tar file
         uses: bakdata/ci-templates/actions/docker-build@feat/docker-publish
         with:
-          dockerfile-context: "${{ inputs.docker-context }}"
+          docker-context: "${{ inputs.docker-context }}"
           dockerfile-path: "${{ inputs.dockerfile-path }}"
           github-token: "${{ secrets.github-token }}"
           image-artifact-name: "${{ inputs.image-artifact-name }}"
@@ -83,4 +83,3 @@ jobs:
           password: "${{ secrets.docker-password }}"
           working-directory: "${{ inputs.working-directory }}"
           docker-registry: "${{ inputs.docker-registry }}"
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
