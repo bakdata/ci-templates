@@ -51,7 +51,10 @@ runs:
     - name: Publish image
       run: |
         if [ -n "${{ inputs.docker-registry }}" ]; then 
-          DOCKER_REG="${{ inputs.docker-registry }}"/
+          DOCKER_REG="${{ inputs.docker-registry }}/"
+          echor "---------------------"
+          echo "$DOCKER_REG"
+          echor "---------------------"
         else
           DOCKER_REG=""
         fi
@@ -62,6 +65,7 @@ runs:
         docker load --input build/*.tar
         if [[ "$GITHUB_REF" =~ ^refs/tags/.* ]]; then
           echo "??????????????????????????????"
+          echo "$DOCKER_REG$"
           somvar="$DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}"
           echo "$somvar"
           echo "??????????????????????????????"
