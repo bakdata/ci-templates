@@ -58,7 +58,7 @@ runs:
         fi
         REG_PUB_NAME="${DOCKER_REG}${PUB}/${IMG_NAME}"
         echo "=========================="
-        echo "$REG_PUB_NAME"
+        echo "$IMG_NAME"
         echo "=========================="
         if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
           >&2 echo "Error: A single image tar file is needed in the downloaded artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
