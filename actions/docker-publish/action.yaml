@@ -56,7 +56,7 @@ runs:
         if [ -n "${{ inputs.docker-registry }}" ]; then 
           DOCKER_REG="${{ inputs.docker-registry }}/"
         fi
-        $REG_PUB_NAME="${DOCKER_REG}${PUB}/${IMG_NAME}"
+        REG_PUB_NAME="${DOCKER_REG}${PUB}/${IMG_NAME}"
         echo "=========================="
         echo "$REG_PUB_NAME"
         echo "=========================="
