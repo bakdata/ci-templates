@@ -53,13 +53,13 @@ runs:
         DOCKER_REG=""
         PUB=${{ inputs.publisher }}
         IMG_NAME=${{ inputs.image-name }}
-        REG_NAME_TAG="${DOCKER_REG}${IMG_NAME}/${PUB}"
         if [ -n "${{ inputs.docker-registry }}" ]; then 
           DOCKER_REG="${{ inputs.docker-registry }}/"
           echo "---------------------"
-          echo "$DOCKER_REG"
+          echo "$REG_NAME_TAG"
           echo "---------------------"
         fi
+        REG_NAME_TAG="${DOCKER_REG}${IMG_NAME}/${PUB}"
         if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
           >&2 echo "Error: A single image tar file is needed in the downloaded artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
           exit 1
@@ -67,7 +67,6 @@ runs:
         docker load --input build/*.tar
         if [[ "$GITHUB_REF" =~ ^refs/tags/.* ]]; then
           echo "??????????????????????????????"
-          echo "$DOCKER_REG"
           echo "$REG_NAME_TAG"
           echo "??????????????????????????????"
           docker tag ${{ inputs.image-name }}:${{ github.run_id }} $REG_NAME_TAG:latest
@@ -75,7 +74,6 @@ runs:
           docker push $REG_NAME_TAG:latest
           docker push $REG_NAME_TAG:${GITHUB_REF/refs\/tags\//}
         else
-          echo "??????????????????????????????"
           docker tag ${{ inputs.image-name }}:${{ github.run_id }} $REG_NAME_TAG:${{ github.run_id }}
           docker push $REG_NAME_TAG:${{ github.run_id }}
         fi
