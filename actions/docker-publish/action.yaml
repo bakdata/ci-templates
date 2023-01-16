@@ -54,7 +54,7 @@ runs:
           DOCKER_REG="${{ inputs.docker-registry }}/"
           echo "---------------------"
           echo "$DOCKER_REG"
-          echor "---------------------"
+          echo "---------------------"
         else
           DOCKER_REG=""
         fi
