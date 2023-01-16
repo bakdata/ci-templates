@@ -62,8 +62,8 @@ runs:
         docker load --input build/*.tar
         if [[ "$GITHUB_REF" =~ ^refs/tags/.* ]]; then
           echo "??????????????????????????????"
-          somvar=$DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }
-          echo $somvar
+          somvar="$DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}"
+          echo "$somvar"
           echo "??????????????????????????????"
           docker tag ${{ inputs.image-name }}:${{ github.run_id }} $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:latest
           docker tag ${{ inputs.image-name }}:${{ github.run_id }} $DOCKER_REG${{ inputs.publisher }}/${{ inputs.image-name }}:${GITHUB_REF/refs\/tags\//}
