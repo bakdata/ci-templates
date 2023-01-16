@@ -50,29 +50,27 @@ runs:
 
     - name: Publish image
       run: |
-        DOCKER_REG=""
-        PUB="${{ inputs.publisher }}"
-        IMG_NAME="${{ inputs.image-name }}"
+        docker_reg=""
+        pub="${{ inputs.publisher }}"
+        img_name="${{ inputs.image-name }}"
         if [ -n "${{ inputs.docker-registry }}" ]; then 
-          DOCKER_REG="${{ inputs.docker-registry }}/"
+          docker_reg="${{ inputs.docker-registry }}/"
         fi
-        REG_PUB_NAME="${DOCKER_REG}${PUB}/${IMG_NAME}"
-        echo "=========================="
-        echo "$REG_PUB_NAME"
-        echo "=========================="
+        reg_pub_name="${docker_reg}${pub}/${img_name}"
+
         if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
           >&2 echo "Error: A single image tar file is needed in the downloaded artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
           exit 1
         fi
         docker load --input build/*.tar
         if [[ "$GITHUB_REF" =~ ^refs/tags/.* ]]; then
-          docker tag ${{ inputs.image-name }}:${{ github.run_id }} $REG_PUB_NAME:latest
-          docker tag ${{ inputs.image-name }}:${{ github.run_id }} $REG_PUB_NAME:${GITHUB_REF/refs\/tags\//}
-          docker push $REG_PUB_NAME:latest
-          docker push $REG_PUB_NAME:${GITHUB_REF/refs\/tags\//}
+          docker tag ${{ inputs.image-name }}:${{ github.run_id }} $reg_pub_name:latest
+          docker tag ${{ inputs.image-name }}:${{ github.run_id }} $reg_pub_name:${GITHUB_REF/refs\/tags\//}
+          docker push $reg_pub_name:latest
+          docker push $reg_pub_name:${GITHUB_REF/refs\/tags\//}
         else
-          docker tag ${{ inputs.image-name }}:${{ github.run_id }} $REG_PUB_NAME:${{ github.run_id }}
-          docker push $REG_PUB_NAME:${{ github.run_id }}
+          docker tag ${{ inputs.image-name }}:${{ github.run_id }} $reg_pub_name:${{ github.run_id }}
+          docker push $reg_pub_name:${{ github.run_id }}
         fi
       shell: bash
       working-directory: ${{ inputs.working-directory }}
