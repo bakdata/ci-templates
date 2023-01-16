@@ -22,7 +22,7 @@ inputs:
   image-name:
     description: "Name of Docker image (Default is the repository name)."
     required: false
-    default: "${{ github.event.repository.name }}"
+    default: ${{ github.event.repository.name }}
   working-directory:
     description: "Working directory for your Docker artifacts. (Default is .)"
     required: false
@@ -58,7 +58,7 @@ runs:
         fi
         REG_PUB_NAME="${DOCKER_REG}${PUB}/${IMG_NAME}"
         echo "=========================="
-        echo "$IMG_NAME"
+        echo "$REG_PUB_NAME"
         echo "=========================="
         if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
           >&2 echo "Error: A single image tar file is needed in the downloaded artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
