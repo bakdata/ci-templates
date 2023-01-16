@@ -62,7 +62,7 @@ jobs:
         uses: bakdata/ci-templates/actions/docker-build@feat/docker-publish
         with:
           dockerfile-context: "${{ inputs.docker-context }}"
-          dockerfile-path: "${{ inputs.docker-path }}"
+          dockerfile-path: "${{ inputs.dockerfile-path }}"
           github-token: "${{ secrets.github-token }}"
           image-artifact-name: "${{ inputs.image-artifact-name }}"
           image-name: "${{ inputs.image-name }}"
