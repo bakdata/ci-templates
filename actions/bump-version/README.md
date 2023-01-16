@@ -36,8 +36,6 @@ This action outputs the following variables:
 Add the following steps to your workflow:
 
 ```yaml
-
----
 steps:
   # check out current repository
   - uses: actions/checkout@v3
