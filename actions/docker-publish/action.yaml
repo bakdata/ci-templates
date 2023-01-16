@@ -51,8 +51,8 @@ runs:
     - name: Publish image
       run: |
         DOCKER_REG=""
-        PUB=${{ inputs.publisher }}
-        IMG_NAME=${{ inputs.image-name }}
+        PUB="${{ inputs.publisher }}"
+        IMG_NAME="${{ inputs.image-name }}"
         if [ -n "${{ inputs.docker-registry }}" ]; then 
           DOCKER_REG="${{ inputs.docker-registry }}/"
         fi
