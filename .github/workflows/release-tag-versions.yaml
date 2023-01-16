@@ -49,7 +49,7 @@ jobs:
         if: ${{ inputs.release-type == 'patch'}}
         id: suffixstep
         run: |
-          VERSION_VAR=`sed -n 's/^current_version = \(.*\)/\1/p' < .bumpversion.cfg`
+          VERSION_VAR=$(sed -n 's/^current_version = \(.*\)/\1/p' < .bumpversion.cfg)
           DEV_SUFFIX=-${{ inputs.next-dev-release-suffix }}
           final=""
           if [[ $VERSION_VAR == *$DEV_SUFFIX* ]]; then
@@ -79,7 +79,7 @@ jobs:
       - name: Create and push new Tag
         run: |
           tag=${{ steps.release.outputs.release-tag }}
-          message='Create new Tag: ${tag}'
+          message="Create new Tag: ${tag}"
           git config user.name "${{ secrets.github-username }}"
           git config user.email "${{ secrets.github-email }}"
           git tag -a "${tag}" -m "${message}"
