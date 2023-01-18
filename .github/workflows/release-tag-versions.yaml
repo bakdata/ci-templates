@@ -39,7 +39,7 @@ jobs:
       - name: Check out default branch
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.github-token }}
+          # token: ${{ secrets.github-token }}
           persist-credentials: false
 
       - name: Verify current version
@@ -88,6 +88,7 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           tags: true
+          github_token: ${{ secrets.github-token }}
 
       - name: Setup semver
         run: |
