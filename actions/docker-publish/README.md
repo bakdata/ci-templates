@@ -1,6 +1,6 @@
 # docker-publish
 
-This action downloads an `image.tar` file from an artifact and publishes it on Dockerhub. When this action is used on a tag branch, the image is tagged with latest and the tag version of the branch (e.g. 1.2.3). For all other branches the github.run_id is used as an image tag.
+This action downloads an `image.tar` file from an artifact and publishes it on Dockerhub. When this action is used on a tag branch, the image is tagged with `latest` and the tag version of the branch (e.g. `1.2.3`). For all other branches, the `github`.run_id` is used as an image tag.
 
 ## Prerequisites
 
@@ -16,7 +16,6 @@ Create an action that [uploads a tarball image as an artifact](https://github.co
 | docker-registry     |    ❌    |              ""              | Host where the image should be pushed to.                                                                                                           |
 | image-artifact-name |    ❌    |       "image-artifact"       | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
 | image-name          |    ❌    | github.event.repository.name | Name of Docker image on Dockerhub                                                                                                                   |
-| ref                 |    ❌    |              ""              | Branch to use for the checkout.                                                                                                                     |
 | working-directory   |    ❌    |              -               | Working directory for your Docker artifacts                                                                                                         |
 
 ## Usage
