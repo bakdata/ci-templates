@@ -51,12 +51,9 @@ runs:
     - name: Publish image
       run: |
         docker_reg=""
-        pub="${{ inputs.publisher }}"
-        img_name="${{ inputs.image-name }}"
         if [ -n "${{ inputs.docker-registry }}" ]; then 
           docker_reg="${{ inputs.docker-registry }}/"
         fi
-        # reg_pub_name="${docker_reg}${pub}/${img_name}"
         reg_pub_name="${docker_reg}${{ inputs.publisher }}/${{ inputs.image-name }}"
 
         if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
