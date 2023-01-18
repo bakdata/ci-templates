@@ -54,8 +54,6 @@ jobs:
           else
             echo "version_var=$final" >> "$GITHUB_OUTPUT"
           fi
-          echo "!!!!!!!!!!!!!!"
-          echo "$final"
         shell: bash
 
       - name: Bump input version to create a new release tag
