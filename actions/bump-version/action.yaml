@@ -28,7 +28,6 @@ runs:
     - name: Set up bump2version
       run: |
         pip install --upgrade bump2version
-        python --version
       shell: bash
 
     - name: Bump version

@@ -7,10 +7,6 @@ on:
         description: "The Path to the directory containing the file where the versioning is defined and `.bumpversion.cfg` file."
         required: true
         type: string
-      versioning-file:
-        description: "The name of the file where the version is declared (E.g: Dockerfile, Chart.yaml ). This file is also specified in the `.bumpversion.cfg` "
-        required: true
-        type: string
       release-type:
         description: "Scope of the release (major, minor or patch)."
         required: true

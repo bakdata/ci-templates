@@ -223,7 +223,7 @@ This method enables the release of tag versions as well as the creation of a new
 
 ### Prerequisites
 
-Create, configure your `.bumpversion.cfg` file and make sure it'is in the `version-configs-dir` directory. A minimal configuration with `Chart.yaml` being the versioning file could look like this:
+Create, configure your `.bumpversion.cfg` file and make sure it's in the `version-configs-dir` directory. A minimal configuration with `Chart.yaml` being the versioning file could look like this:
 
 ```cfg
 [bumpversion]
@@ -234,12 +234,23 @@ search = version: {current_version}
 replace = version: {new_version}
 ```
 
-Additionally, you need to create the lint configuration file `.github/lint-config.yaml` and configure it to your liking.
-A minimal configuration could look like this:
+In case you want your version logic to include releasing a developer version, the following configuration or similar will be needed.
 
-```yaml
-# check https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml for possible configurations
-target-branch: "main"
+```cfg
+[bumpversion]
+current_version = 1.0.1-SNAPSHOT
+parse = (?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)(-(?P<suffix>\w+))?
+serialize =
+	{major}.{minor}.{patch}-{suffix}
+	{major}.{minor}.{patch}
+
+[bumpversion:file:path/to/Chart.yaml]
+search =
+	version: {current_version}
+	appVersion: {current_version}
+replace =
+	version: {new_version}
+	appVersion: {new_version}
 ```
 
 ### Dependencies
@@ -251,13 +262,12 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name                    | Required | Default Value |  Type  | Description                                                                                                                              |
-| ----------------------- | :------: | :-----------: | :----: | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| version-configs-dir     |    ✅    |               | string | The Path to the directory containing the file where the versioning is defined and the `.bumpversion.cfg` file.                           |
-| versioning-file         |    ✅    |               | string | The name of the file where the version is declared (E.g: `Dockerfile`, `Chart.yaml` ). This file is also specified in `.bumpversion.cfg` |
-| release-type            |    ✅    |       -       | string | Scope of the release (major, minor or patch).                                                                                            |
-| next-dev-release-type   |    ✅    |       -       | string | Scope of the next release (minor or patch) for developers.                                                                               |
-| next-dev-release-suffix |    ❌    |  "SNAPSHOT"   | string | The suffix to add for the developer version.                                                                                             |
+| Name                    | Required | Default Value |  Type  | Description                                                                                                    |
+| ----------------------- | :------: | :-----------: | :----: | -------------------------------------------------------------------------------------------------------------- |
+| version-configs-dir     |    ✅    |               | string | The Path to the directory containing the file where the versioning is defined and the `.bumpversion.cfg` file. |
+| release-type            |    ✅    |       -       | string | Scope of the release (major, minor or patch).                                                                  |
+| next-dev-release-type   |    ✅    |       -       | string | Scope of the next release (minor or patch) for developers.                                                     |
+| next-dev-release-suffix |    ❌    |  "SNAPSHOT"   | string | The suffix to add for the developer version.                                                                   |
 
 ### Secret Parameters
 
