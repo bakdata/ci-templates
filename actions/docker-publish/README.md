@@ -1,6 +1,6 @@
 # docker-publish
 
-This action downloads an `image.tar` file from an artifact and publishes it on Dockerhub. When this action is used on a tag branch, the image is tagged with `latest` and the tag version of the branch (e.g. `1.2.3`). For all other branches, the `github`.run_id` is used as an image tag.
+This action downloads an `image.tar` file from an artifact and publishes it on Dockerhub. When this action is used on a tag branch, the image is tagged with `latest` and the tag version of the branch (e.g. `1.2.3`). For all other branches, the `github.run_id` is used as an image tag.
 
 ## Prerequisites
 
