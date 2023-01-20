@@ -35,6 +35,7 @@ runs:
       with:
         ref: ${{ inputs.ref }}
         token: ${{ inputs.github-token }}
+        persist-credentials: false
 
     - name: Build Dockerfile and store them in "build" directory
       run: |
