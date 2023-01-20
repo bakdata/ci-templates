@@ -4,7 +4,7 @@ inputs:
   ref:
     description: "The ref name to checkout the repository."
     required: false
-    default: ${{ github.ref_name }}
+    default: ""
   action-lint-version:
     description: "The action lint repository version to use."
     required: false
