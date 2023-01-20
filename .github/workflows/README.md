@@ -30,26 +30,26 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name                | Required |        Default Value         |  Type  | Description                                                                                                                                         |
-| ------------------- | :------: | :--------------------------: | :----: | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| docker-context      |    ❌    |             "."              | string | The docker context.                                                                                                                                 |
-| dockerfile-path     |    ❌    |         "Dockerfile"         | string | Path to the Dockerfile.                                                                                                                             |
-| docker-registry     |    ❌    |              ""              | string | Host where the image should be pushed to.                                                                                                           |
-| image-artifact-name |    ❌    |       "image-artifact"       | string | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
-| image-name          |    ❌    | github.event.repository.name | string | Name of Docker image (Default is the repository name).                                                                                              |
-| ref                 |    ❌    |              ""              | string | The ref name to checkout the repository                                                                                                             |
-| working-directory   |    ❌    |             "."              | string | Working directory for your Docker artifacts. (Default is .)                                                                                         |
+| Name                | Required |        Default Value         |  Type  | Description                                                                                                                                                          |
+| ------------------- | :------: | :--------------------------: | :----: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| docker-context      |    ❌    |             "."              | string | The docker context.                                                                                                                                                  |
+| dockerfile-path     |    ❌    |         "Dockerfile"         | string | Path to the Dockerfile.                                                                                                                                              |
+| docker-registry     |    ❌    |              ""              | string | Host where the image should be pushed to.                                                                                                                            |
+| github-token        |    ❌    |              ""              | string | Github token to use for checkout(important when this action should be automatically triggerd by another action: https://github.com/orgs/community/discussions/27028) |
+| image-artifact-name |    ❌    |       "image-artifact"       | string | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact').                  |
+| image-name          |    ❌    | github.event.repository.name | string | Name of Docker image (Default is the repository name).                                                                                                               |
+| ref                 |    ❌    |              ""              | string | The ref name to checkout the repository                                                                                                                              |
+| working-directory   |    ❌    |             "."              | string | Working directory for your Docker artifacts. (Default is .)                                                                                                          |
 
 ### Secret Parameters
 
 These secrets define the user that pushes the built images to the container registry.
 
-| Name             | Required | Description                                                                                                                                                          |
-| ---------------- | :------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| docker-publisher |    ✅    | Publisher to prefix Docker image (e.g. 'my-publisher').                                                                                                              |
-| docker-user      |    ✅    | Username for the Docker registry login.                                                                                                                              |
-| docker-password  |    ✅    | Password for the Docker registry login.                                                                                                                              |
-| github-token     |    ❌    | Github token to use for checkout(important when this action should be automatically triggerd by another action: https://github.com/orgs/community/discussions/27028) |
+| Name             | Required | Description                                             |
+| ---------------- | :------: | ------------------------------------------------------- |
+| docker-publisher |    ✅    | Publisher to prefix Docker image (e.g. 'my-publisher'). |
+| docker-user      |    ✅    | Username for the Docker registry login.                 |
+| docker-password  |    ✅    | Password for the Docker registry login.                 |
 
 ### Calling the workflow
 
