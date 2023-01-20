@@ -6,15 +6,7 @@ on:
 jobs:
   actionlint:
     name: actionlint
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Check workflow files
-        run: |
-          echo "::add-matcher::.github/actionlint-matcher.json"
-          bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/v1.6.19/scripts/download-actionlint.bash)
-          ./actionlint -color
+      - name: Lint actions and workflows
+        uses: bakdata/ci-templates/actions/action-lint@feat/lint-workflow

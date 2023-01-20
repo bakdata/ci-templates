@@ -1,0 +1,31 @@
+name: "Lint actions and workflows"
+description: "Lint all actions and workflows of a repository"
+inputs:
+  ref:
+    description: "The ref name to checkout the repository."
+    required: false
+    default: ""
+  action-lint-version:
+    description: "The action lint repository version to use."
+    required: false
+    default: "v1.6.22"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+      with:
+        ref: "${{ inputs.ref }}"
+
+    - name: Download "actionlint-matcher.json"
+      run: |
+        wget https://raw.githubusercontent.com/rhysd/actionlint/${{ inputs.action-lint-version }}/.github/actionlint-matcher.json
+        echo "::add-matcher::actionlint-matcher.json"
+      shell: bash
+
+    - name: Check workflow files
+      run: |
+        bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/${{ inputs.action-lint-version }}/scripts/download-actionlint.bash)
+        ./actionlint -color
+      shell: bash
