@@ -26,7 +26,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    # For more information to create a commit with a valid GitHub user go to:
+    # For more information to create a commit with a valid GitHub user go to: 
     # https://github.com/ad-m/github-push-action
     - name: Configure git
       run: |
