@@ -1,0 +1,118 @@
+name: Reusable workflow for releasing tag versions
+
+on:
+  workflow_call:
+    inputs:
+      version-configs-dir:
+        description: "The Path to the directory containing the file where the versioning is defined and `.bumpversion.cfg` file."
+        required: true
+        type: string
+      release-type:
+        description: "Scope of the release (major, minor or patch)."
+        required: true
+        type: string
+      next-dev-release-type:
+        description: "Scope of the next release (minor or patch) for developers"
+        required: true
+        type: string
+      next-dev-release-suffix:
+        description: "The suffix to add for the developer version"
+        required: false
+        default: "SNAPSHOT"
+        type: string
+    secrets:
+      github-email:
+        description: "The GitHub email for committing the changes."
+        required: true
+      github-username:
+        description: "The GitHub username for committing the changes."
+        required: true
+      github-token:
+        description: "The GitHub token for committing the changes."
+        required: true
+
+jobs:
+  bump_and_release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out default branch
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      - name: Verify current version
+        if: ${{ inputs.release-type == 'patch'}}
+        id: suffixstep
+        run: |
+          VERSION_VAR=$(sed -n 's/^current_version = \(.*\)/\1/p' < .bumpversion.cfg)
+          DEV_SUFFIX=-${{ inputs.next-dev-release-suffix }}
+          final=""
+          if [[ $VERSION_VAR == *$DEV_SUFFIX* ]]; then
+            final=${VERSION_VAR%"$DEV_SUFFIX"}
+            echo "version_var=$final" >> "$GITHUB_OUTPUT"
+          else
+            echo "version_var=$final" >> "$GITHUB_OUTPUT"
+          fi
+        shell: bash
+
+      - name: Bump input version to create a new release tag
+        id: release
+        uses: bakdata/ci-templates/actions/bump-version@feat/tag-release
+        with:
+          release-type: ${{ inputs.release-type }}
+          working-directory: ${{ inputs.version-configs-dir }}
+          new-version: ${{ steps.suffixstep.outputs.version_var }}
+
+      - name: Commit and push the file where the versioning is defined & .bumpversion.cfg file to release new tag
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        with:
+          commit-message: "Bump version and create release version ${{ steps.release.outputs.release-tag }}"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
+
+      - name: Create and push new Tag
+        run: |
+          tag=${{ steps.release.outputs.release-tag }}
+          message="Create new Tag: ${tag}"
+          git config user.name "${{ secrets.github-username }}"
+          git config user.email "${{ secrets.github-email }}"
+          git tag -a "${tag}" -m "${message}"
+        shell: bash
+        working-directory: ${{ inputs.version-configs-dir }}
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          tags: true
+          github_token: ${{ secrets.github-token }}
+
+      - name: Setup semver
+        run: |
+          wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
+          chmod +x /usr/local/bin/semver
+        shell: bash
+
+      - name: Sembump dev-version
+        id: sembump
+        run: |
+          tag=${{ steps.release.outputs.release-tag }}
+          release_version=$(semver bump "${{ inputs.next-dev-release-type }}" "${tag}")
+          echo "version=$release_version" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - name: Bump to "tag-${{ inputs.next-dev-release-suffix }}" version
+        uses: bakdata/ci-templates/actions/bump-version@feat/tag-release
+        with:
+          release-type: ${{ inputs.next-dev-release-type }}
+          working-directory: ${{ inputs.version-configs-dir }}
+          new-version: ${{ steps.sembump.outputs.version }}-${{ inputs.next-dev-release-suffix }}
+
+      - name: Commit and push the file where the versioning is defined & .bumpversion.cfg file (containing the -${{ inputs.next-dev-release-suffix }} version)
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        with:
+          commit-message: "Bump version and create dev version ${{ steps.release.outputs.release-tag }} → ${{ steps.sembump.outputs.version }}-${{ inputs.next-dev-release-suffix }}"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
