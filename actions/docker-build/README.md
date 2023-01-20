@@ -25,8 +25,8 @@ steps:
     uses: bakdata/ci-templates/actions/docker-build@main
     with:
       dockerfile-context: "./docker-dir/"
-      dockerfile-path: "docker-dir/Dockerfile"
-      image-artifact-name: "${{ inputs.image-artifact-name }}"
-      image-name: "tarball"
-      github-token: "${{ secrets.GITHUB_TOKEN }}"
+      dockerfile-path: "./path/to/my/Dockerfile"
+      image-artifact-name: "my-image-artifact"
+      image-name: "my-image"
+      github-token: "${{ secrets.GH_TOKEN }}"
 ```
