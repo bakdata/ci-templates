@@ -227,17 +227,6 @@ Create, configure your `.bumpversion.cfg` file and make sure it's in the `versio
 
 ```cfg
 [bumpversion]
-current_version = 0.0.1
-
-[bumpversion:file:charts/Chart.yaml]
-search = version: {current_version}
-replace = version: {new_version}
-```
-
-In case you want your version logic to include releasing a developer version, the following configuration or similar will be needed.
-
-```cfg
-[bumpversion]
 current_version = 1.0.1-SNAPSHOT
 parse = (?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)(-(?P<suffix>\w+))?
 serialize =
@@ -264,7 +253,7 @@ This workflow is built from multiple composite actions listed below:
 
 | Name                    | Required | Default Value |  Type  | Description                                                                                                    |
 | ----------------------- | :------: | :-----------: | :----: | -------------------------------------------------------------------------------------------------------------- |
-| version-configs-dir     |    ✅    |               | string | The Path to the directory containing the file where the versioning is defined and the `.bumpversion.cfg` file. |
+| version-configs-dir     |    ✅    |       -       | string | The Path to the directory containing the file where the versioning is defined and the `.bumpversion.cfg` file. |
 | release-type            |    ✅    |       -       | string | Scope of the release (major, minor or patch).                                                                  |
 | next-dev-release-type   |    ✅    |       -       | string | Scope of the next release (minor or patch) for developers.                                                     |
 | next-dev-release-suffix |    ❌    |  "SNAPSHOT"   | string | The suffix to add for the developer version.                                                                   |
@@ -301,7 +290,6 @@ jobs:
     uses: bakdata/ci-templates/.github/workflows/release-tag-versions.yaml@main
     with:
       version-configs-dir: "."
-      versioning-file: "Chart.yaml"
       release-type: "${{ inputs.release-type }}"
       next-dev-release-type: "${{ inputs.next-dev-release-type }}"
       next-dev-release-suffix: "SNAPSHOT"

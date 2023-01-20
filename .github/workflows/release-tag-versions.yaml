@@ -39,7 +39,6 @@ jobs:
       - name: Check out default branch
         uses: actions/checkout@v3
         with:
-          # token: ${{ secrets.github-token }}
           persist-credentials: false
 
       - name: Verify current version
@@ -80,7 +79,6 @@ jobs:
           git config user.name "${{ secrets.github-username }}"
           git config user.email "${{ secrets.github-email }}"
           git tag -a "${tag}" -m "${message}"
-          # git push origin "${tag}"
         shell: bash
         working-directory: ${{ inputs.version-configs-dir }}
 
