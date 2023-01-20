@@ -333,7 +333,7 @@ You can use the no-reply GitHub email for the email: `[username]@users.noreply.g
 | --------------- | :------: | ---------------------------------------------- |
 | github-username |    ✅    | The GitHub username for committing the changes |
 | github-email    |    ✅    | The GitHub email for committing the changes    |
-| github-token    |    ✅    | The GitHub token for committing the changes    |
+| github-token    |    ❌    | The GitHub token for committing the changes    |
 
 ### Calling the workflow
 
