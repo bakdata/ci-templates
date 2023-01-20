@@ -62,7 +62,7 @@ jobs:
 
     steps:
       - name: Build docker image and upload tar file
-        uses: bakdata/ci-templates/actions/docker-build@feat/docker-publish
+        uses: bakdata/ci-templates/actions/docker-build@v1.14.0
         with:
           docker-context: "${{ inputs.docker-context }}"
           dockerfile-path: "${{ inputs.dockerfile-path }}"
@@ -77,7 +77,7 @@ jobs:
     needs: [docker-build]
     steps:
       - name: Use uploaded tar files to push new image to docker
-        uses: bakdata/ci-templates/actions/docker-publish@feat/docker-publish
+        uses: bakdata/ci-templates/actions/docker-publish@v1.14.0
         with:
           image-artifact-name: "${{ inputs.image-artifact-name }}"
           image-name: "${{ inputs.image-name }}"
