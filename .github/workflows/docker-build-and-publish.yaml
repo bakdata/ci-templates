@@ -23,13 +23,6 @@ on:
         required: false
         default: "image-artifact"
         type: string
-
-      # if this workflow should be automatically triggered after a new tag was pushed by another action, then configure the github token to overcome it (as described here: https://github.com/orgs/community/discussions/27028)
-      github-token:
-        description: "GitHub token."
-        required: false
-        default: "${{ github.token }}"
-        type: string
       image-name:
         description: "Name of Docker image (Default is the repository name)."
         required: false
@@ -55,6 +48,10 @@ on:
       docker-password:
         description: "Password for the Docker registry login."
         required: true
+      # if this workflow should be automatically triggered after a new tag was pushed by another action, then configure the github token to overcome it (as described here: https://github.com/orgs/community/discussions/27028)
+      github-token:
+        description: "GitHub token."
+        required: false
 
 jobs:
   docker-build:
