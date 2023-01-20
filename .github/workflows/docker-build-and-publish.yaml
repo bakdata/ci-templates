@@ -66,7 +66,7 @@ jobs:
         with:
           docker-context: "${{ inputs.docker-context }}"
           dockerfile-path: "${{ inputs.dockerfile-path }}"
-          github-token: "${{ secrets.github-token }}"
+          github-token: "${{ inputs.github-token }}"
           image-artifact-name: "${{ inputs.image-artifact-name }}"
           image-name: "${{ inputs.image-name }}"
           ref: "${{ inputs.ref }}"
