@@ -2,6 +2,7 @@
 
 The following workflows can be found here:
 
+- [Docker Build and Publish](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#docker-build-and-publish)
 - [Helm Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-release)
 - [Helm Multi Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-multi-release)
 - [Release Tag Versions](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#release-tag-versions)
@@ -12,6 +13,71 @@ The following workflows can be found here:
 - [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
 - [Java Gradle Plugin](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-plugin)
 - [Java Gradle Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-release)
+
+## Docker Build and Publish
+
+This workflow will use a Dockerfile to build and push images to any container registry.
+
+### Prerequisites
+
+This workflow requires a Dockerfile located in the repository.
+
+### Dependencies
+
+This workflow is built from multiple composite actions listed below:
+
+- [docker-build](https://github.com/bakdata/ci-templates/tree/main/actions/docker-build)
+- [docker-publish](https://github.com/bakdata/ci-templates/tree/main/actions/docker-publish)
+
+### Input Parameters
+
+| Name                | Required |        Default Value         |  Type  | Description                                                                                                                                                          |
+| ------------------- | :------: | :--------------------------: | :----: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| docker-context      |    ❌    |             "."              | string | The docker context.                                                                                                                                                  |
+| dockerfile-path     |    ❌    |         "Dockerfile"         | string | Path to the Dockerfile.                                                                                                                                              |
+| docker-registry     |    ❌    |              ""              | string | Host where the image should be pushed to.                                                                                                                            |
+| github-token        |    ❌    |              ""              | string | Github token to use for checkout(important when this action should be automatically triggerd by another action: https://github.com/orgs/community/discussions/27028) |
+| image-artifact-name |    ❌    |       "image-artifact"       | string | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact').                  |
+| image-name          |    ❌    | github.event.repository.name | string | Name of Docker image (Default is the repository name).                                                                                                               |
+| ref                 |    ❌    |              ""              | string | The ref name to checkout the repository                                                                                                                              |
+| working-directory   |    ❌    |             "."              | string | Working directory for your Docker artifacts. (Default is .)                                                                                                          |
+
+### Secret Parameters
+
+These secrets define the user that pushes the built images to the container registry.
+
+| Name             | Required | Description                                             |
+| ---------------- | :------: | ------------------------------------------------------- |
+| docker-publisher |    ✅    | Publisher to prefix Docker image (e.g. 'my-publisher'). |
+| docker-user      |    ✅    | Username for the Docker registry login.                 |
+| docker-password  |    ✅    | Password for the Docker registry login.                 |
+
+### Calling the workflow
+
+```yaml
+name: Docker build and publish
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-workflow-passing-data:
+    name: Build and push Docker image
+    uses: bakdata/ci-templates/.github/workflows/docker-build-and-publish.yaml@main
+    with:
+      dockerfile-context: "./docker-dir/"
+      dockerfile-path: "./path/to/my/Dockerfile"
+      docker-registry: "my-registry.com"
+      image-name: "my-image"
+      image-artifact-name: "my-image-artifact"
+      working-directory: "."
+
+    secrets:
+      docker-publisher: "${{ secrets.DOCKER_PUBLISHER }}"
+      docker-user: "${{ secrets.DOCKER_USER }}"
+      docker-password: "${{ secrets.DOCKER_PWD }}"
+      github-token: ${{ secrets.GH_TOKEN }}
+```
 
 ## Helm Release
 

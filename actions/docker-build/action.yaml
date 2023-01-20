@@ -1,0 +1,52 @@
+name: "Build Docker image"
+description: "Use a Dockerfile to build an `image.tar` file and upload it to GitHub"
+
+inputs:
+  docker-context:
+    description: "The docker context."
+    required: false
+    default: "."
+  dockerfile-path:
+    description: "Path to the Dockerfile."
+    required: false
+    default: "Dockerfile"
+  github-token:
+    # if this action should be automatically triggered after a new tag was pushed by another action, this action will not be triggered. Configure the github token to overcome it (as described here: https://github.com/orgs/community/discussions/27028)
+    description: "GitHub token"
+    required: false
+    default: "${{ github.token }}"
+  image-artifact-name:
+    description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
+    required: false
+    default: "image-artifact"
+  image-name:
+    description: "Name of Docker image (Default is the repository name)."
+    required: false
+    default: "${{ github.event.repository.name }}"
+  ref:
+    description: "Ref to checkout"
+    required: false
+    default: ""
+runs:
+  using: "composite"
+  steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ inputs.ref }}
+        token: ${{ inputs.github-token }}
+        persist-credentials: false
+
+    - name: Build Dockerfile and store them in "build" directory
+      run: |
+        docker build -t ${{ inputs.image-name }}:${{ github.run_id }} -f ${{ inputs.dockerfile-path }} ${{ inputs.docker-context }}
+        mkdir build
+        docker save ${{ inputs.image-name }}:${{ github.run_id }} > build/${{ inputs.image-name }}.tar
+      shell: bash
+
+    - name: Upload Docker image tar artifact
+      uses: actions/upload-artifact@v3.1.1
+      with:
+        name: ${{ inputs.image-artifact-name }}
+        path: build
+        retention-days: 1
