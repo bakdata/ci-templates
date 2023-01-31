@@ -23,7 +23,7 @@ jobs:
       - name: Set up Poetry
         uses: ./actions/python-setup-poetry
         with:
-          poetry-version: ${{ env.POETRY_VERSION }}
+          poetry-version: ${{ matrix.poetry-version }}
           python-version: ${{ matrix.python-version }}
           working-directory: .tests/poetry
 
