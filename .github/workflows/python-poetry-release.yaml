@@ -20,7 +20,7 @@ on:
       poetry-version:
         description: "The Python version for setting up Poetry. (Default is 1.1.12)"
         required: false
-        default: "1.1.12"
+        default: "1.3.2"
         type: string
       publish-to-test:
         description: "If set to false, the package is published to PyPI. (Default is true)"
@@ -72,7 +72,7 @@ jobs:
 
       - name: Bump version with Poetry
         id: release-tag
-        uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.13.3
+        uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.14.2
         with:
           release-type: ${{ inputs.release-type }}
           python-version: ${{ inputs.python-version }}
@@ -80,7 +80,7 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
 
       - name: Release to PyPI
-        uses: bakdata/ci-templates/actions/python-poetry-release@v1.13.3
+        uses: bakdata/ci-templates/actions/python-poetry-release@v1.14.2
         with:
           pypi-token: ${{ secrets.pypi-token }}
           publish-to-test: ${{ inputs.publish-to-test }}

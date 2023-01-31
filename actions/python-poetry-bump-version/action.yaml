@@ -12,7 +12,7 @@ inputs:
   poetry-version:
     description: "The Poetry version to be installed."
     required: false
-    default: "1.2.2"
+    default: "1.3.2"
   working-directory:
     description: "The root directory of the Poetry project."
     required: false
@@ -30,7 +30,7 @@ runs:
   using: "composite"
   steps:
     - name: Set up Poetry ${{ inputs.poetry-version }}
-      uses: bakdata/ci-templates/actions/python-setup-poetry@v1.5.3
+      uses: bakdata/ci-templates/actions/python-setup-poetry@v1.14.2
       with:
         python-version: ${{ inputs.python-version }}
         poetry-version: ${{ inputs.poetry-version }}
@@ -42,8 +42,8 @@ runs:
     - name: Bump version with Poetry
       id: release-tag
       run: |
-        echo "oldTag=$(poetry version -s)" >> $GITHUB_OUTPUT 
+        echo "oldTag=$(poetry version -s)" >> $GITHUB_OUTPUT
         poetry version ${{ inputs.release-type }}
-        echo "newTag=$(poetry version -s)" >> $GITHUB_OUTPUT  
+        echo "newTag=$(poetry version -s)" >> $GITHUB_OUTPUT
       shell: bash
       working-directory: ${{ inputs.working-directory }}
