@@ -15,7 +15,7 @@ inputs:
     required: false
     default: "wrapper"
   gradle-cache:
-    description: "Wheter Gradle caching is enabled or not. (Default is true)"
+    description: "Whether Gradle caching is enabled or not. (Default is true)"
     required: false
     default: true
 runs:
