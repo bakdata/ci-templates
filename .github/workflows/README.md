@@ -946,7 +946,7 @@ A service account (SA) with the necessary permissions is necessary for creating 
 ### Calling the workflow
 
 ```yaml
-name: Release
+name: Terraform
 
 on:
   workflow_dispatch:
