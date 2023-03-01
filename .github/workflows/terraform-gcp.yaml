@@ -1,5 +1,5 @@
 name: Terraform Create GCP Resources
-# Reusable workflow to create a cluster using Terraform
+# Reusable workflow to create GCP Resources
 
 on:
   workflow_call:
