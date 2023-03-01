@@ -953,7 +953,7 @@ on:
 
 jobs:
   call-workflow-passing-data:
-    name: Terraform Create GKE Cluster
+    name: Terraform Create GCP Resources
     uses: bakdata/ci-templates/.github/workflows/terraform-gcp.yaml@main
     with:
     secrets:
