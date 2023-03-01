@@ -937,7 +937,7 @@ Create a service account and save its key as a GitHub secret so you can provide 
 
 ### Secret Parameters
 
-A service account (SA) with the necessary permissions is necessary for creating a GKE cluster. Generate a key out of the recently created SA and provide it to the workflow.
+A service account (SA) with the necessary permissions is required for creating a GKE cluster. Generate a key for the recently created SA and provide it to the workflow.
 
 | Name               | Required | Description                       |
 | ------------------ | :------: | --------------------------------- |
