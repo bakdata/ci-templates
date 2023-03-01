@@ -922,7 +922,7 @@ jobs:
 
 ## Terraform Create GKE Cluster
 
-This method leverages your Terraform project to establish a GKE cluster.
+This workflow leverages your Terraform project to establish a GKE cluster.
 
 ### Prerequisites
 
@@ -942,8 +942,6 @@ A service account (SA) with the necessary permissions is necessary for creating 
 | Name               | Required | Description                       |
 | ------------------ | :------: | --------------------------------- |
 | google-credentials |    ✅    | Key of the service account to use |
-
-The needed permissions for the SA are :
 
 ### Calling the workflow
 
