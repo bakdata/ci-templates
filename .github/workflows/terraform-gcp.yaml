@@ -1,0 +1,55 @@
+name: Terraform Create GCP Resources
+# Reusable workflow to create GCP Resources
+
+on:
+  workflow_call:
+    inputs:
+      tf-plan:
+        description: "Name of the terraform plan output file"
+        required: false
+        default: "tfplan"
+        type: string
+      working-directory:
+        description: "Directory containing your Terraform project. (Default is .)"
+        required: false
+        default: "."
+        type: string
+    secrets:
+      google-credentials:
+        description: "Key of the service account to use."
+        required: true
+
+jobs:
+  terraform:
+    name: "Terraform workflow"
+    runs-on: ubuntu-22.04
+    env:
+      GOOGLE_CREDENTIALS: ${{ secrets.google-credentials }}
+      TF_PLAN: "${{ inputs.tf-plan }}"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Terraform Setup
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Init
+        run: terraform init -reconfigure
+        shell: bash
+        working-directory: ${{ inputs.working-directory }}
+
+      - name: Terraform Validate
+        run: terraform validate
+        shell: bash
+        working-directory: ${{ inputs.working-directory }}
+
+      - name: Terraform Plan
+        run: terraform plan -out=${{ env.TF_PLAN }}
+        shell: bash
+        working-directory: ${{ inputs.working-directory }}
+
+      - name: Terraform Apply
+        if: github.event_name == 'workflow_dispatch'
+        run: terraform apply -auto-approve ${{ env.TF_PLAN }}
+        shell: bash
+        working-directory: ${{ inputs.working-directory }}
