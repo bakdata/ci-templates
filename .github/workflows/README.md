@@ -926,7 +926,7 @@ This workflow leverages your Terraform project to establish a GKE cluster.
 
 ### Prerequisites
 
-Establish a service account and save its Key as a GitHub secret so you can provide it to the variable `google-credentials`.
+Create a service account and save its key as a GitHub secret so you can provide it to the variable `google-credentials`.
 
 ### Input Parameters
 
