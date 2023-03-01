@@ -13,7 +13,7 @@ The following workflows can be found here:
 - [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
 - [Java Gradle Plugin](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-plugin)
 - [Java Gradle Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-release)
-- [Terraform Create GKE Cluster](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#terraform-create-gke-cluster)
+- [Terraform Create GCP Resource](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#terraform-reate-gcp-resource)
 
 ## Docker Build and Publish
 
@@ -920,9 +920,9 @@ jobs:
       - run: echo Bumped Version from ${{ needs.call-workflow-passing-data.outputs.old-version }} to ${{ needs.call-workflow-passing-data.outputs.release-version }}
 ```
 
-## Terraform Create GKE Cluster
+## Terraform Create GCP Resource
 
-This workflow leverages your Terraform project to establish a GKE cluster.
+This workflow leverages your Terraform project to provision GCP resources.
 
 ### Prerequisites
 
@@ -937,7 +937,7 @@ Create a service account and save its key as a GitHub secret so you can provide 
 
 ### Secret Parameters
 
-A service account (SA) with the necessary permissions is required for creating a GKE cluster. Generate a key for the recently created SA and provide it to the workflow.
+A service account (SA) with the necessary permissions is required for creating your GCP resource(s). Generate a key for the recently created SA and provide it to the workflow.
 
 | Name               | Required | Description                       |
 | ------------------ | :------: | --------------------------------- |

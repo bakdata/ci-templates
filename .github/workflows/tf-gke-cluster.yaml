@@ -1,5 +1,5 @@
-name: Terraform Create GKE Cluster
-# Reusable workflow to create a GKE cluster using Terraform
+name: Terraform Create GCP Resources
+# Reusable workflow to create a cluster using Terraform
 
 on:
   workflow_call:
@@ -21,7 +21,7 @@ on:
 
 jobs:
   terraform:
-    name: "Terraform preprocessing"
+    name: "Terraform workflow"
     runs-on: ubuntu-22.04
     env:
       GOOGLE_CREDENTIALS: ${{ secrets.google-credentials }}
@@ -30,7 +30,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: "Terraform Setup"
+      - name: Terraform Setup
         uses: hashicorp/setup-terraform@v1
 
       - name: Terraform Init
