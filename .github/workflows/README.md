@@ -954,7 +954,7 @@ on:
 jobs:
   call-workflow-passing-data:
     name: Terraform Create GKE Cluster
-    uses: bakdata/ci-templates/.github/workflows/tf-gke-cluster.yaml@main
+    uses: bakdata/ci-templates/.github/workflows/terraform-gcp.yaml@main
     with:
     secrets:
       google-credentials: ${{ secrets.GKE_SA_TF }}
