@@ -23,6 +23,11 @@ on:
         required: false
         type: string
         default: "wrapper"
+      gradle-cache:
+        description: "Whether Gradle caching is enabled or not. (Default is true)"
+        required: false
+        type: boolean
+        default: true
       working-directory:
         description: "Working directory of your Gradle artifacts. (Default is .)"
         required: false
@@ -75,6 +80,7 @@ jobs:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}
 
   test:
@@ -94,6 +100,7 @@ jobs:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}
   
   build-jib:
@@ -108,6 +115,7 @@ jobs:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}
 
   publish:
@@ -127,6 +135,7 @@ jobs:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}
 
   publish-jib-image:
@@ -157,4 +166,5 @@ jobs:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}

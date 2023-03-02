@@ -18,6 +18,10 @@ inputs:
     description: "Gradle version to be installed. (Default is wrapper)"
     required: false
     default: "wrapper"
+  gradle-cache:
+    description: "Whether Gradle caching is enabled or not. (Default is true)"
+    required: false
+    default: true
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is .)"
     required: false
@@ -34,6 +38,7 @@ runs:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
         gradle-version: ${{ inputs.gradle-version }}
+        gradle-cache: ${{ inputs.gradle-cache }}
 
     - name: Compile
       run: ./gradlew --info --stacktrace build -x test
