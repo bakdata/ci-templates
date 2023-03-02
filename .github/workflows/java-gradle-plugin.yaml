@@ -106,7 +106,7 @@ jobs:
 
     steps:
       - name: Publish
-        uses: bakdata/ci-templates/actions/java-gradle-publish@v1.4.0
+        uses: bakdata/ci-templates/actions/java-gradle-publish@feat/gradle-cache
         with:
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
@@ -127,7 +127,7 @@ jobs:
 
     steps:
       - name: Publish plugin
-        uses: bakdata/ci-templates/actions/java-gradle-publish-plugin@v1.4.0
+        uses: bakdata/ci-templates/actions/java-gradle-publish-plugin@feat/gradle-cache
         with:
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
@@ -148,7 +148,7 @@ jobs:
 
     steps:
       - name: Release on Github
-        uses: bakdata/ci-templates/actions/java-gradle-release-github@v1.4.0
+        uses: bakdata/ci-templates/actions/java-gradle-release-github@feat/gradle-cache
         with:
           github-username: ${{ secrets.github-username }}
           github-token: ${{ secrets.github-token }}
