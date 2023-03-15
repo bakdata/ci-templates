@@ -13,7 +13,7 @@ The following workflows can be found here:
 - [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
 - [Java Gradle Plugin](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-plugin)
 - [Java Gradle Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-release)
-- [Terraform Create GCP Resource](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#terraform-reate-gcp-resource)
+- [Terraform Create GCP Resource](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#terraform-create-gcp-resource)
 
 ## Docker Build and Publish
 
