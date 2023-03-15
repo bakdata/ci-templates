@@ -16,7 +16,8 @@ on:
         type: string
       docker-registry:
         description: "Host where the image should be pushed to."
-        required: true
+        required: false
+        default: ""
         type: string
       image-artifact-name:
         description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
