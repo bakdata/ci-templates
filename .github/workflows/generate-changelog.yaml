@@ -12,9 +12,18 @@ on:
         description: Version after bump
         required: true
         type: string
-      changelog:
+      gh-changelog:
         description: Location of the Changelog.md file
         required: true
+        type: string
+      doc-exists:
+        type: boolean
+        description: Describes if there is a documentation where the changelog needs to be updated as well
+        required: false
+        default: false
+      doc-changelog:
+        description: Location of the documentation changelog (if any exists)
+        required: false
         type: string
       config:
         description: Path to the changelog config JSON file
@@ -73,14 +82,6 @@ jobs:
           # required for bypassing status checks when pushing
           token: "${{ secrets.github-token }}"
 
-      - name: Test config
-        run: |
-          echo "------------------------------------------------"
-          echo "${{ needs.read-config-file.outputs.content }}"
-          cat CHANGELOG.md
-          echo "------------------------------------------------"
-        shell: bash
-
       - name: Generate Changelog
         id: generate-release-changelog
         uses: heinrichreimer/github-changelog-generator-action@v2.2
@@ -103,23 +104,21 @@ jobs:
           addSections: |
             ${{ needs.read-config-file.outputs.content }}
 
-      # update-changelog:
-      #   name: Update Changelogs
-      #   runs-on: ubuntu-22.04
-      #   needs:
-      #     [generate-changelog]
-      #     # Prepend changes to the CHANGELOG.md
-      #   steps:
-      #     - name: Check out repository
-      #       uses: actions/checkout@v3
-
-      - name: Update Changelogs
+      - name: Update github Changelog
         run: |
           # Remove header from changes
           sed -i '1d' changes.md
           # Prepend changes.md after first header
-          sed -i '/# Changelog/ r changes.md' CHANGELOG.md
-          sed -i '/# Changelog/ r changes.md' "${{ inputs.changelog }}"
+          sed -i '/# Changelog/ r changes.md' "${{ inputs.gh-changelog }}"
+        shell: bash
+
+      - name: Update doc Changelog
+        if: ${{inputs.doc-exists}}
+        run: |
+          # Remove header from changes
+          sed -i '1d' changes.md
+          # Prepend changes.md after first header
+          sed -i '/# Changelog/ r changes.md' "${{ inputs.doc-changelog }}"
         shell: bash
 
       - name: Create release commit
