@@ -1,0 +1,88 @@
+name: Generate changelog
+# Reusable workflow to generate changelog after release
+
+on:
+  workflow_call:
+    old-tag:
+      description: Version to be replaced
+      required: true
+      type: string
+    new-tag:
+      description: Version after bump
+      required: true
+      type: string
+    config:
+      description: Path to the changelog config JSON file
+      required: false
+      default: "./.github/changelog-config.json"
+      type: string
+
+jobs:
+  read-config-file:
+    name: Read config file
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Read changelog config
+        id: read-config
+        # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
+        run: |
+          content=$(cat ${{ inputs.new-tag }})
+          echo "content<<EOF" >> $GITHUB_OUTPUT
+          echo "$content" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        shell: bash
+
+  generate-changelog:
+    name: Generate Changelog
+    runs-on: ubuntu-22.04
+    needs: [read-config-file]
+    steps:
+      - name: Generate Changelog
+        id: generate-release-changelog
+        uses: heinrichreimer/github-changelog-generator-action@v2.2
+        with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          sinceTag: "${{ inputs.old-tag }}"
+          output: "changes.md"
+          stripGeneratorNotice: "true"
+          issues: "true"
+          unreleased: "true"
+          pullRequests: "false"
+          compareLink: "true"
+          issuesWoLabels: "false"
+          futureRelease: "${{ inputs.new-tag }}"
+          issuesLabel: "**Miscellaneous:**"
+          bugLabels: "type/bug"
+          enhancementLabels: "type/enhancement"
+          httpCache: "true"
+          verbose: "true"
+          addSections: |
+            ${{ needs.read-config-file.outputs.content }}
+
+  update-changelog:
+    name: Update Changelogs
+    runs-on: ubuntu-22.04
+    needs:
+      [generate-changelog]
+      # Prepend changes to the CHANGELOG.md
+    steps:
+      - name: Update Changelogs
+        run: |
+          # Remove header from changes
+          sed -i '1d' changes.md
+          # Prepend changes.md after first header
+          sed -i '/# Changelog/ r changes.md' CHANGELOG.md
+          sed -i '/# Changelog/ r changes.md' docs/docs/changelog.md
+        shell: bash
+
+      - name: Create release commit
+        run: |
+          # Set email and username for github-actions bot
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          # Add changes
+          git add CHANGELOG.md
+          git add docs/
+          git add deployment/
+          git commit -m "Release v${{ inputs.new-tag }}"
+          git push
