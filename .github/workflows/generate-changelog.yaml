@@ -69,7 +69,7 @@ jobs:
       - name: Test config
         run: |
           echo "------------------------------------------------"
-          echo ${{ needs.read-config-file.outputs.content }}
+          echo "${{ needs.read-config-file.outputs.content }}"
           echo "------------------------------------------------"
         shell: bash
   #     - name: Generate Changelog
