@@ -32,6 +32,8 @@ jobs:
   read-config-file:
     name: Read config file
     runs-on: ubuntu-22.04
+    outputs:
+      content: ${{ steps.read-config.outputs.content }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
