@@ -37,7 +37,7 @@ jobs:
         id: read-config
         # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
         run: |
-          content=$(cat ${{ inputs.new-tag }})
+          content=$(cat ${{ inputs.config }})
           echo "content<<EOF" >> $GITHUB_OUTPUT
           echo "$content" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
