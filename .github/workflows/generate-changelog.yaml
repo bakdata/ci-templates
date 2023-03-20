@@ -95,7 +95,7 @@ jobs:
           httpCache: "true"
           verbose: "true"
           addSections: |
-            "${{ needs.read-config-file.outputs.content }}"
+            ${{ needs.read-config-file.outputs.content }}
 
   update-changelog:
     name: Update Changelogs
