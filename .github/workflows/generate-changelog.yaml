@@ -3,19 +3,30 @@ name: Generate changelog
 
 on:
   workflow_call:
-    old-tag:
-      description: Version to be replaced
-      required: true
-      type: string
-    new-tag:
-      description: Version after bump
-      required: true
-      type: string
-    config:
-      description: Path to the changelog config JSON file
-      required: false
-      default: "./.github/changelog-config.json"
-      type: string
+    inputs:
+      old-tag:
+        description: Version to be replaced
+        required: true
+        type: string
+      new-tag:
+        description: Version after bump
+        required: true
+        type: string
+      config:
+        description: Path to the changelog config JSON file
+        required: false
+        default: "./.github/changelog-config.json"
+        type: string
+    secrets:
+      github-username:
+        description: "The GitHub username for committing the changes."
+        required: true
+      github-email:
+        description: "The GitHub email for committing the changes."
+        required: true
+      github-token:
+        description: "The GitHub token for committing the changes."
+        required: true
 
 jobs:
   read-config-file:
@@ -41,7 +52,7 @@ jobs:
         id: generate-release-changelog
         uses: heinrichreimer/github-changelog-generator-action@v2.2
         with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
+          token: "${{ secrets.github-token }}"
           sinceTag: "${{ inputs.old-tag }}"
           output: "changes.md"
           stripGeneratorNotice: "true"
@@ -78,8 +89,8 @@ jobs:
       - name: Create release commit
         run: |
           # Set email and username for github-actions bot
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
+          git config --local user.email "${{ secrets.github-email }}"
+          git config --local user.name "${{ secrets.github-token }}"
           # Add changes
           git add CHANGELOG.md
           git add docs/
