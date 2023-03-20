@@ -119,7 +119,7 @@ jobs:
           sed -i '1d' changes.md
           # Prepend changes.md after first header
           sed -i '/# Changelog/ r changes.md' CHANGELOG.md
-          sed -i '/# Changelog/ r changes.md' "${{ inputs.changelog }}""
+          sed -i '/# Changelog/ r changes.md' "${{ inputs.changelog }}"
         shell: bash
 
       - name: Create release commit
