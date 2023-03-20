@@ -97,15 +97,15 @@ jobs:
           addSections: |
             ${{ needs.read-config-file.outputs.content }}
 
-  update-changelog:
-    name: Update Changelogs
-    runs-on: ubuntu-22.04
-    needs:
-      [generate-changelog]
-      # Prepend changes to the CHANGELOG.md
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
+      # update-changelog:
+      #   name: Update Changelogs
+      #   runs-on: ubuntu-22.04
+      #   needs:
+      #     [generate-changelog]
+      #     # Prepend changes to the CHANGELOG.md
+      #   steps:
+      #     - name: Check out repository
+      #       uses: actions/checkout@v3
 
       - name: Update Changelogs
         run: |
