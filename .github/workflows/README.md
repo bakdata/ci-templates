@@ -959,3 +959,57 @@ jobs:
     secrets:
       google-credentials: ${{ secrets.GKE_SA_TF }}
 ```
+
+## Generate Changelog
+
+This workflow will allow for the automatic generation of a changelog. The changelog template needs to be configured using a `changelog-config.json`. Depending on whether there is other documentation besides the GitHub changelog or not, one or two `Changelog` files will be updated.
+
+### Prerequisites
+
+Create a `changelog-config.json` file containing the configurations of the changelogs.
+
+### Input Parameters
+
+| Name          | Required |           Default Value           |  Type   | Description                                                                           |
+| ------------- | :------: | :-------------------------------: | :-----: | ------------------------------------------------------------------------------------- |
+| old-tag       |    ✅    |                 -                 | string  | Previous version                                                                      |
+| new-tag       |    ✅    |                 -                 | string  | Newest version                                                                        |
+| gh-changelog  |    ✅    |                 -                 | string  | Path to the Changelog.md file                                                         |
+| doc-exists    |    ❌    |               false               | boolean | Describes if there is a documentation where the changelog needs to be updated as well |
+| doc-changelog |    ❌    |    "./docs/docs/Changelog.md "    | string  | Path to the documentation changelog (if any exists)                                   |
+| config        |    ❌    | "./.github/changelog-config.json" | string  | Path to the changelog config JSON file                                                |
+
+### Secret Parameters
+
+For committing and pushing the changes to GitHub you need to define a `github-username`, a `github-email` and
+a `github-token`.
+
+| Name            | Required | Description                                |
+| --------------- | :------: | ------------------------------------------ |
+| github-username |    ✅    | GitHub username for committing the changes |
+| github-email    |    ✅    | GitHub email for committing the changes    |
+| github-token    |    ✅    | GitHub token for committing the changes    |
+
+### Calling the workflow
+
+```yaml
+name: Github changelog creator
+on:
+  workflow_dispatch:
+
+jobs:
+  call-workflow-passing-data:
+    name: Create changelog
+    uses: bakdata/ci-templates/.github/workflows/generate-changelog.yaml@feat/changelog
+    with:
+      old-tag: "1.0.0"
+      new-tag: "1.0.1"
+      gh-changelog: CHANGELOG.md
+      doc-exists: true
+      doc-changelog: ./docs/Changelog.md
+      config: "./.github/changelog-config.json"
+    secrets:
+      github-email: "${{ secrets.GH_EMAIL }}"
+      github-username: "${{ secrets.GH_USERNAME }}"
+      github-token: "${{ secrets.GH_TOKEN }}"
+```

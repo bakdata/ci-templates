@@ -13,7 +13,7 @@ on:
         required: true
         type: string
       gh-changelog:
-        description: Location of the Changelog.md file
+        description: Path to the Changelog.md file
         required: true
         type: string
       doc-exists:
@@ -22,8 +22,9 @@ on:
         required: false
         default: false
       doc-changelog:
-        description: Location of the documentation changelog (if any exists)
+        description: Path to the documentation changelog (if any exists)
         required: false
+        default: "./docs/docs/Changelog.md "
         type: string
       config:
         description: Path to the changelog config JSON file
@@ -115,9 +116,7 @@ jobs:
       - name: Update doc Changelog
         if: ${{inputs.doc-exists}}
         run: |
-          # Remove header from changes
           sed -i '1d' changes.md
-          # Prepend changes.md after first header
           sed -i '/# Changelog/ r changes.md' "${{ inputs.doc-changelog }}"
         shell: bash
 
