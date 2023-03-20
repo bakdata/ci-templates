@@ -12,11 +12,16 @@ on:
         description: Version after bump
         required: true
         type: string
+      changelog:
+        description: Location of the Changelog.md file
+        required: true
+        type: string
       config:
         description: Path to the changelog config JSON file
         required: false
         default: "./.github/changelog-config.json"
         type: string
+
     secrets:
       github-username:
         description: "The GitHub username for committing the changes."
@@ -113,7 +118,7 @@ jobs:
           sed -i '1d' changes.md
           # Prepend changes.md after first header
           sed -i '/# Changelog/ r changes.md' CHANGELOG.md
-          sed -i '/# Changelog/ r changes.md' docs/docs/changelog.md
+          sed -i '/# Changelog/ r changes.md' "${{ inputs.changelog }}""
         shell: bash
 
       - name: Create release commit
