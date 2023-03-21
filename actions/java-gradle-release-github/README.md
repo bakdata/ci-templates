@@ -11,8 +11,8 @@ This action releases Java Gradle Artifacts and a generated changelog on Github.
 | java-distribution |    ❌    |   microsoft   | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
 | java-version      |    ❌    |      11       | string  | Java version to be installed                                                                                  |
 | gradle-version    |    ❌    |    wrapper    | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
-| working-directory |    ❌    |      "."      | string  | Working directory of your Gradle artifacts                                                                    |
 | gradle-cache      |    ❌    |     true      | boolean | Whether Gradle caching is enabled or not                                                                      |
+| working-directory |    ❌    |      "."      | string  | Working directory of your Gradle artifacts                                                                    |
 
 ## Usage
 
