@@ -59,7 +59,7 @@ jobs:
         # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
         run: |
           content=$(cat "${{ inputs.config }}")
-          {echo "content<<EOF"; echo "$content"; echo "EOF"; } >> "$GITHUB_OUTPUT"
+          { echo "content<<EOF"; echo "$content"; echo "EOF"; } >> "$GITHUB_OUTPUT"
           # echo "$content" >> "$GITHUB_OUTPUT"
           # echo "EOF" >> "$GITHUB_OUTPUT"
         shell: bash
