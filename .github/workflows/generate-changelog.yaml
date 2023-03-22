@@ -4,27 +4,93 @@ name: Generate changelog
 on:
   workflow_call:
     inputs:
-      old-tag:
-        description: Previous version
+      gh-changelog:
+        description: Path to the Changelog.md file
         required: true
         type: string
       new-tag:
         description: Version after bump
         required: true
         type: string
-      gh-changelog:
-        description: Path to the Changelog.md file
+      old-tag:
+        description: Previous version
         required: true
+        type: string
+
+      bugLabels:
+        description: "Issues with the specified labels will be added to Fixed bugs section"
+        required: false
+        default: "type/bug"
+        type: string
+      compareLink:
+        description: "Include compare link (Full Changelog) between older version and newer version"
+        required: false
+        default: "true"
+        type: string
+      config:
+        description: Path to the changelog config JSON file
+        required: false
+        default: "./.github/changelog-config.json"
         type: string
       doc-changelog:
         description: Path to the documentation changelog (if any exists)
         required: false
         default: ""
         type: string
-      config:
-        description: Path to the changelog config JSON file
+      enhancementLabels:
+        description: "Issues with the specified labels will be added to Implemented enhancements section"
         required: false
-        default: "./.github/changelog-config.json"
+        default: "type/enhancement"
+        type: string
+      httpCache:
+        description: "Use HTTP Cache to cache GitHub API requests (useful for large repos)"
+        required: false
+        default: "true"
+        type: string
+      issues:
+        description: "Include closed issues in changelog"
+        required: false
+        default: "true"
+        type: string
+      issuesLabel:
+        description: "Set up custom label for closed-issues section"
+        required: false
+        default: "**Miscellaneous:**"
+        type: string
+      issuesWoLabels:
+        description: "Include closed issues without labels in changelog"
+        required: false
+        default: "true"
+        type: string
+      output:
+        description: "Name of the output file for the generate changelog step"
+        required: false
+        default: "changes.md"
+        type: string
+      prWoLabels:
+        description: "Include pull requests without labels in changelog"
+        required: false
+        default: "false"
+        type: string
+      pullRequests:
+        description: "Include pull-requests in changelog"
+        required: false
+        default: "false"
+        type: string
+      stripGeneratorNotice:
+        description: "Strip generator notice"
+        required: false
+        default: "false"
+        type: string
+      unreleased:
+        description: "Add to log unreleased closed issues"
+        required: false
+        default: "true"
+        type: string
+      verbose:
+        description: "Run verbosely"
+        required: false
+        default: "true"
         type: string
 
     secrets:
@@ -82,35 +148,35 @@ jobs:
         with:
           token: "${{ secrets.github-token }}"
           sinceTag: "${{ inputs.old-tag }}"
-          output: "changes.md"
+          output: "${{ inputs.output }}"
           stripGeneratorNotice: "true"
-          issues: "true"
-          unreleased: "true"
-          pullRequests: "false"
-          compareLink: "true"
-          issuesWoLabels: "false"
+          issues: "${{ inputs.issues }}"
+          unreleased: "${{ inputs.unreleased }}"
+          pullRequests: "${{ inputs.pullRequests }}"
+          compareLink: "${{ inputs.compareLink }}"
+          issuesWoLabels: "${{ inputs.issuesWoLabels }}"
           futureRelease: "${{ inputs.new-tag }}"
-          issuesLabel: "**Miscellaneous:**"
-          bugLabels: "type/bug"
-          enhancementLabels: "type/enhancement"
-          httpCache: "true"
-          verbose: "true"
+          issuesLabel: "${{ inputs.issuesLabel }}"
+          bugLabels: "${{ inputs.bugLabels }}"
+          enhancementLabels: "${{ inputs.enhancementLabels }}"
+          httpCache: "${{ inputs.httpCache }}"
+          verbose: "${{ inputs.verbose }}"
           addSections: |
             ${{ needs.read-config-file.outputs.content }}
 
       - name: Update github Changelog
         run: |
           # Remove header from changes
-          sed -i '1d' changes.md
+          sed -i '1d' "${{ inputs.output }}"
           # Prepend changes.md after first header
-          sed -i '/# Changelog/ r changes.md' "${{ inputs.gh-changelog }}"
+          sed -i '/# Changelog/ r "${{ inputs.output }}"' "${{ inputs.gh-changelog }}"
         shell: bash
 
       - name: Update doc Changelog
         run: |
           if [ -n "${{ inputs.doc-changelog }}" ]; then 
-            sed -i '1d' changes.md
-            sed -i '/# Changelog/ r changes.md' "${{ inputs.doc-changelog }}"
+            sed -i '1d' "${{ inputs.output }}"
+            sed -i '/# Changelog/ r "${{ inputs.output }}"' "${{ inputs.doc-changelog }}"
           fi
         shell: bash
 
@@ -120,8 +186,9 @@ jobs:
           git config --local user.email "${{ secrets.github-email }}"
           git config --local user.name "${{ secrets.github-username }}"
           # Add changes
-          git add CHANGELOG.md
-          git add docs/
-          git add deployment/
+          git add "${{ inputs.gh-changelog }}"
+          if [ -n "${{ inputs.doc-changelog }}" ]; then 
+            git add "${{ inputs.doc-changelog }}"
+          fi
           git commit -m "Release v${{ inputs.new-tag }}"
           git push

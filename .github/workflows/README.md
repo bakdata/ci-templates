@@ -928,6 +928,12 @@ This workflow leverages your Terraform project to provision GCP resources.
 
 Create a service account and save its key as a GitHub secret so you can provide it to the variable `google-credentials`.
 
+### Dependencies
+
+This workflow is built from multiple composite actions listed below:
+
+- [action-github-changelog-generator](https://github.com/heinrichreimer/action-github-changelog-generator)
+
 ### Input Parameters
 
 | Name              | Required | Default Value |  Type  | Description                                  |
@@ -973,7 +979,7 @@ Create a `changelog-config.json` file containing the configurations of the chang
 | Name          | Required |           Default Value           |  Type  | Description                                                                                                        |
 | ------------- | :------: | :-------------------------------: | :----: | ------------------------------------------------------------------------------------------------------------------ |
 | old-tag       |    ✅    |                 -                 | string | Previous version                                                                                                   |
-| new-tag       |    ✅    |                 -                 | string | New version                                                                                                     |
+| new-tag       |    ✅    |                 -                 | string | New version                                                                                                        |
 | gh-changelog  |    ✅    |                 -                 | string | Path to the Changelog.md file                                                                                      |
 | doc-changelog |    ❌    |                ""                 | string | Path to the documentation changelog (if any exists). If the variable is empty then no further file will be updated |
 | config        |    ❌    | "./.github/changelog-config.json" | string | Path to the changelog config JSON file                                                                             |
