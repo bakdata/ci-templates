@@ -16,15 +16,10 @@ on:
         description: Path to the Changelog.md file
         required: true
         type: string
-      doc-exists:
-        type: boolean
-        description: Describes if there is a documentation where the changelog needs to be updated as well
-        required: false
-        default: false
       doc-changelog:
         description: Path to the documentation changelog (if any exists)
         required: false
-        default: "./docs/docs/Changelog.md "
+        default: ""
         type: string
       config:
         description: Path to the changelog config JSON file
@@ -114,7 +109,7 @@ jobs:
         shell: bash
 
       - name: Update doc Changelog
-        if: ${{inputs.doc-exists}}
+        if: -n ${{inputs.doc-changelog}}
         run: |
           sed -i '1d' changes.md
           sed -i '/# Changelog/ r changes.md' "${{ inputs.doc-changelog }}"

@@ -970,14 +970,13 @@ Create a `changelog-config.json` file containing the configurations of the chang
 
 ### Input Parameters
 
-| Name          | Required |           Default Value           |  Type   | Description                                                                           |
-| ------------- | :------: | :-------------------------------: | :-----: | ------------------------------------------------------------------------------------- |
-| old-tag       |    ✅    |                 -                 | string  | Previous version                                                                      |
-| new-tag       |    ✅    |                 -                 | string  | Newest version                                                                        |
-| gh-changelog  |    ✅    |                 -                 | string  | Path to the Changelog.md file                                                         |
-| doc-exists    |    ❌    |               false               | boolean | Describes if there is a documentation where the changelog needs to be updated as well |
-| doc-changelog |    ❌    |    "./docs/docs/Changelog.md "    | string  | Path to the documentation changelog (if any exists)                                   |
-| config        |    ❌    | "./.github/changelog-config.json" | string  | Path to the changelog config JSON file                                                |
+| Name          | Required |           Default Value           |  Type  | Description                                                                                                        |
+| ------------- | :------: | :-------------------------------: | :----: | ------------------------------------------------------------------------------------------------------------------ |
+| old-tag       |    ✅    |                 -                 | string | Previous version                                                                                                   |
+| new-tag       |    ✅    |                 -                 | string | Newest version                                                                                                     |
+| gh-changelog  |    ✅    |                 -                 | string | Path to the Changelog.md file                                                                                      |
+| doc-changelog |    ❌    |                ""                 | string | Path to the documentation changelog (if any exists). If the variable is empty then no further file will be updated |
+| config        |    ❌    | "./.github/changelog-config.json" | string | Path to the changelog config JSON file                                                                             |
 
 ### Secret Parameters
 
@@ -1004,9 +1003,8 @@ jobs:
     with:
       old-tag: "1.0.0"
       new-tag: "1.0.1"
-      gh-changelog: CHANGELOG.md
-      doc-exists: true
-      doc-changelog: ./docs/Changelog.md
+      gh-changelog: "CHANGELOG.md"
+      doc-changelog: "./docs/Changelog.md"
       config: "./.github/changelog-config.json"
     secrets:
       github-email: "${{ secrets.GH_EMAIL }}"
