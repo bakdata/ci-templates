@@ -148,7 +148,7 @@ jobs:
         with:
           token: "${{ secrets.github-token }}"
           sinceTag: "${{ inputs.old-tag }}"
-          output: "${{ inputs.output }}"
+          output: ${{ inputs.output }}
           stripGeneratorNotice: "true"
           issues: "${{ inputs.issues }}"
           unreleased: "${{ inputs.unreleased }}"
@@ -167,7 +167,7 @@ jobs:
       - name: Update github Changelog
         run: |
           # Remove header from changes
-          sed -i '1d' "${{ inputs.output }}"
+          sed -i '1d' ${{ inputs.output }}
           # Prepend changes.md after first header
           sed -i '/# Changelog/ r "${{ inputs.output }}"' "${{ inputs.gh-changelog }}"
           cat "${{ inputs.gh-changelog }}"
