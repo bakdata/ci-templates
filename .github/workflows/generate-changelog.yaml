@@ -111,10 +111,11 @@ jobs:
         shell: bash
 
       - name: Update doc Changelog
-        if: -n ${{inputs.doc-changelog}}
         run: |
-          sed -i '1d' changes.md
-          sed -i '/# Changelog/ r changes.md' "${{ inputs.doc-changelog }}"
+          if [ -n "${{ inputs.doc-changelog }}" ]; then 
+            sed -i '1d' changes.md
+            sed -i '/# Changelog/ r changes.md' "${{ inputs.doc-changelog }}"
+          fi
         shell: bash
 
       - name: Create release commit
