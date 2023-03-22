@@ -5,7 +5,7 @@ on:
   workflow_call:
     inputs:
       old-tag:
-        description: Version to be replaced
+        description: Previous version
         required: true
         type: string
       new-tag:
