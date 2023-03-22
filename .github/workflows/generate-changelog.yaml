@@ -187,8 +187,8 @@ jobs:
           git config --local user.email "${{ secrets.github-email }}"
           git config --local user.name "${{ secrets.github-username }}"
           # Add changes
-          git add "${{ inputs.gh-changelog }}"
-          if [ -n "${{ inputs.doc-changelog }}" ]; then 
+          git add ${{ inputs.gh-changelog }}
+          if [ -n ${{ inputs.doc-changelog }} ]; then 
             git add "${{ inputs.doc-changelog }}"
           fi
           git commit -m "Release v${{ inputs.new-tag }}"
