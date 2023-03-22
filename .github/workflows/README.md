@@ -999,7 +999,7 @@ on:
 jobs:
   call-workflow-passing-data:
     name: Create changelog
-    uses: bakdata/ci-templates/.github/workflows/generate-changelog.yaml@feat/changelog
+    uses: bakdata/ci-templates/.github/workflows/generate-changelog.yaml@main
     with:
       old-tag: "1.0.0"
       new-tag: "1.0.1"
