@@ -60,8 +60,6 @@ jobs:
         run: |
           content=$(cat "${{ inputs.config }}")
           { echo "content<<EOF"; echo "$content"; echo "EOF"; } >> "$GITHUB_OUTPUT"
-          # echo "$content" >> "$GITHUB_OUTPUT"
-          # echo "EOF" >> "$GITHUB_OUTPUT"
         shell: bash
 
   generate-changelog:
@@ -102,8 +100,6 @@ jobs:
 
       - name: Update github Changelog
         run: |
-          ls -al
-          tree .
           # Remove header from changes
           sed -i '1d' changes.md
           # Prepend changes.md after first header
