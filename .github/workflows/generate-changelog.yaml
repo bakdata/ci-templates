@@ -177,6 +177,7 @@ jobs:
           if [ -n "${{ inputs.doc-changelog }}" ]; then 
             sed -i '1d' "${{ inputs.output }}"
             sed -i '/# Changelog/ r "${{ inputs.output }}"' "${{ inputs.doc-changelog }}"
+            echo "!!!!!!!!!!!changed"
           fi
         shell: bash
 
