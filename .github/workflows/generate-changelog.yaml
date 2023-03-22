@@ -118,7 +118,7 @@ jobs:
         run: |
           # Set email and username for github-actions bot
           git config --local user.email "${{ secrets.github-email }}"
-          git config --local user.name "${{ secrets.github-token }}"
+          git config --local user.name "${{ secrets.github-username }}"
           # Add changes
           git add CHANGELOG.md
           git add docs/
