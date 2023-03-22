@@ -973,7 +973,7 @@ Create a `changelog-config.json` file containing the configurations of the chang
 | Name          | Required |           Default Value           |  Type  | Description                                                                                                        |
 | ------------- | :------: | :-------------------------------: | :----: | ------------------------------------------------------------------------------------------------------------------ |
 | old-tag       |    ✅    |                 -                 | string | Previous version                                                                                                   |
-| new-tag       |    ✅    |                 -                 | string | Newest version                                                                                                     |
+| new-tag       |    ✅    |                 -                 | string | New version                                                                                                     |
 | gh-changelog  |    ✅    |                 -                 | string | Path to the Changelog.md file                                                                                      |
 | doc-changelog |    ❌    |                ""                 | string | Path to the documentation changelog (if any exists). If the variable is empty then no further file will be updated |
 | config        |    ❌    | "./.github/changelog-config.json" | string | Path to the changelog config JSON file                                                                             |
