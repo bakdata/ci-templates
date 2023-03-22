@@ -102,6 +102,8 @@ jobs:
 
       - name: Update github Changelog
         run: |
+          ls -al
+          tree .
           # Remove header from changes
           sed -i '1d' changes.md
           # Prepend changes.md after first header
