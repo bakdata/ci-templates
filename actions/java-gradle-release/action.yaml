@@ -59,6 +59,7 @@ runs:
       run: |
         wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
         chmod +x /usr/local/bin/semver
+      shell: bash
 
     - name: Bump version
       id: evaluate-version
@@ -70,6 +71,7 @@ runs:
             release_version=$(semver bump "${{ inputs.release-type }}" "${old_version}")
         fi
         echo "release-version=$release_version" >> "$GITHUB_OUTPUT"
+      shell: bash
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@v1.16.0
