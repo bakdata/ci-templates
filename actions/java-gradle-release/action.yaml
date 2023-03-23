@@ -55,9 +55,12 @@ runs:
       id: evaluate-version
       run: |
         old_version=$(grep "version=" gradle.properties | cut -d "=" -f2)
-        release_version=$(semver bump "${{ inputs.release-type }}" "${old_version}")
-        echo ::set-output "name=old-version::$old_version"
-        echo ::set-output "name=release-version::$release_version"
+        if [[ "${{ inputs.release-type }}" == "patch" ]]; then
+            release_version="${old_version%-*}"
+        else
+            release_version=$(semver bump "${{ inputs.release-type }}" "${old_version}")
+        fi
+        echo "release-version=$release_version" >> "$GITHUB_OUTPUT"
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@v1.16.0
@@ -77,7 +80,8 @@ runs:
 
     - name: Commit and push
       run: |
-        git commit -am "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}" 
+        git add CHANGELOG.md
+        git commit -m "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}" 
         git push
       shell: bash
 
