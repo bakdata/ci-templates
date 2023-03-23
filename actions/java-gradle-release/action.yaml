@@ -31,6 +31,15 @@ inputs:
     description: "Working directory of your Gradle artifacts. (Default is .)"
     required: false
     default: "."
+
+outputs:
+  old-tag:
+    description: "The old version of your artifact."
+    value: ${{ steps.evaluate-version.outputs.oldTag }}
+  release-tag:
+    description: "The bumped version of your package."
+    value: ${{ steps.evaluate-version.outputs.newTag }}  
+
 runs:
   using: "composite"
   steps:
