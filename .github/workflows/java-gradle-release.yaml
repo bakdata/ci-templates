@@ -23,6 +23,11 @@ on:
         required: false
         type: string
         default: "wrapper"
+      gradle-cache:
+        description: "Whether Gradle caching is enabled or not. (Default is true)"
+        required: false
+        type: boolean
+        default: true
       working-directory:
         description: "Working directory of your Gradle artifacts. (Default is .)"
         required: false
@@ -85,11 +90,12 @@ jobs:
           echo ::set-output "name=release-version::$release_version"
 
       - name: Set up Gradle with version ${{ inputs.gradle-version }}
-        uses: bakdata/ci-templates/actions/java-gradle-setup@v1.4.0
+        uses: bakdata/ci-templates/actions/java-gradle-setup@v1.16.0
         with:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
 
       - name: Generate changelog
         run: ./gradlew -Pchangelog.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} --stacktrace --info generateChangelog

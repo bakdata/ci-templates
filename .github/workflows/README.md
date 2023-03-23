@@ -610,13 +610,14 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name              | Required | Default Value |  Type  | Description                                                                                                   |
-| ----------------- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------------------- |
-| docker-publisher  |    ✅    |       -       | string | Publisher to prefix Docker image                                                                              |
-| java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
-| java-version      |    ❌    |      11       | string | Java version to be installed                                                                                  |
-| gradle-version    |    ❌    |    wrapper    | string | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
-| working-directory |    ❌    |       .       | string | Working directory of your Gradle artifacts                                                                    |
+| Name              | Required | Default Value |  Type   | Description                                                                                                   |
+| ----------------- | :------: | :-----------: | :-----: | ------------------------------------------------------------------------------------------------------------- |
+| docker-publisher  |    ✅    |       -       | string  | Publisher to prefix Docker image                                                                              |
+| java-distribution |    ❌    |   microsoft   | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
+| java-version      |    ❌    |      11       | string  | Java version to be installed                                                                                  |
+| gradle-version    |    ❌    |    wrapper    | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
+| gradle-cache      |    ❌    |     true      | boolean | Whether Gradle caching is enabled or not                                                                      |
+| working-directory |    ❌    |       .       | string  | Working directory of your Gradle artifacts                                                                    |
 
 ### Secret Parameters
 
@@ -659,6 +660,7 @@ jobs:
       java-distribution: "microsoft" # (Optional) Default is microsoft
       java-version: "11" # (Optional) Default is 11
       gradle-version: "wrapper" # (Optional) Default is wrapper
+      gradle-cache: false # (Optional) Default is true
       working-directory: "." # (Optional) Default is .
     secrets:
       sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
@@ -695,12 +697,13 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name              | Required | Default Value |  Type  | Description                                                                                                   |
-| ----------------- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------------------- |
-| java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
-| java-version      |    ❌    |      11       | string | Java version to be installed                                                                                  |
-| gradle-version    |    ❌    |    wrapper    | string | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
-| working-directory |    ❌    |       .       | string | Working directory of your Gradle artifacts                                                                    |
+| Name              | Required | Default Value |  Type   | Description                                                                                                   |
+| ----------------- | :------: | :-----------: | :-----: | ------------------------------------------------------------------------------------------------------------- |
+| java-distribution |    ❌    |   microsoft   | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
+| java-version      |    ❌    |      11       | string  | Java version to be installed                                                                                  |
+| gradle-version    |    ❌    |    wrapper    | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
+| gradle-cache      |    ❌    |     true      | boolean | Whether Gradle caching is enabled or not                                                                      |
+| working-directory |    ❌    |       .       | string  | Working directory of your Gradle artifacts                                                                    |
 
 ### Secret Parameters
 
@@ -739,6 +742,7 @@ jobs:
       java-distribution: "microsoft" # (Optional) Default is microsoft
       java-version: "11" # (Optional) Default is 11
       gradle-version: "wrapper" # (Optional) Default is wrapper
+      gradle-cache: false # (Optional) Default is true
       working-directory: "." # (Optional) Default is .
     secrets:
       sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
@@ -775,12 +779,13 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name              | Required | Default Value |  Type  | Description                                                                                                   |
-| ----------------- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------------------- |
-| java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
-| java-version      |    ❌    |      11       | string | Java version to be installed                                                                                  |
-| gradle-version    |    ❌    |    wrapper    | string | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
-| working-directory |    ❌    |       .       | string | Working directory of your Gradle artifacts                                                                    |
+| Name              | Required | Default Value |  Type   | Description                                                                                                   |
+| ----------------- | :------: | :-----------: | :-----: | ------------------------------------------------------------------------------------------------------------- |
+| java-distribution |    ❌    |   microsoft   | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
+| java-version      |    ❌    |      11       | string  | Java version to be installed                                                                                  |
+| gradle-version    |    ❌    |    wrapper    | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
+| gradle-cache      |    ❌    |     true      | boolean | Whether Gradle caching is enabled or not                                                                      |
+| working-directory |    ❌    |       .       | string  | Working directory of your Gradle artifacts                                                                    |
 
 ### Secret Parameters
 
@@ -822,6 +827,7 @@ jobs:
       java-distribution: "microsoft" # (Optional) Default is microsoft
       java-version: "11" # (Optional) Default is 11
       gradle-version: "wrapper" # (Optional) Default is wrapper
+      gradle-cache: false # (Optional) Default is true
       working-directory: "." # (Optional) Default is .
     secrets:
       sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
@@ -856,13 +862,14 @@ This workflow is built from another composite action listed below:
 
 ### Input Parameters
 
-| Name              | Required | Default Value |  Type  | Description                                                                                                   |
-| ----------------- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------------------- |
-| release-type      |    ✅    |     patch     | string | Scope of the release (major, minor or patch)                                                                  |
-| java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
-| java-version      |    ❌    |      11       | string | Java version to be installed                                                                                  |
-| gradle-version    |    ❌    |    wrapper    | string | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
-| working-directory |    ❌    |       .       | string | Working directory of your Gradle artifacts                                                                    |
+| Name              | Required | Default Value |  Type   | Description                                                                                                   |
+| ----------------- | :------: | :-----------: | :-----: | ------------------------------------------------------------------------------------------------------------- |
+| release-type      |    ✅    |     patch     | string  | Scope of the release (major, minor or patch)                                                                  |
+| java-distribution |    ❌    |   microsoft   | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
+| java-version      |    ❌    |      11       | string  | Java version to be installed                                                                                  |
+| gradle-version    |    ❌    |    wrapper    | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
+| gradle-cache      |    ❌    |     true      | boolean | Whether Gradle caching is enabled or not                                                                      |
+| working-directory |    ❌    |       .       | string  | Working directory of your Gradle artifacts                                                                    |
 
 ### Secret Parameters
 
@@ -907,6 +914,7 @@ jobs:
       java-distribution: "microsoft" # (Optional) Default is microsoft
       java-version: "11" # (Optional) Default is 11
       gradle-version: "wrapper" # (Optional) Default is wrapper
+      gradle-cache: false # (Optional) Default is true
       working-directory: "." # (Optional) Default is .
     secrets:
       github-username: "${{ secrets.GH_USERNAME }}"
