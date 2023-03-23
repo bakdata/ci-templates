@@ -88,6 +88,7 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-22.04
+    needs: test
 
     # Map the job outputs to step outputs
     outputs:
