@@ -46,11 +46,8 @@ on:
 
     # Map the workflow outputs to job outputs
     outputs:
-      old-version:
-        description: "The old version."
-        value: ${{ jobs.release.outputs.old-version }}
       release-version:
-        description: "The release version."
+        description: "Bumped version of your project."
         value: ${{ jobs.release.outputs.release-version }}
 
 jobs:
@@ -94,7 +91,6 @@ jobs:
 
     # Map the job outputs to step outputs
     outputs:
-      old-version: ${{ steps.release.outputs.old-version }}
       release-version: ${{ steps.release.outputs.release-version }}
 
     steps:
@@ -102,6 +98,7 @@ jobs:
         id: release
         uses: bakdata/ci-templates/actions/java-gradle-release@feat/java-gradle-release-action
         with:
+          release-type: ${{ inputs.release-type }}
           github-email: ${{ inputs.github-email }}
           github-username: ${{ inputs.github-username }}
           github-token: ${{ inputs.github-token }}

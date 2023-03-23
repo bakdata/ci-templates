@@ -889,7 +889,6 @@ future jobs (e.g., using the `release-version` to create a GitHub release).
 
 | Name            | Description                                  |
 | --------------- | -------------------------------------------- |
-| old-version     | Old version from your gradle.properties file |
 | release-version | Bumped version of your project               |
 
 ### Calling the workflow
