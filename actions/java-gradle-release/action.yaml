@@ -2,6 +2,9 @@ name: "Release Java artifacts"
 description: "Release Java Gradle artifacts on Github"
 
 inputs:
+  release-type:
+    description: "Scope of the release"
+    required: true
   github-email:
     description: "GitHub email for requesting changes from API."
     required: true
