@@ -100,9 +100,9 @@ jobs:
         uses: bakdata/ci-templates/actions/java-gradle-release@feat/java-gradle-release-action
         with:
           release-type: ${{ inputs.release-type }}
-          github-email: ${{ inputs.github-email }}
-          github-username: ${{ inputs.github-username }}
-          github-token: ${{ inputs.github-token }}
+          github-email: ${{ secrets.github-email }}
+          github-username: ${{ secrets.github-username }}
+          github-token: ${{ secrets.github-token }}
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
