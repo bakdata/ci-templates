@@ -75,7 +75,7 @@ jobs:
 
     steps:
       - name: Build
-        uses: bakdata/ci-templates/actions/java-gradle-build@feat/gradle-cache
+        uses: bakdata/ci-templates/actions/java-gradle-build@v1.16.0
         with:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
@@ -90,7 +90,7 @@ jobs:
 
     steps:
       - name: Test
-        uses: bakdata/ci-templates/actions/java-gradle-test@feat/gradle-cache
+        uses: bakdata/ci-templates/actions/java-gradle-test@v1.16.0
         with:
           sonar-token: ${{ secrets.sonar-token }}
           sonar-organization: ${{ secrets.sonar-organization }}
@@ -110,7 +110,7 @@ jobs:
 
     steps:
       - name: Build tarball image
-        uses: bakdata/ci-templates/actions/java-gradle-build-jib@feat/gradle-cache
+        uses: bakdata/ci-templates/actions/java-gradle-build-jib@v1.16.0
         with:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
@@ -125,7 +125,7 @@ jobs:
 
     steps:
       - name: Publish
-        uses: bakdata/ci-templates/actions/java-gradle-publish@feat/gradle-cache
+        uses: bakdata/ci-templates/actions/java-gradle-publish@v1.16.0
         with:
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
@@ -145,7 +145,7 @@ jobs:
 
     steps:
       - name: Publish tarball image
-        uses: bakdata/ci-templates/actions/docker-publish@feat/gradle-cache
+        uses: bakdata/ci-templates/actions/docker-publish@v1.16.0
         with:
           publisher: ${{ inputs.docker-publisher }}
           username: ${{ secrets.docker-username }}
@@ -159,7 +159,7 @@ jobs:
 
     steps:
       - name: Release on Github
-        uses: bakdata/ci-templates/actions/java-gradle-release-github@feat/gradle-cache
+        uses: bakdata/ci-templates/actions/java-gradle-release-github@v1.16.0
         with:
           github-username: ${{ secrets.github-username }}
           github-token: ${{ secrets.github-token }}
