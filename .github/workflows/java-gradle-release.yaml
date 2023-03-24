@@ -62,7 +62,7 @@ jobs:
     steps:
       - name: Release on Github
         id: release
-        uses: bakdata/ci-templates/actions/java-gradle-release@feat/java-gradle-release-action
+        uses: bakdata/ci-templates/actions/java-gradle-release@v1.17.0
         with:
           release-type: ${{ inputs.release-type }}
           github-email: ${{ secrets.github-email }}
