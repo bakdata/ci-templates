@@ -142,7 +142,8 @@ runs:
         if [ -n "${{ inputs.doc-changelog }}" ]; then 
           sed -i '1d' "${{ inputs.output }}"
           sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.doc-changelog }}
-          echo "Changed"
+          echo "!!! Changed"
+          cat "${{ inputs.doc-changelog }}"
         fi
       shell: bash
 
