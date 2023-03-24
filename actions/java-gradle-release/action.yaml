@@ -96,7 +96,6 @@ runs:
 
     - name: Commit and push
       run: |
-        exit 1
         git add CHANGELOG.md
         git commit -m "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}" 
         git push
