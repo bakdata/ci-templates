@@ -171,6 +171,7 @@ jobs:
           # Prepend changes.md after first header
           sed -i '/# Changelog/ r "${{ inputs.output }}"' "${{ inputs.gh-changelog }}"
           cat "${{ inputs.output }}"
+          cat "${{ inputs.gh-changelog }}"
         shell: bash
 
       - name: Update doc Changelog
