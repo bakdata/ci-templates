@@ -190,6 +190,7 @@ jobs:
           # Add changes
           git add ${{ inputs.gh-changelog }}
           if [ -n ${{ inputs.doc-changelog }} ]; then 
+            echo "!!!!!! Not empty!"
             git add "${{ inputs.doc-changelog }}"
           fi
           git commit -m "Release v${{ inputs.new-tag }}"
