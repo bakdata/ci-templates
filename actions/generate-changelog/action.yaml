@@ -131,19 +131,14 @@ runs:
       run: |
         # Remove header from changes
         sed -i '1d' "${{ inputs.output }}"
-        cat "${{ inputs.output }}"
         # Prepend changes.md after first header
         sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
-        cat "${{ inputs.gh-changelog }}"
       shell: bash
 
     - name: Update doc Changelog
       run: |
         if [ -n "${{ inputs.doc-changelog }}" ]; then 
-          sed -i '1d' "${{ inputs.output }}"
           sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.doc-changelog }}
-          echo "!!! Changed"
-          cat "${{ inputs.doc-changelog }}"
         fi
       shell: bash
 
@@ -156,7 +151,6 @@ runs:
         git add ${{ inputs.gh-changelog }}
         if [ -n "${{ inputs.doc-changelog }}" ]; then 
           git add "${{ inputs.doc-changelog }}"
-          echo "!! added"
         fi
         git commit -m "Release v${{ inputs.new-tag }}"
         git push
