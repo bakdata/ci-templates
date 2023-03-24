@@ -90,13 +90,13 @@ runs:
         GITHUB_TOKEN: ${{ inputs.github-token }}
 
     - name: Create release
-      run: ./gradlew -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -PfailOnCommitNeeded=false --stacktrace --info release -x test
+      run: ./gradlew -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -Prelease.failOnCommitNeeded=false --stacktrace --info release -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}    
 
-    - name: Commit and push
-      run: |
-        git add CHANGELOG.md
-        git commit -m "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}" 
-        git push
-      shell: bash
+    # - name: Commit and push
+    #   run: |
+    #     git add CHANGELOG.md
+    #     git commit -m "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}" 
+    #     git push
+    #   shell: bash
