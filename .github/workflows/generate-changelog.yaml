@@ -192,7 +192,7 @@ jobs:
           git config --local user.name "${{ secrets.github-username }}"
           # Add changes
           cat "${{ inputs.gh-changelog }}"
-          git add "${{ inputs.gh-changelog }}"
+          git add ${{ inputs.gh-changelog }}
           if [! -z "${{ inputs.doc-changelog }}" ]; then 
             echo "!!!!!! Not empty!"
             git add "${{ inputs.doc-changelog }}"
