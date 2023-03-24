@@ -88,6 +88,11 @@ runs:
       env:
         GITHUB_USER: ${{ inputs.github-username }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
+    
+    - name: Create release
+      run: ./gradlew -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true --stacktrace --info release -x test
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
 
     - name: Commit and push
       run: |
@@ -95,8 +100,3 @@ runs:
         git commit -m "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}" 
         git push
       shell: bash
-
-    - name: Create release
-      run: ./gradlew -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} --stacktrace --info release -x test
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
