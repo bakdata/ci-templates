@@ -170,8 +170,6 @@ jobs:
           sed -i '1d' "${{ inputs.output }}"
           # Prepend changes.md after first header
           sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
-          cat "${{ inputs.output }}"
-          cat "${{ inputs.gh-changelog }}"
         shell: bash
 
       - name: Update doc Changelog
@@ -179,9 +177,6 @@ jobs:
           if [ ! -z "${{ inputs.doc-changelog }}" ]; then 
             sed -i '1d' "${{ inputs.output }}"
             sed -i '/# Changelog/ r "${{ inputs.output }}"' "${{ inputs.doc-changelog }}"
-            echo "!!!!!!!!!!!changed"
-          else
-            echo "!! Var is empty"
           fi
         shell: bash
 
@@ -194,10 +189,7 @@ jobs:
           cat "${{ inputs.gh-changelog }}"
           git add ${{ inputs.gh-changelog }}
           if [! -z "${{ inputs.doc-changelog }}" ]; then 
-            echo "!!!!!! Not empty!"
             git add "${{ inputs.doc-changelog }}"
-          else
-            echo "!! Var is empty"
           fi
           git commit -m "Release v${{ inputs.new-tag }}"
           git push
