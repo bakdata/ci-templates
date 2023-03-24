@@ -876,16 +876,11 @@ This workflow is built from another composite action listed below:
 For committing and pushing the changes to GitHub you need to define a `github-username`, a `github-email` and
 a `github-token`.
 
-| Name                    | Required | Description                                                    |
-| ----------------------- | :------: | -------------------------------------------------------------- |
-| sonar-token             |    ✅    | Token for Sonarcloud                                           |
-| sonar-organization      |    ✅    | Organization for Sonarcloud                                    |
-| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication |
-| signing-key-id          |    ✅    | Key id for signing the Sonatype publication                    |
-| signing-password        |    ✅    | Password for signing the Sonatype publication                  |
-| github-username         |    ✅    | GitHub username for committing the changes                     |
-| github-email            |    ✅    | GitHub email for committing the changes                        |
-| github-token            |    ✅    | GitHub token for committing the changes                        |
+| Name            | Required | Description                                |
+| --------------- | :------: | ------------------------------------------ |
+| github-username |    ✅    | GitHub username for committing the changes |
+| github-email    |    ✅    | GitHub email for committing the changes    |
+| github-token    |    ✅    | GitHub token for committing the changes    |
 
 ### Outputs
 
