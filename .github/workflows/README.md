@@ -876,11 +876,16 @@ This workflow is built from another composite action listed below:
 For committing and pushing the changes to GitHub you need to define a `github-username`, a `github-email` and
 a `github-token`.
 
-| Name            | Required | Description                                |
-| --------------- | :------: | ------------------------------------------ |
-| github-username |    ✅    | GitHub username for committing the changes |
-| github-email    |    ✅    | GitHub email for committing the changes    |
-| github-token    |    ✅    | GitHub token for committing the changes    |
+| Name                    | Required | Description                                                    |
+| ----------------------- | :------: | -------------------------------------------------------------- |
+| sonar-token             |    ✅    | Token for Sonarcloud                                           |
+| sonar-organization      |    ✅    | Organization for Sonarcloud                                    |
+| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication |
+| signing-key-id          |    ✅    | Key id for signing the Sonatype publication                    |
+| signing-password        |    ✅    | Password for signing the Sonatype publication                  |
+| github-username         |    ✅    | GitHub username for committing the changes                     |
+| github-email            |    ✅    | GitHub email for committing the changes                        |
+| github-token            |    ✅    | GitHub token for committing the changes                        |
 
 ### Outputs
 
@@ -916,6 +921,11 @@ jobs:
       gradle-cache: false # (Optional) Default is true
       working-directory: "." # (Optional) Default is .
     secrets:
+      sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
+      sonar-organization: ${{ secrets.SONARCLOUD_ORGANIZATION }}
+      signing-secret-key-ring: ${{ secrets.SIGNING_SECRET_KEY_RING }}
+      signing-key-id: ${{ secrets.SIGNING_KEY_ID }}
+      signing-password: ${{ secrets.SIGNING_PASSWORD }}
       github-username: "${{ secrets.GH_USERNAME }}"
       github-email: "${{ secrets.GH_EMAIL }}"
       github-token: "${{ secrets.GH_TOKEN }}"
