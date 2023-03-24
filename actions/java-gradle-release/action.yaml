@@ -81,11 +81,6 @@ runs:
         gradle-version: ${{ inputs.gradle-version }}
         gradle-cache: ${{ inputs.gradle-cache }}
 
-    - name: Create release
-      run: ./gradlew -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -PfailOnCommitNeeded=false --stacktrace --info release -x test
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-
     - name: Generate changelog
       run: ./gradlew -Pchangelog.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} --stacktrace --info generateChangelog
       shell: bash
@@ -93,6 +88,11 @@ runs:
       env:
         GITHUB_USER: ${{ inputs.github-username }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
+
+    - name: Create release
+      run: ./gradlew -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -PfailOnCommitNeeded=false --stacktrace --info release -x test
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}    
 
     - name: Commit and push
       run: |
