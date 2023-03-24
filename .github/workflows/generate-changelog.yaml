@@ -189,9 +189,11 @@ jobs:
           git config --local user.name "${{ secrets.github-username }}"
           # Add changes
           git add ${{ inputs.gh-changelog }}
-          if [ -n ${{ inputs.doc-changelog }} ]; then 
+          if [! -z "${{ inputs.doc-changelog }}" ]; then 
             echo "!!!!!! Not empty!"
             git add "${{ inputs.doc-changelog }}"
+          else
+            echo "!! Var is empty"
           fi
           git commit -m "Release v${{ inputs.new-tag }}"
           git push
