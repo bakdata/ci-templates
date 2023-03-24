@@ -174,7 +174,7 @@ jobs:
 
       - name: Update doc Changelog
         run: |
-          if [ ! -z "${{ inputs.doc-changelog }}" ]; then 
+          if [ -n "${{ inputs.doc-changelog }}" ]; then 
             sed -i '1d' "${{ inputs.output }}"
             sed -i '/# Changelog/ r "${{ inputs.output }}"' "${{ inputs.doc-changelog }}"
           fi
@@ -188,7 +188,7 @@ jobs:
           # Add changes
           cat "${{ inputs.gh-changelog }}"
           git add ${{ inputs.gh-changelog }}
-          if [ ! -z "${{ inputs.doc-changelog }}" ]; then 
+          if [ -n "${{ inputs.doc-changelog }}" ]; then 
             git add "${{ inputs.doc-changelog }}"
           fi
           git commit -m "Release v${{ inputs.new-tag }}"
