@@ -40,7 +40,7 @@ steps:
   - uses: actions/checkout@v3
   # generate changelog
   - name: Create changelog
-    uses: bakdata/ci-templates/actions/generate-changelog/action.yaml@main
+    uses: bakdata/ci-templates/actions/generate-changelog@main
     with:
       old-tag: "1.0.0"
       new-tag: "1.0.1"

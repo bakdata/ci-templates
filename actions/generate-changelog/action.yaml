@@ -89,7 +89,7 @@ runs:
       with:
         ref: ${{ github.event.repository.default_branch }}
         # required for bypassing status checks when pushing
-        token: "${{ secrets.github-token }}"
+        token: "${{ inputs.github-token }}"
 
     - name: Read changelog config
       id: read-config
@@ -104,12 +104,12 @@ runs:
       with:
         ref: ${{ github.event.repository.default_branch }}
         # required for bypassing status checks when pushing
-        token: "${{ secrets.github-token }}"
+        token: "${{ inputs.github-token }}"
 
     - name: Generate Changelog
       uses: heinrichreimer/github-changelog-generator-action@v2.3
       with:
-        token: "${{ secrets.github-token }}"
+        token: "${{ inputs.github-token }}"
         sinceTag: "${{ inputs.old-tag }}"
         output: "${{ inputs.output }}"
         stripGeneratorNotice: "true"
@@ -146,8 +146,8 @@ runs:
     - name: Create release commit
       run: |
         # Set email and username for github-actions bot
-        git config --local user.email "${{ secrets.github-email }}"
-        git config --local user.name "${{ secrets.github-username }}"
+        git config --local user.email "${{ inputs.github-email }}"
+        git config --local user.name "${{ inputs.github-username }}"
         # Add changes
         cat "${{ inputs.gh-changelog }}"
         git add ${{ inputs.gh-changelog }}
