@@ -921,11 +921,6 @@ jobs:
       gradle-cache: false # (Optional) Default is true
       working-directory: "." # (Optional) Default is .
     secrets:
-      sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
-      sonar-organization: ${{ secrets.SONARCLOUD_ORGANIZATION }}
-      signing-secret-key-ring: ${{ secrets.SIGNING_SECRET_KEY_RING }}
-      signing-key-id: ${{ secrets.SIGNING_KEY_ID }}
-      signing-password: ${{ secrets.SIGNING_PASSWORD }}
       github-username: "${{ secrets.GH_USERNAME }}"
       github-email: "${{ secrets.GH_EMAIL }}"
       github-token: "${{ secrets.GH_TOKEN }}"
