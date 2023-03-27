@@ -93,7 +93,6 @@ runs:
     #     content=$(cat "${{ inputs.config }}")
     #     { echo "content<<EOF"; echo "$content"; echo "EOF"; } >> "$GITHUB_OUTPUT"
     #   shell: bash
-
     # - name: Generate Changelog
     #   uses: heinrichreimer/github-changelog-generator-action@v2.3
     #   with:
