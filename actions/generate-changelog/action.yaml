@@ -82,6 +82,14 @@ inputs:
   #   description: "Run verbosely"
   #   required: false
   #   default: "true"
+  owner:
+    description: "Name of the output file for the generate changelog step"
+    required: false
+    default: "changes.md"
+  repo:
+    description: "Name of the output file for the generate changelog step"
+    required: false
+    default: "changes.md"
 
 runs:
   using: "composite"
@@ -130,6 +138,8 @@ runs:
         configuration: "${{ inputs.config }}"
         fromTag: "${{ inputs.old-tag }}"
         toTag: "${{ inputs.new-tag }}"
+        owner: "${{ inputs.owner }}"
+        repo: "${{ inputs.repo }}"
         outputFile: "${{ inputs.output }}"
 
     - name: Update github Changelog
