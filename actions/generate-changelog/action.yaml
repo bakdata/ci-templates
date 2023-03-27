@@ -2,18 +2,18 @@ name: "Generate changelog"
 description: "Generate changelog after release"
 inputs:
   # required inputs
-  gh-changelog:
-    description: Path to the Changelog.md file
-    required: true
-  github-email:
-    description: "The GitHub email for committing the changes."
-    required: true
+  # gh-changelog:
+  #   description: Path to the Changelog.md file
+  #   required: true
+  # github-email:
+  #   description: "The GitHub email for committing the changes."
+  #   required: true
   github-token:
     description: "The GitHub token for committing the changes."
     required: true
-  github-username:
-    description: "The GitHub username for committing the changes."
-    required: true
+  # github-username:
+  #   description: "The GitHub username for committing the changes."
+  #   required: true
   new-tag:
     description: Version after bump
     required: true
@@ -22,77 +22,77 @@ inputs:
     required: true
 
   # unrequired inputs
-  bugLabels:
-    description: "Issues with the specified labels will be added to Fixed bugs section"
-    required: false
-    default: "type/bug"
-  compareLink:
-    description: "Include compare link (Full Changelog) between older version and newer version"
-    required: false
-    default: "true"
-  config:
-    description: Path to the changelog config JSON file
-    required: false
-    default: "./.github/changelog-config.json"
-  doc-changelog:
-    description: Path to the documentation changelog (if any exists)
-    required: false
-    default: ""
-  enhancementLabels:
-    description: "Issues with the specified labels will be added to Implemented enhancements section"
-    required: false
-    default: "type/enhancement"
-  httpCache:
-    description: "Use HTTP Cache to cache GitHub API requests (useful for large repos)"
-    required: false
-    default: "true"
-  issues:
-    description: "Include closed issues in changelog"
-    required: false
-    default: "true"
-  issuesLabel:
-    description: "Set up custom label for closed-issues section"
-    required: false
-    default: "**Miscellaneous:**"
-  issuesWoLabels:
-    description: "Include closed issues without labels in changelog"
-    required: false
-    default: "true"
-  output:
-    description: "Name of the output file for the generate changelog step"
-    required: false
-    default: "changes.md"
-  prWoLabels:
-    description: "Include pull requests without labels in changelog"
-    required: false
-    default: "false"
-  pullRequests:
-    description: "Include pull-requests in changelog"
-    required: false
-    default: "false"
-  stripGeneratorNotice:
-    description: "Strip generator notice"
-    required: false
-    default: "false"
-  unreleased:
-    description: "Add to log unreleased closed issues"
-    required: false
-    default: "true"
-  verbose:
-    description: "Run verbosely"
-    required: false
-    default: "true"
+  # bugLabels:
+  #   description: "Issues with the specified labels will be added to Fixed bugs section"
+  #   required: false
+  #   default: "type/bug"
+  # compareLink:
+  #   description: "Include compare link (Full Changelog) between older version and newer version"
+  #   required: false
+  #   default: "true"
+  # config:
+  #   description: Path to the changelog config JSON file
+  #   required: false
+  #   default: "./.github/changelog-config.json"
+  # doc-changelog:
+  #   description: Path to the documentation changelog (if any exists)
+  #   required: false
+  #   default: ""
+  # enhancementLabels:
+  #   description: "Issues with the specified labels will be added to Implemented enhancements section"
+  #   required: false
+  #   default: "type/enhancement"
+  # httpCache:
+  #   description: "Use HTTP Cache to cache GitHub API requests (useful for large repos)"
+  #   required: false
+  #   default: "true"
+  # issues:
+  #   description: "Include closed issues in changelog"
+  #   required: false
+  #   default: "true"
+  # issuesLabel:
+  #   description: "Set up custom label for closed-issues section"
+  #   required: false
+  #   default: "**Miscellaneous:**"
+  # issuesWoLabels:
+  #   description: "Include closed issues without labels in changelog"
+  #   required: false
+  #   default: "true"
+  # output:
+  #   description: "Name of the output file for the generate changelog step"
+  #   required: false
+  #   default: "changes.md"
+  # prWoLabels:
+  #   description: "Include pull requests without labels in changelog"
+  #   required: false
+  #   default: "false"
+  # pullRequests:
+  #   description: "Include pull-requests in changelog"
+  #   required: false
+  #   default: "false"
+  # stripGeneratorNotice:
+  #   description: "Strip generator notice"
+  #   required: false
+  #   default: "false"
+  # unreleased:
+  #   description: "Add to log unreleased closed issues"
+  #   required: false
+  #   default: "true"
+  # verbose:
+  #   description: "Run verbosely"
+  #   required: false
+  #   default: "true"
 
 runs:
   using: "composite"
   steps:
-    - name: Read changelog config
-      id: read-config
-      # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
-      run: |
-        content=$(cat "${{ inputs.config }}")
-        { echo "content<<EOF"; echo "$content"; echo "EOF"; } >> "$GITHUB_OUTPUT"
-      shell: bash
+    # - name: Read changelog config
+    #   id: read-config
+    #   # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
+    #   run: |
+    #     content=$(cat "${{ inputs.config }}")
+    #     { echo "content<<EOF"; echo "$content"; echo "EOF"; } >> "$GITHUB_OUTPUT"
+    #   shell: bash
 
     # - name: Generate Changelog
     #   uses: heinrichreimer/github-changelog-generator-action@v2.3
@@ -139,16 +139,3 @@ runs:
     #     fi
     #   shell: bash
 
-    # - name: Create release commit
-    #   run: |
-    #     # Set email and username for github-actions bot
-    #     git config --local user.email "${{ inputs.github-email }}"
-    #     git config --local user.name "${{ inputs.github-username }}"
-    #     # Add changes
-    #     git add ${{ inputs.gh-changelog }}
-    #     if [ -n "${{ inputs.doc-changelog }}" ]; then 
-    #       git add "${{ inputs.doc-changelog }}"
-    #     fi
-    #     git commit -m "Release v${{ inputs.new-tag }}"
-    #     git push
-    #   shell: bash
