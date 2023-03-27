@@ -46,11 +46,8 @@ on:
 
     # Map the workflow outputs to job outputs
     outputs:
-      old-version:
-        description: "The old version."
-        value: ${{ jobs.release.outputs.old-version }}
       release-version:
-        description: "The release version."
+        description: "Bumped version of your project."
         value: ${{ jobs.release.outputs.release-version }}
 
 jobs:
@@ -60,58 +57,19 @@ jobs:
 
     # Map the job outputs to step outputs
     outputs:
-      old-version: ${{ steps.evaluate-version.outputs.old-version }}
-      release-version: ${{ steps.evaluate-version.outputs.release-version }}
+      release-version: ${{ steps.release.outputs.release-version }}
 
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
+      - name: Release on Github
+        id: release
+        uses: bakdata/ci-templates/actions/java-gradle-release@v1.17.0
         with:
-          fetch-depth: 0
-          token: ${{ secrets.github-token }}
-
-      - name: Setup git
-        run: |
-          git config user.email ${{ secrets.github-email }}
-          git config user.name ${{ secrets.github-username }}
-        shell: bash
-
-      - name: Setup semver
-        run: |
-          wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
-          chmod +x /usr/local/bin/semver
-
-      - name: Bump version
-        id: evaluate-version
-        run: |
-          old_version=$(grep "version=" gradle.properties | cut -d "=" -f2)
-          release_version=$(semver bump "${{ inputs.release-type }}" "${old_version}")
-          echo ::set-output "name=old-version::$old_version"
-          echo ::set-output "name=release-version::$release_version"
-
-      - name: Set up Gradle with version ${{ inputs.gradle-version }}
-        uses: bakdata/ci-templates/actions/java-gradle-setup@v1.16.0
-        with:
+          release-type: ${{ inputs.release-type }}
+          github-email: ${{ secrets.github-email }}
+          github-username: ${{ secrets.github-username }}
+          github-token: ${{ secrets.github-token }}
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
-
-      - name: Generate changelog
-        run: ./gradlew -Pchangelog.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} --stacktrace --info generateChangelog
-        shell: bash
-        working-directory: ${{ inputs.working-directory }}
-        env:
-          GITHUB_USER: ${{ secrets.github-username }}
-          GITHUB_TOKEN: ${{ secrets.github-token }}
-
-      - name: Commit and push
-        run: |
-          git commit -am "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}" 
-          git push
-        shell: bash
-
-      - name: Create release
-        run: ./gradlew -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} --stacktrace --info release -x test
-        shell: bash
-        working-directory: ${{ inputs.working-directory }}
+          working-directory: ${{ inputs.working-directory }}

@@ -887,10 +887,9 @@ a `github-token`.
 This workflow outputs two variables: The `old-version` and the `release-version`. These variables can be used in the
 future jobs (e.g., using the `release-version` to create a GitHub release).
 
-| Name            | Description                                  |
-| --------------- | -------------------------------------------- |
-| old-version     | Old version from your gradle.properties file |
-| release-version | Bumped version of your project               |
+| Name            | Description                    |
+| --------------- | ------------------------------ |
+| release-version | Bumped version of your project |
 
 ### Calling the workflow
 

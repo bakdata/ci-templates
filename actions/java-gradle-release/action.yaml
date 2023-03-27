@@ -1,0 +1,102 @@
+name: "Release Java artifacts"
+description: "Release Java Gradle artifacts on Github"
+
+inputs:
+  release-type:
+    description: "Scope of the release"
+    required: true
+  github-email:
+    description: "GitHub email for requesting changes from API."
+    required: true
+  github-username:
+    description: "GitHub username for requesting changes from API."
+    required: true
+  github-token:
+    description: "GitHub token for requesting changes from API."
+    required: true
+  java-distribution:
+    description: "Java distribution to be installed. (Default is microsoft)"
+    required: false
+    default: "microsoft"
+  java-version:
+    description: "Java version to be installed. (Default is 11)"
+    required: false
+    default: "11"
+  gradle-version:
+    description: "Gradle version to be installed. (Default is wrapper)"
+    required: false
+    default: "wrapper"
+  gradle-cache:
+    description: "Whether Gradle caching is enabled or not. (Default is true)"
+    required: false
+    default: true
+  working-directory:
+    description: "Working directory of your Gradle artifacts. (Default is .)"
+    required: false
+    default: "."
+
+outputs:
+  release-version:
+    description: "The bumped version of your release."
+    value: ${{ steps.evaluate-version.outputs.release-version }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.github-token }}
+
+    - name: Setup git
+      run: |
+        git config user.email ${{ inputs.github-email }}
+        git config user.name ${{ inputs.github-username }}
+      shell: bash
+
+    - name: Setup semver
+      run: |
+        wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
+        chmod +x /usr/local/bin/semver
+      shell: bash
+
+    - name: Bump version
+      id: evaluate-version
+      run: |
+        old_version=$(grep "version=" gradle.properties | cut -d "=" -f2)
+        if [[ "${{ inputs.release-type }}" == "patch" ]]; then
+            release_version="${old_version%-*}"
+        else
+            release_version=$(semver bump "${{ inputs.release-type }}" "${old_version}")
+        fi
+        echo "release-version=$release_version" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: Set up Gradle with version ${{ inputs.gradle-version }}
+      uses: bakdata/ci-templates/actions/java-gradle-setup@v1.16.0
+      with:
+        java-distribution: ${{ inputs.java-distribution }}
+        java-version: ${{ inputs.java-version }}
+        gradle-version: ${{ inputs.gradle-version }}
+        gradle-cache: ${{ inputs.gradle-cache }}
+
+    - name: Create release
+      run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}   
+
+    - name: Generate changelog
+      run: ./gradlew -Pchangelog.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} --stacktrace --info generateChangelog
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        GITHUB_USER: ${{ inputs.github-username }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+
+    - name: Commit and push
+      run: |
+        git add CHANGELOG.md
+        git commit -m "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}" 
+        git push --follow-tags origin ${{ github.event.repository.default_branch }}
+      shell: bash
