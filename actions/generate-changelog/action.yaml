@@ -147,4 +147,3 @@ runs:
     #       sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.doc-changelog }}
     #     fi
     #   shell: bash
-
