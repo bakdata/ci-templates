@@ -120,8 +120,9 @@ runs:
       uses: requarks/changelog-action@v1.7.0
       with:
         token: "${{ inputs.github-token }}"
-        fromTag: "${{ inputs.new-tag }}"
-        toTag: "${{ inputs.old-tag }}"
+        # fromTag: "${{ inputs.new-tag }}"
+        # toTag: "${{ inputs.old-tag }}"
+        tag: "${{ inputs.new-tag }}"
 
 
     # - name: Update github Changelog
