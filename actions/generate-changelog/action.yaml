@@ -130,7 +130,7 @@ runs:
         configuration: "${{ inputs.config }}"
         fromTag: "${{ inputs.old-tag }}"
         toTag: "${{ inputs.new-tag }}"
-        writeToFile: "${{ inputs.output }}"
+        outputFile: "${{ inputs.output }}"
 
     - name: Update github Changelog
       run: |
