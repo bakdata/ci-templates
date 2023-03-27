@@ -2,9 +2,9 @@ name: "Generate changelog"
 description: "Generate changelog after release"
 inputs:
   # required inputs
-  # gh-changelog:
-  #   description: Path to the Changelog.md file
-  #   required: true
+  gh-changelog:
+    description: Path to the Changelog.md file
+    required: true
   # github-email:
   #   description: "The GitHub email for committing the changes."
   #   required: true
@@ -30,10 +30,10 @@ inputs:
   #   description: "Include compare link (Full Changelog) between older version and newer version"
   #   required: false
   #   default: "true"
-  # config:
-  #   description: Path to the changelog config JSON file
-  #   required: false
-  #   default: "./.github/changelog-config.json"
+  config:
+    description: Path to the changelog config JSON file
+    required: false
+    default: "./.github/changelog-config.json"
   # doc-changelog:
   #   description: Path to the documentation changelog (if any exists)
   #   required: false
@@ -58,10 +58,10 @@ inputs:
   #   description: "Include closed issues without labels in changelog"
   #   required: false
   #   default: "true"
-  # output:
-  #   description: "Name of the output file for the generate changelog step"
-  #   required: false
-  #   default: "changes.md"
+  output:
+    description: "Name of the output file for the generate changelog step"
+    required: false
+    default: "changes.md"
   # prWoLabels:
   #   description: "Include pull requests without labels in changelog"
   #   required: false
@@ -115,24 +115,31 @@ runs:
     #     addSections: |
     #       ${{ steps.read-config.outputs.content }}
       
-    - name: Update CHANGELOG
-      id: changelog
-      uses: requarks/changelog-action@v1.7.0
+    # - name: Update CHANGELOG
+    #   id: changelog
+    #   uses: requarks/changelog-action@v1.7.0
+    #   with:
+    #     token: "${{ inputs.github-token }}"
+    #     tag: "${{ inputs.new-tag }}"
+    #     includeInvalidCommits: true
+
+    - name: "Create changelog"
+      id: build_changelog
+      uses: mikepenz/release-changelog-builder-action@{latest-release}
       with:
         token: "${{ inputs.github-token }}"
-        # fromTag: "${{ inputs.new-tag }}"
-        # toTag: "${{ inputs.old-tag }}"
-        tag: "${{ inputs.new-tag }}"
-        includeInvalidCommits: true
+        configuration: "${{ inputs.config }}"
+        fromTag: "${{ inputs.old-tag }}"
+        toTag: "${{ inputs.new-tag }}"
+        writeToFile: "${{ inputs.output }}"
 
-
-    # - name: Update github Changelog
-    #   run: |
-    #     # Remove header from changes
-    #     sed -i '1d' "${{ inputs.output }}"
-    #     # Prepend changes.md after first header
-    #     sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
-    #   shell: bash
+    - name: Update github Changelog
+      run: |
+        # Remove header from changes
+        sed -i '1d' "${{ inputs.output }}"
+        # Prepend changes.md after first header
+        sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
+      shell: bash
 
     # - name: Update doc Changelog
     #   run: |
