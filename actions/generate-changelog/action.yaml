@@ -114,7 +114,7 @@ runs:
     #     verbose: "${{ inputs.verbose }}"
     #     addSections: |
     #       ${{ steps.read-config.outputs.content }}
-      
+
     # - name: Update CHANGELOG
     #   id: changelog
     #   uses: requarks/changelog-action@v1.7.0
@@ -143,7 +143,7 @@ runs:
 
     # - name: Update doc Changelog
     #   run: |
-    #     if [ -n "${{ inputs.doc-changelog }}" ]; then 
+    #     if [ -n "${{ inputs.doc-changelog }}" ]; then
     #       sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.doc-changelog }}
     #     fi
     #   shell: bash
