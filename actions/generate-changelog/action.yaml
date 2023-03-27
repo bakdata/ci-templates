@@ -1,6 +1,7 @@
 name: "Generate changelog"
 description: "Generate changelog after release"
 inputs:
+  # required inputs
   gh-changelog:
     description: Path to the Changelog.md file
     required: true
@@ -20,6 +21,7 @@ inputs:
     description: Previous version
     required: true
 
+  # unrequired inputs
   bugLabels:
     description: "Issues with the specified labels will be added to Fixed bugs section"
     required: false
@@ -92,52 +94,61 @@ runs:
         { echo "content<<EOF"; echo "$content"; echo "EOF"; } >> "$GITHUB_OUTPUT"
       shell: bash
 
-    - name: Generate Changelog
-      uses: heinrichreimer/github-changelog-generator-action@v2.3
+    # - name: Generate Changelog
+    #   uses: heinrichreimer/github-changelog-generator-action@v2.3
+    #   with:
+    #     token: "${{ inputs.github-token }}"
+    #     sinceTag: "${{ inputs.old-tag }}"
+    #     output: "${{ inputs.output }}"
+    #     stripGeneratorNotice: "true"
+    #     issues: "${{ inputs.issues }}"
+    #     unreleased: "${{ inputs.unreleased }}"
+    #     pullRequests: "${{ inputs.pullRequests }}"
+    #     compareLink: "${{ inputs.compareLink }}"
+    #     issuesWoLabels: "${{ inputs.issuesWoLabels }}"
+    #     futureRelease: "${{ inputs.new-tag }}"
+    #     issuesLabel: "${{ inputs.issuesLabel }}"
+    #     bugLabels: "${{ inputs.bugLabels }}"
+    #     enhancementLabels: "${{ inputs.enhancementLabels }}"
+    #     httpCache: "${{ inputs.httpCache }}"
+    #     verbose: "${{ inputs.verbose }}"
+    #     addSections: |
+    #       ${{ steps.read-config.outputs.content }}
+      
+    - name: Update CHANGELOG
+      id: changelog
+      uses: requarks/changelog-action@v1.7.0
       with:
         token: "${{ inputs.github-token }}"
-        sinceTag: "${{ inputs.old-tag }}"
-        output: "${{ inputs.output }}"
-        stripGeneratorNotice: "true"
-        issues: "${{ inputs.issues }}"
-        unreleased: "${{ inputs.unreleased }}"
-        pullRequests: "${{ inputs.pullRequests }}"
-        compareLink: "${{ inputs.compareLink }}"
-        issuesWoLabels: "${{ inputs.issuesWoLabels }}"
-        futureRelease: "${{ inputs.new-tag }}"
-        issuesLabel: "${{ inputs.issuesLabel }}"
-        bugLabels: "${{ inputs.bugLabels }}"
-        enhancementLabels: "${{ inputs.enhancementLabels }}"
-        httpCache: "${{ inputs.httpCache }}"
-        verbose: "${{ inputs.verbose }}"
-        addSections: |
-          ${{ steps.read-config.outputs.content }}
+        fromTag: "${{ inputs.old-tag }}"
+        toTag: "${{ inputs.new-tag }}"
 
-    - name: Update github Changelog
-      run: |
-        # Remove header from changes
-        sed -i '1d' "${{ inputs.output }}"
-        # Prepend changes.md after first header
-        sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
-      shell: bash
 
-    - name: Update doc Changelog
-      run: |
-        if [ -n "${{ inputs.doc-changelog }}" ]; then 
-          sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.doc-changelog }}
-        fi
-      shell: bash
+    # - name: Update github Changelog
+    #   run: |
+    #     # Remove header from changes
+    #     sed -i '1d' "${{ inputs.output }}"
+    #     # Prepend changes.md after first header
+    #     sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
+    #   shell: bash
 
-    - name: Create release commit
-      run: |
-        # Set email and username for github-actions bot
-        git config --local user.email "${{ inputs.github-email }}"
-        git config --local user.name "${{ inputs.github-username }}"
-        # Add changes
-        git add ${{ inputs.gh-changelog }}
-        if [ -n "${{ inputs.doc-changelog }}" ]; then 
-          git add "${{ inputs.doc-changelog }}"
-        fi
-        git commit -m "Release v${{ inputs.new-tag }}"
-        git push
-      shell: bash
+    # - name: Update doc Changelog
+    #   run: |
+    #     if [ -n "${{ inputs.doc-changelog }}" ]; then 
+    #       sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.doc-changelog }}
+    #     fi
+    #   shell: bash
+
+    # - name: Create release commit
+    #   run: |
+    #     # Set email and username for github-actions bot
+    #     git config --local user.email "${{ inputs.github-email }}"
+    #     git config --local user.name "${{ inputs.github-username }}"
+    #     # Add changes
+    #     git add ${{ inputs.gh-changelog }}
+    #     if [ -n "${{ inputs.doc-changelog }}" ]; then 
+    #       git add "${{ inputs.doc-changelog }}"
+    #     fi
+    #     git commit -m "Release v${{ inputs.new-tag }}"
+    #     git push
+    #   shell: bash
