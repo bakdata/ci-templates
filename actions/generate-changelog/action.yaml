@@ -83,13 +83,21 @@ inputs:
   #   required: false
   #   default: "true"
   owner:
-    description: "Name of the output file for the generate changelog step"
+    description: "Owner of the repository"
     required: false
-    default: "changes.md"
   repo:
-    description: "Name of the output file for the generate changelog step"
+    description: "Repository name"
     required: false
-    default: "changes.md"
+  fetchReviewers:
+    description: "Will enable fetching the users/reviewers who approved the PR"
+    required: false
+    default: "false"
+
+  fetchReleaseInformation:
+    description: "Will enable fetching additional release information from tags."
+    required: false
+    default: "false"
+
 
 runs:
   using: "composite"
@@ -138,9 +146,12 @@ runs:
         configuration: "${{ inputs.config }}"
         fromTag: "${{ inputs.old-tag }}"
         toTag: "${{ inputs.new-tag }}"
+        outputFile: "${{ inputs.output }}"
         owner: "${{ inputs.owner }}"
         repo: "${{ inputs.repo }}"
-        outputFile: "${{ inputs.output }}"
+        fetchReviewers: "${{ inputs.fetchReviewers }}"
+        fetchReleaseInformation: "${{ inputs.fetchReleaseInformation }}"
+
 
     - name: Update github Changelog
       run: |
