@@ -164,7 +164,7 @@ runs:
         
         echo "=========================="
         cat  ${{ inputs.output }}
-        sed -i '/# Changelog/ r tmp.md' ${{ inputs.gh-changelog }}
+        sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
       shell: bash
 
     # - name: Update doc Changelog
