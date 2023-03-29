@@ -928,12 +928,6 @@ This workflow leverages your Terraform project to provision GCP resources.
 
 Create a service account and save its key as a GitHub secret so you can provide it to the variable `google-credentials`.
 
-### Dependencies
-
-This workflow is built from multiple composite actions listed below:
-
-- [action-github-changelog-generator](https://github.com/heinrichreimer/action-github-changelog-generator)
-
 ### Input Parameters
 
 | Name              | Required | Default Value |  Type  | Description                                  |
