@@ -16,10 +16,7 @@ Create a file called `changelog-config.json` that contains the changelog configu
 {
   "categories":
     [
-      {
-        "title": "## 🚀 Features",
-        "labels": ["feature", "feat", "enhancement"],
-      },
+      { "title": "## 🚀 Features", "labels": ["feature", "feat"] },
       { "title": "## 🐛 Fixes", "labels": ["fix", "bug"] },
       { "title": "## 🧪 Dependencies", "labels": ["dependency"] },
     ],
