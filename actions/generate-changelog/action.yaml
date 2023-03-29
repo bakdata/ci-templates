@@ -155,13 +155,13 @@ runs:
 
     - name: Update github Changelog
       run: |
-        # Remove header from changes
-        # sed -i '1d' "${{ inputs.output }}"
         # Prepend changes.md after first header
         echo "=========================="
         cat  ${{ inputs.output }}
         echo "=========================="
-        sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
+        # Reformat changes.md and add it to the existing changelog
+        sed -i 's/##/###/g' ${{ inputs.output }} > tmp.md
+        sed -i '/# Changelog/ r tmp.md' ${{ inputs.gh-changelog }}
       shell: bash
 
     # - name: Update doc Changelog
