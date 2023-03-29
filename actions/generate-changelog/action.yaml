@@ -160,10 +160,11 @@ runs:
         cat  ${{ inputs.output }}
         echo "=========================="
         # Reformat changes.md and add it to the existing changelog
-        sed -i 's/##/###/g' ${{ inputs.output }}
+        sed -i 's/# /## /g' ${{ inputs.output }}
         
-        echo "=========================="
+        echo "+++++++++++++++++++++++"
         cat  ${{ inputs.output }}
+        echo "+++++++++++++++++++++++"
         sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
       shell: bash
 
