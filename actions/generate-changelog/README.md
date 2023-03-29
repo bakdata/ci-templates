@@ -14,21 +14,30 @@ Create a file called `changelog-config.json` that contains the changelog configu
 
 ```yaml
 {
-  "categories":
-    [
-      {
-        "title": "## 🚀 Features",
-        "labels": ["feature", "feat", "enhancement"],
-      },
-      { "title": "## 🐛 Fixes", "labels": ["fix", "bug"] },
-      { "title": "## 🧪 Dependencies", "labels": ["dependency"] },
-    ],
+  "categories": [
+    {
+      "title": "## 🚀 Features",
+      "labels": ["feature", "feat", "enhancement"]
+    },
+    {
+      "title": "## 🐛 Fixes",
+      "labels": ["fix","bug"]
+    },
+    {
+      "title": "## 🧪 Dependencies",
+      "labels": ["dependency"]
+    }
+  ],
   "ignore_labels": ["ignore"],
-  "sort": { "order": "ASC", "on_property": "mergedAt" },
+  "sort": {
+    "order": "ASC",
+    "on_property": "mergedAt"
+  },
   "template": "# [${{TO_TAG}}](https://github.com/<myorganization>/<myrepository>/releases/tag/${{TO_TAG}}) - ${{TO_TAG_DATE}}\n\n${{CHANGELOG}}\n<details>\n<summary>Uncategorized</summary>\n\n${{UNCATEGORIZED}}\n</details>\n",
   "pr_template": "- ${{TITLE}}\n   - PR: ${{URL}}\n   - Assignees: ${{ASSIGNEES[*]}}\n   - Reviewers: ${{REVIEWERS[*]}}\n   - Approvers: ${{APPROVERS[*]}}",
-  "empty_template": "- no changes!",
+  "empty_template": "- no changes!"
 }
+
 ```
 
 Make sure to update the link `https://github.com/<myorganization>/<myrepository>/releases/tag/${{TO_TAG}}` accordingly.
