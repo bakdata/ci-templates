@@ -1,6 +1,6 @@
 # Generate Changelog
 
-This action will allow for the automatic generation of a changelog. The changelog template needs to be configured using a `changelog-config.json`. Depending on whether there is other documentation besides the GitHub changelog or not, one or two `Changelog` files will be updated.
+This action will allow for the automatic generation of a changelog. The changelog template needs to be configured using a `changelog-config.json`. This action will then create a changelog for the new release and update the changelog file in your repository.
 
 ## Dependencies
 
