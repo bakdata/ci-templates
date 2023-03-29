@@ -2,18 +2,12 @@ name: "Generate changelog"
 description: "Generate changelog after release"
 inputs:
   # required inputs
-  gh-changelog:
+  changelog-file:
     description: Path to the Changelog.md file
     required: true
-  # github-email:
-  #   description: "The GitHub email for committing the changes."
-  #   required: true
   github-token:
     description: "The GitHub token for committing the changes."
     required: true
-  # github-username:
-  #   description: "The GitHub username for committing the changes."
-  #   required: true
   new-tag:
     description: Version after bump
     required: true
@@ -22,122 +16,30 @@ inputs:
     required: true
 
   # unrequired inputs
-  # bugLabels:
-  #   description: "Issues with the specified labels will be added to Fixed bugs section"
-  #   required: false
-  #   default: "type/bug"
-  # compareLink:
-  #   description: "Include compare link (Full Changelog) between older version and newer version"
-  #   required: false
-  #   default: "true"
   config:
     description: Path to the changelog config JSON file
     required: false
     default: "./.github/changelog-config.json"
-  # doc-changelog:
-  #   description: Path to the documentation changelog (if any exists)
-  #   required: false
-  #   default: ""
-  # enhancementLabels:
-  #   description: "Issues with the specified labels will be added to Implemented enhancements section"
-  #   required: false
-  #   default: "type/enhancement"
-  # httpCache:
-  #   description: "Use HTTP Cache to cache GitHub API requests (useful for large repos)"
-  #   required: false
-  #   default: "true"
-  # issues:
-  #   description: "Include closed issues in changelog"
-  #   required: false
-  #   default: "true"
-  # issuesLabel:
-  #   description: "Set up custom label for closed-issues section"
-  #   required: false
-  #   default: "**Miscellaneous:**"
-  # issuesWoLabels:
-  #   description: "Include closed issues without labels in changelog"
-  #   required: false
-  #   default: "true"
   output:
     description: "Name of the output file for the generate changelog step"
     required: false
     default: "changes.md"
-  # prWoLabels:
-  #   description: "Include pull requests without labels in changelog"
-  #   required: false
-  #   default: "false"
-  # pullRequests:
-  #   description: "Include pull-requests in changelog"
-  #   required: false
-  #   default: "false"
-  # stripGeneratorNotice:
-  #   description: "Strip generator notice"
-  #   required: false
-  #   default: "false"
-  # unreleased:
-  #   description: "Add to log unreleased closed issues"
-  #   required: false
-  #   default: "true"
-  # verbose:
-  #   description: "Run verbosely"
-  #   required: false
-  #   default: "true"
-  owner:
-    description: "Owner of the repository"
-    required: false
-  repo:
-    description: "Repository name"
-    required: false
   fetchReviewers:
     description: "Will enable fetching the users/reviewers who approved the PR"
     required: false
     default: "false"
-
   fetchReleaseInformation:
     description: "Will enable fetching additional release information from tags."
     required: false
     default: "false"
-
+  commitMode:
+    description: "Special configuration for projects which work without PRs."
+    required: false
+    default: "false"
 
 runs:
   using: "composite"
   steps:
-    # - name: Read changelog config
-    #   id: read-config
-    #   # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
-    #   run: |
-    #     content=$(cat "${{ inputs.config }}")
-    #     { echo "content<<EOF"; echo "$content"; echo "EOF"; } >> "$GITHUB_OUTPUT"
-    #   shell: bash
-    # - name: Generate Changelog
-    #   uses: heinrichreimer/github-changelog-generator-action@v2.3
-    #   with:
-    #     token: "${{ inputs.github-token }}"
-    #     sinceTag: "${{ inputs.old-tag }}"
-    #     output: "${{ inputs.output }}"
-    #     stripGeneratorNotice: "true"
-    #     issues: "${{ inputs.issues }}"
-    #     unreleased: "${{ inputs.unreleased }}"
-    #     pullRequests: "${{ inputs.pullRequests }}"
-    #     compareLink: "${{ inputs.compareLink }}"
-    #     issuesWoLabels: "${{ inputs.issuesWoLabels }}"
-    #     futureRelease: "${{ inputs.new-tag }}"
-    #     issuesLabel: "${{ inputs.issuesLabel }}"
-    #     bugLabels: "${{ inputs.bugLabels }}"
-    #     enhancementLabels: "${{ inputs.enhancementLabels }}"
-    #     httpCache: "${{ inputs.httpCache }}"
-    #     verbose: "${{ inputs.verbose }}"
-    #     addSections: |
-    #       ${{ steps.read-config.outputs.content }}
-
-    # - name: Update CHANGELOG
-    #   id: changelog
-    #   uses: requarks/changelog-action@v1.7.0
-    #   with:
-    #     token: "${{ inputs.github-token }}"
-    #     tag: "${{ inputs.new-tag }}"
-    #     includeInvalidCommits: true
-
     - name: "Create changelog"
       id: build_changelog
       uses: mikepenz/release-changelog-builder-action@v3.7.0
@@ -147,30 +49,14 @@ runs:
         fromTag: "${{ inputs.old-tag }}"
         toTag: "${{ inputs.new-tag }}"
         outputFile: "${{ inputs.output }}"
-        owner: "${{ inputs.owner }}"
-        repo: "${{ inputs.repo }}"
         fetchReviewers: "${{ inputs.fetchReviewers }}"
         fetchReleaseInformation: "${{ inputs.fetchReleaseInformation }}"
-
+        commitMode: "${{ inputs.commitMode }}"
 
     - name: Update github Changelog
       run: |
-        # Prepend changes.md after first header
-        echo "=========================="
-        cat  ${{ inputs.output }}
-        echo "=========================="
+
         # Reformat changes.md and add it to the existing changelog
         sed -i 's/# /## /g' ${{ inputs.output }}
-        
-        echo "+++++++++++++++++++++++"
-        cat  ${{ inputs.output }}
-        echo "+++++++++++++++++++++++"
         sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
       shell: bash
-
-    # - name: Update doc Changelog
-    #   run: |
-    #     if [ -n "${{ inputs.doc-changelog }}" ]; then
-    #       sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.doc-changelog }}
-    #     fi
-    #   shell: bash

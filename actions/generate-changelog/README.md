@@ -2,35 +2,52 @@
 
 This action will allow for the automatic generation of a changelog. The changelog template needs to be configured using a `changelog-config.json`. Depending on whether there is other documentation besides the GitHub changelog or not, one or two `Changelog` files will be updated.
 
+## Dependencies
+
+This action is built from the following composite actions:
+
+- [release-changelog-builder-action](https://github.com/mikepenz/release-changelog-builder-action)
+
 ## Prerequisites
 
-Create a `changelog-config.json` file containing the configurations of the changelogs.
+Create a file called `changelog-config.json` that contains the changelog configurations. The mentioned action's documentation goes into great detail about how to create and utilize config files. A simple configuration may look like this:
+
+```yaml
+{
+  "categories":
+    [
+      {
+        "title": "## 🚀 Features",
+        "labels": ["feature", "feat", "enhancement"],
+      },
+      { "title": "## 🐛 Fixes", "labels": ["fix", "bug"] },
+      { "title": "## 🧪 Dependencies", "labels": ["dependency"] },
+    ],
+  "ignore_labels": ["ignore"],
+  "sort": { "order": "ASC", "on_property": "mergedAt" },
+  "template": "# [${{TO_TAG}}](https://github.com/<myorganization>/<myrepository>/releases/tag/${{TO_TAG}}) - ${{TO_TAG_DATE}}\n\n${{CHANGELOG}}\n<details>\n<summary>Uncategorized</summary>\n\n${{UNCATEGORIZED}}\n</details>\n",
+  "pr_template": "- ${{TITLE}}\n   - PR: ${{URL}}\n   - Assignees: ${{ASSIGNEES[*]}}\n   - Reviewers: ${{REVIEWERS[*]}}\n   - Approvers: ${{APPROVERS[*]}}",
+  "empty_template": "- no changes!",
+}
+```
+
+Make sure to update the link `https://github.com/<myorganization>/<myrepository>/releases/tag/${{TO_TAG}}` accordingly.
+
+Additional configuration options can be explored [here](https://github.com/mikepenz/release-changelog-builder-action#configuration-specification).
 
 ## Input Parameters
 
-| Name                 | Required |           Default Value           | Description                                                                                                        |
-| -------------------- | :------: | :-------------------------------: | ------------------------------------------------------------------------------------------------------------------ |
-| gh-changelog         |    ✅    |                 -                 | Path to the Changelog.md file                                                                                      |
-| github-email         |    ✅    |                 -                 | The GitHub email for committing the changes                                                                        |
-| github-token         |    ✅    |                 -                 | The GitHub token for committing the changes                                                                        |
-| github-username      |    ✅    |                 -                 | The GitHub username for committing the changes                                                                     |
-| new-tag              |    ✅    |                 -                 | New version                                                                                                        |
-| old-tag              |    ✅    |                 -                 | Previous version                                                                                                   |
-| bugLabels            |    ❌    |            "type/bug"             | Issues with the specified labels will be added to Fixed bugs section                                               |
-| compareLink          |    ❌    |              "true"               | Include compare link (Full Changelog) between older version and newer version                                      |
-| config               |    ❌    | "./.github/changelog-config.json" | Path to the changelog config JSON file                                                                             |
-| doc-changelog        |    ❌    |                ""                 | Path to the documentation changelog (if any exists). If the variable is empty then no further file will be updated |
-| enhancementLabels    |    ❌    |        "type/enhancement"         | Issues with the specified labels will be added to Implemented enhancements section                                 |
-| httpCache            |    ❌    |              "true"               | Use HTTP Cache to cache GitHub API requests (useful for large repos)                                               |
-| issues               |    ❌    |              "true"               | Include closed issues in changelog                                                                                 |
-| issuesLabel          |    ❌    |       "**Miscellaneous:**"        | Set up custom label for closed-issues section                                                                      |
-| issuesWoLabels       |    ❌    |              "true"               | Include closed issues without labels in changelog                                                                  |
-| output               |    ❌    |           "changes.md"            | Name of the output file for the generate changelog step                                                            |
-| outpprWoLabelsut     |    ❌    |              "false"              | Include pull requests without labels in changelog                                                                  |
-| pullRequests         |    ❌    |              "false"              | Include pull-requests in changelog                                                                                 |
-| stripGeneratorNotice |    ❌    |              "false"              | Strip generator notice                                                                                             |
-| unreleased           |    ❌    |              "true"               | Add to log unreleased closed issues                                                                                |
-| verbose              |    ❌    |              "true"               | Run verbosely                                                                                                      |
+| Name                    | Required |           Default Value           | Description                                                                                                                                                  |
+| ----------------------- | :------: | :-------------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| changelog-file          |    ✅    |                 -                 | Path to the Changelog.md file                                                                                                                                |
+| github-token            |    ✅    |                 -                 | The GitHub token for committing the changes                                                                                                                  |
+| new-tag                 |    ✅    |                 -                 | New version                                                                                                                                                  |
+| old-tag                 |    ✅    |                 -                 | Previous version                                                                                                                                             |
+| config                  |    ❌    | "./.github/changelog-config.json" | Path to the changelog config JSON file                                                                                                                       |
+| output                  |    ❌    |           "changes.md"            | Relative path to a file to store the resulting changelog in.                                                                                                 |
+| fetchReviewers          |    ❌    |              "false"              | Will enable fetching the users/reviewers who approved the PR.                                                                                                |
+| fetchReleaseInformation |    ❌    |              "false"              | Will enable fetching additional release information from tags.                                                                                               |
+| commitMode              |    ❌    |              "false"              | Special configuration for projects which work without PRs. Uses commit messages as changelog. This mode looses access to information only available for PRs. |
 
 ## Calling the workflow
 
