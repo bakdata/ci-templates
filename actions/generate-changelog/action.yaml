@@ -161,6 +161,7 @@ runs:
         echo "=========================="
         # Reformat changes.md and add it to the existing changelog
         sed -i 's/##/###/g' ${{ inputs.output }} > tmp.md
+        cat tmp.md
         sed -i '/# Changelog/ r tmp.md' ${{ inputs.gh-changelog }}
       shell: bash
 
