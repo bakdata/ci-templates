@@ -10,11 +10,6 @@ inputs:
     description: "Path to the Dockerfile."
     required: false
     default: "Dockerfile"
-  github-token:
-    # if this action should be automatically triggered after a new tag was pushed by another action, this action will not be triggered. Configure the github token to overcome it (as described here: https://github.com/orgs/community/discussions/27028)
-    description: "GitHub token"
-    required: false
-    default: "${{ github.token }}"
   image-artifact-name:
     description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
     required: false
@@ -23,20 +18,13 @@ inputs:
     description: "Name of Docker image (Default is the repository name)."
     required: false
     default: "${{ github.event.repository.name }}"
-  ref:
-    description: "Ref to checkout"
+  retention-days:
+    description: "Number of days the image artifact should be stored on GitHub."
     required: false
-    default: ""
+    default: 1
 runs:
   using: "composite"
   steps:
-    - name: Check out repository
-      uses: actions/checkout@v3
-      with:
-        ref: ${{ inputs.ref }}
-        token: ${{ inputs.github-token }}
-        persist-credentials: false
-
     - name: Build Dockerfile and store them in "build" directory
       run: |
         docker build -t ${{ inputs.image-name }}:${{ github.run_id }} -f ${{ inputs.dockerfile-path }} ${{ inputs.docker-context }}
@@ -49,4 +37,4 @@ runs:
       with:
         name: ${{ inputs.image-artifact-name }}
         path: build
-        retention-days: 1
+        retention-days: ${{ inputs.retention-days }}
