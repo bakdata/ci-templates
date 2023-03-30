@@ -67,7 +67,7 @@ runs:
           if [[ -n "${{ inputs.image-repository }}" ]]; then
             fullImageName="${{ inputs.image-repository }}/${fullImageName}"
           fi
-          fullImageName="${{ inputs.image-registry }}/${fullImageName}"
+          fullImageName="${{ inputs.docker-registry }}/${fullImageName}"
         fi
 
         docker load --input build/*.tar
