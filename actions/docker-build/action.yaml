@@ -15,9 +15,13 @@ inputs:
     required: false
     default: "image-artifact"
   image-name:
-    description: "Name of Docker image (Default is the repository name)."
+    description: "Name of Docker image."
     required: false
     default: "${{ github.event.repository.name }}"
+  image-tag:
+    description: "Tag of Docker image."
+    required: false
+    default: "pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}"
   retention-days:
     description: "Number of days the image artifact should be stored on GitHub."
     required: false
@@ -27,9 +31,9 @@ runs:
   steps:
     - name: Build Dockerfile and store them in "build" directory
       run: |
-        docker build -t ${{ inputs.image-name }}:${{ github.run_id }} -f ${{ inputs.dockerfile-path }} ${{ inputs.docker-context }}
+        docker build -t ${{ inputs.image-name }}:${{ inputs.image-tag }} -f ${{ inputs.dockerfile-path }} ${{ inputs.docker-context }}
         mkdir build
-        docker save ${{ inputs.image-name }}:${{ github.run_id }} > build/${{ inputs.image-name }}.tar
+        docker save ${{ inputs.image-name }}:${{ inputs.image-tag }} > build/${{ inputs.image-name }}.tar
       shell: bash
 
     - name: Upload Docker image tar artifact
