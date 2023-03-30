@@ -40,9 +40,6 @@ on:
         default: "."
         type: string
     secrets:
-      docker-publisher:
-        description: "Publisher to prefix Docker image (e.g. 'my-publisher')."
-        required: true
       docker-user:
         description: "Username for the Docker registry login."
         required: true
@@ -85,7 +82,6 @@ jobs:
         with:
           image-artifact-name: "${{ inputs.image-artifact-name }}"
           image-name: "${{ inputs.image-name }}"
-          publisher: "${{ secrets.docker-publisher }}"
           username: "${{ secrets.docker-user }}"
           password: "${{ secrets.docker-password }}"
           working-directory: "${{ inputs.working-directory }}"

@@ -2,27 +2,28 @@ name: "Publish Docker image"
 description: "Publish Docker image from download artifact to any host"
 
 inputs:
-  password:
-    description: "Password for the Docker registry login."
-    required: true
-  publisher:
-    description: "Publisher to prefix Docker image (e.g. 'my-publisher')."
-    required: true
   username:
     description: "Username for the Docker registry login."
+    required: true
+  password:
+    description: "Password for the Docker registry login."
     required: true
   docker-registry:
     description: "Host where the image should be pushed to."
     required: false
     default: ""
-  image-artifact-name:
-    description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
-    required: false
-    default: "image-artifact"
   image-name:
     description: "Name of Docker image (Default is the repository name)."
     required: false
     default: "${{ github.event.repository.name }}"
+  image-tag:
+    description: "Tag of Docker image."
+    required: false
+    default: "pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}"
+  image-artifact-name:
+    description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
+    required: false
+    default: "image-artifact"
   working-directory:
     description: "Working directory for your Docker artifacts. (Default is .)"
     required: false
@@ -50,25 +51,20 @@ runs:
 
     - name: Publish image
       run: |
-        docker_reg=""
-        if [ -n "${{ inputs.docker-registry }}" ]; then 
-          docker_reg="${{ inputs.docker-registry }}/"
-        fi
-        reg_pub_name="${docker_reg}${{ inputs.publisher }}/${{ inputs.image-name }}"
-
         if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
           >&2 echo "Error: A single image tar file is needed in the downloaded artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
           exit 1
         fi
+
         docker load --input build/*.tar
         if [[ "$GITHUB_REF" =~ ^refs/tags/.* ]]; then
-          docker tag ${{ inputs.image-name }}:${{ github.run_id }} $reg_pub_name:latest
-          docker tag ${{ inputs.image-name }}:${{ github.run_id }} $reg_pub_name:${GITHUB_REF/refs\/tags\//}
-          docker push $reg_pub_name:latest
-          docker push $reg_pub_name:${GITHUB_REF/refs\/tags\//}
+          docker tag ${{ inputs.image-name }}:${{ inputs.image-tag }} ${{ inputs.docker-registry }}:latest
+          docker tag ${{ inputs.image-name }}:${{ inputs.image-tag }} ${{ inputs.docker-registry }}:${GITHUB_REF/refs\/tags\//}
+          docker push ${{ inputs.docker-registry }}:latest
+          docker push ${{ inputs.docker-registry }}:${GITHUB_REF/refs\/tags\//}
         else
-          docker tag ${{ inputs.image-name }}:${{ github.run_id }} $reg_pub_name:${{ github.run_id }}
-          docker push $reg_pub_name:${{ github.run_id }}
+          docker tag ${{ inputs.image-name }}:${{ inputs.image-tag }} ${{ inputs.docker-registry }}:${{ inputs.image-tag }}
+          docker push ${{ inputs.docker-registry }}:${{ inputs.image-tag }}
         fi
       shell: bash
       working-directory: ${{ inputs.working-directory }}
