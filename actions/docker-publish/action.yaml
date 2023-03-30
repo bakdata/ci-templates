@@ -12,8 +12,12 @@ inputs:
     description: "Host where the image should be pushed to."
     required: false
     default: ""
+  image-repository:
+    description: "Repository of Docker image."
+    required: false
+    default: "${{ github.event.repository.name }}"
   image-name:
-    description: "Name of Docker image (Default is the repository name)."
+    description: "Name of Docker image."
     required: false
     default: "${{ github.event.repository.name }}"
   image-tag:
@@ -56,15 +60,23 @@ runs:
           exit 1
         fi
 
+        fullImageName="${{ inputs.image-name }}"
+        if [[ -n "${{ inputs.image-repository }}" ]]; then
+          fullImageName="${{ inputs.image-repository }}/${fullImageName}"
+        fi
+        if [[ -n "${{ inputs.image-registry }}"]]; then
+          fullImageName="${{ inputs.image-registry }}/${fullImageName}"
+        fi
+        
         docker load --input build/*.tar
         if [[ "$GITHUB_REF" =~ ^refs/tags/.* ]]; then
-          docker tag ${{ inputs.image-name }}:${{ inputs.image-tag }} ${{ inputs.docker-registry }}:latest
-          docker tag ${{ inputs.image-name }}:${{ inputs.image-tag }} ${{ inputs.docker-registry }}:${GITHUB_REF/refs\/tags\//}
-          docker push ${{ inputs.docker-registry }}:latest
-          docker push ${{ inputs.docker-registry }}:${GITHUB_REF/refs\/tags\//}
+          docker tag ${{ inputs.image-name }}:${{ inputs.image-tag }} ${fullImageName}:latest
+          docker tag ${{ inputs.image-name }}:${{ inputs.image-tag }} ${fullImageName}:${GITHUB_REF/refs\/tags\//}
+          docker push ${fullImageName}:latest
+          docker push ${fullImageName}:${GITHUB_REF/refs\/tags\//}
         else
-          docker tag ${{ inputs.image-name }}:${{ inputs.image-tag }} ${{ inputs.docker-registry }}:${{ inputs.image-tag }}
-          docker push ${{ inputs.docker-registry }}:${{ inputs.image-tag }}
+          docker tag ${{ inputs.image-name }}:${{ inputs.image-tag }} ${fullImageName}:${{ inputs.image-tag }}
+          docker push ${fullImageName}:${{ inputs.image-tag }}
         fi
       shell: bash
       working-directory: ${{ inputs.working-directory }}
