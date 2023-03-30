@@ -4,10 +4,12 @@ description: "Publish Docker image from download artifact to any host"
 inputs:
   username:
     description: "Username for the Docker registry login."
-    required: true
+    required: false 
+    default: ""
   password:
     description: "Password for the Docker registry login."
-    required: true
+    required: false
+    default: ""
   docker-registry:
     description: "Host where the image should be pushed to."
     required: false
