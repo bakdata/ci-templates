@@ -61,13 +61,13 @@ runs:
         fi
 
         fullImageName="${{ inputs.image-name }}"
-        if [[ -n "${{ inputs.image-repository }}" ]]; then
-          fullImageName="${{ inputs.image-repository }}/${fullImageName}"
-        fi
         if [[ -n "${{ inputs.image-registry }}"]]; then
+          if [[ -n "${{ inputs.image-repository }}" ]]; then
+            fullImageName="${{ inputs.image-repository }}/${fullImageName}"
+          fi
           fullImageName="${{ inputs.image-registry }}/${fullImageName}"
         fi
-        
+
         docker load --input build/*.tar
         if [[ "$GITHUB_REF" =~ ^refs/tags/.* ]]; then
           docker tag ${{ inputs.image-name }}:${{ inputs.image-tag }} ${fullImageName}:latest
