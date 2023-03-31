@@ -35,6 +35,7 @@ steps:
       ref: "my-awesome-ref-name" # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value
       commit-message: "Committing all the awesome changes in my repository!"
       add-untracked: "true" # (Optional) if not set, only tracked files will be committed
+      pass-empty-commit: "true" # (Optional) if not set, fail upon nothing to commit
       github-username: ${{ secrets.github-username }}
       github-email: ${{ secrets.github-email }}
       github-token: ${{ secrets.github-token }}
