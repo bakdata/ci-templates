@@ -72,12 +72,13 @@ runs:
 
         docker load --input build/*.tar
         if [[ "$GITHUB_REF" =~ ^refs/tags/.* ]]; then
-          docker tag ${{ inputs.image-name }}:${{ inputs.image-tag }} ${fullImageName}:latest
-          docker tag ${{ inputs.image-name }}:${{ inputs.image-tag }} ${fullImageName}:${GITHUB_REF/refs\/tags\//}
+          docker tag ${{ inputs.image-name }} ${fullImageName}:latest
+          docker tag ${{ inputs.image-name }} ${fullImageName}:${GITHUB_REF/refs\/tags\//}
           docker push ${fullImageName}:latest
           docker push ${fullImageName}:${GITHUB_REF/refs\/tags\//}
         else
-          docker tag ${{ inputs.image-name }}:${{ inputs.image-tag }} ${fullImageName}:${{ inputs.image-tag }}
+          docker tag ${{ inputs.image-name }} ${fullImageName}:${{ inputs.image-tag }}
+          docker images
           docker push ${fullImageName}:${{ inputs.image-tag }}
         fi
       shell: bash
