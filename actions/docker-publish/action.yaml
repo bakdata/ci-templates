@@ -63,7 +63,7 @@ runs:
         fi
 
         fullImageName="${{ inputs.image-name }}"
-        if [[ -n "${{ inputs.image-registry }}" ]]; then
+        if [[ -n "${{ inputs.docker-registry }}" ]]; then
           if [[ -n "${{ inputs.image-repository }}" ]]; then
             fullImageName="${{ inputs.image-repository }}/${fullImageName}"
           fi
