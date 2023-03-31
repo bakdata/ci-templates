@@ -14,7 +14,6 @@ inputs:
   old-tag:
     description: Previous version
     required: true
-
   # unrequired inputs
   config:
     description: Path to the changelog config JSON file
@@ -36,7 +35,6 @@ inputs:
     description: "Special configuration for projects which work without PRs."
     required: false
     default: "false"
-
 runs:
   using: "composite"
   steps:
@@ -52,10 +50,8 @@ runs:
         fetchReviewers: "${{ inputs.fetchReviewers }}"
         fetchReleaseInformation: "${{ inputs.fetchReleaseInformation }}"
         commitMode: "${{ inputs.commitMode }}"
-
     - name: Update github Changelog
       run: |
-
         # Reformat changes.md and add it to the existing changelog
         sed -i 's/# /## /g' ${{ inputs.output }}
         sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
