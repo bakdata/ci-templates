@@ -23,7 +23,7 @@ inputs:
     required: false
     default: "false"
   pass-empty-commit:
-    description: "Whether to exit with exit-code 0 when no files to commit."
+    description: "Whether to exit with code 0 when nothing to commit."
     required: false
     default: "false"
 
