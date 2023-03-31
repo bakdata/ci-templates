@@ -22,6 +22,10 @@ inputs:
     description: "Number of days the image artifact should be stored on GitHub."
     required: false
     default: 1
+  working-directory:
+    description: "Working directory for your Docker artifacts."
+    required: false
+    default: "."
 runs:
   using: "composite"
   steps:
@@ -31,6 +35,7 @@ runs:
         mkdir build
         docker save ${{ inputs.image-name }} > build/${{ inputs.image-name }}.tar
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
 
     - name: Upload Docker image tar artifact
       uses: actions/upload-artifact@v3.1.1
