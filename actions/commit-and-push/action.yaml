@@ -25,7 +25,7 @@ inputs:
   pass-empty-commit:
     description: "Whether to exit with code 0 when nothing to commit."
     required: false
-    default: "false"
+    default: false
 
 runs:
   using: "composite"
@@ -50,7 +50,7 @@ runs:
 
     - name: Commit files, exit 0 if nothing to commit and no uncommitted changes
       if: "inputs.pass-empty-commit"
-      run: '( [ -z "$(git status --porcelain=v1 2>/dev/null)"] && echo "No uncommitted changes." ) || git commit -m "${{ inputs.commit-message }}" -a'
+      run: '( [ -z "$(git status --porcelain=v1 2>/dev/null)" ] && echo "No uncommitted changes." ) || git commit -m "${{ inputs.commit-message }}" -a'
       shell: bash
 
     - name: Push changes
