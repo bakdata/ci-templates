@@ -7,15 +7,15 @@ This composite action commits the changes of your repository with an arbitrary c
 
 ## Input Parameters
 
-| Name            | Required |           Default Value           | Description                                          |
-| --------------- | :------: | :-------------------------------: | ---------------------------------------------------- |
-| github-username |    ✅    |                 -                 | The GitHub username for committing the changes       |
-| github-email    |    ✅    |                 -                 | The GitHub email for committing the changes          |
-| github-token    |    ✅    |                 -                 | The GitHub token for committing the changes          |
-| commit-message  |    ✅    |                 -                 | The commit message                                   |
-| ref             |    ❌    | Default branch of your repository | The ref name to commit and push the files on         |
-| add-untracked   |    ❌    |              "false"              | Whether to add untracked files to commit             |
-|pass-empty-commit|    ❌    |              "false"              | Whether to exit with code zero when nothing to commit|
+| Name             | Required |           Default Value           | Description                                          |
+| ---------------- | :------: | :-------------------------------: | ---------------------------------------------------- |
+| github-username  |    ✅    |                 -                 | The GitHub username for committing the changes       |
+| github-email     |    ✅    |                 -                 | The GitHub email for committing the changes          |
+| github-token     |    ✅    |                 -                 | The GitHub token for committing the changes          |
+| commit-message   |    ✅    |                 -                 | The commit message                                   |
+| ref              |    ❌    | Default branch of your repository | The ref name to commit and push the files on         |
+| add-untracked    |    ❌    |              "false"              | Whether to add untracked files to commit             |
+| pass-empty-commit|    ❌    |              "false"              | Whether to exit with code zero when nothing to commit|
 
 ## Usage
 
