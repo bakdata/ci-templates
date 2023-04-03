@@ -24,12 +24,11 @@ steps:
   - name: Publish tarball image
     uses: bakdata/ci-templates/actions/docker-publish@main
     with:
-      image-tag: "v.1.0"
-      image-name: "tarball"
-      publisher: "my-publisher"
-      username: "${{ secrets.docker-user }}"
-      password: "${{ secrets.docker-password }}"
+      # publishing image registry.hub.docker.com/my-repo/my-image:v1.1.0
+      docker-registry: "registry.hub.docker.com"
+      image-repository: "my-repo"
+      image-name: "my-image"
+      image-tag: "v1.1.0"
+      image-artifact-name: "tarball"
       working-directory: "./tarball"
-      github-token: "${{ secrets.GITHUB_TOKEN }}"
-      ref: "master" # (Optional)
 ```
