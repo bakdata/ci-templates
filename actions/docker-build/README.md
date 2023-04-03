@@ -29,4 +29,5 @@ steps:
       image-artifact-name: "my-image-artifact"
       image-name: "my-image"
       retention-days: 2
+      working-directory: "./tarball"
 ```
