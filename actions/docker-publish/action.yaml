@@ -45,8 +45,8 @@ runs:
 
     # setup-buildx action will create and boot a builder using by default the docker-container driver.
     # This is not required but recommended using it to be able to build multi-platform images, export cache, etc.
-    # - name: Set up Docker Buildx
-    #   uses: docker/setup-buildx-action@v2.2.1
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2.2.1
 
     - name: Publish image
       run: |
@@ -71,7 +71,6 @@ runs:
           docker push ${fullImageName}:${GITHUB_REF/refs\/tags\//}
         else
           docker tag ${{ inputs.image-name }} ${fullImageName}:${{ inputs.image-tag }}
-          docker images
           docker push ${fullImageName}:${{ inputs.image-tag }}
         fi
       shell: bash
