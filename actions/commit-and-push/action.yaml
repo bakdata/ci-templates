@@ -25,7 +25,7 @@ inputs:
   pass-empty-commit:
     description: "Whether to exit with code 0 when nothing to commit."
     required: false
-    default: false
+    default: "false"
 
 runs:
   using: "composite"
