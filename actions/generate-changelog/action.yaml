@@ -53,13 +53,6 @@ runs:
     - name: Update github Changelog
       run: |
         # Reformat changes.md and add it to the existing changelog
-        echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++"
-        echo ${{steps.build_changelog.outputs.changelog	}}
-        echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++"
-        sed -i 's/# /## /g' ${{steps.build_changelog.outputs.changelog	}}
-        echo ${{steps.build_changelog.outputs.changelog	}}
-        echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++"
-
         sed -i 's/# /## /g' ${{ inputs.output }}
         sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
       shell: bash
