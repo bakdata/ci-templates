@@ -10,7 +10,7 @@ Ensure that your Dockerfile is uploaded to the repository you want to use this a
 
 | Name                | Required |        Default Value         |                                                                     Description                                                                     |
 | ------------------- | :------: | :--------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------: |
-| dockerfile-context  |    ❌    |             "."              |                                                                 The docker context.                                                                 |
+| docker-context      |    ❌    |             "."              |                                                                 The docker context.                                                                 |
 | dockerfile-path     |    ❌    |         "Dockerfile"         |                                                               Path to the Dockerfile.                                                               |
 | image-artifact-name |    ❌    |       "image-artifact"       | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
 | image-name          |    ❌    | github.event.repository.name |                                                          Name of Docker image on Dockerhub                                                          |
@@ -20,11 +20,12 @@ Ensure that your Dockerfile is uploaded to the repository you want to use this a
 
 ```yaml
 steps:
-  - name: Build tarball image
+  - name: Build
     uses: bakdata/ci-templates/actions/docker-build@main
     with:
       dockerfile-context: "./docker-dir/"
       dockerfile-path: "./path/to/my/Dockerfile"
       image-artifact-name: "my-image-artifact"
       image-name: "my-image"
+      retention-days: 2
 ```
