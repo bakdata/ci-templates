@@ -7,14 +7,15 @@ This composite action commits the changes of your repository with an arbitrary c
 
 ## Input Parameters
 
-| Name            | Required |           Default Value           | Description                                    |
-| --------------- | :------: | :-------------------------------: | ---------------------------------------------- |
-| github-username |    ✅    |                 -                 | The GitHub username for committing the changes |
-| github-email    |    ✅    |                 -                 | The GitHub email for committing the changes    |
-| github-token    |    ✅    |                 -                 | The GitHub token for committing the changes    |
-| commit-message  |    ✅    |                 -                 | The commit message                             |
-| ref             |    ❌    | Default branch of your repository | The ref name to commit and push the files on   |
-| add-untracked   |    ❌    |              "false"              | Whether to add untracked files to commit       |
+| Name              | Required |           Default Value           | Description                                        |
+| ----------------- | :------: | :-------------------------------: | -------------------------------------------------- |
+| github-username   |    ✅    |                 -                 | The GitHub username for committing the changes     |
+| github-email      |    ✅    |                 -                 | The GitHub email for committing the changes        |
+| github-token      |    ✅    |                 -                 | The GitHub token for committing the changes        |
+| commit-message    |    ✅    |                 -                 | The commit message                                 |
+| ref               |    ❌    | Default branch of your repository | The ref name to commit and push the files on       |
+| add-untracked     |    ❌    |              "false"              | Whether to add untracked files to commit           |
+| pass-empty-commit |    ❌    |              "false"              | Whether to exit with code 0 when nothing to commit |
 
 ## Usage
 
@@ -34,6 +35,7 @@ steps:
       ref: "my-awesome-ref-name" # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value
       commit-message: "Committing all the awesome changes in my repository!"
       add-untracked: "true" # (Optional) if not set, only tracked files will be committed
+      pass-empty-commit: "true" # (Optional) if not set, fail upon nothing to commit
       github-username: ${{ secrets.github-username }}
       github-email: ${{ secrets.github-email }}
       github-token: ${{ secrets.github-token }}
