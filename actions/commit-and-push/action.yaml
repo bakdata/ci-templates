@@ -44,12 +44,12 @@ runs:
       shell: bash
 
     - name: Commit files, exit 1 if nothing to commit
-      if: "! inputs.pass-empty-commit"
+      if: ${{ inputs.pass-empty-commit == 'false' }}
       run: git commit -m "${{ inputs.commit-message }}" -a
       shell: bash
 
     - name: Commit files, exit 0 if nothing to commit and no uncommitted changes
-      if: "inputs.pass-empty-commit"
+      if: ${{ inputs.pass-empty-commit == 'true' }}
       run: '( [ -z "$(git status --porcelain=v1 2>/dev/null)" ] && echo "No uncommitted changes." ) || git commit -m "${{ inputs.commit-message }}" -a'
       shell: bash
 
