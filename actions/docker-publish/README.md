@@ -8,15 +8,14 @@ Create an action that [uploads a tarball image as an artifact](https://github.co
 
 ## Input Parameters
 
-| Name                | Required |        Default Value         | Description                                                                                                                                         |
-| ------------------- | :------: | :--------------------------: | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| password            |    ✅    |              -               | Password for the Docker registry login                                                                                                              |
-| publisher           |    ✅    |              -               | Publisher to prefix Docker image (e.g. 'my-publisher')                                                                                              |
-| username            |    ✅    |              -               | Username for the Docker registry login                                                                                                              |
-| docker-registry     |    ❌    |              ""              | Host where the image should be pushed to.                                                                                                           |
-| image-artifact-name |    ❌    |       "image-artifact"       | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
-| image-name          |    ❌    | github.event.repository.name | Name of Docker image on Dockerhub                                                                                                                   |
-| working-directory   |    ❌    |              -               | Working directory for your Docker artifacts                                                                                                         |
+| Name                | Required |                   Default Value                    | Description                                                                                                          |
+| ------------------- | :------: | :------------------------------------------------: | -------------------------------------------------------------------------------------------------------------------- |
+| docker-registry     |    ❌    |                         ""                         | Host where the image should be pushed to                                                                             |
+| image-repository    |    ❌    |                         ""                         | Repository of Docker image                                                                                           |
+| image-name          |    ❌    |            github.event.repository.name            | Name of Docker image                                                                                                 |
+| image-tag           |    ❌    | pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8} | Tag of Docker image                                                                                                  |
+| image-artifact-name |    ❌    |                  "image-artifact"                  | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact |
+| working-directory   |    ❌    |                        "."                         | Working directory for your Docker artifacts                                                                          |
 
 ## Usage
 
