@@ -108,6 +108,6 @@ jobs:
           docker-registry: "${{ inputs.docker-registry }}"
           image-repository: "${{ inputs.image-repository }}"
           image-name: "${{ inputs.image-name }}"
-          image-tag: "${{ ipnuts.image-tag }}"
+          image-tag: "${{ inputs.image-tag }}"
           image-artifact-name: "${{ inputs.image-artifact-name }}"
           working-directory: "${{ inputs.working-directory }}"
