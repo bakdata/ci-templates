@@ -15,6 +15,7 @@ Ensure that your Dockerfile is uploaded to the repository you want to use this a
 | image-artifact-name |    ❌    |       "image-artifact"       | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact |
 | image-name          |    ❌    | github.event.repository.name | Name of Docker image on Dockerhub                                                                                    |
 | retention-days      |    ❌    |              1               | Number of days the image artifact should be stored on GitHub                                                         |
+| working-directory   |    ❌    |             "."              | Working directory for your Docker artifacts                                                                          |
 
 ## Usage
 
