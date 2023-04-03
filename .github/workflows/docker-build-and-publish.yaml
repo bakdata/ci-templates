@@ -81,7 +81,7 @@ jobs:
           persist-credentials: false
 
       - name: Build docker image and upload tar file
-        uses: bakdata/ci-templates/actions/docker-build@v1.14.0
+        uses: bakdata/ci-templates/actions/docker-build@fix/docker
         with:
           docker-context: "${{ inputs.docker-context }}"
           dockerfile-path: "${{ inputs.dockerfile-path }}"
@@ -103,7 +103,7 @@ jobs:
           password: "${{ secrets.docker-password }}"
 
       - name: Use uploaded tar files to push new image to docker
-        uses: bakdata/ci-templates/actions/docker-publish@v1.14.0
+        uses: bakdata/ci-templates/actions/docker-publish@fix/docker
         with:
           docker-registry: "${{ inputs.docker-registry }}"
           image-repository: "${{ inputs.image-repository }}"
