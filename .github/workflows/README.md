@@ -32,26 +32,28 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name                | Required |        Default Value         |  Type  | Description                                                                                                                                         |
-| ------------------- | :------: | :--------------------------: | :----: | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| docker-context      |    ❌    |             "."              | string | The docker context.                                                                                                                                 |
-| dockerfile-path     |    ❌    |         "Dockerfile"         | string | Path to the Dockerfile.                                                                                                                             |
-| docker-registry     |    ❌    |              ""              | string | Host where the image should be pushed to.                                                                                                           |
-| image-artifact-name |    ❌    |       "image-artifact"       | string | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
-| image-name          |    ❌    | github.event.repository.name | string | Name of Docker image (Default is the repository name).                                                                                              |
-| ref                 |    ❌    |              ""              | string | The ref name to checkout the repository                                                                                                             |
-| working-directory   |    ❌    |             "."              | string | Working directory for your Docker artifacts. (Default is .)                                                                                         |
+| Name                | Required |                   Default Value                    |  Type  | Description                                                                                                          |
+| ------------------- | :------: | :------------------------------------------------: | :----: | -------------------------------------------------------------------------------------------------------------------- |
+| docker-context      |    ❌    |                        "."                         | string | The docker context                                                                                                   |
+| dockerfile-path     |    ❌    |                    "Dockerfile"                    | string | Path to the Dockerfile                                                                                               |
+| docker-registry     |    ❌    |                         ""                         | string | Host where the image should be pushed to                                                                             |
+| image-repository    |    ❌    |                         ""                         | string | Repository of Docker image                                                                                           |
+| image-name          |    ❌    |            github.event.repository.name            | string | Name of Docker image                                                                                                 |
+| image-tag           |    ❌    | pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8} | string | Tag of Docker image                                                                                                  |
+| ref                 |    ❌    |                         ""                         | string | The ref name to checkout                                                                                             |
+| retention-days      |    ❌    |                         1                          | string | Number of days the image artifact should be stored on GitHub                                                         |
+| image-artifact-name |    ❌    |                  "image-artifact"                  | string | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact |
+| working-directory   |    ❌    |                        "."                         | string | Working directory for your Docker artifacts                                                                          |
 
 ### Secret Parameters
 
 These secrets define the user that pushes the built images to the container registry.
 
-| Name             | Required | Description                                             |
-| ---------------- | :------: | ------------------------------------------------------- |
-| docker-publisher |    ✅    | Publisher to prefix Docker image (e.g. 'my-publisher'). |
-| docker-user      |    ✅    | Username for the Docker registry login.                 |
-| docker-password  |    ✅    | Password for the Docker registry login.                 |
-| github-token     |    ❌    | The GitHub token for committing the changes             |
+| Name            | Required | Description                                 |
+| --------------- | :------: | ------------------------------------------- |
+| docker-user     |    ✅    | Username for the Docker registry login      |
+| docker-password |    ✅    | Password for the Docker registry login      |
+| github-token    |    ❌    | The GitHub token for committing the changes |
 
 ### Calling the workflow
 
@@ -66,15 +68,18 @@ jobs:
     name: Build and push Docker image
     uses: bakdata/ci-templates/.github/workflows/docker-build-and-publish.yaml@main
     with:
-      dockerfile-context: "./docker-dir/"
+      # with these settings image would be pushed to my-registry.com/my-repository/my-image:my-tag
+      docker-context: "./docker-dir/"
       dockerfile-path: "./path/to/my/Dockerfile"
       docker-registry: "my-registry.com"
+      image-repository: "my-repository"
       image-name: "my-image"
+      image-tag: "my-tag"
+      ref: "feat/foo"
+      retention-days: 2
       image-artifact-name: "my-image-artifact"
       working-directory: "."
-
     secrets:
-      docker-publisher: "${{ secrets.DOCKER_PUBLISHER }}"
       docker-user: "${{ secrets.DOCKER_USER }}"
       docker-password: "${{ secrets.DOCKER_PWD }}"
       github-token: ${{ secrets.GH_TOKEN }}

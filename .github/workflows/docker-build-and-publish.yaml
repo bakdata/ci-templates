@@ -35,7 +35,7 @@ on:
         default: "pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}"
         type: string
       ref:
-        description: "Ref to checkout"
+        description: "Ref name to checkout"
         required: false
         default: ""
         type: string
