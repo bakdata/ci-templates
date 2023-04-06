@@ -1,6 +1,6 @@
 # docker-publish
 
-This action downloads an `image.tar` file from an artifact and publishes it on Dockerhub. When this action is used on a tag branch, the image is tagged with `latest` and the tag version of the branch (e.g. `1.2.3`). For all other branches, the `github.run_id` is used as an image tag.
+This action downloads an `image.tar` file from an artifact and publishes it into a Docker registry. When this action is used on a tag branch, the image is tagged with `latest` and the tag version of the branch (e.g. `1.2.3`). For all other branches, the tag `pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}` is used as an image tag.
 
 ## Prerequisites
 
@@ -8,15 +8,14 @@ Create an action that [uploads a tarball image as an artifact](https://github.co
 
 ## Input Parameters
 
-| Name                | Required |        Default Value         | Description                                                                                                                                         |
-| ------------------- | :------: | :--------------------------: | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| password            |    ✅    |              -               | Password for the Docker registry login                                                                                                              |
-| publisher           |    ✅    |              -               | Publisher to prefix Docker image (e.g. 'my-publisher')                                                                                              |
-| username            |    ✅    |              -               | Username for the Docker registry login                                                                                                              |
-| docker-registry     |    ❌    |              ""              | Host where the image should be pushed to.                                                                                                           |
-| image-artifact-name |    ❌    |       "image-artifact"       | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact'). |
-| image-name          |    ❌    | github.event.repository.name | Name of Docker image on Dockerhub                                                                                                                   |
-| working-directory   |    ❌    |              -               | Working directory for your Docker artifacts                                                                                                         |
+| Name                | Required |                   Default Value                    | Description                                                                                                          |
+| ------------------- | :------: | :------------------------------------------------: | -------------------------------------------------------------------------------------------------------------------- |
+| docker-registry     |    ❌    |                         ""                         | Host where the image should be pushed to                                                                             |
+| image-repository    |    ❌    |                         ""                         | Repository of Docker image                                                                                           |
+| image-name          |    ❌    |            github.event.repository.name            | Name of Docker image                                                                                                 |
+| image-tag           |    ❌    | pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8} | Tag of Docker image                                                                                                  |
+| image-artifact-name |    ❌    |                  "image-artifact"                  | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact |
+| working-directory   |    ❌    |                        "."                         | Working directory for your Docker artifacts                                                                          |
 
 ## Usage
 
@@ -25,12 +24,11 @@ steps:
   - name: Publish tarball image
     uses: bakdata/ci-templates/actions/docker-publish@main
     with:
-      image-tag: "v.1.0"
-      image-name: "tarball"
-      publisher: "my-publisher"
-      username: "${{ secrets.docker-user }}"
-      password: "${{ secrets.docker-password }}"
+      # publishing image registry.hub.docker.com/my-repo/my-image:v1.1.0
+      docker-registry: "registry.hub.docker.com"
+      image-repository: "my-repo"
+      image-name: "my-image"
+      image-tag: "v1.1.0"
+      image-artifact-name: "tarball"
       working-directory: "./tarball"
-      github-token: "${{ secrets.GITHUB_TOKEN }}"
-      ref: "master" # (Optional)
 ```
