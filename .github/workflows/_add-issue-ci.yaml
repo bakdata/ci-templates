@@ -1,0 +1,17 @@
+name: Add opened issues to specific project board
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  add-issue-to-project:
+    name: Add issue to project board
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Add the issue to the project
+        uses: actions/add-to-project@v0.5.0
+        with:
+          project-url: https://github.com/orgs/bakdata/projects/7
+          github-token: ${{ secrets.GH_TOKEN }}
