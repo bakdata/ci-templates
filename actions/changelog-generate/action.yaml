@@ -70,16 +70,21 @@ runs:
         fi
 
         # set fromtag to first commit if not fromtag was specified
-        if [ -n "${{ inputs.old-tag }}" ]; then
+        if [ ! -n "${{ inputs.old-tag }}" ]; then
           first_commit=`git log --oneline | tail -1 | awk '{print $1}'`
+          echo "+++++++++++++++++++++++++++"
+          echo "+++++++++++++++++++++++++++"
+          echo "fromtag: $fromtag was empty"
+          echo "+++++++++++++++++++++++++++"
+          echo "+++++++++++++++++++++++++++"
           echo  "fromtag=$first_commit">> $GITHUB_OUTPUT
         else
+          echo "+++++++++++++++++++++++++++"
+          echo "+++++++++++++++++++++++++++"
+          echo "fromtag: ${{ inputs.old-tag }} was provided"
+          echo "+++++++++++++++++++++++++++"
+          echo "+++++++++++++++++++++++++++"
           echo  "fromtag=${{ inputs.old-tag }}">> $GITHUB_OUTPUT 
-          echo "+++++++++++++++++++++++++++"
-          echo "+++++++++++++++++++++++++++"
-          echo "fromtag: $fromtag was given"
-          echo "+++++++++++++++++++++++++++"
-          echo "+++++++++++++++++++++++++++"
         fi
 
       shell: bash
