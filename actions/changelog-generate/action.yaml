@@ -72,7 +72,7 @@ runs:
         cat ${{ inputs.output }}
         echo "---------------------------"
         
-        sed -i 's/tag\/${{steps.setTag.outputs.totag}}/tag\/${{ inputs.new-tag }}/g' ${{ inputs.output }}
+        sed -i 's|releases/tag/${{steps.setTag.outputs.totag}}|releases/tag/${{ inputs.new-tag }}|g' ${{ inputs.output }}
         cat ${{ inputs.output }}
         echo "---------------------------"
         #Update date
