@@ -50,17 +50,15 @@ runs:
       id: setTags
       run: |
         # Set from and to tags
-        if [ $(git tag -l "v${{ inputs.new-tag }}") ]; then
+        if [ $(git tag -l "${{ inputs.new-tag }}") ]; then
           echo "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
           var="true" 
           echo "!!Tag exists"
           echo "to-exists=$var">> $GITHUB_OUTPUT 
-          echo "!!Tag is new"
         else
           var="false" 
           echo "totag=${{ github.event.repository.default_branch }}">> $GITHUB_OUTPUT 
           echo "to-exists=$var">> $GITHUB_OUTPUT 
-          echo "!!Tag DOES NOT EXIST" 
         fi
 
         # set fromtag to first commit if not fromtag was specified
@@ -76,7 +74,7 @@ runs:
     - name: "test from"
       run: |
         # Test
-        echo "!!!!!!!!!!!!!!!!!!!!!! [${{steps.setTags.outputs.fromtag}}] "
+        echo "!!!!!!!!!!!!!!!!!!!!!! [${{steps.setTags.outputs.to-exists}}] "
       shell: bash
 
     - name: "Create changelog"
