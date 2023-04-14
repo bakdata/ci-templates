@@ -75,9 +75,11 @@ runs:
         sed -i 's|releases/tag/${{steps.setTag.outputs.totag}}|releases/tag/${{ inputs.new-tag }}|g' ${{ inputs.output }}
         cat ${{ inputs.output }}
         echo "+++++++++++++++++++++++++++++="
-        #Update date
+        #Set Release date
         tag_date=$(date '+%Y-%m-%d') 
         echo $tag_date 
+        # [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?([Zz]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?
+        sed -i 's/Release Date:/Release Date: $tag_date/g' ${{ inputs.output }}
       shell: bash
     - name: Update github Changelog
       run: |
