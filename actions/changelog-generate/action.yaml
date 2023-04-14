@@ -66,9 +66,14 @@ runs:
     - name: Replace default branch with new Tag
       run: |
         # Replace default branch with new tag
-        sed -i 's/# [${{steps.setTag.outputs.totag}}]/# [${{ inputs.new-tag }}]/g' ${{ inputs.output }}
-        sed -i 's/tag\/${{steps.setTag.outputs.totag}}/tag\/{{ inputs.new-tag }}/g' ${{ inputs.output }}
+        sed -i 's/[${{steps.setTag.outputs.totag}}]/[${{ inputs.new-tag }}]/g' ${{ inputs.output }}
+        echo "---------------------------"
+        cat ${{ inputs.output }}
+        echo "---------------------------"
         
+        sed -i 's/tag\/${{steps.setTag.outputs.totag}}/tag\/${{ inputs.new-tag }}/g' ${{ inputs.output }}
+        cat ${{ inputs.output }}
+        echo "---------------------------"
         #Update date
         
       
