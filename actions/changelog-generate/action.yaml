@@ -64,6 +64,7 @@ runs:
         fetchReleaseInformation: "${{ inputs.fetchReleaseInformation }}"
         commitMode: "${{ inputs.commitMode }}"
     - name: Replace default branch with new Tag
+      if: ${{ steps.checkTag.outputs.exists == 'false' }}
       run: |
         # Replace default branch with new tag
         sed -i 's/\[${{steps.setTag.outputs.totag}}\]/\[${{ inputs.new-tag }}\]/g' ${{ inputs.output }}
