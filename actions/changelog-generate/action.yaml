@@ -52,7 +52,7 @@ runs:
         fi
       shell: bash
     - name: "Test tag"
-      run: echo "Output [${{steps.my_step.outputs.totag}}]"
+      run: echo "Output [${{steps.setTag.outputs.totag}}]"
       shell: bash
     # - name: "Create changelog"
     #   id: build_changelog
