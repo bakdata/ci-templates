@@ -97,6 +97,7 @@ runs:
       if: ${{ steps.setTags.outputs.to-exists == 'false' }}
       run: |
         # Replace default branch with new tag
+        echo "\n" >>  ${{ inputs.output }}
         sed -i 's/\[${{steps.setTags.outputs.totag}}\]/\[${{ inputs.new-tag }}\]/g' ${{ inputs.output }}
         sed -i 's|releases/tag/${{steps.setTags.outputs.totag}}|releases/tag/${{ inputs.new-tag }}|g' ${{ inputs.output }}
 
