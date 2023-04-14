@@ -74,10 +74,10 @@ runs:
         
         sed -i 's|releases/tag/${{steps.setTag.outputs.totag}}|releases/tag/${{ inputs.new-tag }}|g' ${{ inputs.output }}
         cat ${{ inputs.output }}
-        echo "---------------------------"
+        echo "+++++++++++++++++++++++++++++="
         #Update date
-        
-      
+        tag_date=$(date '+%Y-%m-%d') 
+        echo $tag_date 
       shell: bash
     - name: Update github Changelog
       run: |
