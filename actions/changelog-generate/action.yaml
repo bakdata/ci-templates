@@ -63,6 +63,16 @@ runs:
         fetchReviewers: "${{ inputs.fetchReviewers }}"
         fetchReleaseInformation: "${{ inputs.fetchReleaseInformation }}"
         commitMode: "${{ inputs.commitMode }}"
+    - name: Replace default branch with new Tag
+      run: |
+        # Replace default branch with new tag
+        sed -i 's/# [${{steps.setTag.outputs.totag}}]/# [${{ inputs.new-tag }}]/g' ${{ inputs.output }}
+        sed -i 's/tag\/${{steps.setTag.outputs.totag}}/tag\/{{ inputs.new-tag }}/g' ${{ inputs.output }}
+        
+        #Update date
+        
+      
+      shell: bash
     - name: Update github Changelog
       run: |
         # Reformat changes.md and add it to the existing changelog
