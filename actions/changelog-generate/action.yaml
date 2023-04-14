@@ -71,7 +71,6 @@ runs:
         fetchReviewers: "${{ inputs.fetchReviewers }}"
         fetchReleaseInformation: "${{ inputs.fetchReleaseInformation }}"
         commitMode: "${{ inputs.commitMode }}"
-        ignorePreReleases: true
 
     - name: Replace default branch with new Tag
       if: ${{ steps.checkTag.outputs.exists == 'false' }}
