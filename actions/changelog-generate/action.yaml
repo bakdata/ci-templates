@@ -78,7 +78,7 @@ runs:
         #Set Release date
         tag_date=$(date '+%Y-%m-%d') 
         # tag_date="Release Date: ${date}"
-        # echo $tag_date
+        echo $tag_date
         old_line="Release Date: "
         sed -i 's/Release Date\: /Release Date\: ${tag_date}/g' ${{ inputs.output }}
       shell: bash
