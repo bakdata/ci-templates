@@ -50,7 +50,7 @@ runs:
       id: setTags
       run: |
         # Set from and to tags
-        if [ $(git tag -l "${{ inputs.new-tag }}") ]; then
+        if [ $(git tag -l ${{ inputs.new-tag }}) ]; then
           echo "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
           var="true" 
           echo "!!Tag exists"
