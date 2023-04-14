@@ -82,7 +82,7 @@ runs:
         # tag_date="Release Date: ${date}"
         echo $tag_date
         old_line="Release Date: "
-        sed -i 's/Release Date/Release Date \[${tag_date}\]/g' ${{ inputs.output }}
+        sed -i "s/Release Date/Release Date \[${tag_date}\]/g" ${{ inputs.output }}
       shell: bash
         # [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?([Zz]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?
 
