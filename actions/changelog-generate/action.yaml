@@ -95,6 +95,15 @@ runs:
         echo 'EOF' >> $GITHUB_OUTPUT
         sed -i 's/# /## /g' ${{ inputs.output }}
 
+        # Create changelog.md in case of a first Release
+        if [ ! -f "${{ inputs.gh-changelog }}" ]; then
+            touch ${{ inputs.gh-changelog }}
+            echo "# Changelog \n" >> ${{ inputs.gh-changelog }}
+        fi
+
         sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
+        echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
+        echo "$(cat ${{ inputs.gh-changelog }})" >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
         # echo "merged-changelog=$(cat ${{ inputs.gh-changelog }})">> $GITHUB_OUTPUT
       shell: bash
