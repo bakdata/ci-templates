@@ -53,6 +53,7 @@ runs:
         if [ $(git tag -l "${{ inputs.new-tag }}") ]; then
           echo "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
           var="true" 
+          echo "!!Tag exists"
           echo "to-exists=$var">> $GITHUB_OUTPUT 
         else
           var="false" 
@@ -73,7 +74,7 @@ runs:
     - name: "test from"
       run: |
         # Test
-        echo "!!!!!!!!!!!!!!!!!!!!!! [${{steps.setTags.outputs.fromtag}}]"
+        echo "!!!!!!!!!!!!!!!!!!!!!! [${{steps.setTags.outputs.fromtag}}] "
       shell: bash
 
     - name: "Create changelog"
