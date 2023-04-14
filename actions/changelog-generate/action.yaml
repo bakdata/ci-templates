@@ -83,5 +83,10 @@ runs:
       run: |
         # Reformat changes.md and add it to the existing changelog
         sed -i 's/# /## /g' ${{ inputs.output }}
+        echo "---------------------------"
+        cat ${{ inputs.output }}
+        echo "---------------------------"
         sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
+        cat ${{ inputs.gh-changelog }}
+        echo "---------------------------"
       shell: bash
