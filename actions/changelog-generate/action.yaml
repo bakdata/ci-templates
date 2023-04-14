@@ -40,7 +40,7 @@ runs:
   steps:
     - uses: mukunku/tag-exists-action@v1.2.0
       id: checkTag
-      with: 
+      with:
         tag: "${{ inputs.new-tag }}"
     - name: "Set tag"
       id: setTag
@@ -71,7 +71,7 @@ runs:
         echo "---------------------------"
         cat ${{ inputs.output }}
         echo "---------------------------"
-        
+
         sed -i 's|releases/tag/${{steps.setTag.outputs.totag}}|releases/tag/${{ inputs.new-tag }}|g' ${{ inputs.output }}
         cat ${{ inputs.output }}
         echo "+++++++++++++++++++++++++++++="
@@ -80,9 +80,9 @@ runs:
         tag_date="Release Date: ${date}"
         echo $tag_date
         old_line="Release Date: "
-        # [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?([Zz]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?
-        sed -i 's/${old_line}/${tag_date}/g' ${{ inputs.output }}
+        sed -i 's/Release Date\: /Release Date\: ${date}/g' ${{ inputs.output }}
       shell: bash
+        # [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?([Zz]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?
     - name: Update github Changelog
       run: |
         # Reformat changes.md and add it to the existing changelog
