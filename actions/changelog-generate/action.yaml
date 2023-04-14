@@ -35,6 +35,13 @@ inputs:
     description: "Special configuration for projects which work without PRs."
     required: false
     default: "false"
+outputs:
+  single-changelog:
+    description: "Changelog containing changes of the latest tag"
+    value: ${{ steps.output-generator.outputs.single-changelog }}
+  merged-changelog:
+    description: "Changelog containing listing of all single changelogs"
+    value: ${{ steps.output-generator.outputs.merged-changelog }}
 runs:
   using: "composite"
   steps:
@@ -64,36 +71,28 @@ runs:
         fetchReviewers: "${{ inputs.fetchReviewers }}"
         fetchReleaseInformation: "${{ inputs.fetchReleaseInformation }}"
         commitMode: "${{ inputs.commitMode }}"
+        ignorePreReleases: true
 
     - name: Replace default branch with new Tag
       if: ${{ steps.checkTag.outputs.exists == 'false' }}
       run: |
         # Replace default branch with new tag
         sed -i 's/\[${{steps.setTag.outputs.totag}}\]/\[${{ inputs.new-tag }}\]/g' ${{ inputs.output }}
-        echo "---------------------------"
-        cat ${{ inputs.output }}
-        echo "---------------------------"
-
         sed -i 's|releases/tag/${{steps.setTag.outputs.totag}}|releases/tag/${{ inputs.new-tag }}|g' ${{ inputs.output }}
-        cat ${{ inputs.output }}
-        echo "+++++++++++++++++++++++++++++="
+
         #Set Release date
         tag_date=$(date '+%Y-%m-%d') 
-        # tag_date="Release Date: ${date}"
-        echo $tag_date
-        old_line="Release Date: "
         sed -i "s/Release Date: /Release Date: \[${tag_date}\]/g" ${{ inputs.output }}
       shell: bash
         # [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?([Zz]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?
 
     - name: Update github Changelog
+      id: output-generator
       run: |
         # Reformat changes.md and add it to the existing changelog
+        echo "single-changelog=$(cat ${{ inputs.output }})" >> $GITHUB_OUTPUT
         sed -i 's/# /## /g' ${{ inputs.output }}
-        echo "---------------------------"
-        cat ${{ inputs.output }}
-        echo "---------------------------"
+
         sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
-        cat ${{ inputs.gh-changelog }}
-        echo "---------------------------"
+        echo "merged-changelog=$(cat ${{ inputs.gh-changelog }} >> $GITHUB_OUTPUT
       shell: bash
