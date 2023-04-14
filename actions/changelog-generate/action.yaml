@@ -94,5 +94,5 @@ runs:
         sed -i 's/# /## /g' ${{ inputs.output }}
 
         sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
-        echo "merged-changelog=$(cat ${{ inputs.gh-changelog }} >> $GITHUB_OUTPUT
+        echo "merged-changelog=$(cat ${{ inputs.gh-changelog }} )>> $GITHUB_OUTPUT
       shell: bash
