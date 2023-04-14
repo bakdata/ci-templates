@@ -62,7 +62,12 @@ runs:
         # set fromtag to first commit if not fromtag was specified
         # if [ -n "${{ inputs.old-tag }}" ]; then
         #   first_commit=`git log --oneline | tail -1 | awk '{print $1}'`
-        #   echo  "fromtag=$first_commit">> $GITHUB_OUTPUT 
+        #   echo  "fromtag=$first_commit">> $GITHUB_OUTPUT
+        #   echo "+++++++++++++++++++++++++++"
+        #   echo "+++++++++++++++++++++++++++"
+        #   echo $first_commit
+        #   echo "+++++++++++++++++++++++++++"
+        #   echo "+++++++++++++++++++++++++++"
         # else
         #   echo  "fromtag=${{ inputs.old-tag }}">> $GITHUB_OUTPUT 
         # fi
