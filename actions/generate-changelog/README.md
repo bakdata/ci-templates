@@ -54,14 +54,17 @@ steps:
   - uses: actions/checkout@v3
   # generate changelog
   - name: Create changelog
-    uses: bakdata/ci-templates/actions/generate-changelog@main
+    id: build_changelog
+    uses: mikepenz/release-changelog-builder-action@v3.7.0
     with:
-      old-tag: "1.0.0"
-      new-tag: "1.0.1"
-      gh-changelog: "CHANGELOG.md"
-      doc-changelog: "./docs/Changelog.md"
-      config: "./.github/changelog-config.json"
-      github-email: "${{ secrets.GH_EMAIL }}"
-      github-username: "${{ secrets.GH_USERNAME }}"
-      github-token: "${{ secrets.GH_TOKEN }}"
+      token: ${{ secrets.GH_TOKEN }}
+      configuration: "./.github/changelog-config.json"
+      fromTag: "1.0.0"
+      toTag: "1.0.1"
+      fetchReviewers: "true"
+      fetchReleaseInformation: "true"
+  # access generated changelog
+  - name: Use output
+    run: echo ${{ steps.build_changelog.outputs.changelog }}
+    shell: bash
 ```
