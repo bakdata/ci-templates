@@ -91,8 +91,11 @@ runs:
       run: |
         # Reformat changes.md and add it to the existing changelog
         echo "single-changelog=$(cat ${{ inputs.output }})" >> $GITHUB_OUTPUT
+        # echo 'single-changelog<<EOF' >> $GITHUB_OUTPUT
+        # echo "$(cat ${{ inputs.output }})" >> $GITHUB_OUTPUT
+        # echo 'EOF' >> $GITHUB_OUTPUT
         sed -i 's/# /## /g' ${{ inputs.output }}
 
         sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
-        echo "merged-changelog=$(cat ${{ inputs.gh-changelog }})">> $GITHUB_OUTPUT
+        # echo "merged-changelog=$(cat ${{ inputs.gh-changelog }})">> $GITHUB_OUTPUT
       shell: bash
