@@ -90,10 +90,10 @@ runs:
       id: output-generator
       run: |
         # Reformat changes.md and add it to the existing changelog
-        echo "single-changelog=$(cat ${{ inputs.output }})" >> $GITHUB_OUTPUT
-        # echo 'single-changelog<<EOF' >> $GITHUB_OUTPUT
-        # echo "$(cat ${{ inputs.output }})" >> $GITHUB_OUTPUT
-        # echo 'EOF' >> $GITHUB_OUTPUT
+        # echo "single-changelog=$(cat ${{ inputs.output }})" >> $GITHUB_OUTPUT
+        echo 'single-changelog<<EOF' >> $GITHUB_OUTPUT
+        echo "$(cat ${{ inputs.output }})" >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
         sed -i 's/# /## /g' ${{ inputs.output }}
 
         sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
