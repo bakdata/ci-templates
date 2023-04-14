@@ -49,6 +49,7 @@ runs:
       id: checkTag
       with:
         tag: "${{ inputs.new-tag }}"
+
     - name: "Set tag"
       id: setTag
       run: |
