@@ -55,6 +55,7 @@ runs:
           var="true" 
           echo "!!Tag exists"
           echo "to-exists=$var">> $GITHUB_OUTPUT 
+          echo "!!Tag is new"
         else
           var="false" 
           echo "totag=${{ github.event.repository.default_branch }}">> $GITHUB_OUTPUT 
