@@ -49,6 +49,7 @@ runs:
     - name: "Set tags"
       id: setTags
       run: |
+        # Set from and to tags
         if [ $(git tag -l "${{ inputs.new-tag }}") ]; then
           echo "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
           var="true" 
@@ -63,13 +64,18 @@ runs:
         if [ ! -n "${{ inputs.old-tag }}" ]; then
           first_commit=`git log --oneline | tail -1 | awk '{print $1}'`
           echo  "fromtag=$first_commit">> $GITHUB_OUTPUT
-          echo "!!!!!!!!!!!!!Empty fromtag:updated to $fromtag"
+          echo "!!!!!!!!!!!!!Empty fromtag:updated to $first_commit"
         else
           echo  "fromtag=${{ inputs.old-tag }}">> $GITHUB_OUTPUT 
         fi
 
       shell: bash
-
+    - name: "test from"
+      run: |
+        # Test
+        echo "${{steps.setTags.outputs.fromtag}}"
+      shell: bash
+          echo "!!!!!!!!!!!!!Empty fromtag:updated to $first_commit"
     - name: "Create changelog"
       id: build_changelog
       uses: mikepenz/release-changelog-builder-action@v3.7.0
