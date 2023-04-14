@@ -76,8 +76,8 @@ runs:
         cat ${{ inputs.output }}
         echo "+++++++++++++++++++++++++++++="
         #Set Release date
-        tag_date=$(date '+%Y-%m-%d') 
-        tag_date="Release Date: ${tag_date}"
+        date=$(date '+%Y-%m-%d') 
+        tag_date="Release Date: ${date}"
         echo $tag_date
         old_line="Release Date: "
         # [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?([Zz]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?
