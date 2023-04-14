@@ -12,8 +12,9 @@ inputs:
     description: Version after bump
     required: true
   old-tag:
-    description: Previous version
-    required: true
+    description: Previous version. Let empty for releases
+    required: false
+    default: ""
   # unrequired inputs
   config:
     description: Path to the changelog config JSON file
@@ -45,19 +46,25 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - uses: mukunku/tag-exists-action@v1.2.0
-      id: checkTag
-      with:
-        tag: "${{ inputs.new-tag }}"
-
-    - name: "Set tag"
-      id: setTag
+    - name: "Set tags"
+      id: setTags
       run: |
-        if [[ "${{ steps.checkTag.outputs.exists }}" == "true" ]]; then
-            echo  "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT 
-        else 
-            echo  "totag=${{ github.event.repository.default_branch }}">> $GITHUB_OUTPUT 
+        if [ $(git tag -l "${{ inputs.new-tag }}") ]; then
+          echo "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT 
+          echo "to-exists=true" $GITHUB_OUTPUT 
+        else
+          echo "totag=${{ github.event.repository.default_branch }}">> $GITHUB_OUTPUT 
+          echo "to-exists=false" $GITHUB_OUTPUT 
         fi
+
+        # set fromtag to first commit if not fromtag was specified
+        if [ -n "${{ inputs.old-tag }}" ]; then
+          first_commit=`git log --oneline | tail -1 | awk '{print $1}'`
+          echo  "fromtag=$first_commit">> $GITHUB_OUTPUT 
+        else
+          echo  "fromtag=${{ inputs.old-tag }}">> $GITHUB_OUTPUT 
+        fi
+
       shell: bash
 
     - name: "Create changelog"
@@ -66,19 +73,19 @@ runs:
       with:
         token: "${{ inputs.github-token }}"
         configuration: "${{ inputs.config }}"
-        fromTag: "${{ inputs.old-tag }}"
-        toTag: "${{steps.setTag.outputs.totag}}"
+        fromTag: "${{steps.setTags.outputs.totag}}"
+        toTag: "${{steps.setTags.outputs.totag}}"
         outputFile: "${{ inputs.output }}"
         fetchReviewers: "${{ inputs.fetchReviewers }}"
         fetchReleaseInformation: "${{ inputs.fetchReleaseInformation }}"
         commitMode: "${{ inputs.commitMode }}"
 
     - name: Replace default branch with new Tag
-      if: ${{ steps.checkTag.outputs.exists == 'false' }}
+      if: ${{ steps.setTags.outputs.to-exists == 'false' }}
       run: |
         # Replace default branch with new tag
-        sed -i 's/\[${{steps.setTag.outputs.totag}}\]/\[${{ inputs.new-tag }}\]/g' ${{ inputs.output }}
-        sed -i 's|releases/tag/${{steps.setTag.outputs.totag}}|releases/tag/${{ inputs.new-tag }}|g' ${{ inputs.output }}
+        sed -i 's/\[${{steps.setTags.outputs.totag}}\]/\[${{ inputs.new-tag }}\]/g' ${{ inputs.output }}
+        sed -i 's|releases/tag/${{steps.setTags.outputs.totag}}|releases/tag/${{ inputs.new-tag }}|g' ${{ inputs.output }}
 
         #Set Release date
         tag_date=$(date '+%Y-%m-%d') 
