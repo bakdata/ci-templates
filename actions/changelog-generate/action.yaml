@@ -83,13 +83,11 @@ runs:
         tag_date=$(date '+%Y-%m-%d') 
         sed -i "s/Release Date: /Release Date: \[${tag_date}\]/g" ${{ inputs.output }}
       shell: bash
-        # [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]+)?([Zz]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?
 
     - name: Update github Changelog
       id: output-generator
       run: |
         # Reformat changes.md and add it to the existing changelog
-        # echo "single-changelog=$(cat ${{ inputs.output }})" >> $GITHUB_OUTPUT
         echo 'single-changelog<<EOF' >> $GITHUB_OUTPUT
         echo "$(cat ${{ inputs.output }})" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
@@ -101,9 +99,9 @@ runs:
             echo "# Changelog \n" >> ${{ inputs.gh-changelog }}
         fi
 
+        # Update global changelog and pass it to the ouput
         sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
         echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
         echo "$(cat ${{ inputs.gh-changelog }})" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
-        # echo "merged-changelog=$(cat ${{ inputs.gh-changelog }})">> $GITHUB_OUTPUT
       shell: bash
