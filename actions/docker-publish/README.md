@@ -24,9 +24,9 @@ steps:
   - name: Publish tarball image
     uses: bakdata/ci-templates/actions/docker-publish@main
     with:
-      # publishing image registry.hub.docker.com/my-repo/my-image:v1.1.0
+      # publishing image registry.hub.docker.com/my-namespace/my-image:v1.1.0
       docker-registry: "registry.hub.docker.com"
-      image-namespace: "my-repo"
+      image-namespace: "my-namespace"
       image-name: "my-image"
       image-tag: "v1.1.0"
       image-artifact-name: "tarball"
