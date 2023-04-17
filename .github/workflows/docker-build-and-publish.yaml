@@ -19,8 +19,8 @@ on:
         required: false
         default: ""
         type: string
-      image-repository:
-        description: "Repository of Docker image."
+      image-namespace:
+        description: "Namespace of Docker image."
         required: false
         default: ""
         type: string
@@ -106,7 +106,7 @@ jobs:
         uses: bakdata/ci-templates/actions/docker-publish@v1.18.0
         with:
           docker-registry: "${{ inputs.docker-registry }}"
-          image-repository: "${{ inputs.image-repository }}"
+          image-namespace: "${{ inputs.image-namespace }}"
           image-name: "${{ inputs.image-name }}"
           image-tag: "${{ inputs.image-tag }}"
           image-artifact-name: "${{ inputs.image-artifact-name }}"

@@ -37,7 +37,7 @@ This workflow is built from multiple composite actions listed below:
 | docker-context      |    ❌    |                        "."                         | string | The docker context                                                                                                   |
 | dockerfile-path     |    ❌    |                    "Dockerfile"                    | string | Path to the Dockerfile                                                                                               |
 | docker-registry     |    ❌    |                         ""                         | string | Host where the image should be pushed to                                                                             |
-| image-repository    |    ❌    |                         ""                         | string | Repository of Docker image                                                                                           |
+| image-namespace     |    ❌    |                         ""                         | string | Namespace of Docker image                                                                                            |
 | image-name          |    ❌    |            github.event.repository.name            | string | Name of Docker image                                                                                                 |
 | image-tag           |    ❌    | pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8} | string | Tag of Docker image                                                                                                  |
 | ref                 |    ❌    |                         ""                         | string | The ref name to checkout                                                                                             |
@@ -68,11 +68,11 @@ jobs:
     name: Build and push Docker image
     uses: bakdata/ci-templates/.github/workflows/docker-build-and-publish.yaml@main
     with:
-      # with these settings image would be pushed to my-registry.com/my-repository/my-image:my-tag
+      # with these settings image would be pushed to my-registry.com/my-namespace/my-image:my-tag
       docker-context: "./docker-dir/"
       dockerfile-path: "./path/to/my/Dockerfile"
       docker-registry: "my-registry.com"
-      image-repository: "my-repository"
+      image-namespace: "my-namespace"
       image-name: "my-image"
       image-tag: "my-tag"
       ref: "feat/foo"

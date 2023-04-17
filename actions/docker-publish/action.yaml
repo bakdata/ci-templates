@@ -6,8 +6,8 @@ inputs:
     description: "Host where the image should be pushed to."
     required: false
     default: ""
-  image-repository:
-    description: "Repository of Docker image."
+  image-namespace:
+    description: "Namespace of Docker image."
     required: false
     default: ""
   image-name:
@@ -49,8 +49,8 @@ runs:
 
         fullImageName="${{ inputs.image-name }}"
         if [[ -n "${{ inputs.docker-registry }}" ]]; then
-          if [[ -n "${{ inputs.image-repository }}" ]]; then
-            fullImageName="${{ inputs.image-repository }}/${fullImageName}"
+          if [[ -n "${{ inputs.image-namespace }}" ]]; then
+            fullImageName="${{ inputs.image-namespace }}/${fullImageName}"
           fi
           fullImageName="${{ inputs.docker-registry }}/${fullImageName}"
         fi

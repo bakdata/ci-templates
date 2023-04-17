@@ -11,7 +11,7 @@ Create an action that [uploads a tarball image as an artifact](https://github.co
 | Name                | Required |                   Default Value                    | Description                                                                                                          |
 | ------------------- | :------: | :------------------------------------------------: | -------------------------------------------------------------------------------------------------------------------- |
 | docker-registry     |    ❌    |                         ""                         | Host where the image should be pushed to                                                                             |
-| image-repository    |    ❌    |                         ""                         | Repository of Docker image                                                                                           |
+| image-namespace     |    ❌    |                         ""                         | Namespace of Docker image                                                                                            |
 | image-name          |    ❌    |            github.event.repository.name            | Name of Docker image                                                                                                 |
 | image-tag           |    ❌    | pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8} | Tag of Docker image                                                                                                  |
 | image-artifact-name |    ❌    |                  "image-artifact"                  | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact |
@@ -26,7 +26,7 @@ steps:
     with:
       # publishing image registry.hub.docker.com/my-repo/my-image:v1.1.0
       docker-registry: "registry.hub.docker.com"
-      image-repository: "my-repo"
+      image-namespace: "my-repo"
       image-name: "my-image"
       image-tag: "v1.1.0"
       image-artifact-name: "tarball"
