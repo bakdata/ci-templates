@@ -48,10 +48,10 @@ runs:
         fi
 
         fullImageName="${{ inputs.image-name }}"
+        if [[ -n "${{ inputs.image-namespace }}" ]]; then
+          fullImageName="${{ inputs.image-namespace }}/${fullImageName}"
+        fi
         if [[ -n "${{ inputs.docker-registry }}" ]]; then
-          if [[ -n "${{ inputs.image-namespace }}" ]]; then
-            fullImageName="${{ inputs.image-namespace }}/${fullImageName}"
-          fi
           fullImageName="${{ inputs.docker-registry }}/${fullImageName}"
         fi
 
