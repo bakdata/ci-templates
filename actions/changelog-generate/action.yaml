@@ -3,7 +3,7 @@ description: "Generate changelog after release"
 inputs:
   # required inputs
   changelog-file:
-    description: Path to the Changelog.md file
+    description: Path to the Changelog.md file in the github repository
     required: true
   github-token:
     description: "The GitHub token for committing the changes."
@@ -107,14 +107,14 @@ runs:
         sed -i 's/# /## /g' ${{ inputs.output }}
 
         # Create changelog.md in case of a first Release
-        if [ ! -f "${{ inputs.gh-changelog }}" ]; then
-            touch ${{ inputs.gh-changelog }}
-            echo "# Changelog \n" >> ${{ inputs.gh-changelog }}
+        if [ ! -f "${{ inputs.changelog-file }}" ]; then
+            touch ${{ inputs.changelog-file }}
+            echo "# Changelog \n" >> ${{ inputs.changelog-file }}
         fi
 
         # Update global changelog and pass it to the ouput
-        sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.gh-changelog }}
+        sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.changelog-file }}
         echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
-        echo "$(cat ${{ inputs.gh-changelog }})" >> $GITHUB_OUTPUT
+        echo "$(cat ${{ inputs.changelog-file }})" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
       shell: bash
