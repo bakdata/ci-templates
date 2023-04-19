@@ -88,7 +88,6 @@ runs:
       if: ${{ steps.checkTag.outputs.exists == 'false' }}
       run: |
         # Replace default branch with new tag
-        echo "\n" >>  ${{ inputs.output }}
         sed -i 's/\[${{steps.setTags.outputs.totag}}\]/\[${{ inputs.new-tag }}\]/g' ${{ inputs.output }}
         sed -i 's|releases/tag/${{steps.setTags.outputs.totag}}|releases/tag/${{ inputs.new-tag }}|g' ${{ inputs.output }}
 
@@ -113,7 +112,7 @@ runs:
         fi
 
         # Update global changelog and pass it to the ouput
-        sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.changelog-file }}
+        sed -i '/# Changelog/ r ${{ inputs.output }}\n' ${{ inputs.changelog-file }}
         echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
         echo "$(cat ${{ inputs.changelog-file }})" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
