@@ -63,11 +63,11 @@ runs:
         # set fromtag to first commit if fromtag was not specified
         if [ ! -n "${{ inputs.old-tag }}" ]; then
           # first_commit=`git log --oneline | tail -1 | awk '{print $1}'`
-          # first_commit=`git rev-list --max-parents=0 HEAD`
-          first_commit=4bbdcc3458b1730d7d540c2d34fb60817f35a7a5
+          first_commit=`git rev-list --max-parents=0 HEAD`
+          # first_commit=4bbdcc3458b1730d7d540c2d34fb60817f35a7a5
           echo  "fromtag=$first_commit">> $GITHUB_OUTPUT
-          # latest_commit=`git rev-parse HEAD`
-          latest_commit=95662b8f64bd8ded2a0322bba31d7c3b4eb45109
+          latest_commit=`git rev-parse HEAD`
+          # latest_commit=95662b8f64bd8ded2a0322bba31d7c3b4eb45109
           
           echo  "totag=$latest_commit">> $GITHUB_OUTPUT 
           echo "!!!!!!!!!!!!! from - to: <$first_commit - $latest_commit>"
