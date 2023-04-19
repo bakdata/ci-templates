@@ -100,9 +100,11 @@ runs:
       id: output-generator
       run: |
         # Reformat changes.md and add it to the existing changelog
+        echo -e "\n" >> ${{ inputs.output }} 
         echo 'single-changelog<<EOF' >> $GITHUB_OUTPUT
         echo "$(cat ${{ inputs.output }})" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
+
         sed -i 's/# /## /g' ${{ inputs.output }}
 
         # Create changelog.md in case of a first Release
