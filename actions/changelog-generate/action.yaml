@@ -110,7 +110,7 @@ runs:
         # Create changelog.md in case of a first Release
         if [ ! -f "${{ inputs.changelog-file }}" ]; then
             touch ${{ inputs.changelog-file }}
-            echo "# Changelog \n" >> ${{ inputs.changelog-file }}
+            echo "# Changelog " >> ${{ inputs.changelog-file }}
         fi
 
         # Update global changelog and pass it to the ouput
