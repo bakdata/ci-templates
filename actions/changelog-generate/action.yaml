@@ -50,10 +50,12 @@ runs:
       id: setTags
       run: |
         # Set from and to tags
-        if [ $(git tag -l v${{ inputs.new-tag }}) ]; then
+        checkTag=$(git ls-remote --tags origin | grep "${{ inputs.new-tag }}")
+        
+        if [ -n "$checkTag" ]; then 
+        # if [ $(git tag -l "${{ inputs.new-tag }}") ]; then
           echo "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
-          var="true" 
-          echo "!!Tag exists"
+          var="true"
           echo "to-exists=$var">> $GITHUB_OUTPUT 
         else
           var="false" 
@@ -61,7 +63,7 @@ runs:
           echo "to-exists=$var">> $GITHUB_OUTPUT 
         fi
 
-        # set fromtag to first commit if not fromtag was specified
+        # set fromtag to first commit if fromtag was not specified
         if [ ! -n "${{ inputs.old-tag }}" ]; then
           first_commit=`git log --oneline | tail -1 | awk '{print $1}'`
           echo  "fromtag=$first_commit">> $GITHUB_OUTPUT
