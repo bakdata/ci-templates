@@ -112,8 +112,9 @@ runs:
         fi
 
         # Update global changelog and pass it to the ouput
-        sed -i '/# Changelog/ r ${{ inputs.output }}\n' ${{ inputs.changelog-file }}
+        sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.changelog-file }}
         echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
         echo "$(cat ${{ inputs.changelog-file }})" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
+        cat ${{ inputs.changelog-file }}
       shell: bash
