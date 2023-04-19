@@ -68,7 +68,7 @@ runs:
           latest_commit=`git rev-parse HEAD`
           
           echo  "totag=$latest_commit">> $GITHUB_OUTPUT 
-          echo "!!!!!!!!!!!!! from - to: <first_commit - $latest_commit>"
+          echo "!!!!!!!!!!!!! from - to: <$first_commit - $latest_commit>"
         else
           echo  "fromtag=${{ inputs.old-tag }}">> $GITHUB_OUTPUT 
         fi
