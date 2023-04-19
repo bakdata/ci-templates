@@ -64,6 +64,7 @@ runs:
         if [ ! -n "${{ inputs.old-tag }}" ]; then
           first_commit=`git log --oneline | tail -1 | awk '{print $1}'`
           echo  "fromtag=$first_commit">> $GITHUB_OUTPUT
+          echo  "totag=95662b8">> $GITHUB_OUTPUT 
           echo "!!!!!!!!!!!!!Empty fromtag:updated to $first_commit"
         else
           echo  "fromtag=${{ inputs.old-tag }}">> $GITHUB_OUTPUT 
