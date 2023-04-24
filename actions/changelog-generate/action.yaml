@@ -82,7 +82,7 @@ runs:
           if [ -n "$tag_list" ]; then 
             # if tag exists then set from-tag to the latest tag
             latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
-            setfrom=$latest-tag
+            setfrom=$latest_tag
           else
             # if no tag exists then use the frist commit as fromtag
             first_commit=`git rev-list --max-parents=0 HEAD`
