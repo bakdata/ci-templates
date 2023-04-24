@@ -106,9 +106,7 @@ runs:
         echo 'single-changelog<<EOF' >> $GITHUB_OUTPUT
         echo "$(cat ${{ inputs.output }})" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
-
         sed -i 's/# /## /g' ${{ inputs.output }}
-
         # Create changelog.md in case of a first Release
         if [ -n "${{ inputs.changelog-file }}" ]; then
           echo  "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
