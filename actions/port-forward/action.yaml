@@ -10,10 +10,19 @@ inputs:
   namespace:
     description: Kubernetes namespace
     required: true
+  kubectl-version:
+    description: kubectl version
+    default: "v1.23.0"
+    required: false
 
 runs:
   using: composite
   steps:
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v1
+      with:
+        version: ${{ inputs.kubectl-version }}
+
     - name: Establish port forward
       shell: bash
       run: |
