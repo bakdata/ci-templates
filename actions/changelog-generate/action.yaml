@@ -111,6 +111,7 @@ runs:
 
         # Create changelog.md in case of a first Release
         if [ -n "${{ inputs.changelog-file }}" ]; then
+          echo  "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
           if [ ! -f "${{ inputs.changelog-file }}" ]; then
               touch ${{ inputs.changelog-file }}
               echo "# Changelog " >> ${{ inputs.changelog-file }}
@@ -122,5 +123,7 @@ runs:
           echo "$(cat ${{ inputs.changelog-file }})" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
           cat ${{ inputs.changelog-file }}
+        else
+          echo  "???????????????????????????????????????"
         fi
       shell: bash
