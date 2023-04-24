@@ -113,7 +113,7 @@ runs:
           echo  "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
           if [ ! -f "${{ inputs.changelog-file }}" ]; then
               touch ${{ inputs.changelog-file }}
-              echo "# Changelog " >> ${{ inputs.changelog-file }}
+              echo "# Changelog " >> ./${{ inputs.changelog-file }}
           fi
         #   # Update global changelog and pass it to the ouput
         #   sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.changelog-file }}
