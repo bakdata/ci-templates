@@ -11,8 +11,8 @@ inputs:
     description: Kubernetes namespace
     required: true
   kubectl-version:
-    description: kubectl version
-    default: "v1.23.0"
+    description: kubectl version, e.g. `v1.23.0` or `latest`
+    default: latest
     required: false
 
 runs:
