@@ -62,8 +62,8 @@ runs:
       id: setTags
       run: |
         # set both old and new tags
-        git config user.name "${{ secrets.github-username }}"
-        git config user.email "${{ secrets.github-email }}"
+        git config user.name "${{ inputs.github-username }}"
+        git config user.email "${{ inputs.github-email }}"
         git fetch --tags
         tag_list=$(git describe --tags)
         echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
