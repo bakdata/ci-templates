@@ -62,49 +62,58 @@ runs:
       id: setTags
       run: |
         # set both old and new tags
-        git config user.name "${{ inputs.github-username }}"
-        git config user.email "${{ inputs.github-email }}"
-        git clone git@github.com:bakdata/github-playground.git
-        
-        git fetch --tags
+        # git config user.name "${{ inputs.github-username }}"
+        # git config user.email "${{ inputs.github-email }}"
+        # git clone git@github.com:bakdata/github-playground.git
+
+        # git fetch --tags
         tag_list=$(git describe --tags)
-        echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
-        echo "$tag_list"
-        echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
-        #to-tag
-           # if [[ "${{ steps.checkTag.outputs.exists }}" == "true" ]]; then
-        if [[ "$tag_list" == *"${{ inputs.new-tag }}"* ]]; then
-          echo  "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
-          echo  "totag_exists=true">> $GITHUB_OUTPUT
-        else
-          echo  "totag=${{ github.event.repository.default_branch }}">> $GITHUB_OUTPUT 
-          echo  "totag_exists=false">> $GITHUB_OUTPUT
-        fi
 
 
-        #from-tag
-        setfrom=""
-        check_if_first_commit="false"
-        # if [[ "$tag_list" == *"${{ inputs.old-tag }}"* ]]; then
+        # echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+        # echo "$tag_list"
+        # echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+        # #to-tag
+        #    # if [[ "${{ steps.checkTag.outputs.exists }}" == "true" ]]; then
+        # if [[ "$tag_list" == *"${{ inputs.new-tag }}"* ]]; then
+        #   echo  "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
+        #   echo  "totag_exists=true">> $GITHUB_OUTPUT
+        # else
+        #   echo  "totag=${{ github.event.repository.default_branch }}">> $GITHUB_OUTPUT 
+        #   echo  "totag_exists=false">> $GITHUB_OUTPUT
+        # fi
+
+
+        # #from-tag
+        # setfrom=""
+        # check_if_first_commit="false"
+        # # if [[ "$tag_list" == *"${{ inputs.old-tag }}"* ]]; then
         
-        if [[ -n "${{ inputs.old-tag }}" ]] && [[ "$tag_list" == *"${{ inputs.old-tag }}"* ]]; then
-        # tag provided & provided tag exists
-            setfrom=${{ inputs.old-tag }}
-        else
-        # no tag provided or a non-existing tag was provided 
-          if [ -n "$tag_list" ]; then 
-            # if tag exists then set from-tag to the latest tag
-            latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
-            setfrom=$latest_tag
-          else
-            # if no tag exists then use the frist commit as fromtag
-            first_commit=`git rev-list --max-parents=0 HEAD`
-            setfrom=$first_commit
-            # latest_commit=`git rev-parse HEAD`
-            # echo  "totag=$latest_commit">> $GITHUB_OUTPUT 
-          fi
-        fi
+        # if [[ -n "${{ inputs.old-tag }}" ]] && [[ "$tag_list" == *"${{ inputs.old-tag }}"* ]]; then
+        # # tag provided & provided tag exists
+        #     setfrom=${{ inputs.old-tag }}
+        # else
+        # # no tag provided or a non-existing tag was provided 
+        #   if [ -n "$tag_list" ]; then 
+        #     # if tag exists then set from-tag to the latest tag
+        #     latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+        #     setfrom=$latest_tag
+        #   else
+        #     # if no tag exists then use the frist commit as fromtag
+        #     first_commit=`git rev-list --max-parents=0 HEAD`
+        #     setfrom=$first_commit
+        #     # latest_commit=`git rev-parse HEAD`
+        #     # echo  "totag=$latest_commit">> $GITHUB_OUTPUT 
+        #   fi
+        # fi
         echo  "fromtag=$setfrom">> $GITHUB_OUTPUT 
+
+
+
+
+
+
+
 
         # if [[ "$check_if_first_commit"=="true" ]]; then
         #   taglist=$(git tag)
