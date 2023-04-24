@@ -16,6 +16,12 @@ inputs:
     description: Previous version. Let empty for releases
     required: false
     default: ""
+  github-email:
+    description: "The GitHub email for committing the changes."
+    required: true
+  github-username:
+    description: "The GitHub username for committing the changes."
+    required: true
   # unrequired inputs
   config:
     description: Path to the changelog config JSON file
@@ -56,6 +62,8 @@ runs:
       id: setTags
       run: |
         # set both old and new tags
+        git config user.name "${{ secrets.github-username }}"
+        git config user.email "${{ secrets.github-email }}"
         git fetch --tags
         tag_list=$(git describe --tags)
         echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
