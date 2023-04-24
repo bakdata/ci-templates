@@ -60,23 +60,13 @@ runs:
     - name: "Set tags"
       id: setTags
       run: |
-        git config user.name "${{ inputs.github-username }}"
-        git config user.email "${{ inputs.github-email }}"
-        var=$(git ls-remote --tags origin | grep ${{ inputs.new-tag }})
-        if [ -n "$var" ]; then
-
+        if [[ "${{ steps.checkTag.outputs.exists }}" == "true" ]]; then
           echo  "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
-          echo "tagexists=true">> $GITHUB_OUTPUT
           echo "!!!!!!!!!!!! -------- TAG WAS FOUND"
         else
           echo  "totag=${{ github.event.repository.default_branch }}">> $GITHUB_OUTPUT 
-          echo "tagexists=false">> $GITHUB_OUTPUT
           echo "??????????????? -------- TAG WAS FOUND"
         fi
-
-        # if [[ "${{ steps.checkTag.outputs.exists }}" == "true" ]]; then
-        # else 
-        # fi
 
         # set fromtag to first commit if fromtag was not specified
         if [ ! -n "${{ inputs.old-tag }}" ]; then
@@ -105,7 +95,7 @@ runs:
         commitMode: "${{ inputs.commitMode }}"
 
     - name: Replace default branch with new Tag
-      if: ${{ steps.setTags.outputs.tagexists == 'false' }}
+      if: ${{ steps.checkTag.outputs.exists == 'false' }}
       run: |
         # Replace default branch with new tag
         sed -i 's/\[${{steps.setTags.outputs.totag}}\]/\[${{ inputs.new-tag }}\]/g' ${{ inputs.output }}
