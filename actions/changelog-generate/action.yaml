@@ -55,7 +55,8 @@ runs:
     - name: "Set tags"
       id: setTags
       run: |
-        # set both old and new tags 
+        # set both old and new tags
+        git fetch --tags
         tag_list=$(git describe --tags)
         echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
         echo "$tag_list"
