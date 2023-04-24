@@ -91,7 +91,7 @@ runs:
             # echo  "totag=$latest_commit">> $GITHUB_OUTPUT 
           fi
         fi
-        echo  "fromtag=${{ inputs.old-tag }}">> $GITHUB_OUTPUT 
+        echo  "fromtag=$setfrom">> $GITHUB_OUTPUT 
 
 
 
