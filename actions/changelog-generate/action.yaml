@@ -5,12 +5,6 @@ inputs:
   changelog-file:
     description: Path to the Changelog.md file in the github repository
     required: true
-  github-email:
-    description: "The GitHub email for committing the changes."
-    required: true
-  github-username:
-    description: "The GitHub username for committing the changes."
-    required: true
   github-token:
     description: "The GitHub token for committing the changes."
     required: true
