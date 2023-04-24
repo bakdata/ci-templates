@@ -4,7 +4,8 @@ inputs:
   # required inputs
   changelog-file:
     description: Path to the Changelog.md file in the github repository
-    required: true
+    required: false
+    default: "CHANGELOG.md"
   github-token:
     description: "The GitHub token for committing the changes."
     required: true
@@ -54,22 +55,19 @@ runs:
     - name: "Set tags"
       id: setTags
       run: |
+        # set both old and new tags 
         if [[ "${{ steps.checkTag.outputs.exists }}" == "true" ]]; then
           echo  "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
-          echo "!!!!!!!!!!!! -------- TAG WAS FOUND"
         else
           echo  "totag=${{ github.event.repository.default_branch }}">> $GITHUB_OUTPUT 
-          echo "??????????????? -------- TAG WAS FOUND"
         fi
 
         # set fromtag to first commit if fromtag was not specified
         if [ ! -n "${{ inputs.old-tag }}" ]; then
           first_commit=`git rev-list --max-parents=0 HEAD`
           echo  "fromtag=$first_commit">> $GITHUB_OUTPUT
-
           latest_commit=`git rev-parse HEAD`
           echo  "totag=$latest_commit">> $GITHUB_OUTPUT 
-          echo "!!!!!!!!!!!!! from - to: <$first_commit - $latest_commit>"
         else
           echo  "fromtag=${{ inputs.old-tag }}">> $GITHUB_OUTPUT 
         fi
@@ -95,7 +93,7 @@ runs:
         sed -i 's/\[${{steps.setTags.outputs.totag}}\]/\[${{ inputs.new-tag }}\]/g' ${{ inputs.output }}
         sed -i 's|releases/tag/${{steps.setTags.outputs.totag}}|releases/tag/${{ inputs.new-tag }}|g' ${{ inputs.output }}
 
-        #Set Release date
+        # Set Release date
         tag_date=$(date '+%Y-%m-%d') 
         sed -i "s/Release Date: /Release Date: \[${tag_date}\]/g" ${{ inputs.output }}
       shell: bash
@@ -112,15 +110,17 @@ runs:
         sed -i 's/# /## /g' ${{ inputs.output }}
 
         # Create changelog.md in case of a first Release
-        if [ ! -f "${{ inputs.changelog-file }}" ]; then
-            touch ${{ inputs.changelog-file }}
-            echo "# Changelog " >> ${{ inputs.changelog-file }}
-        fi
+        if [ -n "${{ inputs.changelog-file }}" ]; then
+          if [ ! -f "${{ inputs.changelog-file }}" ]; then
+              touch ${{ inputs.changelog-file }}
+              echo "# Changelog " >> ${{ inputs.changelog-file }}
+          fi
 
-        # Update global changelog and pass it to the ouput
-        sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.changelog-file }}
-        echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
-        echo "$(cat ${{ inputs.changelog-file }})" >> $GITHUB_OUTPUT
-        echo 'EOF' >> $GITHUB_OUTPUT
-        cat ${{ inputs.changelog-file }}
+          # Update global changelog and pass it to the ouput
+          sed -i '/# Changelog/ r ${{ inputs.output }}' ${{ inputs.changelog-file }}
+          echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
+          echo "$(cat ${{ inputs.changelog-file }})" >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+          cat ${{ inputs.changelog-file }}
+        fi
       shell: bash

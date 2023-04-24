@@ -1,6 +1,6 @@
 # Generate Changelog
 
-This action will allow for the automatic generation of a changelog. The changelog template needs to be configured using a `changelog-config.json`. The action will then generate a new release changelog and an updated version of the changelog file in your repository. It returns both the new tag's changelog and the global changelog. If the new tag does not yet exist, the action will nevertheless establish the changelog in order for it to be included in the release.
+This action will enable the automated creation of a changelog. The changelog template needs to be configured using a `changelog-config.json`. The action will then generate a new release changelog and an updated version of the changelog file in your repository(if there is any). It returns both the new tag's changelog and the global changelog. If the new tag does not yet exist, the action will nevertheless establish the changelog in order for it to be included in the release.
 
 ## Dependencies
 
@@ -74,7 +74,7 @@ steps:
   # access generated changelog
   - name: Use output
     run: |
-        echo  "${{ steps.build_changelog.outputs.single-changelog }}" >> tag_changelog.md
-        echo  "${{ steps.build_changelog.outputs.merged-changelog }}" >> global_changelog.md
+      echo  "${{ steps.build_changelog.outputs.single-changelog }}" >> tag_changelog.md
+      echo  "${{ steps.build_changelog.outputs.merged-changelog }}" >> global_changelog.md
     shell: bash
 ```
