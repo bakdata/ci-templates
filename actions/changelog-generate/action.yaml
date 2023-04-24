@@ -57,7 +57,9 @@ runs:
       run: |
         # set both old and new tags 
         tag_list=$(git describe --tags)
-
+        echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+        echo "$tag_list"
+        echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
         #to-tag
            # if [[ "${{ steps.checkTag.outputs.exists }}" == "true" ]]; then
         if [[ "$tag_list" == *"${{ inputs.new-tag }}"* ]]; then
@@ -92,9 +94,6 @@ runs:
           fi
         fi
         echo  "fromtag=$setfrom">> $GITHUB_OUTPUT 
-
-
-
 
         # if [[ "$check_if_first_commit"=="true" ]]; then
         #   taglist=$(git tag)
