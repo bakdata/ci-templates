@@ -26,7 +26,7 @@ runs:
     - name: Establish port forward
       shell: bash
       run: |
-        nohup kubectl port-forward "services/${{ inputs.service }}" "${{ inputs.port }}:${{ inputs.port }}" --namespace ${{ inputs.namespace }} --kubeconfig $KUBECONFIG > port-forward.out &
+        nohup kubectl port-forward "services/${{ inputs.service }}" "${{ inputs.port }}:${{ inputs.port }}" --namespace ${{ inputs.namespace }} --kubeconfig ~/.kube/config > port-forward.out &
         # wait up to 60 seconds for port forwarding
         for _ in {1..120}; do if [ "$(cat port-forward.out)" = "Forwarding from 127.0.0.1:${{ inputs.port }} -> ${{ inputs.port }}" ]; then
           echo "Port forwarding done"
