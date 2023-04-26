@@ -142,7 +142,7 @@ runs:
               echo "**********************************"
               echo "**********************************"
               touch ${{ inputs.changelog-file }}
-              echo "# Changelog" >> ./tmp.md
+              echo "# Changelog" >> ${{ inputs.changelog-file }}
           fi
           # Update global changelog and pass it to the ouput
           # sed -i 's/# Changelog / ${{ inputs.output }}/g' ${{ inputs.changelog-file }}
