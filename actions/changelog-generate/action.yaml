@@ -81,9 +81,9 @@ runs:
             # save log for exception 
         }
         # tag_list=$(git ls-remote --tags)
-        echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!"
         echo "$tag_list"
-        echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!"
         #to-tag
         # if [[ "$tag_list" == *"${{ inputs.new-tag }}"* ]]; then
         if [[ "${{ steps.checkToTag.outputs.exists }}" == "true" ]]; then
@@ -102,7 +102,7 @@ runs:
         
         if [[ -n "${{ inputs.old-tag }}" ]] && [[  "${{ steps.checkFromTag.outputs.exists }}" == "true"]]; then
         # tag provided & provided tag exists
-            setfrom=${{ inputs.old-tag }}
+          setfrom=${{ inputs.old-tag }}
         else
         # no tag provided or a non-existing tag was provided 
           if [ -n "$tag_list" ]; then 
