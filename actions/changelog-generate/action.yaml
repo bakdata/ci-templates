@@ -129,9 +129,9 @@ runs:
         echo "$(cat ${{ inputs.output }})" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
         sed -i 's/# /## /g' ${{ inputs.output }}
-        touch tmp.md
-        echo "# Changelog" >> tmp.md
-        echo $(cat ${{ inputs.output }}) >> tmp.md
+        # touch tmp.md
+        # echo "# Changelog" >> tmp.md
+        # echo $(cat ${{ inputs.output }}) >> tmp.md
 
         # Create changelog.md in case of a first Release
         if [ -n "${{ inputs.changelog-file }}" ]; then
@@ -142,13 +142,14 @@ runs:
           # Update global changelog and pass it to the ouput
           # sed -i 's/# Changelog / ${{ inputs.output }}/g' ${{ inputs.changelog-file }}
           # sed 's/# Changelog/ $(cat tmp.md)/' ${{ inputs.changelog-file }}
-          awk -v r="$(cat tmp.md)" '{gsub(/# Changelog/,r)}1' ${{ inputs.changelog-file }} > tmp_changelog.md
-          rm ${{ inputs.changelog-file }}
-          cat tmp_changelog.md > ${{ inputs.changelog-file }}
+          # awk -v r="$(cat tmp.md)" '{gsub(/# Changelog/,r)}1' ${{ inputs.changelog-file }} > tmp_changelog.md
+          # rm ${{ inputs.changelog-file }}
+          # cat tmp_changelog.md > ${{ inputs.changelog-file }}
+          sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ inputs.output }})" ${{ inputs.changelog-file }}
           echo "+++++++++++++++++++++++++++++++++++++++++++"
           cat ${{ inputs.output }}
           echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-          cat tmp.md
+          # cat tmp.md
           echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
           cat ${{ inputs.changelog-file }}
           # echo "+++++++++++++++++++++++++++++++++++++++++++"
@@ -156,6 +157,7 @@ runs:
           echo "$(cat ${{ inputs.changelog-file }})" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
-          rm tmp.md
+          # rm tmp.md
+          # rm tmp_changelog.md
         fi
       shell: bash
