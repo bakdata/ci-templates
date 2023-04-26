@@ -128,11 +128,11 @@ runs:
 
         # Create changelog.md in case of a first Release
         if [ -n "${{ inputs.changelog-file }}" ]; then
-          if [ -f "${{ inputs.changelog-file }}" ]; then
-            cat ${{ inputs.changelog-file }} > "${{ env.tmp_changelog }}"
-          else
+          if [ ! -f "${{ inputs.changelog-file }}" ]; then
               touch "${{ env.tmp_changelog }}"
               echo $'# Changelog\n' >> "${{ env.tmp_changelog }}"
+          else
+            cat ${{ inputs.changelog-file }} > "${{ env.tmp_changelog }}"
           fi
           
           # Update global changelog and pass it to the ouput
