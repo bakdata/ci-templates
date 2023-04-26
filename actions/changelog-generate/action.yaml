@@ -144,6 +144,6 @@ runs:
           echo 'EOF' >> $GITHUB_OUTPUT
         fi
         echo "+++++++++++++++++++++++++++++++++++++++++++"
-        cat ${{ inputs.output }})
+        cat ${{ inputs.output }}
         echo "+++++++++++++++++++++++++++++++++++++++++++"
       shell: bash
