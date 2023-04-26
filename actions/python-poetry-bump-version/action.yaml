@@ -44,6 +44,8 @@ runs:
       run: |
         echo "oldTag=$(poetry version -s)" >> $GITHUB_OUTPUT 
         poetry version ${{ inputs.release-type }}
-        echo "newTag=$(poetry version -s)" >> $GITHUB_OUTPUT  
+        export NEW_TAG=$(poetry version -s)
+        echo "newTag=$NEW_TAG" >> $GITHUB_OUTPUT
+        echo "__version__ = '$NEW_TAG'" > kpops/_version.py
       shell: bash
       working-directory: ${{ inputs.working-directory }}
