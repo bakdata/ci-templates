@@ -74,12 +74,11 @@ runs:
           tag_list=$(git describe --tags)
         } || { # catch
           tag_list=""
-            # save log for exception 
         }
         # tag_list=$(git ls-remote --tags)
-        echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!"
         echo "$tag_list"
-        echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+        echo "!!!!!!!!!!!!!!!!!!!!!!!!"
         #to-tag
            # if [[ "${{ steps.checkTag.outputs.exists }}" == "true" ]]; then
         if [[ "$tag_list" == *"${{ inputs.new-tag }}"* ]]; then
@@ -102,7 +101,7 @@ runs:
         else
         # no tag provided or a non-existing tag was provided 
           if [ -n "$tag_list" ]; then 
-            # if tag exists then set from-tag to the latest tag
+            # if any tag exists then set from-tag to the latest tag
             latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
             setfrom=$latest_tag
           else
