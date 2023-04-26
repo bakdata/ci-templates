@@ -53,27 +53,23 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - uses: mukunku/tag-exists-action@v1.2.0
-      id: checkToTag
-      with:
-        tag: "${{ inputs.new-tag }}"
-
-    - uses: mukunku/tag-exists-action@v1.2.0
-      id: checkFromTag
-      with:
-        tag: "${{ inputs.old-tag }}"
+    # - uses: mukunku/tag-exists-action@v1.2.0
+    #   id: checkTag
+    #   with:
+    #     tag: "${{ inputs.new-tag }}"
 
     - name: "Set tags"
       id: setTags
       run: |
         # set both old and new tags
-        git config user.name "${{ inputs.github-username }}"
-        git config user.email "${{ inputs.github-email }}"
+        # git config user.name "${{ inputs.github-username }}"
+        # git config user.email "${{ inputs.github-email }}"
         # git fetch --prune --unshallow
 
         # git clone git@github.com:bakdata/github-playground.git
 
         # git fetch --tags
+        # tag_list=$(git describe --tags)
         { # try
           tag_list=$(git describe --tags)
         } || { # catch
@@ -81,17 +77,17 @@ runs:
             # save log for exception 
         }
         # tag_list=$(git ls-remote --tags)
-        echo "!!!!!!!!!!!!!!!!!!!!!!!!"
+        echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
         echo "$tag_list"
-        echo "!!!!!!!!!!!!!!!!!!!!!!!!"
+        echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
         #to-tag
-        # if [[ "$tag_list" == *"${{ inputs.new-tag }}"* ]]; then
-        if [[ "${{ steps.checkToTag.outputs.exists }}" == "true" ]]; then
+           # if [[ "${{ steps.checkTag.outputs.exists }}" == "true" ]]; then
+        if [[ "$tag_list" == *"${{ inputs.new-tag }}"* ]]; then
           echo  "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
-          # echo  "totag_exists=true">> $GITHUB_OUTPUT
+          echo  "totag_exists=true">> $GITHUB_OUTPUT
         else
           echo  "totag=${{ github.event.repository.default_branch }}">> $GITHUB_OUTPUT 
-          # echo  "totag_exists=false">> $GITHUB_OUTPUT
+          echo  "totag_exists=false">> $GITHUB_OUTPUT
         fi
 
 
@@ -100,9 +96,9 @@ runs:
         check_if_first_commit="false"
         # if [[ "$tag_list" == *"${{ inputs.old-tag }}"* ]]; then
         
-        if [[ -n "${{ inputs.old-tag }}" ]] && [[  "${{ steps.checkFromTag.outputs.exists }}" == "true"]]; then
+        if [[ -n "${{ inputs.old-tag }}" ]] && [[ "$tag_list" == *"${{ inputs.old-tag }}"* ]]; then
         # tag provided & provided tag exists
-          setfrom=${{ inputs.old-tag }}
+            setfrom=${{ inputs.old-tag }}
         else
         # no tag provided or a non-existing tag was provided 
           if [ -n "$tag_list" ]; then 
