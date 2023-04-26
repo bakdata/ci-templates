@@ -137,7 +137,7 @@ runs:
         if [ -n "${{ inputs.changelog-file }}" ]; then
           if [ ! -f "${{ inputs.changelog-file }}" ]; then
               touch ${{ inputs.changelog-file }}
-              echo "# Changelog" >> ${{ inputs.changelog-file }}
+              echo $'# Changelog\n' >> ${{ inputs.changelog-file }}
           fi
           # Update global changelog and pass it to the ouput
           # sed -i 's/# Changelog / ${{ inputs.output }}/g' ${{ inputs.changelog-file }}
