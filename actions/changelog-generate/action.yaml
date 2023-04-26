@@ -129,21 +129,24 @@ runs:
         echo "$(cat ${{ inputs.output }})" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
         sed -i 's/# /## /g' ${{ inputs.output }}
-        
+        touch tmp.md
+        echo "# Changelog" >> ./tmp.md
+        echo ${{ inputs.output }} >> tmp.md
+
         # Create changelog.md in case of a first Release
         if [ -n "${{ inputs.changelog-file }}" ]; then
           if [ ! -f "${{ inputs.changelog-file }}" ]; then
               touch ${{ inputs.changelog-file }}
-              echo "# Changelog" >> ./${{ inputs.changelog-file }}
           fi
           # Update global changelog and pass it to the ouput
           # sed -i 's/# Changelog / ${{ inputs.output }}/g' ${{ inputs.changelog-file }}
           sed '/# Changelog/ r \n${{ inputs.output }}' ${{ inputs.changelog-file }}
           echo "+++++++++++++++++++++++++++++++++++++++++++"
-          cat ${{ inputs.output }}
+          # cat ${{ inputs.output }}
+          cat tmp.md
           echo "+++++++++++++++++++++++++++++++++++++++++++"
-          cat ${{ inputs.changelog-file }}
-          echo "+++++++++++++++++++++++++++++++++++++++++++"
+          # cat ${{ inputs.changelog-file }}
+          # echo "+++++++++++++++++++++++++++++++++++++++++++"
           echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
           echo "$(cat ${{ inputs.changelog-file }})" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
