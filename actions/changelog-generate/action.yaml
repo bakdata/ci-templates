@@ -48,11 +48,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    # - uses: mukunku/tag-exists-action@v1.2.0
-    #   id: checkTag
-    #   with:
-    #     tag: "${{ inputs.new-tag }}"
-
     - name: "Set tags"
       id: setTags
       run: |
@@ -61,7 +56,7 @@ runs:
         } || { # catch
           tag_list=""
         }
-        #to-tag
+        # to-tag
         if [[ "$tag_list" == *"${{ inputs.new-tag }}"* ]]; then
           echo  "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
           echo  "totag_exists=true">> $GITHUB_OUTPUT
@@ -69,7 +64,6 @@ runs:
           echo  "totag=${{ github.event.repository.default_branch }}">> $GITHUB_OUTPUT 
           echo  "totag_exists=false">> $GITHUB_OUTPUT
         fi
-
 
         #from-tag
         setfrom=""
@@ -122,6 +116,8 @@ runs:
 
     - name: Update github Changelog
       id: output-generator
+      env:
+        tmp_changelog: tmp_changelog.md
       run: |
         # Reformat changes.md and add it to the existing changelog
         echo -e "\n" >> ${{ inputs.output }} 
@@ -129,14 +125,14 @@ runs:
         echo "$(cat ${{ inputs.output }})" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
         sed -i 's/# /## /g' ${{ inputs.output }}
-        echo "-------------------------------------"
-        cat ${{ inputs.output }}
-        echo "-------------------------------------"
+
         # Create changelog.md in case of a first Release
         if [ -n "${{ inputs.changelog-file }}" ]; then
-          if [ ! -f "${{ inputs.changelog-file }}" ]; then
-              touch ${{ inputs.changelog-file }}
-              echo $'# Changelog\n' >> ${{ inputs.changelog-file }}
+          if [ -f "${{ inputs.changelog-file }}" ]; then
+            cat ${{ inputs.changelog-file }} > "${{ env.tmp_changelog }}"
+          else
+              touch "${{ env.tmp_changelog }}"
+              echo $'# Changelog\n' >> "${{ env.tmp_changelog }}"
           fi
           
           # Update global changelog and pass it to the ouput
@@ -145,5 +141,6 @@ runs:
           echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
           echo "$(cat ${{ inputs.changelog-file }})" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
+          rm ${{ inputs.output }}
         fi
       shell: bash
