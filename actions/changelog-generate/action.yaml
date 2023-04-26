@@ -130,7 +130,7 @@ runs:
         echo 'EOF' >> $GITHUB_OUTPUT
         sed -i 's/# /## /g' ${{ inputs.output }}
         touch tmp.md
-        echo "# Changelog" >> ./tmp.md
+        echo "# Changelog" >> tmp.md
         echo $(cat ${{ inputs.output }}) >> tmp.md
 
         # Create changelog.md in case of a first Release
