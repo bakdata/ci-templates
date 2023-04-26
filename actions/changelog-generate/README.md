@@ -9,14 +9,13 @@ When generating the changelog, the action evaluates two factors to decide which 
 
 If this is the initial release, leaving `old-tag` empty allows the action to utilize the first commit as the lower bound.
 
-The upper bound might be either existing or new. If the new tag does not yet exist, the operation will nevertheless create the changelog so that it may be included in the release.
+The upper bound might be either existing or new. If the new tag does not yet exist, the action will nevertheless create the changelog so that it may be included in the release.
 
 ## Dependencies
 
 This action is built from the following composite actions:
 
 - [release-changelog-builder-action](https://github.com/mikepenz/release-changelog-builder-action)
-- [tag-exists-action](https://github.com/mukunku/tag-exists-action)
 
 ## Prerequisites
 
@@ -26,19 +25,22 @@ Create a file called `changelog-config.json` that contains the changelog configu
 {
   "categories":
     [
-      { "title": "## 🚀 Features", "labels": ["feature", "feat"] },
+      {
+        "title": "## 🚀 Features",
+        "labels": ["feature", "feat", "enhancement"],
+      },
       { "title": "## 🐛 Fixes", "labels": ["fix", "bug"] },
       { "title": "## 🧪 Dependencies", "labels": ["dependency"] },
     ],
   "ignore_labels": ["ignore"],
   "sort": { "order": "ASC", "on_property": "mergedAt" },
-  "template": "# [${{TO_TAG}}](https://github.com/<myorganization>/<myrepository>/releases/tag/${{TO_TAG}}) - ${{TO_TAG_DATE}}\n\n${{CHANGELOG}}\n<details>\n<summary>Uncategorized</summary>\n\n${{UNCATEGORIZED}}\n</details>\n",
+  "template": "# [${{TO_TAG}}](https://github.com/<myorganization>/<myrepository>/releases/tag/${{TO_TAG}}) - Release Date: ${{TO_TAG_DATE}}\n\n${{CHANGELOG}}\n<details>\n<summary>Uncategorized</summary>\n\n${{UNCATEGORIZED}}\n</details>\n",
   "pr_template": "- ${{TITLE}}\n   - PR: ${{URL}}\n   - Assignees: ${{ASSIGNEES[*]}}\n   - Reviewers: ${{REVIEWERS[*]}}\n   - Approvers: ${{APPROVERS[*]}}",
   "empty_template": "- no changes!",
 }
 ```
 
-Make sure to update the link `https://github.com/<myorganization>/<myrepository>/releases/tag/${{TO_TAG}}` accordingly.
+Make sure to update the link `https://github.com/<myorganization>/<myrepository>/releases/tag/${{TO_TAG}}` accordingly and make sure to include `- Release Date: ${{TO_TAG_DATE}}` because the action looks for this pattern to make the date format easily readable.
 
 Additional configuration options can be explored [here](https://github.com/mikepenz/release-changelog-builder-action#configuration-specification).
 
@@ -67,23 +69,20 @@ Additional configuration options can be explored [here](https://github.com/mikep
 
 ```yaml
 steps:
-  # check out current repository
   - uses: actions/checkout@v3
-  # generate changelog
   - name: Create changelog
     id: build_changelog
     uses: bakdata/ci-templates/actions/changelog-generate@main
     with:
       token: ${{ secrets.GH_TOKEN }}
-      configuration: "./.github/changelog-config.json"
-      fromTag: "1.0.0"
-      toTag: "1.0.1"
+      config: "./.github/changelog-config.json"
+      new-taf: "1.0.0"
+      changelog-file: "CHANGELOG.md"
       fetchReviewers: "true"
       fetchReleaseInformation: "true"
-  # access generated changelog
   - name: Use output
     run: |
-      echo  "${{ steps.build_changelog.outputs.single-changelog }}" >> tag_changelog.md
-      echo  "${{ steps.build_changelog.outputs.merged-changelog }}" >> global_changelog.md
+      echo  "${{ steps.build_changelog.outputs.single-changelog }}" > tag_changelog.md
+      echo  "${{ steps.build_changelog.outputs.merged-changelog }}" > global_changelog.md
     shell: bash
 ```
