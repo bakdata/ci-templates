@@ -136,10 +136,10 @@ runs:
           fi
           
           # Update global changelog and pass it to the ouput
-          sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ inputs.output }})" ${{ inputs.changelog-file }}
+          sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ inputs.output }})" ${{ env.tmp_changelog }}
 
           echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
-          echo "$(cat ${{ inputs.changelog-file }})" >> $GITHUB_OUTPUT
+          echo "$(cat ${{ env.tmp_changelog }})" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
           rm ${{ inputs.output }}
           rm "${{ env.tmp_changelog }}"
