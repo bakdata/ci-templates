@@ -129,10 +129,10 @@ runs:
         # Create changelog.md in case of a first Release
         if [ -n "${{ inputs.changelog-file }}" ]; then
           if [ ! -f "${{ inputs.changelog-file }}" ]; then
-            touch "${{ env.tmp_changelog }}"
-            echo $'# Changelog\n' >> "${{ env.tmp_changelog }}"
+            touch ${{ env.tmp_changelog }}
+            echo $'# Changelog\n' >> ${{ env.tmp_changelog }}
           else
-            cat ${{ inputs.changelog-file }} > "${{ env.tmp_changelog }}"
+            cat ${{ inputs.changelog-file }} > ${{ env.tmp_changelog }}
           fi
           
           # Update global changelog and pass it to the ouput
@@ -141,7 +141,8 @@ runs:
           echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
           echo "$(cat ${{ env.tmp_changelog }})" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
+
           rm ${{ inputs.output }}
-          rm "${{ env.tmp_changelog }}"
+          rm ${{ env.tmp_changelog }}
         fi
       shell: bash
