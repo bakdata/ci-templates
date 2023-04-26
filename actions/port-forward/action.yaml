@@ -32,7 +32,7 @@ runs:
           echo "Port forwarding done"
           break
         else
-          cat port-forward.out
+          cat port-forward.out || true
           echo "Waiting for port forwarding..."
           sleep 0.5
         fi; done
