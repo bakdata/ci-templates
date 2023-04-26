@@ -136,24 +136,21 @@ runs:
         # Create changelog.md in case of a first Release
         if [ -n "${{ inputs.changelog-file }}" ]; then
           if [ ! -f "${{ inputs.changelog-file }}" ]; then
-              echo "**********************************"
-              echo "**********************************"
-              echo "Yes"
-              echo "**********************************"
-              echo "**********************************"
               touch ${{ inputs.changelog-file }}
               echo "# Changelog" >> ${{ inputs.changelog-file }}
           fi
           # Update global changelog and pass it to the ouput
           # sed -i 's/# Changelog / ${{ inputs.output }}/g' ${{ inputs.changelog-file }}
           # sed 's/# Changelog/ $(cat tmp.md)/' ${{ inputs.changelog-file }}
-          awk -v r="$(cat tmp.md)" '{gsub(/# Changelog/,r)}1' ${{ inputs.changelog-file }}
+          awk -v r="$(cat tmp.md)" '{gsub(/# Changelog/,r)}1' ${{ inputs.changelog-file }} > tmp_changelog.md
+          rm ${{ inputs.changelog-file }}
+          cat tmp_changelog.md > ${{ inputs.changelog-file }}
           echo "+++++++++++++++++++++++++++++++++++++++++++"
-          # cat ${{ inputs.output }}
-          cat ${{ inputs.changelog-file }}
-          echo "+++++++++++++++++++++++++++++++++++++++++++"
+          cat ${{ inputs.output }}
+          echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
           cat tmp.md
-          # cat ${{ inputs.changelog-file }}
+          echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+          cat ${{ inputs.changelog-file }}
           # echo "+++++++++++++++++++++++++++++++++++++++++++"
           echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
           echo "$(cat ${{ inputs.changelog-file }})" >> $GITHUB_OUTPUT
