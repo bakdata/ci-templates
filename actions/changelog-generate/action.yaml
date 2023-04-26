@@ -146,6 +146,7 @@ runs:
           # cat ${{ inputs.output }}
           cat ${{ inputs.changelog-file }}
           echo "+++++++++++++++++++++++++++++++++++++++++++"
+          cat tmp.md
           # cat ${{ inputs.changelog-file }}
           # echo "+++++++++++++++++++++++++++++++++++++++++++"
           echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
