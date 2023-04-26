@@ -73,7 +73,7 @@ runs:
 
         # git clone git@github.com:bakdata/github-playground.git
 
-        git fetch --tags
+        # git fetch --tags
         tag_list=$(git describe --tags)
         # tag_list=$(git ls-remote --tags)
         echo "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
