@@ -140,7 +140,7 @@ runs:
           fi
           # Update global changelog and pass it to the ouput
           # sed -i 's/# Changelog / ${{ inputs.output }}/g' ${{ inputs.changelog-file }}
-          sed 's/# Changelog/ $(cat ${{ inputs.output }})/' ${{ inputs.changelog-file }}
+          sed 's/# Changelog/ $(cat tmp.md)/' ${{ inputs.changelog-file }}
           echo "+++++++++++++++++++++++++++++++++++++++++++"
           # cat ${{ inputs.output }}
           cat tmp.md
