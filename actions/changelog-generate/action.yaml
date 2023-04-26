@@ -136,6 +136,11 @@ runs:
         # Create changelog.md in case of a first Release
         if [ -n "${{ inputs.changelog-file }}" ]; then
           if [ ! -f "${{ inputs.changelog-file }}" ]; then
+              echo "**********************************"
+              echo "**********************************"
+              echo "Yes"
+              echo "**********************************"
+              echo "**********************************"
               touch ${{ inputs.changelog-file }}
               echo "# Changelog" >> ./tmp.md
           fi
