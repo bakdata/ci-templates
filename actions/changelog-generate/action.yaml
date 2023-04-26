@@ -137,8 +137,8 @@ runs:
               echo "# Changelog " >> ./${{ inputs.changelog-file }}
           fi
           # Update global changelog and pass it to the ouput
-          # sed -i 's/# Changelog / ${{ inputs.output }}' ${{ inputs.changelog-file }}
-          sed -i 's/# Changelog /a ${{ inputs.output }}/g' ${{ inputs.changelog-file }}
+          sed -i 's/# Changelog / ${{ inputs.output }}' ${{ inputs.changelog-file }}
+          # sed -i 's/# Changelog /a (cat ${{ inputs.output }})' ${{ inputs.changelog-file }}
           echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
           echo "$(cat ${{ inputs.changelog-file }})" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
