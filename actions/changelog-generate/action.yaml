@@ -142,5 +142,6 @@ runs:
           echo "$(cat ${{ inputs.changelog-file }})" >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
           rm ${{ inputs.output }}
+          rm "${{ env.tmp_changelog }}"
         fi
       shell: bash
