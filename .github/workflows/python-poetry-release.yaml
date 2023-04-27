@@ -80,7 +80,7 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
 
       - name: Release to PyPI
-        uses: bakdata/ci-templates/actions/python-poetry-release@v1.13.3
+        uses: bakdata/ci-templates/actions/python-poetry-release@v1.18.2
         with:
           pypi-token: ${{ secrets.pypi-token }}
           publish-to-test: ${{ inputs.publish-to-test }}

@@ -33,7 +33,7 @@ runs:
         working-directory: ${{ inputs.working-directory }}
 
     - name: Install dependencies
-      run: poetry install --no-dev --no-interaction
+      run: poetry install --only main --no-interaction
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
