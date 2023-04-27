@@ -36,14 +36,18 @@ runs:
         poetry-version: ${{ inputs.poetry-version }}
         working-directory: ${{ inputs.working-directory }}
 
+    - name: Install Poetry bumpversion plugin  # for updating __init__.py etc.
+      run: poetry self add poetry-bumpversion
+      shell: bash
+
     # Update the pyproject.toml version. Versioning format for dev packages: X.Y.Z
     # For more information visit: https://www.python.org/dev/peps/pep-0440/#semantic-versioning
     # https://python-poetry.org/docs/cli/#version
     - name: Bump version with Poetry
       id: release-tag
       run: |
-        echo "oldTag=$(poetry version -s)" >> $GITHUB_OUTPUT 
+        echo "oldTag=$(poetry version -s)" >> $GITHUB_OUTPUT
         poetry version ${{ inputs.release-type }}
-        echo "newTag=$(poetry version -s)" >> $GITHUB_OUTPUT  
+        echo "newTag=$(poetry version -s)" >> $GITHUB_OUTPUT
       shell: bash
       working-directory: ${{ inputs.working-directory }}
