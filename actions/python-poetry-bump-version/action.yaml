@@ -36,7 +36,8 @@ runs:
         poetry-version: ${{ inputs.poetry-version }}
         working-directory: ${{ inputs.working-directory }}
 
-    - name: Install Poetry bumpversion plugin  # for updating __init__.py etc.
+    # for updating __init__.py etc.
+    - name: Install Poetry bumpversion plugin
       run: poetry self add poetry-bumpversion
       shell: bash
 
