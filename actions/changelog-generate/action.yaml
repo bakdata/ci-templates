@@ -52,18 +52,16 @@ runs:
       id: setTags
       run: |
         tag_list=$(git describe --tags) || tag_list=""
+
         # to-tag
         if [[ "$tag_list" == *"${{ inputs.new-tag }}"* ]]; then
           echo  "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
-          echo  "totag_exists=true">> $GITHUB_OUTPUT
         else
           echo  "totag=${{ github.event.repository.default_branch }}">> $GITHUB_OUTPUT 
-          echo  "totag_exists=false">> $GITHUB_OUTPUT
         fi
 
         #from-tag
         setfrom=""
-        check_if_first_commit="false"
 
         if [[ -n "${{ inputs.old-tag }}" ]] && [[ "$tag_list" == *"${{ inputs.old-tag }}"* ]]; then
         # tag provided & provided tag exists
@@ -97,7 +95,7 @@ runs:
         commitMode: "${{ inputs.commitMode }}"
 
     - name: Replace default branch with new Tag
-      if: ${{ steps.setTags.outputs.totag_exists == 'false' }}
+      if: ${{ steps.setTags.outputs.totag == github.event.repository.default_branch }}
       run: |
         # Replace default branch with new tag
         sed -i 's/\[${{ steps.setTags.outputs.totag }}\]/\[${{ inputs.new-tag }}\]/g' ${{ inputs.output }}
