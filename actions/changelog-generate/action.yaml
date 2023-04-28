@@ -51,11 +51,7 @@ runs:
     - name: "Set tags"
       id: setTags
       run: |
-        { # try
-          tag_list=$(git describe --tags)
-        } || { # catch
-          tag_list=""
-        }
+        tag_list=$(git describe --tags) || tag_list=""
         # to-tag
         if [[ "$tag_list" == *"${{ inputs.new-tag }}"* ]]; then
           echo  "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
