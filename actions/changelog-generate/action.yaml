@@ -75,8 +75,7 @@ runs:
             setfrom=$(git describe --tags `git rev-list --tags --max-count=1`)
           else
             # if no tag exists then use the frist commit as fromtag
-            first_commit=`git rev-list --max-parents=0 HEAD`
-            setfrom=$first_commit
+            setfrom=$(git rev-list --max-parents=0 HEAD)
             latest_commit=`git rev-parse HEAD`
             echo  "totag=$latest_commit">> $GITHUB_OUTPUT 
           fi
