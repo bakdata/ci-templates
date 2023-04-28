@@ -51,19 +51,19 @@ Additional configuration options can be explored [here](https://github.com/mikep
 | changelog-file          |    ✅    |                 -                 | Path to the Changelog.md file                                                                                                                                |
 | github-token            |    ✅    |                 -                 | The GitHub token for committing the changes                                                                                                                  |
 | new-tag                 |    ✅    |                 -                 | New version                                                                                                                                                  |
-| old-tag                 |    ✅    |                 -                 | Previous version                                                                                                                                             |
-| config                  |    ❌    | "./.github/changelog-config.json" | Path to the changelog config JSON file                                                                                                                       |
-| output                  |    ❌    |           "changes.md"            | Relative path to a file to store the resulting changelog in.                                                                                                 |
-| fetchReviewers          |    ❌    |              "false"              | Will enable fetching the users/reviewers who approved the PR.                                                                                                |
-| fetchReleaseInformation |    ❌    |              "false"              | Will enable fetching additional release information from tags.                                                                                               |
 | commitMode              |    ❌    |              "false"              | Special configuration for projects which work without PRs. Uses commit messages as changelog. This mode looses access to information only available for PRs. |
+| config                  |    ❌    | "./.github/changelog-config.json" | Path to the changelog config JSON file                                                                                                                       |
+| fetchReleaseInformation |    ❌    |              "false"              | Will enable fetching additional release information from tags.                                                                                               |
+| fetchReviewers          |    ❌    |              "false"              | Will enable fetching the users/reviewers who approved the PR.                                                                                                |
+| old-tag                 |    ❌    |                 -                 | Previous version                                                                                                                                             |
+| output                  |    ❌    |           "changes.md"            | Relative path to a file to store the resulting changelog in.                                                                                                 |
 
 ## Outputs
 
 | Name             | Description                                           |
 | ---------------- | ----------------------------------------------------- |
-| single-changelog | Changelog containing changes of the latest tag        |
 | merged-changelog | Changelog containing listing of all single changelogs |
+| single-changelog | Changelog containing changes of the latest tag        |
 
 ## Calling the workflow
 
