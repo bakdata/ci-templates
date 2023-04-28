@@ -133,7 +133,7 @@ runs:
           sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ inputs.output }})" ${{ env.tmp_changelog }}
 
           echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
-          echo "$(cat ${{ env.tmp_changelog }})" >> $GITHUB_OUTPUT
+          cat ${{ env.tmp_changelog }} >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
           rm ${{ inputs.output }} ${{ env.tmp_changelog }}
