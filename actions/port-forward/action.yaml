@@ -1,5 +1,5 @@
 name: Port forward Kubernetes service
-description: TODO
+description: Creates a port forward for a Kubernetes service and keep it open in the background
 inputs:
   service:
     description: Name of Kubernetes service
