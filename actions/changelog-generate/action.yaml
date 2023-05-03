@@ -107,8 +107,6 @@ runs:
 
     - name: Update github Changelog
       id: output-generator
-      env:
-        tmp_changelog: tmp_changelog.md
       run: |
         # Reformat changes.md and add it to the existing changelog
         echo 'single-changelog<<EOF' >> $GITHUB_OUTPUT
@@ -121,21 +119,15 @@ runs:
           echo -e "\n" >> ${{ inputs.output }} 
           if [ ! -f "${{ inputs.changelog-file }}" ]; then
             echo $'# Changelog\n' >> ${{ inputs.changelog-file }}
-            # echo $'# Changelog\n' >> ${{ env.tmp_changelog }}
           fi
-          # else
-          #   cat ${{ inputs.changelog-file }} > ${{ env.tmp_changelog }}
-          
+
           # Update global changelog and pass it to the ouput
           sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ inputs.output }})" ${{ inputs.changelog-file }}
-          # sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ inputs.output }})" ${{ env.tmp_changelog }}
 
-          # cat ${{ env.tmp_changelog }} >> $GITHUB_OUTPUT
           echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
           cat ${{ inputs.changelog-file }} >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
           rm ${{ inputs.output }} 
-          # ${{ env.tmp_changelog }}
         fi
       shell: bash
