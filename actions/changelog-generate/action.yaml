@@ -120,7 +120,7 @@ runs:
         if [ -n "${{ inputs.changelog-file }}" ]; then
           sed -i 's/# /## /g' ${{ inputs.output }}
           if [ ! -f "${{ inputs.changelog-file }}" ]; then
-            echo $'# Changelog\n' >> ${{ env.tmp_changelog }}
+            echo $'# Changelog\n' >> ${{ inputs.output }}
           fi
           # else
           #   cat ${{ inputs.changelog-file }} > ${{ env.tmp_changelog }}
@@ -129,7 +129,7 @@ runs:
           sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ inputs.output }})" ${{ inputs.output }}
 
           echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
-          cat ${{ env.tmp_changelog }} >> $GITHUB_OUTPUT
+          cat ${{ inputs.output }} >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
           # rm ${{ inputs.output }} ${{ env.tmp_changelog }}
