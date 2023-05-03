@@ -94,7 +94,7 @@ runs:
         commitMode: "${{ inputs.commitMode }}"
 
     - name: Replace default branch with new Tag
-      if: ${{ steps.setTags.outputs.totag == github.event.repository.default_branch }}
+      if: ${{ steps.setTags.outputs.totag != inputs.new-tag }}
       run: |
         # Replace default branch with new tag
         sed -i 's/\[${{ steps.setTags.outputs.totag }}\]/\[${{ inputs.new-tag }}\]/g' ${{ inputs.output }}
