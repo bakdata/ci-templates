@@ -57,7 +57,8 @@ runs:
         if [[ "$tag_list" == *"${{ inputs.new-tag }}"* ]]; then
           echo  "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
         else
-          echo  "totag=${{ github.event.repository.default_branch }}">> $GITHUB_OUTPUT 
+          latest_commit=`git rev-parse HEAD`
+          echo  "totag=$latest_commit">> $GITHUB_OUTPUT 
         fi
 
         #from-tag
@@ -74,8 +75,6 @@ runs:
           else
             # if no tag exists then use the frist commit as fromtag
             setfrom=$(git rev-list --max-parents=0 HEAD)
-            latest_commit=`git rev-parse HEAD`
-            echo  "totag=$latest_commit">> $GITHUB_OUTPUT 
           fi
         fi
         echo  "fromtag=$setfrom">> $GITHUB_OUTPUT
@@ -102,7 +101,7 @@ runs:
         sed -i 's|releases/tag/${{ steps.setTags.outputs.totag }}|releases/tag/${{ inputs.new-tag }}|g' ${{ inputs.output }}
 
         # Set Release date
-        tag_date=$(date '+%Y-%m-%d') 
+        tag_date=$(date '+%Y-%m-%d')
         sed -i "s/Release Date: /Release Date: \[${tag_date}\]/g" ${{ inputs.output }}
       shell: bash
 
@@ -116,10 +115,10 @@ runs:
         echo 'single-changelog<<EOF' >> $GITHUB_OUTPUT
         cat ${{ inputs.output }} >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
-        sed -i 's/# /## /g' ${{ inputs.output }}
 
         # Create changelog.md in case of a first Release
         if [ -n "${{ inputs.changelog-file }}" ]; then
+          sed -i 's/# /## /g' ${{ inputs.output }}
           if [ ! -f "${{ inputs.changelog-file }}" ]; then
             echo $'# Changelog\n' >> ${{ env.tmp_changelog }}
           else
