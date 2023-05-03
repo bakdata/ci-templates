@@ -120,18 +120,21 @@ runs:
         if [ -n "${{ inputs.changelog-file }}" ]; then
           sed -i 's/# /## /g' ${{ inputs.output }}
           if [ ! -f "${{ inputs.changelog-file }}" ]; then
-            echo $'# Changelog\n' >> ${{ inputs.output }}
+            # echo $'# Changelog\n' >> ${{ inputs.output }}
+            echo $'# Changelog\n' >> ${{ env.tmp_changelog }}
           fi
           # else
           #   cat ${{ inputs.changelog-file }} > ${{ env.tmp_changelog }}
           
           # Update global changelog and pass it to the ouput
-          sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ inputs.output }})" ${{ inputs.output }}
+          # sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ inputs.output }})" ${{ inputs.output }}
+          sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ inputs.output }})" ${{ env.tmp_changelog }}
 
           echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
-          cat ${{ inputs.output }} >> $GITHUB_OUTPUT
+          # cat ${{ inputs.output }} >> $GITHUB_OUTPUT
+          cat ${{ env.tmp_changelog }} >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
 
-          # rm ${{ inputs.output }} ${{ env.tmp_changelog }}
+          rm ${{ inputs.output }} ${{ env.tmp_changelog }}
         fi
       shell: bash
