@@ -7,8 +7,6 @@ The action returns both the new tag's changelog and the global changelog.
 
 When generating the changelog, the action evaluates two factors to decide which PRs to consider: `old-tag` (lower bound defining the 'start' from where the changelog will consider merged pull requests) and `new-tag` (upper bound defining until which tag the changelog will consider merged pull requests).
 
-If this is the initial release, leaving `old-tag` empty allows the action to utilize the first commit as the lower bound.
-
 The upper bound might be either existing or new. If the new tag does not yet exist, the action will nevertheless create the changelog so that it may be included in the release.
 
 ## Dependencies
