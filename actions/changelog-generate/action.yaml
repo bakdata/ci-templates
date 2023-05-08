@@ -122,7 +122,5 @@ runs:
           echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
           cat ${{ inputs.changelog-file }} >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
-
-          # rm ${{ runner.temp }}/changes.md 
         fi
       shell: bash
