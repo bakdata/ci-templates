@@ -55,7 +55,7 @@ Additional configuration options can be explored [here](https://github.com/mikep
 | config                  |    ❌    | "./.github/changelog-config.json" | Path to the changelog config JSON file                                                                                                                       |
 | fetchReleaseInformation |    ❌    |              "false"              | Will enable fetching additional release information from tags.                                                                                               |
 | fetchReviewers          |    ❌    |              "false"              | Will enable fetching the users/reviewers who approved the PR.                                                                                                |
-| old-tag                 |    ❌    |                 -                 | Previous version                                                                                                                                             |
+| old-tag                 |    ❌    |                ""                 | Previous version                                                                                                                                             |
 | output                  |    ❌    |           "changes.md"            | Relative path to a file to store the resulting changelog in.                                                                                                 |
 
 ## Outputs
