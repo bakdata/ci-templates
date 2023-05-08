@@ -11,7 +11,7 @@ inputs:
 
   # unrequired inputs
   changelog-file:
-    description: Path to the Changelog.md file in the github repository
+    description: Path to the changelog file in the GitHub repository
     required: false
     default: "CHANGELOG.md"
   commitMode:
