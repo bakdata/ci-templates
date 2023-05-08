@@ -29,11 +29,11 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Build Dockerfile and store them in "build" directory
+    - name: Build Dockerfile and store them in "docker-build" directory
       run: |
         docker build -t ${{ inputs.image-name }} -f ${{ inputs.dockerfile-path }} ${{ inputs.docker-context }}
-        mkdir build
-        docker save ${{ inputs.image-name }} > build/${{ inputs.image-name }}.tar
+        mkdir docker-build
+        docker save ${{ inputs.image-name }} > docker-build/${{ inputs.image-name }}.tar
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
@@ -41,5 +41,5 @@ runs:
       uses: actions/upload-artifact@v3.1.1
       with:
         name: ${{ inputs.image-artifact-name }}
-        path: build
+        path: docker-build
         retention-days: ${{ inputs.retention-days }}

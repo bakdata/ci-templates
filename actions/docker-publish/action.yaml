@@ -33,7 +33,7 @@ runs:
       uses: actions/download-artifact@v3
       with:
         name: ${{ inputs.image-artifact-name }}
-        path: build
+        path: docker-build
 
     # setup-buildx action will create and boot a builder using by default the docker-container driver.
     # This is not required but recommended using it to be able to build multi-platform images, export cache, etc.
@@ -42,7 +42,7 @@ runs:
 
     - name: Publish image
       run: |
-        if [[ $(ls -1 build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
+        if [[ $(ls -1 docker-build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
           >&2 echo "Error: A single image tar file is needed in the downloaded artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
           exit 1
         fi
@@ -55,7 +55,7 @@ runs:
           fullImageName="${{ inputs.docker-registry }}/${fullImageName}"
         fi
 
-        docker load --input build/*.tar
+        docker load --input docker-build/*.tar
         if [[ "$GITHUB_REF" =~ ^refs/tags/.* ]]; then
           docker tag ${{ inputs.image-name }} ${fullImageName}:latest
           docker tag ${{ inputs.image-name }} ${fullImageName}:${GITHUB_REF/refs\/tags\//}
