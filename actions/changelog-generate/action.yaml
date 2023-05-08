@@ -105,7 +105,7 @@ runs:
         sed -i "s/Release Date: /Release Date: \[${tag_date}\]/g" ${{ inputs.output }}
       shell: bash
 
-    - name: Update github Changelog
+    - name: Update GitHub Changelog
       id: output-generator
       run: |
         # Reformat changes.md and add it to the existing changelog
