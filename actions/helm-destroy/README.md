@@ -1,4 +1,4 @@
-# helm-gke-destroy
+# helm-destroy
 
 This action will destroy a Helm chart on a Google Kubernetes Engine cluster.
 

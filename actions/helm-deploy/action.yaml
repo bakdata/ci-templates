@@ -29,6 +29,12 @@ inputs:
   repository-url:
     description: "Url of the repository"
     required: false
+  repository-username:
+    description: "User for the login to the repository"
+    required: false
+  repository-password:
+    description: "Password for the login to the repository"
+    required: false
 
 runs:
   using: "composite"
@@ -36,16 +42,13 @@ runs:
     - name: Add helm repository
       shell: bash
       run: |
-        if [ -n "$REPOSITORY_NAME" ] && [ -n "$REPOSITORY_URL" ]; then
-          helm repo add "$REPOSITORY_NAME" "$REPOSITORY_URL"
+        if [[ -n "${{ inputs.repository-name }}" && -n "${{ inputs.repository-url }}" ]]; then
+          helm repo add "${{ inputs.repository-name }}" "${{ inputs.repository-url }}" --username ${{ inputs.repository-username }} --password ${{ inputs.repository-password }}
           helm repo update
         else
           echo "No repository specified; Skipping step"
         fi
-      env:
-        REPOSITORY_NAME: ${{ inputs.repository-name }}
-        REPOSITORY_URL: ${{ inputs.repository-url }}
-
+    
     - name: Deploy helm chart
       shell: bash
       run: |
