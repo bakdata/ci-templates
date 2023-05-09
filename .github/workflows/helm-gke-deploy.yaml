@@ -17,7 +17,7 @@ on:
         required: true
         type: string
       values-yaml:
-        description: "File path as string for a single helm value file or as json array for multiple helm value files"
+        description: "File path as string for a single Helm value file or as json array for multiple Helm value files"
         required: true
         type: string
       repository-name:
