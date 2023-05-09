@@ -43,7 +43,12 @@ runs:
       shell: bash
       run: |
         if [[ -n "${{ inputs.repository-name }}" && -n "${{ inputs.repository-url }}" ]]; then
-          helm repo add "${{ inputs.repository-name }}" "${{ inputs.repository-url }}" --username ${{ inputs.repository-username }} --password ${{ inputs.repository-password }}
+          parameters=(${{ inputs.repository-name }} ${{ inputs.repository-url }})
+
+          if [[ -n "${{ inputs.repository-username }}" ]]; then parameters+=(--username ${{ inputs.repository-username }}); fi
+          if [[ -n "${{ inputs.repository-password }}" ]]; then parameters+=(--password ${{ inputs.repository-password }}); fi
+
+          helm repo add "${parameters[@]}"
           helm repo update
         else
           echo "No repository specified; Skipping step"
@@ -62,8 +67,8 @@ runs:
           parameters+=(--values ${{ inputs.values-yaml }})
         fi
 
-        if [ -n "${{ inputs.chart-version }}" ]; then parameters+=(--version ${{ inputs.chart-version }}); fi
-        if [ -n "${{ inputs.post-renderer }}" ]; then parameters+=(--post-renderer ${{ inputs.post-renderer }}); fi
+        if [[ -n "${{ inputs.chart-version }}" ]]; then parameters+=(--version ${{ inputs.chart-version }}); fi
+        if [[ -n "${{ inputs.post-renderer }}" ]]; then parameters+=(--post-renderer ${{ inputs.post-renderer }}); fi
 
         echo "Deploying with command: helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} ${parameters[@]}"
         helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} "${parameters[@]}"
