@@ -9,7 +9,7 @@ inputs:
     description: Version after bump
     required: true
 
-  # unrequired inputs
+  # optional inputs
   changelog-file:
     description: Path to the changelog file in the GitHub repository
     required: false
