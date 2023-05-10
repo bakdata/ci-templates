@@ -2,7 +2,7 @@
 
 This action will enable the automated creation of a changelog. The changelog template needs to be configured using a `changelog-config.json`.
 If there is a global changelog managed by the repository this will be updated.
-The action generates a new release changelog and an updated version of the changelog file in the repository(if there is any). The default setting updates the repo changelog. If your current repository does not have any global changelog file, then pass an empty string to the variable `changelog-file`.
+The action generates a new release changelog and an updated version of the changelog file in the repository (if there is any). The default setting updates the repo changelog. If your current repository does not have any global changelog file, then pass an empty string to the variable `changelog-file`.
 The action returns both the new tag's changelog and the global changelog.
 
 When generating the changelog, the action evaluates two factors to decide which PRs to consider: `old-tag` (lower bound defining the 'start' from where the changelog will consider merged pull requests) and `new-tag` (upper bound defining until which tag the changelog will consider merged pull requests).
