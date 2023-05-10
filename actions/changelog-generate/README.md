@@ -19,7 +19,7 @@ This action is built from the following composite actions:
 
 Create a file called `changelog-config.json` that contains the changelog configurations. The mentioned action's documentation goes into great detail about how to create and utilize config files. A simple configuration may look like this:
 
-```yaml
+```json
 {
   "categories":
     [
