@@ -1,6 +1,6 @@
 # helm-deploy
 
-This action will deploy a Helm chart on a Google Kubernetes Engine cluster.
+This action will deploy a Helm chart on a Kubernetes cluster.
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ Create a `values.yaml` file according to the documentation of the specific Helm 
 ```yaml
 steps:
   - name: Deploy Helm chart
-    uses: bakdata/ci-templates/actions/helm-gke-deploy@main
+    uses: bakdata/ci-templates/actions/helm-deploy@main
     with:
       release-name: "my-release"
       namespace: "my-namespace"

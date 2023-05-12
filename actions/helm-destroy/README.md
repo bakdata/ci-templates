@@ -1,6 +1,6 @@
 # helm-destroy
 
-This action will destroy a Helm chart on a Google Kubernetes Engine cluster.
+This action will destroy a Helm chart on a Kubernetes cluster.
 
 ## Input Parameters
 
@@ -14,7 +14,7 @@ This action will destroy a Helm chart on a Google Kubernetes Engine cluster.
 ```yaml
 steps:
   - name: Destroy Helm chart
-    uses: bakdata/ci-templates/actions/helm-gke-destroy@main
+    uses: bakdata/ci-templates/actions/helm-destroy@main
     with:
       release-name: "my-release"
       namespace: "my-namespace"

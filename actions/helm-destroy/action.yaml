@@ -5,7 +5,7 @@ inputs:
     description: "Helm release name"
     required: true
   namespace:
-    description: "K8s namespace to deploy in"
+    description: "K8s namespace to destroy in"
     required: true
 runs:
   using: "composite"

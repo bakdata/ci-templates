@@ -83,21 +83,25 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-
-      - name: Setup Environment
-        uses: bakdata/ci-templates/actions/helm-gke-setup@v1.7.0
+      
+      - name: Setup Credentials
+        uses: bakdata/ci-templates/actions/setup-credentials@feat/separate-helm-credentials-setup
         with:
           gke-service-account: ${{ secrets.gke-service-account }}
           gke-project: ${{ secrets.gke-project }}
           gke-region: ${{ secrets.gke-region }}
           gke-cluster: ${{ secrets.gke-cluster }}
+
+      - name: Setup Environment
+        uses: bakdata/ci-templates/actions/helm-setup@feat/separate-helm-credentials-setup
+        with:          
           python-version: ${{ inputs.python-version }}
           gcloud-sdk-version: ${{ inputs.gcloud-sdk-version }}
           kubectl-version: ${{ inputs.kubectl-version }}
           helm-version: ${{ inputs.helm-version }}
 
       - name: Deploy Helm Chart
-        uses: bakdata/ci-templates/actions/helm-gke-deploy@v1.7.0
+        uses: bakdata/ci-templates/actions/helm-deploy@feat/separate-helm-credentials-setup
         with:
           release-name: ${{ inputs.release-name }}
           namespace: ${{ inputs.namespace }}
