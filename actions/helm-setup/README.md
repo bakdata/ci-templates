@@ -16,7 +16,7 @@ This action will set up everything necessary to deploy or destroy Helm charts.
 ...
 steps:
   - name: Setup environment
-    uses: bakdata/ci-templates/actions/helm-gke-setup@main
+    uses: bakdata/ci-templates/actions/helm-setup@main
     with:
       python-version: "3.10" # optional
       kubectl-version: "v1.23.0" # optional

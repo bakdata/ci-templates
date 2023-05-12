@@ -1,5 +1,5 @@
-name: "Setup environment"
-description: "Setup GKE environment for Kubernetes deployments"
+name: "Setup Helm"
+description: "Setup everything necessary to deploy or destroy Helm charts"
 inputs:
   python-version:
     description: "Python version"
