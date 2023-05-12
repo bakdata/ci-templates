@@ -13,8 +13,6 @@ This action will set up everything necessary to deploy or destroy Helm charts.
 ## Usage
 
 ```yaml
-
----
 steps:
   - name: Setup environment
     uses: bakdata/ci-templates/actions/helm-setup@main
