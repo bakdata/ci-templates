@@ -1,2 +1,7 @@
 .idea
 .env
+.vscode
+
+# mac specific
+.DS_Store
+.bash_history
