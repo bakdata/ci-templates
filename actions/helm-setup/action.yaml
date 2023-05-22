@@ -17,17 +17,12 @@ runs:
   using: "composite"
   steps:
     # TODO: replace by ci runner image
-    # - name: Setup python
-    #   uses: actions/setup-python@v1
-    #   with:
-    #     python-version: ${{ inputs.python-version }}
-
-    - name: Install kubectl
+    - name: Install Kubectl
       uses: azure/setup-kubectl@v3
       with:
         version: ${{ inputs.kubectl-version }}
 
-    - name: Install kfilt
+    - name: Install Kfilt
       shell: bash
       run: |
         curl -L "https://github.com/ryane/kfilt/releases/download/v0.0.7/kfilt_0.0.7_linux_amd64" -o /usr/local/bin/kfilt

@@ -1,4 +1,4 @@
-name: "Destroy helm chart"
+name: "Destroy Helm Chart"
 description: "Destroy a helm chart from the GKE cluster"
 inputs:
   release-name:
@@ -10,6 +10,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Destroy helm chart
+    - name: Destroy Helm Chart
       shell: bash
       run: helm uninstall --namespace ${{ inputs.namespace }} ${{ inputs.release-name }}

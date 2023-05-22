@@ -1,5 +1,5 @@
-name: "Deploy helm chart"
-description: "Deploy a helm chart to the GKE cluster"
+name: "Deploy Helm Chart"
+description: "Deploy a Helm chart to the GKE cluster"
 inputs:
   release-name:
     description: "Helm release name"
@@ -39,7 +39,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Add helm repository
+    - name: Add Helm Repository
       shell: bash
       run: |
         if [[ -n "${{ inputs.repository-name }}" && -n "${{ inputs.repository-url }}" ]]; then
@@ -54,7 +54,7 @@ runs:
           echo "No repository specified; Skipping step"
         fi
     
-    - name: Deploy helm chart
+    - name: Deploy Helm Chart
       shell: bash
       run: |
         parameters=(--debug --install --wait --timeout ${{ inputs.timeout }}s --force --namespace ${{ inputs.namespace }})
