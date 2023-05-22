@@ -17,10 +17,10 @@ runs:
   using: "composite"
   steps:
     # TODO: replace by ci runner image
-    - name: Setup python
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ inputs.python-version }}
+    # - name: Setup python
+    #   uses: actions/setup-python@v1
+    #   with:
+    #     python-version: ${{ inputs.python-version }}
 
     - name: Install kubectl
       uses: azure/setup-kubectl@v3
