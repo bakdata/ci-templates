@@ -8,11 +8,6 @@ on:
         description: "Path to the root directory of the kustomization"
         required: true
         type: string
-      python-version:
-        description: "Python version"
-        default: "3.10"
-        required: false
-        type: string
       gcloud-sdk-version:
         description: "GCloud SDK version"
         default: "376.0.0"
@@ -49,15 +44,18 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Setup Environment
-        uses: bakdata/ci-templates/actions/helm-gke-setup@v1.8.0
+      - name: Setup Credentials
+        uses: bakdata/ci-templates/actions/setup-credentials@v1.20.0
         with:
           gke-service-account: ${{ secrets.gke-service-account }}
           gke-project: ${{ secrets.gke-project }}
           gke-region: ${{ secrets.gke-region }}
           gke-cluster: ${{ secrets.gke-cluster }}
-          python-version: ${{ inputs.python-version }}
           gcloud-sdk-version: ${{ inputs.gcloud-sdk-version }}
+
+      - name: Setup Environment
+        uses: bakdata/ci-templates/actions/helm-setup@v1.20.0
+        with:
           kubectl-version: ${{ inputs.kubectl-version }}
           helm-version: ${{ inputs.helm-version }}
 

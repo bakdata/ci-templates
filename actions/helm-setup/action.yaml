@@ -1,10 +1,6 @@
 name: "Setup Helm"
 description: "Setup everything necessary to deploy or destroy Helm charts"
 inputs:
-  python-version:
-    description: "Python version"
-    default: "3.10"
-    required: false
   kubectl-version:
     description: "Kubectl version"
     default: "v1.23.0"

@@ -41,11 +41,6 @@ on:
         default: "1200"
         required: false
         type: string
-      python-version:
-        description: "Python version"
-        default: "3.10"
-        required: false
-        type: string
       gcloud-sdk-version:
         description: "GCloud SDK version"
         default: "376.0.0"
@@ -96,7 +91,6 @@ jobs:
       - name: Setup Environment
         uses: bakdata/ci-templates/actions/helm-setup@v1.20.0
         with:
-          python-version: ${{ inputs.python-version }}
           kubectl-version: ${{ inputs.kubectl-version }}
           helm-version: ${{ inputs.helm-version }}
 

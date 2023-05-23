@@ -379,7 +379,7 @@ This workflow will deploy to GKE using a Kustomize root directory.
 
 This workflow is built from multiple composite actions listed below:
 
-- [helm-setup](https://github.com/bakdata/ci-templates/tree/main/actions/helm-gke-setup)
+- [helm-setup](https://github.com/bakdata/ci-templates/tree/main/actions/helm-setup)
 - [kustomize-gke-deploy](https://github.com/bakdata/ci-templates/tree/main/actions/kustomize-gke-deploy)
 
 ### Input Parameters
@@ -388,7 +388,6 @@ This workflow is built from multiple composite actions listed below:
 | ------------------ | :------: | :-----------: | :----: | -------------------------------------------------- |
 | kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization    |
 | timeout            |    ❌    |      60       | string | Time out(in seconds) for CustomResourceDefinitions |
-| python-version     |    ❌    |    "3.10"     | string | Python version                                     |
 | gcloud-sdk-version |    ❌    |   "376.0.0"   | string | GCloud-SDK version                                 |
 | kubectl-version    |    ❌    |   "v1.23.0"   | string | Kubectl version                                    |
 | helm-version       |    ❌    |   "v3.8.1"    | string | Helm version                                       |
@@ -427,7 +426,6 @@ jobs:
     with:
       kustomization-path: ${{ inputs.kustomization-path }}
       timeout: ${{ inputs.timeout }} #optional
-      python-version: "3.10" #optional
       gcloud-sdk-version: "376.0.0" #optional
       kubectl-version: "v1.23.0" #optional
       helm-version: "v3.8.1"
@@ -446,7 +444,7 @@ This workflow will uninstall deployments using Kustomize.
 
 This workflow is built from multiple composite actions listed below:
 
-- [helm-setup](https://github.com/bakdata/ci-templates/tree/main/actions/helm-gke-setup)
+- [helm-setup](https://github.com/bakdata/ci-templates/tree/main/actions/helm-setup)
 - [kustomize-gke-destroy](https://github.com/bakdata/ci-templates/tree/main/actions/kustomize-gke-destroy)
 
 ### Input Parameters
@@ -454,7 +452,6 @@ This workflow is built from multiple composite actions listed below:
 | Name               | Required | Default Value |  Type  | Description                                     |
 | ------------------ | :------: | :-----------: | :----: | ----------------------------------------------- |
 | kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization |
-| python-version     |    ❌    |    "3.10"     | string | The Python version                              |
 | gcloud-sdk-version |    ❌    |   "376.0.0"   | string | GCloud-SDK version                              |
 | kubectl-version    |    ❌    |   "v1.23.0"   | string | Kubectl version                                 |
 | helm-version       |    ❌    |   "v3.8.1"    | string | Helm version                                    |
@@ -492,7 +489,6 @@ jobs:
     uses: bakdata/ci-templates/.github/workflows/kustomize-gke-destroy.yaml@main
     with:
       kustomization-path: ${{ inputs.kustomization-path }}
-      python-version: "3.10" #optional
       gcloud-sdk-version: "376.0.0" #optional
       kubectl-version: "v1.23.0" #optional
       helm-version: "v3.8.1" #optional
