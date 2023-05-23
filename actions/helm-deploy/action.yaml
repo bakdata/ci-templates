@@ -1,4 +1,4 @@
-name: "Deploy Helm Chart"
+name: "Deploy Helm chart"
 description: "Deploy a Helm chart to the GKE cluster"
 inputs:
   release-name:

@@ -1,4 +1,4 @@
-name: "Deploy kustomized crds and app"
+name: "Deploy Kustomize app"
 description: "Deploy kustomized crds and app to the cluster"
 inputs:
   kustomization-path:
@@ -12,7 +12,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Deploy kustomized CRDs
+    - name: Deploy Kustomize CRDs
       shell: bash
       run: |
         customResourceDefinitions="$(kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -i kind=CustomResourceDefinition)"
@@ -21,6 +21,6 @@ runs:
           echo "$customResourceDefinitions" | kubectl wait --for condition=established --timeout=${{ inputs.timeout }}s -f -
         fi
     
-    - name: Deploy kustomized app
+    - name: Deploy Kustomize app
       shell: bash
       run: kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -x kind=CustomResourceDefinition | kubectl apply -f -
