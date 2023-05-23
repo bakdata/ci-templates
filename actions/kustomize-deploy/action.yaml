@@ -1,5 +1,5 @@
 name: "Deploy kustomized crds and app"
-description: "Deploy kustomized crds and app to the GKE cluster"
+description: "Deploy kustomized crds and app to the cluster"
 inputs:
   kustomization-path:
     description: "Path to the root directory of the kustomization"

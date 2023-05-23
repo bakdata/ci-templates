@@ -1,5 +1,5 @@
 name: "Destroy kustomized app"
-description: "Destroy resources with Kustomize in the GKE cluster"
+description: "Destroy resources with Kustomize in the cluster"
 inputs:
   kustomization-path:
     description: "Path to the root directory of the kustomization"

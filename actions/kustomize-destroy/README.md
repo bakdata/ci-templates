@@ -1,6 +1,6 @@
-# Kustomize-gke-deploy
+# Kustomize-deploy
 
-This action will destroy a `kustomization.yaml` file on a Google Kubernetes Engine cluster.
+This action will destroy a `kustomization.yaml` file on a Kubernetes cluster.
 
 ## Input Parameters
 
@@ -13,7 +13,7 @@ This action will destroy a `kustomization.yaml` file on a Google Kubernetes Engi
 ```yaml
 steps:
   - name: Destroy Kustomize
-    uses: bakdata/ci-templates/actions/kustomize-gke-destroy@main
+    uses: bakdata/ci-templates/actions/kustomize-destroy@main
     with:
       kustomization-path: "my-kustomization-path" #directory containing my kustomization file
 ```
