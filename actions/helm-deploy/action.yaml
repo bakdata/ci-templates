@@ -1,5 +1,5 @@
 name: "Deploy Helm chart"
-description: "Deploy a Helm chart to the GKE cluster"
+description: "Deploy a Helm chart to the Kubernetes cluster"
 inputs:
   release-name:
     description: "Helm release name"
