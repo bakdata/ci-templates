@@ -39,6 +39,7 @@ on:
 
 jobs:
   destroy:
+    name: Destroy
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repository

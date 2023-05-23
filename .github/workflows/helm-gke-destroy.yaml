@@ -42,8 +42,8 @@ on:
         required: true
 
 jobs:
-  helm-destroy:
-    name: Helm Destroy
+  destroy:
+    name: Destroy
     runs-on: ubuntu-22.04
 
     steps:

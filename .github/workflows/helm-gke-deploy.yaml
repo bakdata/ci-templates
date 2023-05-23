@@ -71,8 +71,8 @@ on:
         required: true
 
 jobs:
-  helm-deploy:
-    name: Helm Deploy
+  deploy:
+    name: Deploy
     runs-on: ubuntu-22.04
 
     steps:
