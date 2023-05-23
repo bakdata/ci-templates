@@ -13,7 +13,6 @@ The following workflows can be found here:
 - [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
 - [Java Gradle Plugin](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-plugin)
 - [Java Gradle Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-release)
-- [Terraform Create GCP Resource](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#terraform-create-gcp-resource)
 
 ## Docker Build and Publish
 
@@ -926,44 +925,4 @@ jobs:
     needs: call-workflow-passing-data
     steps:
       - run: echo Bumped Version from ${{ needs.call-workflow-passing-data.outputs.old-version }} to ${{ needs.call-workflow-passing-data.outputs.release-version }}
-```
-
-## Terraform Create GCP Resource
-
-This workflow leverages your Terraform project to provision GCP resources.
-
-### Prerequisites
-
-Create a service account and save its key as a GitHub secret so you can provide it to the variable `google-credentials`.
-
-### Input Parameters
-
-| Name              | Required | Default Value |  Type  | Description                                  |
-| ----------------- | :------: | :-----------: | :----: | -------------------------------------------- |
-| tf-plan           |    ❌    |    tfplan     | string | Name of the terraform plan output file       |
-| working-directory |    ❌    |       .       | string | Directory containing your Terraform project. |
-
-### Secret Parameters
-
-A service account (SA) with the necessary permissions is required for creating your GCP resource(s). Generate a key for the recently created SA and provide it to the workflow.
-
-| Name               | Required | Description                       |
-| ------------------ | :------: | --------------------------------- |
-| google-credentials |    ✅    | Key of the service account to use |
-
-### Calling the workflow
-
-```yaml
-name: Terraform
-
-on:
-  workflow_dispatch:
-
-jobs:
-  call-workflow-passing-data:
-    name: Terraform Create GCP Resources
-    uses: bakdata/ci-templates/.github/workflows/terraform-gcp.yaml@main
-    with:
-    secrets:
-      google-credentials: ${{ secrets.GKE_SA_TF }}
 ```
