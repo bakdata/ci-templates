@@ -65,7 +65,7 @@ jobs:
           helm-version: ${{ inputs.helm-version }}
 
       - name: Deploy crds and app
-        uses: bakdata/ci-templates/actions/kustomize-gke-deploy@feat/separate-helm-credentials-setup
+        uses: bakdata/ci-templates/actions/kustomize-deploy@feat/separate-helm-credentials-setup
         with:
           kustomization-path: ${{ inputs.kustomization-path }}
           timeout: ${{ inputs.timeout }}
