@@ -10,6 +10,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Destroy Helm Chart
+    - name: Destroy Helm chart
       shell: bash
       run: helm uninstall --namespace ${{ inputs.namespace }} ${{ inputs.release-name }}

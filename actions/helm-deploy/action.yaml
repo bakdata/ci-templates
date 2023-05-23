@@ -39,7 +39,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Add Helm Repository
+    - name: Add Helm repository
       shell: bash
       run: |
         if [[ -n "${{ inputs.repository-name }}" && -n "${{ inputs.repository-url }}" ]]; then
@@ -54,7 +54,7 @@ runs:
           echo "No repository specified; Skipping step"
         fi
     
-    - name: Deploy Helm Chart
+    - name: Deploy Helm chart
       shell: bash
       run: |
         parameters=(--debug --install --wait --timeout ${{ inputs.timeout }}s --force --namespace ${{ inputs.namespace }})

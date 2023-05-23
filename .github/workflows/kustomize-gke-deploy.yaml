@@ -46,11 +46,11 @@ jobs:
   deploy:
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Credentials
-        uses: bakdata/ci-templates/actions/setup-credentials@feat/separate-helm-credentials-setup
+      - name: Setup credentials
+        uses: bakdata/ci-templates/actions/setup-credentials@v1.20.0
         with:
           gke-service-account: ${{ secrets.gke-service-account }}
           gke-project: ${{ secrets.gke-project }}
@@ -58,14 +58,14 @@ jobs:
           gke-cluster: ${{ secrets.gke-cluster }}
           gcloud-sdk-version: ${{ inputs.gcloud-sdk-version }}
 
-      - name: Setup Environment
-        uses: bakdata/ci-templates/actions/helm-setup@feat/separate-helm-credentials-setup
+      - name: Setup environment
+        uses: bakdata/ci-templates/actions/helm-setup@v1.20.0
         with:
           kubectl-version: ${{ inputs.kubectl-version }}
           helm-version: ${{ inputs.helm-version }}
 
-      - name: Deploy crds and app
-        uses: bakdata/ci-templates/actions/kustomize-deploy@feat/separate-helm-credentials-setup
+      - name: Deploy Kustomize
+        uses: bakdata/ci-templates/actions/kustomize-deploy@v1.20.0
         with:
           kustomization-path: ${{ inputs.kustomization-path }}
           timeout: ${{ inputs.timeout }}
