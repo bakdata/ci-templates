@@ -17,7 +17,7 @@ Create a `kustomization.yaml` file for your deployment.
 
 ```yaml
 steps:
-  - name: Deploy crds and app
+  - name: Deploy Kustomize app
     uses: bakdata/ci-templates/actions/kustomize-deploy@main
     with:
       kustomization-path: "my-kustomization-path" #directory containing my kustomization file
