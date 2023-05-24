@@ -8,11 +8,6 @@ on:
         description: "Path to the root directory of the kustomization"
         required: true
         type: string
-      python-version:
-        description: "Python version"
-        default: "3.10"
-        required: false
-        type: string
       gcloud-sdk-version:
         description: "GCloud SDK version"
         default: "376.0.0"
@@ -43,25 +38,29 @@ on:
         required: true
 
 jobs:
-  kustomize-destroy:
+  destroy:
+    name: Destroy
     runs-on: ubuntu-22.04
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Environment
-        uses: bakdata/ci-templates/actions/helm-gke-setup@v1.8.0
+      - name: Setup credentials
+        uses: bakdata/ci-templates/actions/setup-credentials@v1.20.0
         with:
           gke-service-account: ${{ secrets.gke-service-account }}
           gke-project: ${{ secrets.gke-project }}
           gke-region: ${{ secrets.gke-region }}
           gke-cluster: ${{ secrets.gke-cluster }}
-          python-version: ${{ inputs.python-version }}
           gcloud-sdk-version: ${{ inputs.gcloud-sdk-version }}
+
+      - name: Setup environment
+        uses: bakdata/ci-templates/actions/helm-setup@v1.20.0
+        with:
           kubectl-version: ${{ inputs.kubectl-version }}
           helm-version: ${{ inputs.helm-version }}
 
       - name: Destroy Kustomize
-        uses: bakdata/ci-templates/actions/kustomize-gke-destroy@v1.8.0
+        uses: bakdata/ci-templates/actions/kustomize-destroy@v1.20.0
         with:
           kustomization-path: ${{ inputs.kustomization-path }}

@@ -9,13 +9,8 @@ on:
         required: true
         type: string
       namespace:
-        description: "K8s namespace to deploy in"
+        description: "K8s namespace to destroy in"
         required: true
-        type: string
-      python-version:
-        description: "Python version"
-        default: "3.10"
-        required: false
         type: string
       gcloud-sdk-version:
         description: "GCloud SDK version"
@@ -47,28 +42,31 @@ on:
         required: true
 
 jobs:
-  helm-destroy:
-    name: Helm Destroy
+  destroy:
+    name: Destroy
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Environment
-        uses: bakdata/ci-templates/actions/helm-gke-setup@v1.6.0
+      - name: Setup credentials
+        uses: bakdata/ci-templates/actions/setup-credentials@v1.20.0
         with:
           gke-service-account: ${{ secrets.gke-service-account }}
           gke-project: ${{ secrets.gke-project }}
           gke-region: ${{ secrets.gke-region }}
           gke-cluster: ${{ secrets.gke-cluster }}
-          python-version: ${{ inputs.python-version }}
           gcloud-sdk-version: ${{ inputs.gcloud-sdk-version }}
+
+      - name: Setup environment
+        uses: bakdata/ci-templates/actions/helm-setup@v1.20.0
+        with:
           kubectl-version: ${{ inputs.kubectl-version }}
           helm-version: ${{ inputs.helm-version }}
 
-      - name: Deploy Helm Chart
-        uses: bakdata/ci-templates/actions/helm-gke-destroy@v1.5.0
+      - name: Destroy Helm chart
+        uses: bakdata/ci-templates/actions/helm-destroy@v1.20.0
         with:
           release-name: ${{ inputs.release-name }}
           namespace: ${{ inputs.namespace }}

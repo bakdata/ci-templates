@@ -1,5 +1,5 @@
-name: "Deploy helm chart"
-description: "Deploy a helm chart to the GKE cluster"
+name: "Deploy Helm chart"
+description: "Deploy a Helm chart to the Kubernetes cluster"
 inputs:
   release-name:
     description: "Helm release name"
@@ -11,7 +11,7 @@ inputs:
     description: "Helm chart to deploy"
     required: true
   values-yaml:
-    description: "File path as string for a single helm value file or as json array for multiple helm value files"
+    description: "File path as string for a single Helm value file or as json array for multiple Helm value files"
     required: true
   chart-version:
     description: "Chart Version"
@@ -29,24 +29,32 @@ inputs:
   repository-url:
     description: "Url of the repository"
     required: false
+  repository-username:
+    description: "User for the login to the repository"
+    required: false
+  repository-password:
+    description: "Password for the login to the repository"
+    required: false
 
 runs:
   using: "composite"
   steps:
-    - name: Add helm repository
+    - name: Add Helm repository
       shell: bash
       run: |
-        if [ -n "$REPOSITORY_NAME" ] && [ -n "$REPOSITORY_URL" ]; then
-          helm repo add "$REPOSITORY_NAME" "$REPOSITORY_URL"
+        if [[ -n "${{ inputs.repository-name }}" && -n "${{ inputs.repository-url }}" ]]; then
+          parameters=(${{ inputs.repository-name }} ${{ inputs.repository-url }})
+
+          if [[ -n "${{ inputs.repository-username }}" ]]; then parameters+=(--username ${{ inputs.repository-username }}); fi
+          if [[ -n "${{ inputs.repository-password }}" ]]; then parameters+=(--password ${{ inputs.repository-password }}); fi
+
+          helm repo add "${parameters[@]}"
           helm repo update
         else
           echo "No repository specified; Skipping step"
         fi
-      env:
-        REPOSITORY_NAME: ${{ inputs.repository-name }}
-        REPOSITORY_URL: ${{ inputs.repository-url }}
-
-    - name: Deploy helm chart
+    
+    - name: Deploy Helm chart
       shell: bash
       run: |
         parameters=(--debug --install --wait --timeout ${{ inputs.timeout }}s --force --namespace ${{ inputs.namespace }})
@@ -59,8 +67,8 @@ runs:
           parameters+=(--values ${{ inputs.values-yaml }})
         fi
 
-        if [ -n "${{ inputs.chart-version }}" ]; then parameters+=(--version ${{ inputs.chart-version }}); fi
-        if [ -n "${{ inputs.post-renderer }}" ]; then parameters+=(--post-renderer ${{ inputs.post-renderer }}); fi
+        if [[ -n "${{ inputs.chart-version }}" ]]; then parameters+=(--version ${{ inputs.chart-version }}); fi
+        if [[ -n "${{ inputs.post-renderer }}" ]]; then parameters+=(--post-renderer ${{ inputs.post-renderer }}); fi
 
         echo "Deploying with command: helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} ${parameters[@]}"
         helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} "${parameters[@]}"

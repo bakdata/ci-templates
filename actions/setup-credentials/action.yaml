@@ -1,5 +1,5 @@
-name: "Setup environment"
-description: "Setup GKE environment for Kubernetes deployments"
+name: "Setup credentials"
+description: "Setup credentials for GCloud and GKE"
 inputs:
   gke-service-account:
     description: "GKE service account key for authentication"
@@ -13,30 +13,13 @@ inputs:
   gke-cluster:
     description: "GKE cluster for authentication"
     required: true
-  python-version:
-    description: "Python version"
-    default: "3.10"
-    required: false
   gcloud-sdk-version:
     description: "GCloud SDK version"
     default: "376.0.0"
     required: false
-  kubectl-version:
-    description: "Kubectl version"
-    default: "v1.23.0"
-    required: false
-  helm-version:
-    description: "Helm version"
-    default: "v3.10.1"
-    required: false
 runs:
   using: "composite"
   steps:
-    - name: Setup python
-      uses: actions/setup-python@v1
-      with:
-        python-version: ${{ inputs.python-version }}
-
     - name: Authenticate at GCloud
       uses: "google-github-actions/auth@v0"
       with:
@@ -48,18 +31,6 @@ runs:
         version: ${{ inputs.gcloud-sdk-version }}
         project_id: ${{ inputs.gke-project }}
 
-    - name: Install kubectl
-      uses: azure/setup-kubectl@v3
-      with:
-        version: ${{ inputs.kubectl-version }}
-
-    # TODO: replace by ci runner image
-    - name: Install kfilt
-      shell: bash
-      run: |
-        curl -L "https://github.com/ryane/kfilt/releases/download/v0.0.7/kfilt_0.0.7_linux_amd64" -o /usr/local/bin/kfilt
-        chmod +x /usr/local/bin/kfilt
-
     - name: Setup authentication
       shell: bash
       run: |
@@ -68,8 +39,3 @@ runs:
         GKE_REGION: ${{ inputs.gke-region }}
         GKE_CLUSTER: ${{ inputs.gke-cluster }}
         GKE_PROJECT: ${{ inputs.gke-project }}
-
-    - name: Install Helm
-      uses: azure/setup-helm@v3
-      with:
-        version: ${{ inputs.helm-version }}

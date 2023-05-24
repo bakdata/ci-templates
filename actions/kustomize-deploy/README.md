@@ -1,6 +1,6 @@
-# Kustomize-gke-deploy
+# Kustomize-deploy
 
-This action will deploy resources with Kustomize on a Google Kubernetes Engine cluster.
+This action will deploy resources with Kustomize on a Kubernetes cluster.
 
 ## Prerequisites
 
@@ -17,8 +17,8 @@ Create a `kustomization.yaml` file for your deployment.
 
 ```yaml
 steps:
-  - name: Deploy crds and app
-    uses: bakdata/ci-templates/actions/kustomize-gke-deploy@main
+  - name: Deploy Kustomize app
+    uses: bakdata/ci-templates/actions/kustomize-deploy@main
     with:
       kustomization-path: "my-kustomization-path" #directory containing my kustomization file
       timeout: "60" #optional
