@@ -26,10 +26,10 @@ current_version = 0.0.1
 
 This action outputs the following variables:
 
-| Name            | Description                                           |
-| --------------- | ----------------------------------------------------- |
-| old-version     | Defines the old version in your .bumpversion.cfg file |
-| release-version | The bumped version of your project                    |
+| Name            | Description                                     |
+| --------------- | ----------------------------------------------- |
+| old-version     | The old version in your `.bumpversion.cfg` file |
+| release-version | The bumped version of your project              |
 
 ## Usage
 

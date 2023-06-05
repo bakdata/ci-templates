@@ -23,7 +23,7 @@ outputs:
     description: "The bumped version of your package."
     value: ${{ steps.bump-version.outputs.new-version }}
   old-version:
-    description: "The old version of your package"
+    description: "The old version of your package."
     value: ${{ steps.bump-version.outputs.old-version }}
 
 runs:

@@ -19,10 +19,10 @@ This action uses another composite action listed below:
 
 ## Output Parameters
 
-| Name            | Description                                         |
-| --------------- | --------------------------------------------------- |
-| old-version     | Defines the old version in your pyproject.toml file |
-| release-version | The bumped version of your project                  |
+| Name            | Description                        |
+| --------------- | ---------------------------------- |
+| old-version     | The old version of your package    |
+| release-version | The bumped version of your package |
 
 ## Usage
 

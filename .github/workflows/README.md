@@ -151,12 +151,12 @@ token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the em
 
 ### Outputs
 
-This workflow outputs two variables: The `old-version` and the `release-version`. These variables can be used in subsequent jobs (e.g., using the `release-version` to create GitHub release).
+This workflow outputs two variables: The `old-version` and the `release-version`. These variables can be used in subsequent jobs (e.g., using the `release-version` to create a GitHub release).
 
-| Name            | Description                                           |
-| --------------- | ----------------------------------------------------- |
-| old-version     | Defines the old version in your .bumpversion.cfg file |
-| release-version | The bumped version of your project                    |
+| Name            | Description                                     |
+| --------------- | ----------------------------------------------- |
+| old-version     | The old version in your `.bumpversion.cfg` file |
+| release-version | The bumped version of your project              |
 
 ### Calling the workflow
 
