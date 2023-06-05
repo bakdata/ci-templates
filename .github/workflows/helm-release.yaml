@@ -78,8 +78,8 @@ jobs:
 
     # Map the job outputs to step outputs
     outputs:
-      release-tag: ${{ steps.release-tag.outputs.release-tag }}
-      old-tag: ${{ steps.release-tag.outputs.old-tag }}
+      release-tag: ${{ steps.bump-version.outputs.release-tag }}
+      old-tag: ${{ steps.bump-version.outputs.old-tag }}
 
     steps:
       - name: Check out repository
@@ -89,7 +89,7 @@ jobs:
           persist-credentials: false # required for pushing to protected branch later
 
       - name: Bump version
-        id: release-tag
+        id: bump-version
         uses: bakdata/ci-templates/actions/bump-version@v1.5.2
         with:
           release-type: ${{ inputs.release-type }}
@@ -117,7 +117,7 @@ jobs:
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           ref: ${{ inputs.ref }}
-          commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
+          commit-message: "Bump version ${{ steps.bump-version.outputs.old-tag }} → ${{ steps.bump-version.outputs.release-tag }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}

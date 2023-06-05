@@ -17,10 +17,10 @@ inputs:
 outputs:
   release-tag:
     description: "The bumped version."
-    value: ${{ steps.release-tag.outputs.new-version }}
+    value: ${{ steps.bump-version.outputs.new-version }}
   old-tag:
     description: "The old version"
-    value: ${{ steps.release-tag.outputs.old-version }}
+    value: ${{ steps.bump-version.outputs.old-version }}
 
 runs:
   using: "composite"
@@ -31,7 +31,7 @@ runs:
       shell: bash
 
     - name: Bump version
-      id: release-tag
+      id: bump-version
       run: |
         parameters=(--no-commit ${{ inputs.release-type }})
         echo "old-version=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"

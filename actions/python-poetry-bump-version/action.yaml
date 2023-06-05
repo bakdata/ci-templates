@@ -21,10 +21,10 @@ inputs:
 outputs:
   release-tag:
     description: "The bumped version of your package."
-    value: ${{ steps.release-tag.outputs.new-version }}
+    value: ${{ steps.bump-version.outputs.new-version }}
   old-tag:
     description: "The old version of your package"
-    value: ${{ steps.release-tag.outputs.old-version }}
+    value: ${{ steps.bump-version.outputs.old-version }}
 
 runs:
   using: "composite"
@@ -45,7 +45,7 @@ runs:
     # For more information visit: https://www.python.org/dev/peps/pep-0440/#semantic-versioning
     # https://python-poetry.org/docs/cli/#version
     - name: Bump version with Poetry
-      id: release-tag
+      id: bump-version
       run: |
         echo "old-version=$(poetry version -s)" >> $GITHUB_OUTPUT
         if [[ "${{ inputs.release-type }}" == "snapshot" ]]; then
