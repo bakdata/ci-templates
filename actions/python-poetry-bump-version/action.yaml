@@ -21,10 +21,10 @@ inputs:
 outputs:
   release-tag:
     description: "The bumped version of your package."
-    value: ${{ steps.release-tag.outputs.newTag }}
+    value: ${{ steps.release-tag.outputs.new-version }}
   old-tag:
     description: "The old version of your package"
-    value: ${{ steps.release-tag.outputs.oldTag }}
+    value: ${{ steps.release-tag.outputs.old-version }}
 
 runs:
   using: "composite"
@@ -47,7 +47,7 @@ runs:
     - name: Bump version with Poetry
       id: release-tag
       run: |
-        echo "oldTag=$(poetry version -s)" >> $GITHUB_OUTPUT
+        echo "old-version=$(poetry version -s)" >> $GITHUB_OUTPUT
         if [[ "${{ inputs.release-type }}" == "snapshot" ]]; then
           snapshot_time=$(python -c "from datetime import datetime; time = datetime.now(); print(time.strftime('%Y%m%d%H%M%S'))")
           poetry version patch
@@ -55,6 +55,6 @@ runs:
         else
           poetry version ${{ inputs.release-type }}
         fi
-        echo "newTag=$(poetry version -s)" >> $GITHUB_OUTPUT
+        echo "new-version=$(poetry version -s)" >> $GITHUB_OUTPUT
       shell: bash
       working-directory: ${{ inputs.working-directory }}
