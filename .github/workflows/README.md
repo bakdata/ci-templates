@@ -547,13 +547,13 @@ email: `[username]@users.noreply.github.com`.
 
 ### Outputs
 
-This workflow outputs two variables: The `old-tag` and the `release-tag`. These variables can be used in the future
-jobs (e.g., using the `release-tag` to create GitHub release).
+This workflow outputs two variables: The `old-version` and the `release-version`. These variables can be used in the future
+jobs (e.g., using the `release-version` to create a GitHub release).
 
-| Name        | Description                                         |
-| ----------- | --------------------------------------------------- |
-| old-tag     | Defines the old version in your pyproject.toml file |
-| release-tag | The bumped version of your project                  |
+| Name            | Description                       |
+| --------------- | --------------------------------- |
+| old-version     | The old version of the package    |
+| release-version | The bumped version of the package |
 
 ### Calling the workflow
 
