@@ -55,9 +55,9 @@ on:
 
     # Map the workflow outputs to job outputs
     outputs:
-      release-tag:
+      release-version:
         description: "The release tag."
-        value: ${{ jobs.helm-release.outputs.release-tag }}
+        value: ${{ jobs.helm-release.outputs.release-version }}
       old-tag:
         description: "The old tag."
         value: ${{ jobs.helm-release.outputs.old-tag }}
@@ -78,7 +78,7 @@ jobs:
 
     # Map the job outputs to step outputs
     outputs:
-      release-tag: ${{ steps.bump-version.outputs.release-tag }}
+      release-version: ${{ steps.bump-version.outputs.release-version }}
       old-tag: ${{ steps.bump-version.outputs.old-tag }}
 
     steps:
@@ -117,7 +117,7 @@ jobs:
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           ref: ${{ inputs.ref }}
-          commit-message: "Bump version ${{ steps.bump-version.outputs.old-tag }} → ${{ steps.bump-version.outputs.release-tag }}"
+          commit-message: "Bump version ${{ steps.bump-version.outputs.old-tag }} → ${{ steps.bump-version.outputs.release-version }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}

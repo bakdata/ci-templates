@@ -19,7 +19,7 @@ inputs:
     default: "."
 
 outputs:
-  release-tag:
+  release-version:
     description: "The bumped version of your package."
     value: ${{ steps.bump-version.outputs.new-version }}
   old-tag:
