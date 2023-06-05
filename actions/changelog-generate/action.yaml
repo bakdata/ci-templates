@@ -47,7 +47,6 @@ runs:
     - name: "Set tags"
       id: setTags
       run: |
-        # tag_list=$(git describe --tags) || tag_list=""
         tag_list=$(git tag) || tag_list=""
 
         # to-tag

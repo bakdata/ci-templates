@@ -73,7 +73,7 @@ steps:
     with:
       token: ${{ secrets.GH_TOKEN }}
       config: "./.github/changelog-config.json"
-      new-taf: "1.0.0"
+      new-tag: "1.0.0"
       changelog-file: "CHANGELOG.md"
       fetchReviewers: "true"
       fetchReleaseInformation: "true"
