@@ -21,7 +21,7 @@ This action uses another composite action listed below:
 
 | Name            | Description                                         |
 | --------------- | --------------------------------------------------- |
-| old-tag         | Defines the old version in your pyproject.toml file |
+| old-version     | Defines the old version in your pyproject.toml file |
 | release-version | The bumped version of your project                  |
 
 ## Usage
@@ -38,5 +38,5 @@ steps:
       poetry-version: ${{ inputs.poetry-version }}
 
   - name: Use bump version output
-    run: echo Bumped version from ${{ steps.bump-version.outputs.old-tag }} to ${{ steps.bump-version.outputs.release-version }}
+    run: echo Bumped version from ${{ steps.bump-version.outputs.old-version }} to ${{ steps.bump-version.outputs.release-version }}
 ```

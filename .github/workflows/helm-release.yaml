@@ -58,9 +58,9 @@ on:
       release-version:
         description: "The release tag."
         value: ${{ jobs.helm-release.outputs.release-version }}
-      old-tag:
+      old-version:
         description: "The old tag."
-        value: ${{ jobs.helm-release.outputs.old-tag }}
+        value: ${{ jobs.helm-release.outputs.old-version }}
 
 jobs:
   helm-lint:
@@ -79,7 +79,7 @@ jobs:
     # Map the job outputs to step outputs
     outputs:
       release-version: ${{ steps.bump-version.outputs.release-version }}
-      old-tag: ${{ steps.bump-version.outputs.old-tag }}
+      old-version: ${{ steps.bump-version.outputs.old-version }}
 
     steps:
       - name: Check out repository
@@ -117,7 +117,7 @@ jobs:
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           ref: ${{ inputs.ref }}
-          commit-message: "Bump version ${{ steps.bump-version.outputs.old-tag }} → ${{ steps.bump-version.outputs.release-version }}"
+          commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}

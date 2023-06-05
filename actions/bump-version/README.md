@@ -28,7 +28,7 @@ This action outputs the following variables:
 
 | Name            | Description                                           |
 | --------------- | ----------------------------------------------------- |
-| old-tag         | Defines the old version in your .bumpversion.cfg file |
+| old-version     | Defines the old version in your .bumpversion.cfg file |
 | release-version | The bumped version of your project                    |
 
 ## Usage

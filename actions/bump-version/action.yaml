@@ -18,7 +18,7 @@ outputs:
   release-version:
     description: "The bumped version."
     value: ${{ steps.bump-version.outputs.new-version }}
-  old-tag:
+  old-version:
     description: "The old version"
     value: ${{ steps.bump-version.outputs.old-version }}
 
