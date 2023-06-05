@@ -60,8 +60,8 @@ jobs:
     runs-on: ubuntu-22.04
     # Map the job outputs to step outputs
     outputs:
-      release-version: ${{ steps.release-version.outputs.release-version }}
-      old-version: ${{ steps.release-version.outputs.old-version }}
+      release-version: ${{ steps.bump-version.outputs.release-version }}
+      old-version: ${{ steps.bump-version.outputs.old-version }}
 
     steps:
       - name: Check out repository
@@ -71,7 +71,7 @@ jobs:
           persist-credentials: false # required for pushing to protected branch later
 
       - name: Bump version with Poetry
-        id: release-version
+        id: bump-version
         uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.18.2
         with:
           release-type: ${{ inputs.release-type }}
@@ -92,7 +92,7 @@ jobs:
         uses: bakdata/ci-templates/actions/commit-and-push@v1.0.0
         with:
           ref: ${{ inputs.ref }}
-          commit-message: "Bump version ${{ steps.release-version.outputs.old-version }} → ${{ steps.release-version.outputs.release-version }}"
+          commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
