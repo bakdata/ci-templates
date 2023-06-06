@@ -22,15 +22,18 @@ on:
         required: false
         default: "1.1.12"
         type: string
-      publish-to-test:
-        description: "If set to false, the package is published to PyPI. (Default is true)"
-        required: false
-        default: true
-        type: boolean
       working-directory:
         description: "The working directory of your Python package. (Default is root directory)"
         required: false
         default: "./"
+        type: string
+      changelog:
+        description: "Create changelog for release"
+        required: false
+        type: string
+      changelog-config:
+        description: "Changelog config path"
+        required: false
         type: string
     secrets:
       github-username:
@@ -41,9 +44,6 @@ on:
         required: true
       github-token:
         description: "The GitHub token for committing the changes."
-        required: true
-      pypi-token:
-        description: "The PyPI token for publishing packages."
         required: true
 
     # Map the workflow outputs to job outputs
@@ -79,14 +79,16 @@ jobs:
           poetry-version: ${{ inputs.poetry-version }}
           working-directory: ${{ inputs.working-directory }}
 
-      - name: Release to PyPI
-        uses: bakdata/ci-templates/actions/python-poetry-release@v1.18.2
+      - name: Create changelog
+        id: build_changelog
+        uses: bakdata/ci-templates/actions/changelog-generate@fix/bug-changelog
+        if: ${{ inputs.changelog == 'true'}}
         with:
-          pypi-token: ${{ secrets.pypi-token }}
-          publish-to-test: ${{ inputs.publish-to-test }}
-          working-directory: ${{ inputs.working-directory }}
-          python-version: ${{ inputs.python-version }}
-          poetry-version: ${{ inputs.poetry-version }}
+          github-token: ${{ secrets.github-token }}
+          config: ${{ inputs.changelog-config }}
+          new-tag: ${{ steps.bump-version.outputs.release-version }}
+          fetchReviewers: "true"
+          fetchReleaseInformation: "true"
 
       - name: Commit and push pyproject.toml file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.0.0
@@ -96,3 +98,15 @@ jobs:
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
+
+      - name: Tag and release
+        uses: bakdata/ci-templates/.github/workflows/tag-and-release.yaml@feature/split_actions
+        with:
+          tag: v${{ steps.bump-version.outputs.release-version }}
+          release-text: Release for v${{ steps.bump-version.outputs.release-version }}
+          release-body: ""
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
+
+
