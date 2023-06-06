@@ -3,7 +3,7 @@ description: "The version defined in the pyproject.toml file gets bump with the 
 
 inputs:
   release-type:
-    description: "Scope of the release; See: https://python-poetry.org/docs/cli/#version"
+    description: "Scope of the release: patch, minor, major, or snapshot. See https://python-poetry.org/docs/cli/#version for reference."
     required: true
   python-version:
     description: "The Python version for the Poetry virtual environment."
@@ -19,12 +19,12 @@ inputs:
     default: "."
 
 outputs:
-  release-tag:
+  release-version:
     description: "The bumped version of your package."
-    value: ${{ steps.release-tag.outputs.newTag }}
-  old-tag:
-    description: "The old version of your package"
-    value: ${{ steps.release-tag.outputs.oldTag }}
+    value: ${{ steps.bump-version.outputs.new-version }}
+  old-version:
+    description: "The old version of your package."
+    value: ${{ steps.bump-version.outputs.old-version }}
 
 runs:
   using: "composite"
@@ -45,10 +45,16 @@ runs:
     # For more information visit: https://www.python.org/dev/peps/pep-0440/#semantic-versioning
     # https://python-poetry.org/docs/cli/#version
     - name: Bump version with Poetry
-      id: release-tag
+      id: bump-version
       run: |
-        echo "oldTag=$(poetry version -s)" >> $GITHUB_OUTPUT
-        poetry version ${{ inputs.release-type }}
-        echo "newTag=$(poetry version -s)" >> $GITHUB_OUTPUT
+        echo "old-version=$(poetry version -s)" >> $GITHUB_OUTPUT
+        if [[ "${{ inputs.release-type }}" == "snapshot" ]]; then
+          snapshot_time=$(python -c "from datetime import datetime; time = datetime.now(); print(time.strftime('%Y%m%d%H%M%S'))")
+          poetry version patch
+          poetry version $(poetry version -s).dev$snapshot_time
+        else
+          poetry version ${{ inputs.release-type }}
+        fi
+        echo "new-version=$(poetry version -s)" >> $GITHUB_OUTPUT
       shell: bash
       working-directory: ${{ inputs.working-directory }}

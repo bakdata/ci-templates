@@ -15,12 +15,12 @@ inputs:
     default: ""
 
 outputs:
-  release-tag:
-    description: "The bumped version."
-    value: ${{ steps.release-tag.outputs.newTag }}
-  old-tag:
-    description: "The old version"
-    value: ${{ steps.release-tag.outputs.oldTag }}
+  release-version:
+    description: "The bumped version of your project."
+    value: ${{ steps.bump-version.outputs.new-version }}
+  old-version:
+    description: "The old version in your `.bumpversion.cfg` file."
+    value: ${{ steps.bump-version.outputs.old-version }}
 
 runs:
   using: "composite"
@@ -31,14 +31,14 @@ runs:
       shell: bash
 
     - name: Bump version
-      id: release-tag
+      id: bump-version
       run: |
         parameters=(--no-commit ${{ inputs.release-type }})
-        echo "oldTag=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
-        if [ -n "${{ inputs.new-version }}" ]; then 
+        echo "old-version=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
+        if [ -n "${{ inputs.new-version }}" ]; then
           parameters+=(--new-version ${{ inputs.new-version }})
         fi
         bump2version "${parameters[@]}"
-        echo "newTag=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
+        echo "new-version=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
       shell: bash
       working-directory: ${{ inputs.working-directory }}

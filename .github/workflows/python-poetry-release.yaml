@@ -48,20 +48,20 @@ on:
 
     # Map the workflow outputs to job outputs
     outputs:
-      release-tag:
-        description: "The release tag."
-        value: ${{ jobs.create-release.outputs.release-tag }}
-      old-tag:
-        description: "The old tag."
-        value: ${{ jobs.create-release.outputs.old-tag }}
+      release-version:
+        description: "The bumped version of the package."
+        value: ${{ jobs.create-release.outputs.release-version }}
+      old-version:
+        description: "The old version of the package."
+        value: ${{ jobs.create-release.outputs.old-version }}
 
 jobs:
   create-release:
     runs-on: ubuntu-22.04
     # Map the job outputs to step outputs
     outputs:
-      release-tag: ${{ steps.release-tag.outputs.release-tag }}
-      old-tag: ${{ steps.release-tag.outputs.old-tag }}
+      release-version: ${{ steps.bump-version.outputs.release-version }}
+      old-version: ${{ steps.bump-version.outputs.old-version }}
 
     steps:
       - name: Check out repository
@@ -71,8 +71,8 @@ jobs:
           persist-credentials: false # required for pushing to protected branch later
 
       - name: Bump version with Poetry
-        id: release-tag
-        uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.18.2
+        id: bump-version
+        uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.21.0
         with:
           release-type: ${{ inputs.release-type }}
           python-version: ${{ inputs.python-version }}
@@ -92,7 +92,7 @@ jobs:
         uses: bakdata/ci-templates/actions/commit-and-push@v1.0.0
         with:
           ref: ${{ inputs.ref }}
-          commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
+          commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}

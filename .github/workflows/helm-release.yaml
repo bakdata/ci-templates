@@ -55,12 +55,12 @@ on:
 
     # Map the workflow outputs to job outputs
     outputs:
-      release-tag:
-        description: "The release tag."
-        value: ${{ jobs.helm-release.outputs.release-tag }}
-      old-tag:
-        description: "The old tag."
-        value: ${{ jobs.helm-release.outputs.old-tag }}
+      release-version:
+        description: "The bumped version."
+        value: ${{ jobs.helm-release.outputs.release-version }}
+      old-version:
+        description: "The old version in your `.bumpversion.cfg` file."
+        value: ${{ jobs.helm-release.outputs.old-version }}
 
 jobs:
   helm-lint:
@@ -78,8 +78,8 @@ jobs:
 
     # Map the job outputs to step outputs
     outputs:
-      release-tag: ${{ steps.release-tag.outputs.release-tag }}
-      old-tag: ${{ steps.release-tag.outputs.old-tag }}
+      release-version: ${{ steps.bump-version.outputs.release-version }}
+      old-version: ${{ steps.bump-version.outputs.old-version }}
 
     steps:
       - name: Check out repository
@@ -89,8 +89,8 @@ jobs:
           persist-credentials: false # required for pushing to protected branch later
 
       - name: Bump version
-        id: release-tag
-        uses: bakdata/ci-templates/actions/bump-version@v1.5.2
+        id: bump-version
+        uses: bakdata/ci-templates/actions/bump-version@v1.21.0
         with:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.charts-dir }}
@@ -117,7 +117,7 @@ jobs:
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           ref: ${{ inputs.ref }}
-          commit-message: "Bump version ${{ steps.release-tag.outputs.old-tag }} → ${{ steps.release-tag.outputs.release-tag }}"
+          commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
