@@ -15,8 +15,6 @@ This action uses another composite action listed below:
 | tag          |    ✅    |       -       | The version of the tag to be publish and released e.g 1.0.0                  |
 | release-text |    ✅    |       -       | Text for the github release (this describes the release content / Changelog) |
 
-|
-
 ## Usage
 
 ```yaml
