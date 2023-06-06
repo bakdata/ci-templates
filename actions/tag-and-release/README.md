@@ -23,8 +23,6 @@ This action uses another composite action listed below:
 steps:
   - name: Check out repository
     uses: actions/checkout@v3
-    with:
-      persist-credentials: false # required for pushing changed pyproject.toml
 
   - name: Release to (Test)PyPI
     uses: bakdata/ci-templates/actions/tag-and-release@main
