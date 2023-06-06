@@ -1,0 +1,32 @@
+name: "Tag and release"
+description: "Tag and release your repo with target tag."
+
+inputs:
+  tag:
+    description: "The version of the tag to be publish and released e.g 1.0.0"
+    required: true
+  release-text:
+    description: "Text for the github release (this describes the release content / Changelog)"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: Create tag
+      run: |
+        git config --local user.name ${{ secrets.GH_USERNAME }}
+        git config --local user.email ${{ secrets.GH_EMAIL }}
+        git tag v${{ inputs.tag }}
+      shell: bash
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        tag_name: "${{ needs.release-to-pypi.outputs.release-tag }}"
+        name: Release v${{ needs.release-to-pypi.outputs.release-tag }}
+        body: "${{ steps.build_changelog.outputs.single-changelog }}"
+        draft: false
+        prerelease: false
