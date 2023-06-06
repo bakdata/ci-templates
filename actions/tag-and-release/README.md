@@ -10,13 +10,12 @@ This action uses another composite action listed below:
 
 ## Input Parameters
 
-| Name              | Required | Default Value | Description                                                                                          |
-| ----------------- | :------: | :-----------: | ---------------------------------------------------------------------------------------------------- |
-| pypi-token        |    ✅    |       -       | The (Test)PyPI API token for publishing packages                                                     |
-| publish-to-test   |    ❌    |     true      | If set to true, the packages are published to TestPyPI other wise the packages are published to PyPI |
-| python-version    |    ❌    |     3.10      | The Python version for setting up Poetry.                                                            |
-| poetry-version    |    ❌    |     1.2.2     | The Poetry version to be installed.                                                                  |
-| working-directory |    ❌    |     "./"      | The working directory of your Python package.                                                        |
+| Name         | Required | Default Value | Description                                                                  |
+| ------------ | :------: | :-----------: | ---------------------------------------------------------------------------- |
+| tag          |    ✅    |       -       | The version of the tag to be publish and released e.g 1.0.0                  |
+| release-text |    ✅    |       -       | Text for the github release (this describes the release content / Changelog) |
+
+|
 
 ## Usage
 
@@ -27,14 +26,9 @@ steps:
     with:
       persist-credentials: false # required for pushing changed pyproject.toml
 
-  # Other steps in your workflow
-
   - name: Release to (Test)PyPI
-    uses: bakdata/ci-templates/actions/python-poetry-release@main
+    uses: bakdata/ci-templates/actions/tag-and-release@main
     with:
-      pypi-token: ${{ secrets.pypi-token }}
-      publish-to-test: ${{ inputs.publish-to-test }}
-      working-directory: ${{ inputs.working-directory }}
-      python-version: ${{ inputs.python-version }}
-      poetry-version: ${{ inputs.poetry-version }}
+        tag: 1.0.0
+        release-text: "This should be on the release section on github. Normally a Changelog"
 ```

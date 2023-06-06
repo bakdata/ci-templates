@@ -25,8 +25,8 @@ runs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
-        tag_name: "${{ needs.release-to-pypi.outputs.release-tag }}"
-        name: Release v${{ needs.release-to-pypi.outputs.release-tag }}
-        body: "${{ steps.build_changelog.outputs.single-changelog }}"
+        tag_name: "${{ inputs.tag }}"
+        name: Release v${{ inputs.tag }}
+        body: "${{ inputs.release-text }}"
         draft: false
         prerelease: false
