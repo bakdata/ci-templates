@@ -1,12 +1,12 @@
 # python-poetry-release
 
-This composite action uses Poetry to build and push your Python packages either to TestPyPI or PyPI.
+This composite action allows you to tag a release a repository.
 
 ## Dependencies
 
 This action uses another composite action listed below:
 
-- [python-setup-poetry](https://github.com/bakdata/ci-templates/tree/main/actions/python-setup-poetry)
+- [action-gh-release](https://github.com/softprops/action-gh-release)
 
 ## Input Parameters
 
