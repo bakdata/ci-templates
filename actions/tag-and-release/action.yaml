@@ -5,9 +5,13 @@ inputs:
   tag:
     description: "The version of the tag to be publish and released e.g 1.0.0"
     required: true
-  release-text:
-    description: "Text for the github release (this describes the release content / Changelog)"
+  release-title:
+    description: "Text for the github release title"
     required: true
+  release-body:
+    description: "Text for the github release body (this describes the release content / Changelog)"
+    default: ""
+    required: false
 
 runs:
   using: "composite"
@@ -26,7 +30,7 @@ runs:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
         tag_name: "${{ inputs.tag }}"
-        name: Release v${{ inputs.tag }}
-        body: "${{ inputs.release-text }}"
+        name: ${{ inputs.release-title }}
+        body: ${{ inputs.release-body }}
         draft: false
         prerelease: false

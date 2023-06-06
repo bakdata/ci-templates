@@ -10,10 +10,11 @@ This action uses another composite action listed below:
 
 ## Input Parameters
 
-| Name         | Required | Default Value | Description                                                                  |
-| ------------ | :------: | :-----------: | ---------------------------------------------------------------------------- |
-| tag          |    ✅    |       -       | The version of the tag to be publish and released e.g 1.0.0                  |
-| release-text |    ✅    |       -       | Text for the github release (this describes the release content / Changelog) |
+| Name          | Required | Default Value | Description                                                 |
+| ------------- | :------: | :-----------: | ----------------------------------------------------------- |
+| tag           |    ✅    |       -       | The version of the tag to be publish and released e.g 1.0.0 |
+| release-title |    ✅    |       -       | Text for the github release title                           |
+| release-body  |    ❌    |       -       | Text for the github release title                           |
 
 ## Usage
 
@@ -26,5 +27,6 @@ steps:
     uses: bakdata/ci-templates/actions/tag-and-release@main
     with:
       tag: 1.0.0
-      release-text: "This should be on the release section on github. Normally a Changelog"
+      release-title: "This should be the title for the github release"
+      release-body: "This should be on the text part of the github release"
 ```
