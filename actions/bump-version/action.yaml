@@ -16,10 +16,10 @@ inputs:
 
 outputs:
   release-version:
-    description: "The bumped version."
+    description: "The bumped version of your project."
     value: ${{ steps.bump-version.outputs.new-version }}
   old-version:
-    description: "The old version"
+    description: "The old version in your `.bumpversion.cfg` file."
     value: ${{ steps.bump-version.outputs.old-version }}
 
 runs:

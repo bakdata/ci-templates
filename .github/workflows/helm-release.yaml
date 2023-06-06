@@ -56,10 +56,10 @@ on:
     # Map the workflow outputs to job outputs
     outputs:
       release-version:
-        description: "The release tag."
+        description: "The bumped version."
         value: ${{ jobs.helm-release.outputs.release-version }}
       old-version:
-        description: "The old tag."
+        description: "The old version in your `.bumpversion.cfg` file."
         value: ${{ jobs.helm-release.outputs.old-version }}
 
 jobs:
