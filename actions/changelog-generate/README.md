@@ -48,10 +48,10 @@ Additional configuration options can be explored [here](https://github.com/mikep
 | github-token            |    ✅    |                 -                 | The GitHub token for committing the changes                                                                                                                  |
 | new-tag                 |    ✅    |                 -                 | New version                                                                                                                                                  |
 | changelog-file          |    ❌    |          "CHANGELOG.md"           | Path to the Changelog.md file                                                                                                                                |
-| commitMode              |    ❌    |              "false"              | Special configuration for projects which work without PRs. Uses commit messages as changelog. This mode looses access to information only available for PRs. |
+| commit-mode              |    ❌    |              "false"              | Special configuration for projects which work without PRs. Uses commit messages as changelog. This mode looses access to information only available for PRs. |
 | config                  |    ❌    | "./.github/changelog-config.json" | Path to the changelog config JSON file                                                                                                                       |
-| fetchReleaseInformation |    ❌    |              "false"              | Will enable fetching additional release information from tags.                                                                                               |
-| fetchReviewers          |    ❌    |              "false"              | Will enable fetching the users/reviewers who approved the PR.                                                                                                |
+| fetch-release-information |    ❌    |              "false"              | Will enable fetching additional release information from tags.                                                                                               |
+| fetch-reviewers          |    ❌    |              "false"              | Will enable fetching the users/reviewers who approved the PR.                                                                                                |
 | old-tag                 |    ❌    |                ""                 | Previous version                                                                                                                                             |
 
 ## Outputs
@@ -79,8 +79,8 @@ steps:
       config: "./.github/changelog-config.json"
       new-tag: "1.0.0"
       changelog-file: "CHANGELOG.md"
-      fetchReviewers: "true"
-      fetchReleaseInformation: "true"
+      fetch-reviewers: "true"
+      fetch-release-information: "true"
   - name: Use output
     run: |
       echo  "${{ steps.build_changelog.outputs.single-changelog }}" > tag_changelog.md
