@@ -1,4 +1,4 @@
-name: Reusable workflow for building and publishing Python packages to TestPyPI or PyPI
+name: Reusable workflow for building and releasing Python packages
 
 on:
   workflow_call:
@@ -69,6 +69,7 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
           persist-credentials: false # required for pushing to protected branch later
+          fetch-depth: 0
 
       - name: Bump version with Poetry
         id: bump-version
@@ -104,7 +105,7 @@ jobs:
         with:
           tag: v${{ steps.bump-version.outputs.release-version }}
           release-text: Release for v${{ steps.bump-version.outputs.release-version }}
-          release-body: ""
+          release-body: "${{ steps.build_changelog.outputs.single-changelog }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
