@@ -101,7 +101,7 @@ jobs:
           github-token: ${{ secrets.github-token }}
 
       - name: Tag and release
-        uses: bakdata/ci-templates/.github/actions/tag-and-release@feature/split_actions
+        uses: bakdata/ci-templates/actions/tag-and-release@feature/split_actions
         with:
           tag: v${{ steps.bump-version.outputs.release-version }}
           release-text: Release for v${{ steps.bump-version.outputs.release-version }}
