@@ -13,6 +13,7 @@ The upper bound might be either existing or new. If the new tag does not yet exi
 
 This action is built from the following composite actions:
 
+- [checkout-action](https://github.com/actions/checkout)
 - [release-changelog-builder-action](https://github.com/mikepenz/release-changelog-builder-action)
 
 ## Prerequisites
@@ -21,20 +22,19 @@ Create a file called `changelog-config.json` that contains the changelog configu
 
 ```json
 {
-  "categories":
-    [
-      {
-        "title": "## 🚀 Features",
-        "labels": ["feature", "feat", "enhancement"],
-      },
-      { "title": "## 🐛 Fixes", "labels": ["fix", "bug"] },
-      { "title": "## 🧪 Dependencies", "labels": ["dependency"] },
-    ],
+  "categories": [
+    {
+      "title": "## 🚀 Features",
+      "labels": ["feature", "feat", "enhancement"]
+    },
+    { "title": "## 🐛 Fixes", "labels": ["fix", "bug"] },
+    { "title": "## 🧪 Dependencies", "labels": ["dependency"] }
+  ],
   "ignore_labels": ["ignore"],
   "sort": { "order": "ASC", "on_property": "mergedAt" },
   "template": "# [${{TO_TAG}}](https://github.com/<myorganization>/<myrepository>/releases/tag/${{TO_TAG}}) - Release Date: ${{TO_TAG_DATE}}\n\n${{CHANGELOG}}\n<details>\n<summary>Uncategorized</summary>\n\n${{UNCATEGORIZED}}\n</details>\n",
   "pr_template": "- ${{TITLE}}\n   - PR: ${{URL}}\n   - Assignees: ${{ASSIGNEES[*]}}\n   - Reviewers: ${{REVIEWERS[*]}}\n   - Approvers: ${{APPROVERS[*]}}",
-  "empty_template": "- no changes!",
+  "empty_template": "- no changes!"
 }
 ```
 
@@ -64,9 +64,14 @@ Additional configuration options can be explored [here](https://github.com/mikep
 
 ## Calling the workflow
 
+By default, just a single commit for the ref/SHA that started the process is retrieved. In the checkout action, enter `fetch-depth: 0` to retrieve all history for all branches and tags. Without it, the changelog action will be unable to track down previous tags.
+
 ```yaml
 steps:
   - uses: actions/checkout@v3
+    with:
+      persist-credentials: false
+      fetch-depth: 0
   - name: Create changelog
     id: build_changelog
     uses: bakdata/ci-templates/actions/changelog-generate@main
