@@ -13,7 +13,6 @@ The upper bound might be either existing or new. If the new tag does not yet exi
 
 This action is built from the following composite actions:
 
-- [checkout-action](https://github.com/actions/checkout)
 - [release-changelog-builder-action](https://github.com/mikepenz/release-changelog-builder-action)
 
 ## Prerequisites
@@ -64,7 +63,7 @@ Additional configuration options can be explored [here](https://github.com/mikep
 
 ## Calling the workflow
 
-By default, just a single commit for the ref/SHA that started the process is retrieved. In the checkout action, enter `fetch-depth: 0` to retrieve all history for all branches and tags. Without it, the changelog action will be unable to track down previous tags.
+By default, just a single commit for the ref/SHA that started the process is retrieved. In the [checkout action](https://github.com/actions/checkout), enter `fetch-depth: 0` to retrieve all history for all branches and tags. Without it, the changelog action will be unable to track down previous tags.
 
 ```yaml
 steps:
