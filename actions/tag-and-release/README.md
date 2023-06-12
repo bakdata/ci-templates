@@ -14,7 +14,7 @@ This action uses another composite action listed below:
 | ------------- | :------: | :-----------: | ----------------------------------------------------------- |
 | tag           |    ✅    |       -       | The version of the tag to be publish and released e.g 1.0.0 |
 | release-title |    ✅    |       -       | Title for the GitHub release                                |
-| release-body  |    ❌    |       -       | Description for the GitHub release                            |
+| release-body  |    ❌    |       -       | Description for the GitHub release                          |
 
 ## Usage
 
