@@ -42,7 +42,6 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
           persist-credentials: false # required for pushing to protected branch later
-          fetch-depth: 0
 
       - name: Publish to PyPI
         id: publish
