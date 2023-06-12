@@ -3,13 +3,13 @@ description: "Tag and release with target tag."
 
 inputs:
   tag:
-    description: "The version of the tag to be publish and released, e.g. 1.0.0"
+    description: "The version of the tag to be publish and released, e.g. 1.0.0."
     required: true
   release-title:
-    description: "Title for the GitHub release"
+    description: "Title for the GitHub release."
     required: true
   release-body:
-    description: "Description for the GitHub release"
+    description: "Description for the GitHub release."
     default: ""
     required: false
   github-username:
