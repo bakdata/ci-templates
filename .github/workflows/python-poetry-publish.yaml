@@ -23,6 +23,11 @@ on:
         required: false
         default: "./"
         type: string
+      ref:
+        description: "The ref name to checkout the repository."
+        required: false
+        default: ${{ github.event.repository.default_branch }}
+        type: string
     secrets:
       pypi-token:
         description: "PyPI token"
