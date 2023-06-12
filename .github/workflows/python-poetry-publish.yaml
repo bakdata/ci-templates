@@ -1,0 +1,50 @@
+name: Reusable workflow for publishing to PyPI
+
+on:
+  workflow_call:
+    inputs:
+      publish-to-test:
+        description: "If set to false, the packages are published to PyPI. (Default is true)"
+        required: false
+        default: "true"
+        type: string
+      python-version:
+        description: "The Python version for the Poetry virtual environment. (Default is 3.10)"
+        required: false
+        default: "3.10"
+        type: string
+      poetry-version:
+        description: "The Poetry version to be installed. (Default is 1.2.2)"
+        required: false
+        default: "1.2.2"
+        type: string
+      working-directory:
+        description: "The working directory of your Python packages. (Default is root directory)"
+        required: false
+        default: "./"
+        type: string
+    secrets:
+      pypi-token:
+        description: "The GitHub username for committing the changes."
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false # required for pushing to protected branch later
+          fetch-depth: 0
+
+      - name: Publish to PyPI
+        id: publish
+        uses: bakdata/ci-templates/actions/python-poetry-publish@feature/split_actions
+        with:
+          pypi-token: ${{ secrets.pypi-token }}
+          publish-to-test: ${{ inputs.publish-to-test }}
+          python-version: ${{ inputs.python-version }}
+          poetry-version: ${{ inputs.poetry-version }}
+          working-directory: ${{ inputs.working-directory }}
