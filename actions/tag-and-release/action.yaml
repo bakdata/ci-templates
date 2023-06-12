@@ -6,10 +6,10 @@ inputs:
     description: "The version of the tag to be publish and released, e.g. 1.0.0"
     required: true
   release-title:
-    description: "Text for the GitHub release title"
+    description: "Title for the GitHub release"
     required: true
   release-body:
-    description: "Text for the GitHub release body (this describes the release content / Changelog)"
+    description: "Description for the GitHub release"
     default: ""
     required: false
   github-username:

@@ -18,9 +18,9 @@ on:
         default: "3.10"
         type: string
       poetry-version:
-        description: "The Python version for setting up Poetry. (Default is 1.1.12)"
+        description: "The Python version for setting up Poetry. (Default is 1.5.1)"
         required: false
-        default: "1.1.12"
+        default: "1.5.1"
         type: string
       working-directory:
         description: "The working directory of your Python package. (Default is root directory)"
@@ -109,5 +109,3 @@ jobs:
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
-
-

@@ -13,8 +13,8 @@ This action uses another composite action listed below:
 | Name          | Required | Default Value | Description                                                 |
 | ------------- | :------: | :-----------: | ----------------------------------------------------------- |
 | tag           |    ✅    |       -       | The version of the tag to be publish and released e.g 1.0.0 |
-| release-title |    ✅    |       -       | Text for the github release title                           |
-| release-body  |    ❌    |       -       | Text for the github release title                           |
+| release-title |    ✅    |       -       | Title for the GitHub release                                |
+| release-body  |    ❌    |       -       | Description for the GitHub release                            |
 
 ## Usage
 
@@ -26,7 +26,7 @@ steps:
   - name: Release to (Test)PyPI
     uses: bakdata/ci-templates/actions/tag-and-release@main
     with:
-      tag: 1.0.0
-      release-title: "This should be the title for the github release"
-      release-body: "This should be on the text part of the github release"
+      tag: "1.0.0"
+      release-title: "This should be the title for the GitHub release"
+      release-body: "This should be on the text part of the GitHub release"
 ```

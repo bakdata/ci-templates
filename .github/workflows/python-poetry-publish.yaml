@@ -14,9 +14,9 @@ on:
         default: "3.10"
         type: string
       poetry-version:
-        description: "The Poetry version to be installed. (Default is 1.2.2)"
+        description: "The Poetry version to be installed. (Default is 1.5.1)"
         required: false
-        default: "1.2.2"
+        default: "1.5.1"
         type: string
       working-directory:
         description: "The working directory of your Python packages. (Default is root directory)"
