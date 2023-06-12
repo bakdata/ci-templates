@@ -1,15 +1,15 @@
 name: "Tag and release"
-description: "Tag and release your repo with target tag."
+description: "Tag and release with target tag."
 
 inputs:
   tag:
-    description: "The version of the tag to be publish and released e.g 1.0.0"
+    description: "The version of the tag to be publish and released, e.g. 1.0.0"
     required: true
   release-title:
-    description: "Text for the github release title"
+    description: "Text for the GitHub release title"
     required: true
   release-body:
-    description: "Text for the github release body (this describes the release content / Changelog)"
+    description: "Text for the GitHub release body (this describes the release content / Changelog)"
     default: ""
     required: false
   github-username:
@@ -25,7 +25,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-
     - name: Create tag
       run: |
         git config --local user.name ${{ inputs.github-username }}

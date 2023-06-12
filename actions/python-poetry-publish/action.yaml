@@ -1,5 +1,5 @@
-name: "Release Python packages"
-description: "Release Python packages using Poetry to TestPyPI or PyPI"
+name: "Publish Python packages"
+description: "Publish Python packages using Poetry to TestPyPI or PyPI"
 
 inputs:
   pypi-token:
