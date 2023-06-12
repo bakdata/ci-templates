@@ -25,7 +25,7 @@ on:
         type: string
     secrets:
       pypi-token:
-        description: "The GitHub username for committing the changes."
+        description: "PyPI token"
         required: true
 
 jobs:
