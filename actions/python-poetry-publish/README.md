@@ -29,7 +29,7 @@ steps:
 
   # Other steps in your workflow
 
-  - name: Release to (Test)PyPI
+  - name: Publish to (Test)PyPI
     uses: bakdata/ci-templates/actions/python-poetry-publish@main
     with:
       pypi-token: ${{ secrets.pypi-token }}
