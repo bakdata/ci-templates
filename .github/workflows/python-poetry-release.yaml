@@ -96,7 +96,7 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
-          github-username: ${{ secrets.github-username }}
+          github-username: ${{ secrets.github-username }}s
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
 
@@ -104,7 +104,7 @@ jobs:
         uses: bakdata/ci-templates/actions/tag-and-release@feature/split_actions
         with:
           tag: v${{ steps.bump-version.outputs.release-version }}
-          release-title: Release for v${{ steps.bump-version.outputs.release-version }}
+          release-title: Release for ${{ steps.bump-version.outputs.release-version }}
           release-body: "${{ steps.build_changelog.outputs.single-changelog }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
