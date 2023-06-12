@@ -82,14 +82,14 @@ jobs:
 
       - name: Create changelog
         id: build_changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@fix/bug-changelog
+        uses: bakdata/ci-templates/actions/changelog-generate@main
         if: ${{ inputs.changelog == 'true'}}
         with:
           github-token: ${{ secrets.github-token }}
           config: ${{ inputs.changelog-config }}
           new-tag: ${{ steps.bump-version.outputs.release-version }}
-          fetchReviewers: "true"
-          fetchReleaseInformation: "true"
+          fetch-reviewers: "true"
+          fetch-release-information: "true"
 
       - name: Commit and push pyproject.toml file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.0.0
