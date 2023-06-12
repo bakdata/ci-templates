@@ -81,7 +81,7 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
 
       - name: Create changelog
-        id: build_changelog
+        id: build-changelog
         uses: bakdata/ci-templates/actions/changelog-generate@v1.21.1
         if: ${{ inputs.changelog == 'true'}}
         with:
@@ -105,7 +105,7 @@ jobs:
         with:
           tag: v${{ steps.bump-version.outputs.release-version }}
           release-title: v${{ steps.bump-version.outputs.release-version }}
-          release-body: "${{ steps.build_changelog.outputs.single-changelog }}"
+          release-body: "${{ steps.build-changelog.outputs.single-changelog }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
