@@ -642,7 +642,7 @@ jobs:
       ref: my-awesome-ref # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value. In this case the changes will be pushed to my-awesome-ref
       publish-to-test: false # (Optional) By default the packages are published to TestPyPI. In this case the packages are published to PyPI
       python-version: 3.8 # (Optional) Default value is 3.10. In this case Poetry is installed with Python 3.8
-      poetry-version: 1.5.1 # (Optional) Default value is 1.5.1. In this case Poetry version 1.1.11 is installed
+      poetry-version: "1.1.11" # (Optional) Default value is 1.5.1. In this case Poetry version 1.1.11 is installed
       working-directory: "./my-awesome-python-project" # (Optional) Default value is the root directory of your repository. In this case all the files to the given path are published
     secrets:
       pypi-token: ${{ secrets.PYPI_API_TOKEN }}
