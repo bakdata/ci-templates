@@ -13,6 +13,7 @@ The following workflows can be found here:
 - [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
 - [Java Gradle Plugin](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-plugin)
 - [Java Gradle Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-release)
+- [Python Poetry Publish](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-release)
 
 ## Docker Build and Publish
 
@@ -500,8 +501,9 @@ jobs:
 
 ## Python Poetry Release
 
-This workflow will bump the version of your python project and publish the built project to either TestPyPI or PyPI. In
-the following, you will first find the necessary prerequisite to set up the workflow. Next, you will find the
+This workflow will bump the version of your python project, tag and make a release of your project on GitHub. Moreover
+this workflow allows you to add a CHANGELOG.md automatically if you wish to do so.
+In the following, you will first find the necessary prerequisite to set up the workflow. Next, you will find the
 documentation of the input, secret, and output parameters. In the end, you find a small example of how to use this
 workflow.
 
@@ -517,8 +519,9 @@ is a protection rule in place.
 This workflow is built from multiple composite actions listed below:
 
 - [python-poetry-bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-bump-version)
-- [python-poetry-release](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-release)
+- [tag-and-release](https://github.com/bakdata/ci-templates/tree/main/actions/tag-and-release)
 - [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
+- [changelog-generate](https://github.com/bakdata/ci-templates/tree/main/actions/changelog-generate)
 
 ### Input Parameters
 
@@ -526,9 +529,10 @@ This workflow is built from multiple composite actions listed below:
 | ----------------- | :------: | :-----------------------------------: | :-----: | --------------------------------------------------------------------------------------------------------------------------------- |
 | release-type      |    ✅    |                   -                   | string  | Scope of the release, see the official [documentation of Poetry](https://python-poetry.org/docs/cli/#version) for possible values |
 | ref               |    ❌    | The default branch of your repository | string  | ref name to checkout the repository                                                                                               |
-| publish-to-test   |    ❌    |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org                     |
+| changelog         |    ❌    |                 true                  | boolean | If set to true, a CHANGELOG.md will be created when a release is done                                                             |
+| changelog-config  |    ❌    |                   -                   | string  | Path to the changelog config file. Only needed if changelog is set to true                                                        |
 | python-version    |    ❌    |                "3.10"                 | string  | Python version for setting up Poetry                                                                                              |
-| poetry-version    |    ❌    |               "1.1.12"                | string  | Poetry version to be installed                                                                                                    |
+| poetry-version    |    ❌    |                "1.5.1"                | string  | Poetry version to be installed                                                                                                    |
 | working-directory |    ❌    |                 "./"                  | string  | Working directory of your Python package                                                                                          |
 
 ### Secret Parameters
@@ -538,12 +542,11 @@ repository secret for the GitHub username (`GH_USERNAME`), the GitHub Email (`GH
 token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the
 email: `[username]@users.noreply.github.com`.
 
-| Name            | Required | Description                                      |
-| --------------- | :------: | ------------------------------------------------ |
-| github-username |    ✅    | The GitHub username for committing the changes   |
-| github-email    |    ✅    | The GitHub email for committing the changes      |
-| github-token    |    ✅    | The GitHub token for committing the changes      |
-| pypi-token      |    ✅    | The (Test)PyPI API token for publishing packages |
+| Name            | Required | Description                                    |
+| --------------- | :------: | ---------------------------------------------- |
+| github-username |    ✅    | The GitHub username for committing the changes |
+| github-email    |    ✅    | The GitHub email for committing the changes    |
+| github-token    |    ✅    | The GitHub token for committing the changes    |
 
 ### Outputs
 
@@ -570,21 +573,79 @@ jobs:
     with:
       release-type: patch # (Required) See more values at: https://python-poetry.org/docs/cli/#version
       ref: my-awesome-ref # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value. In this case the changes will be pushed to my-awesome-ref
-      publish-to-test: false # (Optional) By default the packages are published to TestPyPI. In this case the packages are published to PyPI
       python-version: 3.8 # (Optional) Default value is 3.10. In this case Poetry is installed with Python 3.8
-      poetry-version: 1.1.11 # (Optional) Default value is 1.1.12. In this case Poetry version 1.1.11 is installed
+      poetry-version: 1.5.1 # (Optional) Default value is 1.5.1. In this case Poetry version 1.1.11 is installed
       working-directory: "./my-awesome-python-project" # (Optional) Default value is the root directory of your repository. In this case all the files to the given path are published
+      changelog: true # (Optional) Default to false. Set only if you want to mantain a CHANGELOG.md
+      changelog-config: ./my-changelog-config.json # (Optional) Set only if changelog is set to true. More information about it here https://github.com/bakdata/ci-templates/tree/main/actions/changelog-generate
     secrets:
       github-email: ${{ secrets.GH_EMAIL }}
       github-username: ${{ secrets.GH_USERNAME }}
       github-token: ${{ secrets.GH_TOKEN }}
-      pypi-token: ${{ secrets.PYPI_API_TOKEN }}
 
   use-output-of-workflow:
     runs-on: ubuntu-latest
     needs: call-workflow-passing-data
     steps:
       - run: echo Bumped Version from ${{ needs.call-workflow-passing-data.outputs.old-version }} to ${{ needs.call-workflow-passing-data.outputs.release-version }}
+```
+
+## Python Poetry Publish
+
+This workflow will publish the built project to either TestPyPI or PyPI. In
+the following, you will first find the necessary prerequisite to set up the workflow. Next, you will find the
+documentation of the input, secret, and output parameters. In the end, you find a small example of how to use this
+workflow.
+
+### Prerequisites
+
+Your Python project needs to be set up with Poetry and contain a `pyproject.toml` file to use this workflow.
+
+### Dependencies
+
+This workflow is built from multiple composite actions listed below:
+
+- [python-poetry-publish](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-publish)
+
+### Input Parameters
+
+| Name              | Required |             Default Value             |  Type   | Description                                                                                                   |
+| ----------------- | :------: | :-----------------------------------: | :-----: | ------------------------------------------------------------------------------------------------------------- |
+| ref               |    ❌    | The default branch of your repository | string  | ref name to checkout the repository                                                                           |
+| publish-to-test   |    ❌    |                 true                  | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org |
+| python-version    |    ❌    |                "3.10"                 | string  | Python version for setting up Poetry                                                                          |
+| poetry-version    |    ❌    |                "1.5.1"                | string  | Poetry version to be installed                                                                                |
+| working-directory |    ❌    |                 "./"                  | string  | Working directory of your Python package                                                                      |
+
+### Secret Parameters
+
+These secrets define the pypi token that allow the GitHub action to release the project to PyPI or TestPyPI
+
+| Name       | Required | Description                                      |
+| ---------- | :------: | ------------------------------------------------ |
+| pypi-token |    ✅    | The (Test)PyPI API token for publishing packages |
+
+### Calling the workflow
+
+```yaml
+name: Call this reusable workflow
+
+on:
+  push:
+    tags: 
+      - "*"
+
+jobs:
+  call-workflow-passing-data:
+    uses: bakdata/ci-templates/.github/workflows/python-poetry-publish.yaml@main
+    with:
+      ref: my-awesome-ref # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value. In this case the changes will be pushed to my-awesome-ref
+      publish-to-test: false # (Optional) By default the packages are published to TestPyPI. In this case the packages are published to PyPI
+      python-version: 3.8 # (Optional) Default value is 3.10. In this case Poetry is installed with Python 3.8
+      poetry-version: 1.5.1 # (Optional) Default value is 1.5.1. In this case Poetry version 1.1.11 is installed
+      working-directory: "./my-awesome-python-project" # (Optional) Default value is the root directory of your repository. In this case all the files to the given path are published
+    secrets:
+      pypi-token: ${{ secrets.PYPI_API_TOKEN }}
 ```
 
 ## Java Gradle Docker

@@ -23,7 +23,7 @@ steps:
   - name: Check out repository
     uses: actions/checkout@v3
 
-  - name: Release to (Test)PyPI
+  - name: Tag and release project
     uses: bakdata/ci-templates/actions/tag-and-release@main
     with:
       tag: "1.0.0"
