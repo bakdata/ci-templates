@@ -1,6 +1,6 @@
 # tag-and-release
 
-This composite action allows you to tag a release a repository.
+This composite action allows you to create a Git tag and GitHub release.
 
 ## Dependencies
 
