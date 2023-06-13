@@ -69,7 +69,7 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
           persist-credentials: false # required for pushing to protected branch later
-          fetch-depth: 0
+          fetch-depth: 0 # required to build the changelog
 
       - name: Bump version with Poetry
         id: bump-version
@@ -103,8 +103,8 @@ jobs:
       - name: Tag and release
         uses: bakdata/ci-templates/actions/tag-and-release@feature/split_actions
         with:
-          tag: v${{ steps.bump-version.outputs.release-version }}
-          release-title: v${{ steps.bump-version.outputs.release-version }}
+          tag: "${{ steps.bump-version.outputs.release-version }}"
+          release-title: "${{ steps.bump-version.outputs.release-version }}"
           release-body: "${{ steps.build-changelog.outputs.single-changelog }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
