@@ -30,6 +30,7 @@ on:
       changelog:
         description: "Create changelog for release."
         required: false
+        default: false
         type: boolean
       changelog-config:
         description: "Changelog config path."
