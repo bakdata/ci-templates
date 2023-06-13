@@ -501,9 +501,8 @@ jobs:
 
 ## Python Poetry Release
 
-This workflow will bump the version of your python project, tag and make a release of your project on GitHub. Moreover
-this workflow allows you to add a CHANGELOG.md automatically if you wish to do so.
-In the following, you will first find the necessary prerequisite to set up the workflow. Next, you will find the
+This workflow will bump the version of your Python project, create a Git tag, and make a release of your project on GitHub. Moreover, this workflow allows you to add a CHANGELOG.md automatically if you wish to do so.
+In the following, you will first find the necessary prerequisites to set up the workflow. Next, you will find the
 documentation of the input, secret, and output parameters. In the end, you find a small example of how to use this
 workflow.
 
