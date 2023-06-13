@@ -574,7 +574,7 @@ jobs:
       release-type: patch # (Required) See more values at: https://python-poetry.org/docs/cli/#version
       ref: my-awesome-ref # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value. In this case the changes will be pushed to my-awesome-ref
       python-version: 3.8 # (Optional) Default value is 3.10. In this case Poetry is installed with Python 3.8
-      poetry-version: 1.5.1 # (Optional) Default value is 1.5.1. In this case Poetry version 1.1.11 is installed
+      poetry-version: "1.1.11" # (Optional) Default value is 1.5.1. In this case Poetry version 1.1.11 is installed
       working-directory: "./my-awesome-python-project" # (Optional) Default value is the root directory of your repository. In this case all the files to the given path are published
       changelog: true # (Optional) Default to false. Set only if you want to mantain a CHANGELOG.md
       changelog-config: ./my-changelog-config.json # (Optional) Set only if changelog is set to true. More information about it here https://github.com/bakdata/ci-templates/tree/main/actions/changelog-generate
