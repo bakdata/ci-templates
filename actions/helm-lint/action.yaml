@@ -13,10 +13,6 @@ inputs:
     description: "The Helm version."
     required: false
     default: "v3.10.1"
-  check-version-increment:
-    description: "Activates a check for chart version increments."
-    required: false
-    default: "true"
 
 runs:
   using: "composite"
@@ -44,8 +40,8 @@ runs:
     - name: Run chart-testing (lint)
       run: |
         if [[ "${GITHUB_REF#refs/heads/}" == "main" || "${GITHUB_REF#refs/heads/}" == "master" ]]; then
-          ct lint --config ${{ inputs.lint-config-path }} --since HEAD^ --check-version-increment=${{ inputs.check-version-increment }}
+          ct lint --config ${{ inputs.lint-config-path }} --since HEAD^
         else
-          ct lint --config ${{ inputs.lint-config-path }} --check-version-increment=${{ inputs.check-version-increment }}
+          ct lint --config ${{ inputs.lint-config-path }}
         fi
       shell: bash

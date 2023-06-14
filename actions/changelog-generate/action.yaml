@@ -14,7 +14,7 @@ inputs:
     description: Path to the changelog file in the GitHub repository
     required: false
     default: "CHANGELOG.md"
-  commitMode:
+  commit-mode:
     description: "Special configuration for projects which work without PRs."
     required: false
     default: "false"
@@ -22,11 +22,11 @@ inputs:
     description: Path to the changelog config JSON file
     required: false
     default: "./.github/changelog-config.json"
-  fetchReleaseInformation:
+  fetch-release-information:
     description: "Will enable fetching additional release information from tags."
     required: false
     default: "false"
-  fetchReviewers:
+  fetch-reviewers:
     description: "Will enable fetching the users/reviewers who approved the PR"
     required: false
     default: "false"
@@ -45,9 +45,9 @@ runs:
   using: "composite"
   steps:
     - name: "Set tags"
-      id: setTags
+      id: set-tags
       run: |
-        tag_list=$(git describe --tags) || tag_list=""
+        tag_list=$(git tag) || tag_list=""
 
         # to-tag
         if [[ "$tag_list" == *"${{ inputs.new-tag }}"* ]]; then
@@ -81,19 +81,19 @@ runs:
       with:
         token: "${{ inputs.github-token }}"
         configuration: "${{ inputs.config }}"
-        fromTag: "${{ steps.setTags.outputs.fromtag }}"
-        toTag: "${{ steps.setTags.outputs.totag }}"
+        fromTag: "${{ steps.set-tags.outputs.fromtag }}"
+        toTag: "${{ steps.set-tags.outputs.totag }}"
         outputFile: ${{ runner.temp }}/changes.md
-        fetchReviewers: "${{ inputs.fetchReviewers }}"
-        fetchReleaseInformation: "${{ inputs.fetchReleaseInformation }}"
-        commitMode: "${{ inputs.commitMode }}"
+        fetchReviewers: "${{ inputs.fetch-reviewers }}"
+        fetchReleaseInformation: "${{ inputs.fetch-release-information }}"
+        commitMode: "${{ inputs.commit-mode }}"
 
     - name: Replace default branch with new Tag
-      if: ${{ steps.setTags.outputs.totag != inputs.new-tag }}
+      if: ${{ steps.set-tags.outputs.totag != inputs.new-tag }}
       run: |
         # Replace default branch with new tag
-        sed -i 's/\[${{ steps.setTags.outputs.totag }}\]/\[${{ inputs.new-tag }}\]/g' ${{ runner.temp }}/changes.md
-        sed -i 's|releases/tag/${{ steps.setTags.outputs.totag }}|releases/tag/${{ inputs.new-tag }}|g' ${{ runner.temp }}/changes.md
+        sed -i 's/\[${{ steps.set-tags.outputs.totag }}\]/\[${{ inputs.new-tag }}\]/g' ${{ runner.temp }}/changes.md
+        sed -i 's|releases/tag/${{ steps.set-tags.outputs.totag }}|releases/tag/${{ inputs.new-tag }}|g' ${{ runner.temp }}/changes.md
 
         # Set Release date
         tag_date=$(date '+%Y-%m-%d')
