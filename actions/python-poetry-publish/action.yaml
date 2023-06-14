@@ -9,14 +9,6 @@ inputs:
     description: "If set to false, the packages are published to PyPI. (Default is true)"
     required: false
     default: "true"
-  python-version:
-    description: "The Python version for the Poetry virtual environment. (Default is 3.10)"
-    required: false
-    default: "3.10"
-  poetry-version:
-    description: "The Poetry version to be installed. (Default is 1.2.2)"
-    required: false
-    default: "1.2.2"
   working-directory:
     description: "The working directory of your Python packages. (Default is root directory)"
     required: false
@@ -25,24 +17,16 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Set up Poetry ${{ inputs.poetry-version }}
-      uses: bakdata/ci-templates/actions/python-setup-poetry@v1.5.3
-      with:
-        python-version: ${{ inputs.python-version }}
-        poetry-version: ${{ inputs.poetry-version }}
-        working-directory: ${{ inputs.working-directory }}
-
-    - name: Install dependencies
-      run: poetry install --only main --no-interaction
+    - name: Build package
+      run: poetry build
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Build and Publish package to PyPI
+    - name: Publish package to PyPI
       if: ${{ inputs.publish-to-test == 'false' }}
       run: |
-        # first build the project then publish to PyPI
         # If the repository is not specified, by default Poetry pushes the packages to PyPI
-        poetry publish --build --username __token__ --password ${{ inputs.pypi-token }}
+        poetry publish --username __token__ --password ${{ inputs.pypi-token }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
@@ -52,6 +36,6 @@ runs:
         # set the repository to TestPyPI
         poetry config repositories.testpypi https://test.pypi.org/legacy/
         # first build the project then publish to TestPyPI
-        poetry publish --build --repository testpypi --username __token__ --password ${{ inputs.pypi-token }}
+        poetry publish --repository testpypi --username __token__ --password ${{ inputs.pypi-token }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}

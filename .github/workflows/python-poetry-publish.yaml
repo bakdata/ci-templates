@@ -36,6 +36,18 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
+      - name: Set up Poetry ${{ inputs.poetry-version }}
+        uses: bakdata/ci-templates/actions/python-setup-poetry@v1.5.3
+        with:
+          python-version: ${{ inputs.python-version }}
+          poetry-version: ${{ inputs.poetry-version }}
+          working-directory: ${{ inputs.working-directory }}
+
+      - name: Install dependencies
+        run: poetry install --only main --no-interaction
+        shell: bash
+        working-directory: ${{ inputs.working-directory }}
+
       - name: Publish to PyPI
         id: publish
         uses: bakdata/ci-templates/actions/python-poetry-publish@v1.22.0
