@@ -61,7 +61,7 @@ jobs:
 
       - name: Bump version
         id: bump-version
-        uses: bakdata/ci-templates/actions/bump-version@v1.21.0
+        uses: bakdata/ci-templates/actions/bump-version@fix/bumpversion-no-tag
         with:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.working-directory }}
