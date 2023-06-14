@@ -1,4 +1,5 @@
-name: Reusable workflow for creating release tags using bumpversion
+name: Bump Version Release
+# Reusable workflow for creating release tags using bumpversion
 
 on:
   workflow_call:
