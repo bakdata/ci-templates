@@ -864,7 +864,7 @@ This workflow is built from another composite action listed below:
 
 | Name              | Required | Default Value |  Type   | Description                                                                                                   |
 | ----------------- | :------: | :-----------: | :-----: | ------------------------------------------------------------------------------------------------------------- |
-| release-type      |    ✅    |     patch     | string  | Scope of the release (major, minor or patch)                                                                  |
+| release-type      |    ✅    |       -       | string  | Scope of the release (major, minor or patch)                                                                  |
 | java-distribution |    ❌    |   microsoft   | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
 | java-version      |    ❌    |      11       | string  | Java version to be installed                                                                                  |
 | gradle-version    |    ❌    |    wrapper    | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
