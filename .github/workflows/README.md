@@ -13,6 +13,7 @@ The following workflows can be found here:
 - [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
 - [Java Gradle Plugin](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-plugin)
 - [Java Gradle Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-release)
+- [Bump Version Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#bump-version-release)
 
 ## Docker Build and Publish
 
@@ -914,6 +915,92 @@ jobs:
       java-version: "11" # (Optional) Default is 11
       gradle-version: "wrapper" # (Optional) Default is wrapper
       gradle-cache: false # (Optional) Default is true
+      working-directory: "." # (Optional) Default is .
+    secrets:
+      github-username: "${{ secrets.GH_USERNAME }}"
+      github-email: "${{ secrets.GH_EMAIL }}"
+      github-token: "${{ secrets.GH_TOKEN }}"
+
+  use-output-of-workflow:
+    runs-on: ubuntu-latest
+    needs: call-workflow-passing-data
+    steps:
+      - run: echo Bumped Version from ${{ needs.call-workflow-passing-data.outputs.old-version }} to ${{ needs.call-workflow-passing-data.outputs.release-version }}
+```
+
+## Bump Version Release
+
+This workflow will release your Bump Version project. That means it will bump the version according to your `release-type`, create a Git tag, and create a GitHub release with an optional changelog.
+
+### Prerequisites
+
+A `.bumpversion.cfg` needs to be located inside `working-directory` (repository root by default) to use this workflow.
+Moreover, prepare a `github-username`, a `github-email` and a `github-token` to push to GitHub.
+
+### Dependencies
+
+This workflow is built from other composite actions listed below:
+
+- [bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/bump-version)
+- [changelog-generate](https://github.com/bakdata/ci-templates/tree/main/actions/changelog-generate)
+- [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
+- [tag-and-release](https://github.com/bakdata/ci-templates/tree/main/actions/tag-and-release)
+
+### Input Parameters
+
+| Name              | Required | Default Value |  Type   | Description                                                |
+| ----------------- | :------: | :-----------: | :-----: | ---------------------------------------------------------- |
+| release-type      |    ✅    |       -       | string  | Scope of the release (major, minor or patch)               |
+| changelog         |    ❌    |     false     | boolean | Create changelog for release                               |
+| changelog-config  |    ❌    |       -       | string  | Changelog config path                                      |
+| working-directory |    ❌    |       .       | string  | Working directory of project containing `.bumpversion.cfg` |
+
+### Secret Parameters
+
+For committing and pushing the changes to GitHub you need to define a `github-username`, a `github-email` and
+a `github-token`.
+
+| Name            | Required | Description                                |
+| --------------- | :------: | ------------------------------------------ |
+| github-username |    ✅    | GitHub username for committing the changes |
+| github-email    |    ✅    | GitHub email for committing the changes    |
+| github-token    |    ✅    | GitHub token for committing the changes    |
+
+### Outputs
+
+This workflow outputs two variables: The `old-version` and the `release-version`. These variables can be used in the
+future jobs (e.g., using the `release-version` to create a GitHub release).
+
+| Name            | Description                    |
+| --------------- | ------------------------------ |
+| release-version | Bumped version of your project |
+
+### Calling the workflow
+
+```yaml
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: "Scope of the release."
+        type: choice
+        required: true
+        default: patch
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  call-workflow-passing-data:
+    name: Release
+    uses: bakdata/ci-templates/.github/workflows/bump-version-release.yaml@main
+    with:
+      release-type: "${{ github.event.inputs.release-type }}"
+      changelog: true # (Optional) Default is false
+      changelog-config: "./.github/changelog-config.json" # (Optional)
       working-directory: "." # (Optional) Default is .
     secrets:
       github-username: "${{ secrets.GH_USERNAME }}"
