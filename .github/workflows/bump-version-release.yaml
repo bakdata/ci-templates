@@ -8,11 +8,6 @@ on:
         description: "Scope of the release (major, minor or patch)."
         required: true
         type: string
-      ref:
-        description: "The ref name to checkout the repository."
-        required: false
-        default: ${{ github.event.repository.default_branch }}
-        type: string
       changelog:
         description: "Create changelog for release."
         required: false
@@ -61,7 +56,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
-          ref: ${{ inputs.ref }}
+          ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false # required for pushing to protected branch later
 
       - name: Bump version
