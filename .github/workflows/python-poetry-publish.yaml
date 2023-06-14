@@ -6,8 +6,8 @@ on:
       publish-to-test:
         description: "If set to false, the packages are published to PyPI. (Default is true)"
         required: false
-        default: "true"
-        type: string
+        default: true
+        type: boolean
       python-version:
         description: "The Python version for the Poetry virtual environment. (Default is 3.10)"
         required: false

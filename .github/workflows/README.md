@@ -631,7 +631,7 @@ name: Call this reusable workflow
 
 on:
   push:
-    tags: 
+    tags:
       - "*"
 
 jobs:
