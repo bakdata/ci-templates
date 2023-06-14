@@ -81,7 +81,7 @@ jobs:
           fetch-reviewers: "true"
           fetch-release-information: "true"
 
-      - name: Commit and push .bumpversion.cfg file
+      - name: Commit and push changes including .bumpversion.cfg file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           ref: ${{ inputs.ref }}
