@@ -909,7 +909,7 @@ jobs:
     name: Java Gradle Release
     uses: bakdata/ci-templates/.github/workflows/java-gradle-release.yaml@main
     with:
-      release-type: "${{ github.event.inputs.release-type }}" # (Optional) Default is patch
+      release-type: "${{ github.event.inputs.release-type }}"
       java-distribution: "microsoft" # (Optional) Default is microsoft
       java-version: "11" # (Optional) Default is 11
       gradle-version: "wrapper" # (Optional) Default is wrapper
