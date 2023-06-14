@@ -58,6 +58,7 @@ on:
 
 jobs:
   create-release:
+    name: Release
     runs-on: ubuntu-22.04
     # Map the job outputs to step outputs
     outputs:
