@@ -22,11 +22,6 @@ on:
         required: false
         default: "1.5.1"
         type: string
-      working-directory:
-        description: "The working directory of your Python package. (Default is root directory)"
-        required: false
-        default: "./"
-        type: string
       changelog:
         description: "Create changelog for release."
         required: false
@@ -35,6 +30,11 @@ on:
       changelog-config:
         description: "Changelog config path."
         required: false
+        type: string
+      working-directory:
+        description: "The working directory of your Python package. (Default is root directory)"
+        required: false
+        default: "./"
         type: string
     secrets:
       github-username:

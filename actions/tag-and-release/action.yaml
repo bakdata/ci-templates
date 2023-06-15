@@ -5,13 +5,6 @@ inputs:
   tag:
     description: "The version of the tag to be released, e.g. 1.0.0."
     required: true
-  release-title:
-    description: "Title for the GitHub release."
-    required: true
-  release-body:
-    description: "Description for the GitHub release."
-    default: ""
-    required: false
   github-username:
     description: "The GitHub username for committing the changes."
     required: true
@@ -21,6 +14,13 @@ inputs:
   github-token:
     description: "The GitHub token for committing the changes."
     required: true
+  release-title:
+    description: "Title for the GitHub release."
+    required: true
+  release-body:
+    description: "Description for the GitHub release."
+    default: ""
+    required: false
 
 runs:
   using: "composite"
