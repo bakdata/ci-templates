@@ -1,4 +1,4 @@
-# python-poetry-publish
+# python-poetry-publish-pypi
 
 This composite action uses Poetry to build and publish your Python packages either on TestPyPI or PyPI.
 
@@ -20,7 +20,7 @@ steps:
     # Other steps in your workflow
 
   - name: Publish to (Test)PyPI
-    uses: bakdata/ci-templates/actions/python-poetry-publish@main
+    uses: bakdata/ci-templates/actions/python-poetry-publish-pypi@main
     with:
       pypi-token: ${{ secrets.pypi-token }}
       publish-to-test: ${{ inputs.publish-to-test }}
