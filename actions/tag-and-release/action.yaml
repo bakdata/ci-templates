@@ -28,7 +28,7 @@ runs:
     - name: Create tag
       run: |
         git config --local user.name ${{ inputs.github-username }}
-        git config --local user.email ${{ inputs.github-username }}
+        git config --local user.email ${{ inputs.github-email }}
         git tag ${{ inputs.tag }}
       shell: bash
 
