@@ -9,7 +9,7 @@ The following workflows can be found here:
 - [Kustomize GKE Deploy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-deploy)
 - [Kustomize GKE Destroy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-destroy)
 - [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
-- [Python Poetry Publish](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-release)
+- [Python Poetry Publish](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-publish)
 - [Java Gradle Docker](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-docker)
 - [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
 - [Java Gradle Plugin](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-plugin)
@@ -604,6 +604,7 @@ Your Python project needs to be set up with Poetry and contain a `pyproject.toml
 
 This workflow is built from multiple composite actions listed below:
 
+- [python-setup-poetry](https://github.com/bakdata/ci-templates/tree/main/actions/python-setup-poetry)
 - [python-poetry-publish](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-publish)
 
 ### Input Parameters
