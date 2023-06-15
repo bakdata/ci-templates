@@ -1,0 +1,59 @@
+name: Reusable workflow for publishing to PyPI
+
+on:
+  workflow_call:
+    inputs:
+      publish-to-test:
+        description: "If set to false, the packages are published to PyPI. (Default is true)"
+        required: false
+        default: true
+        type: boolean
+      python-version:
+        description: "The Python version for the Poetry virtual environment. (Default is 3.10)"
+        required: false
+        default: "3.10"
+        type: string
+      poetry-version:
+        description: "The Poetry version to be installed. (Default is 1.5.1)"
+        required: false
+        default: "1.5.1"
+        type: string
+      working-directory:
+        description: "The working directory of your Python packages. (Default is root directory)"
+        required: false
+        default: "./"
+        type: string
+    secrets:
+      pypi-token:
+        description: "PyPI token"
+        required: true
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Poetry ${{ inputs.poetry-version }}
+        uses: bakdata/ci-templates/actions/python-setup-poetry@v1.5.3
+        with:
+          python-version: ${{ inputs.python-version }}
+          poetry-version: ${{ inputs.poetry-version }}
+          working-directory: ${{ inputs.working-directory }}
+
+      - name: Install dependencies
+        run: poetry install --only main --no-interaction
+        shell: bash
+        working-directory: ${{ inputs.working-directory }}
+
+      - name: Publish to PyPI
+        id: publish
+        uses: bakdata/ci-templates/actions/python-poetry-publish@v1.22.0
+        with:
+          pypi-token: ${{ secrets.pypi-token }}
+          publish-to-test: ${{ inputs.publish-to-test }}
+          python-version: ${{ inputs.python-version }}
+          poetry-version: ${{ inputs.poetry-version }}
+          working-directory: ${{ inputs.working-directory }}

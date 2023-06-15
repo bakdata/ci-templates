@@ -1,4 +1,4 @@
-name: Reusable workflow for building and publishing Python packages to TestPyPI or PyPI
+name: Reusable workflow for building and releasing Python packages
 
 on:
   workflow_call:
@@ -18,15 +18,19 @@ on:
         default: "3.10"
         type: string
       poetry-version:
-        description: "The Python version for setting up Poetry. (Default is 1.1.12)"
+        description: "The Poetry version to be installed. (Default is 1.5.1)"
         required: false
-        default: "1.1.12"
+        default: "1.5.1"
         type: string
-      publish-to-test:
-        description: "If set to false, the package is published to PyPI. (Default is true)"
+      changelog:
+        description: "Create changelog for release."
         required: false
-        default: true
+        default: false
         type: boolean
+      changelog-config:
+        description: "Changelog config path."
+        required: false
+        type: string
       working-directory:
         description: "The working directory of your Python package. (Default is root directory)"
         required: false
@@ -42,9 +46,6 @@ on:
       github-token:
         description: "The GitHub token for committing the changes."
         required: true
-      pypi-token:
-        description: "The PyPI token for publishing packages."
-        required: true
 
     # Map the workflow outputs to job outputs
     outputs:
@@ -57,6 +58,7 @@ on:
 
 jobs:
   create-release:
+    name: Release
     runs-on: ubuntu-22.04
     # Map the job outputs to step outputs
     outputs:
@@ -69,6 +71,7 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
           persist-credentials: false # required for pushing to protected branch later
+          fetch-depth: 0 # required to build the changelog
 
       - name: Bump version with Poetry
         id: bump-version
@@ -79,20 +82,32 @@ jobs:
           poetry-version: ${{ inputs.poetry-version }}
           working-directory: ${{ inputs.working-directory }}
 
-      - name: Release to PyPI
-        uses: bakdata/ci-templates/actions/python-poetry-release@v1.18.2
+      - name: Create changelog
+        id: build-changelog
+        uses: bakdata/ci-templates/actions/changelog-generate@v1.21.1
+        if: ${{ inputs.changelog == 'true'}}
         with:
-          pypi-token: ${{ secrets.pypi-token }}
-          publish-to-test: ${{ inputs.publish-to-test }}
-          working-directory: ${{ inputs.working-directory }}
-          python-version: ${{ inputs.python-version }}
-          poetry-version: ${{ inputs.poetry-version }}
+          github-token: ${{ secrets.github-token }}
+          config: ${{ inputs.changelog-config }}
+          new-tag: ${{ steps.bump-version.outputs.release-version }}
+          fetch-reviewers: "true"
+          fetch-release-information: "true"
 
       - name: Commit and push pyproject.toml file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.0.0
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
+          github-username: ${{ secrets.github-username }}s
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
+
+      - name: Tag and release
+        uses: bakdata/ci-templates/actions/tag-and-release@v1.22.0
+        with:
+          tag: "${{ steps.bump-version.outputs.release-version }}"
+          release-title: "${{ steps.bump-version.outputs.release-version }}"
+          release-body: "${{ steps.build-changelog.outputs.single-changelog }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
