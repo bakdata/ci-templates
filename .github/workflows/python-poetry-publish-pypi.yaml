@@ -54,6 +54,4 @@ jobs:
         with:
           pypi-token: ${{ secrets.pypi-token }}
           publish-to-test: ${{ inputs.publish-to-test }}
-          python-version: ${{ inputs.python-version }}
-          poetry-version: ${{ inputs.poetry-version }}
           working-directory: ${{ inputs.working-directory }}
