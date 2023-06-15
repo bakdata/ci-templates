@@ -10,11 +10,11 @@ This action uses another composite action listed below:
 
 ## Input Parameters
 
-| Name          | Required | Default Value | Description                                                   |
-| ------------- | :------: | :-----------: | ------------------------------------------------------------- |
-| tag           |    ✅    |       -       | The version of the tag to be publish and released, e.g. 1.0.0 |
-| release-title |    ✅    |       -       | Title for the GitHub release                                  |
-| release-body  |    ❌    |       -       | Description for the GitHub release                            |
+| Name          | Required | Default Value | Description                                       |
+| ------------- | :------: | :-----------: | ------------------------------------------------- |
+| tag           |    ✅    |       -       | The version of the tag to be released, e.g. 1.0.0 |
+| release-title |    ✅    |       -       | Title for the GitHub release                      |
+| release-body  |    ❌    |       -       | Description for the GitHub release                |
 
 ## Usage
 
