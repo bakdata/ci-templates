@@ -17,25 +17,23 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Build package
-      run: poetry build
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-
-    - name: Publish package to PyPI
-      if: ${{ inputs.publish-to-test == 'false' }}
+    - name: Set index
+      id: index
       run: |
-        # If the repository is not specified, by default Poetry pushes the packages to PyPI
-        poetry publish --username __token__ --password ${{ inputs.pypi-token }}
+        if [[ ${{ inputs.publish-to-test }} == "true" ]]; then
+          echo "index-name=TestPyPI" >> "$GITHUB_OUTPUT"
+          echo "index-url=https://test.pypi.org/simple" >> "$GITHUB_OUTPUT"
+        else
+          echo "index-name=PyPI" >> "$GITHUB_OUTPUT"
+          echo "index-url=https://pypi.org/simple" >> "$GITHUB_OUTPUT"
+        fi
       shell: bash
-      working-directory: ${{ inputs.working-directory }}
 
-    - name: Build and Publish package to TestPyPI
-      if: ${{ inputs.publish-to-test == 'true' }}
-      run: |
-        # set the repository to TestPyPI
-        poetry config repositories.testpypi https://test.pypi.org/legacy/
-        # first build the project then publish to TestPyPI
-        poetry publish --repository testpypi --username __token__ --password ${{ inputs.pypi-token }}
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
+    - name: Publish package to ${{ steps.index.outputs.index-name }}
+      uses: bakdata/ci-templates/actions/python-poetry-publish@feat/generic-poetry-publish # TODO: v1.23.0
+      with:
+        index-name: ${{ steps.index.outputs.index-name }}
+        index-url: ${{ steps.index.outputs.index-url }}
+        index-username: __token__
+        index-password: ${{ inputs.pypi-token }}
+        working-directory: ${{ inputs.working-directory }}
