@@ -1,4 +1,4 @@
-name: "Publish Python packages"
+name: "Publish Python package PyPI"
 description: "Publish Python packages using Poetry to TestPyPI or PyPI"
 
 inputs:
