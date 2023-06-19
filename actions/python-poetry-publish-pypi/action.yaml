@@ -30,7 +30,7 @@ runs:
       shell: bash
 
     - name: Publish package to ${{ steps.index.outputs.index-name }}
-      uses: bakdata/ci-templates/actions/python-poetry-publish@feat/generic-poetry-publish # TODO: v1.23.0
+      uses: bakdata/ci-templates/actions/python-poetry-publish@v1.23.0
       with:
         index-name: ${{ steps.index.outputs.index-name }}
         index-url: ${{ steps.index.outputs.index-url }}
