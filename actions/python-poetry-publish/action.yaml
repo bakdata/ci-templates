@@ -30,7 +30,7 @@ runs:
     - name: Publish package to index
       run: |
         # set the index as repository for Poetry publish
-        poetry config repositories.${{ inputs.index-name }} ${{ inputs.index-url }}
+        poetry source add --priority=explicit ${{ inputs.index-name }} ${{ inputs.index-url }}
         # publish to index
         poetry publish --repository ${{ inputs.index-name }} --username ${{ inputs.index-username }} --password ${{ inputs.index-password }}
       shell: bash
