@@ -32,11 +32,6 @@ on:
         description: "The old version of the package."
         value: ${{ jobs.publish-snapshot.outputs.old-version }}
 
-permissions:
-  # These permissions are needed to interact with GitHub's OIDC Token endpoint for AWS access.
-  id-token: write
-  contents: read
-
 jobs:
   publish-snapshot:
     name: Publish snapshot
