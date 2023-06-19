@@ -20,7 +20,7 @@ on:
         type: string
     secrets:
       pypi-token:
-        description: "PyPI token"
+        description: "TestPyPI token"
         required: true
 
     # Map the workflow outputs to job outputs

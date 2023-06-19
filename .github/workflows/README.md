@@ -10,6 +10,7 @@ The following workflows can be found here:
 - [Kustomize GKE Destroy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-destroy)
 - [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
 - [Python Poetry Publish PyPI](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-publish-pypi)
+- [Python Poetry Publish Snapshot](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-publish-snapshot)
 - [Java Gradle Docker](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-docker)
 - [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
 - [Java Gradle Plugin](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-plugin)
@@ -618,7 +619,7 @@ This workflow is built from multiple composite actions listed below:
 
 ### Secret Parameters
 
-These secrets define the pypi token that allow the GitHub action to release the project to PyPI or TestPyPI
+These secrets define the PyPI token that allow the GitHub action to release the project to PyPI or TestPyPI
 
 | Name       | Required | Description                                      |
 | ---------- | :------: | ------------------------------------------------ |
@@ -627,7 +628,7 @@ These secrets define the pypi token that allow the GitHub action to release the 
 ### Calling the workflow
 
 ```yaml
-name: Call this reusable workflow
+name: Publish
 
 on:
   push:
@@ -643,7 +644,57 @@ jobs:
       poetry-version: "1.1.11" # (Optional) Default value is 1.5.1. In this case Poetry version 1.1.11 is installed
       working-directory: "./my-awesome-python-project" # (Optional) Default value is the root directory of your repository. In this case all the files to the given path are published
     secrets:
-      pypi-token: ${{ secrets.PYPI_API_TOKEN }}
+      pypi-token: ${{ secrets.PYPI_TOKEN }}
+```
+
+## Python Poetry Publish Snapshot
+
+This workflow will publish a dev snapshot of the package to TestPyPI using Poetry.
+
+### Prerequisites
+
+Your Python project needs to be set up with Poetry and contain a `pyproject.toml` file to use this workflow.
+
+### Dependencies
+
+This workflow is built from multiple composite actions listed below:
+
+- [python-poetry-publish-pypi](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-bump-version)
+- [python-poetry-publish-pypi](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-publish-pypi)
+
+### Input Parameters
+
+| Name              | Required | Default Value |  Type  | Description                              |
+| ----------------- | :------: | :-----------: | :----: | ---------------------------------------- |
+| python-version    |    ❌    |    "3.10"     | string | Python version for setting up Poetry     |
+| poetry-version    |    ❌    |    "1.5.1"    | string | Poetry version to be installed           |
+| working-directory |    ❌    |     "./"      | string | Working directory of your Python package |
+
+### Secret Parameters
+
+These secrets define the TestPyPI token that allow the GitHub action to release the project to TestPyPI.
+
+| Name       | Required | Description                                    |
+| ---------- | :------: | ---------------------------------------------- |
+| pypi-token |    ✅    | The TestPyPI API token for publishing packages |
+
+### Calling the workflow
+
+```yaml
+name: Publish snapshot
+
+on:
+  push:
+
+jobs:
+  call-workflow-passing-data:
+    uses: bakdata/ci-templates/.github/workflows/python-poetry-publish-pypi.yaml@main
+    with:
+      python-version: 3.8 # (Optional) Default value is 3.10. In this case Poetry is installed with Python 3.8
+      poetry-version: "1.1.11" # (Optional) Default value is 1.5.1. In this case Poetry version 1.1.11 is installed
+      working-directory: "./my-awesome-python-project" # (Optional) Default value is the root directory of your repository. In this case all the files to the given path are published
+    secrets:
+      pypi-token: ${{ secrets.TEST_PYPI_TOKEN }}
 ```
 
 ## Java Gradle Docker
