@@ -1,14 +1,16 @@
 # python-poetry-publish
 
-This composite action uses Poetry to build and publish your Python packages either on TestPyPI or PyPI.
+This composite action uses Poetry to build and publish your Python packages to a package index.
 
 ## Input Parameters
 
-| Name              | Required | Default Value | Description                                                                                          |
-| ----------------- | :------: | :-----------: | ---------------------------------------------------------------------------------------------------- |
-| pypi-token        |    ✅    |       -       | The (Test)PyPI API token for publishing packages                                                     |
-| publish-to-test   |    ❌    |     true      | If set to true, the packages are published to TestPyPI other wise the packages are published to PyPI |
-| working-directory |    ❌    |     "./"      | The working directory of your Python package.                                                        |
+| Name              | Required | Default Value | Description                                        |
+| ----------------- | :------: | :-----------: | -------------------------------------------------- |
+| index-name        |    ✅    |       -       | The package index name for publishing packages     |
+| index-url         |    ✅    |       -       | The package index url for publishing packages      |
+| index-username    |    ✅    |       -       | The package index username for publishing packages |
+| index-password    |    ✅    |       -       | The package index password for publishing packages |
+| working-directory |    ❌    |     "./"      | The working directory of your Python package.      |
 
 ## Usage
 
@@ -19,10 +21,12 @@ steps:
 
     # Other steps in your workflow
 
-  - name: Publish to (Test)PyPI
+  - name: Publish to package index
     uses: bakdata/ci-templates/actions/python-poetry-publish@main
     with:
-      pypi-token: ${{ secrets.pypi-token }}
-      publish-to-test: ${{ inputs.publish-to-test }}
+      index-name: index
+      index-url: example.org/simple/
+      index-username: user123
+      index-password: supersecret
       working-directory: ${{ inputs.working-directory }}
 ```

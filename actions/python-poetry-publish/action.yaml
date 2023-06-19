@@ -1,14 +1,19 @@
-name: "Publish Python packages"
-description: "Publish Python packages using Poetry to TestPyPI or PyPI"
+name: "Publish Python package"
+description: "Publish Python package using Poetry to a package index"
 
 inputs:
-  pypi-token:
-    description: "The PyPI token for publishing packages."
+  index-name:
+    description: "The package index name for publishing packages."
     required: true
-  publish-to-test:
-    description: "If set to false, the packages are published to PyPI. (Default is true)"
-    required: false
-    default: "true"
+  index-url:
+    description: "The package index url for publishing packages."
+    required: true
+  index-username:
+    description: "The package index username for publishing packages."
+    required: true
+  index-password:
+    description: "The package index password for publishing packages."
+    required: true
   working-directory:
     description: "The working directory of your Python packages. (Default is root directory)"
     required: false
@@ -22,20 +27,11 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Publish package to PyPI
-      if: ${{ inputs.publish-to-test == 'false' }}
+    - name: Publish package to index
       run: |
-        # If the repository is not specified, by default Poetry pushes the packages to PyPI
-        poetry publish --username __token__ --password ${{ inputs.pypi-token }}
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-
-    - name: Build and Publish package to TestPyPI
-      if: ${{ inputs.publish-to-test == 'true' }}
-      run: |
-        # set the repository to TestPyPI
-        poetry config repositories.testpypi https://test.pypi.org/legacy/
-        # first build the project then publish to TestPyPI
-        poetry publish --repository testpypi --username __token__ --password ${{ inputs.pypi-token }}
+        # set the index as repository for Poetry publish
+        poetry config repositories.${{ inputs.index-name }} ${{ inputs.index-url }}
+        # publish to index
+        poetry publish --repository ${{ inputs.index-name }} --username ${{ inputs.index-username }} --password ${{ inputs.index-password }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}

@@ -9,7 +9,7 @@ The following workflows can be found here:
 - [Kustomize GKE Deploy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-deploy)
 - [Kustomize GKE Destroy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-destroy)
 - [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
-- [Python Poetry Publish](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-publish)
+- [Python Poetry Publish PyPI](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-publish-pypi)
 - [Java Gradle Docker](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-docker)
 - [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
 - [Java Gradle Plugin](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-plugin)
@@ -589,7 +589,7 @@ jobs:
       - run: echo Bumped Version from ${{ needs.call-workflow-passing-data.outputs.old-version }} to ${{ needs.call-workflow-passing-data.outputs.release-version }}
 ```
 
-## Python Poetry Publish
+## Python Poetry Publish PyPI
 
 This workflow will publish the built project to either TestPyPI or PyPI. In
 the following, you will first find the necessary prerequisite to set up the workflow. Next, you will find the
@@ -605,7 +605,7 @@ Your Python project needs to be set up with Poetry and contain a `pyproject.toml
 This workflow is built from multiple composite actions listed below:
 
 - [python-setup-poetry](https://github.com/bakdata/ci-templates/tree/main/actions/python-setup-poetry)
-- [python-poetry-publish](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-publish)
+- [python-poetry-publish-pypi](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-publish-pypi)
 
 ### Input Parameters
 
@@ -636,7 +636,7 @@ on:
 
 jobs:
   call-workflow-passing-data:
-    uses: bakdata/ci-templates/.github/workflows/python-poetry-publish.yaml@main
+    uses: bakdata/ci-templates/.github/workflows/python-poetry-publish-pypi.yaml@main
     with:
       publish-to-test: false # (Optional) By default the packages are published to TestPyPI. In this case the packages are published to PyPI
       python-version: 3.8 # (Optional) Default value is 3.10. In this case Poetry is installed with Python 3.8
