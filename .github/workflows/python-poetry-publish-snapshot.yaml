@@ -1,0 +1,63 @@
+name: Reusable workflow for publishing Python packages as snapshot
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: "The Python version for setting up Poetry. (Default is 3.10)"
+        required: false
+        default: "3.10"
+        type: string
+      poetry-version:
+        description: "The Poetry version to be installed. (Default is 1.5.1)"
+        required: false
+        default: "1.5.1"
+        type: string
+      working-directory:
+        description: "The working directory of your Python package. (Default is root directory)"
+        required: false
+        default: "./"
+        type: string
+
+    # Map the workflow outputs to job outputs
+    outputs:
+      release-version:
+        description: "The bumped version of the package."
+        value: ${{ jobs.publish-snapshot.outputs.release-version }}
+      old-version:
+        description: "The old version of the package."
+        value: ${{ jobs.publish-snapshot.outputs.old-version }}
+
+permissions:
+  # These permissions are needed to interact with GitHub's OIDC Token endpoint for AWS access.
+  id-token: write
+  contents: read
+
+jobs:
+  publish-snapshot:
+    name: Publish snapshot
+    runs-on: ubuntu-22.04
+    # Map the job outputs to step outputs
+    outputs:
+      release-version: ${{ steps.bump-version.outputs.release-version }}
+      old-version: ${{ steps.bump-version.outputs.old-version }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Bump version with Poetry
+        id: bump-version
+        uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.21.0
+        with:
+          release-type: snapshot
+          python-version: ${{ inputs.python-version }}
+          poetry-version: ${{ inputs.poetry-version }}
+          working-directory: ${{ inputs.working-directory }}
+
+      - name: Build and publish package to TestPyPI
+        uses: bakdata/ci-templates/actions/python-poetry-publish-pypi@v1.23.0
+        with:
+          pypi-token: ${{ secrets.pypi-token }}
+          publish-to-test: "true"
+          working-directory: ${{ inputs.working-directory }}
