@@ -18,6 +18,10 @@ on:
         required: false
         default: "./"
         type: string
+    secrets:
+      pypi-token:
+        description: "PyPI token"
+        required: true
 
     # Map the workflow outputs to job outputs
     outputs:
