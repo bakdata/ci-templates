@@ -101,6 +101,7 @@ jobs:
           github-username: ${{ secrets.github-username }}s
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
+          add-untracked: "true"
 
       - name: Tag and release
         uses: bakdata/ci-templates/actions/tag-and-release@v1.22.0
