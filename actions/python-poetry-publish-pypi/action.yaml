@@ -25,7 +25,7 @@ runs:
           echo "index-url=https://test.pypi.org/legacy/" >> "$GITHUB_OUTPUT"
         else
           echo "index-name=PyPI" >> "$GITHUB_OUTPUT"
-          echo "index-url=https://pypi.org/legacy/" >> "$GITHUB_OUTPUT"
+          echo "index-url=https://upload.pypi.org/legacy/" >> "$GITHUB_OUTPUT"
         fi
       shell: bash
 
