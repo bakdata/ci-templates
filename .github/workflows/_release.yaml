@@ -1,0 +1,27 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release-type:
+        description: "Scope of the release."
+        type: choice
+        required: true
+        default: patch
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  release:
+    name: Release
+    uses: bakdata/ci-templates/.github/workflows/bump-version-release.yaml@v1.24.0
+    with:
+      release-type: "${{ github.event.inputs.release-type }}"
+      changelog: true
+      changelog-config: "./.github/changelog-config.json"
+    secrets:
+      github-username: "${{ secrets.GH_USERNAME }}"
+      github-email: "${{ secrets.GH_EMAIL }}"
+      github-token: "${{ secrets.GH_TOKEN }}"
