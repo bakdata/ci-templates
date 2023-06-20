@@ -688,7 +688,7 @@ on:
 
 jobs:
   call-workflow-passing-data:
-    uses: bakdata/ci-templates/.github/workflows/python-poetry-publish-pypi.yaml@main
+    uses: bakdata/ci-templates/.github/workflows/python-poetry-publish-snapshot.yaml@main
     with:
       python-version: 3.8 # (Optional) Default value is 3.10. In this case Poetry is installed with Python 3.8
       poetry-version: "1.1.11" # (Optional) Default value is 1.5.1. In this case Poetry version 1.1.11 is installed
