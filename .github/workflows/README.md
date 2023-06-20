@@ -659,7 +659,7 @@ Your Python project needs to be set up with Poetry and contain a `pyproject.toml
 
 This workflow is built from multiple composite actions listed below:
 
-- [python-poetry-publish-pypi](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-bump-version)
+- [python-poetry-bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-bump-version)
 - [python-poetry-publish-pypi](https://github.com/bakdata/ci-templates/tree/main/actions/python-poetry-publish-pypi)
 
 ### Input Parameters
