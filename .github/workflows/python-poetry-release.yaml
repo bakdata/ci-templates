@@ -94,7 +94,7 @@ jobs:
           fetch-release-information: "true"
 
       - name: Commit and push pyproject.toml file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.25.0
+        uses: bakdata/ci-templates/actions/commit-and-push@1.25.2
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
