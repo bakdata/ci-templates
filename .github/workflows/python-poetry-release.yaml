@@ -85,7 +85,7 @@ jobs:
       - name: Create changelog
         id: build-changelog
         uses: bakdata/ci-templates/actions/changelog-generate@v1.21.1
-        if: ${{ inputs.changelog == 'true'}}
+        if: ${{ inputs.changelog == true}}
         with:
           github-token: ${{ secrets.github-token }}
           config: ${{ inputs.changelog-config }}
@@ -94,13 +94,14 @@ jobs:
           fetch-release-information: "true"
 
       - name: Commit and push pyproject.toml file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.0.0
+        uses: bakdata/ci-templates/actions/commit-and-push@1.25.2
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
           github-username: ${{ secrets.github-username }}s
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
+          add-untracked: "true"
 
       - name: Tag and release
         uses: bakdata/ci-templates/actions/tag-and-release@v1.22.0
