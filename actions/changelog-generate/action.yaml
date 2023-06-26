@@ -77,7 +77,7 @@ runs:
 
     - name: "Create changelog"
       id: build_changelog
-      uses: mikepenz/release-changelog-builder-action@v3.7.0
+      uses: mikepenz/release-changelog-builder-action@v4
       with:
         token: "${{ inputs.github-token }}"
         configuration: "${{ inputs.config }}"
