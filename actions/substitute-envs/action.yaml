@@ -5,9 +5,9 @@ inputs:
     description: "Path to the directory to substitute environment variables in"
     required: true
 outputs:
-  subst-path:
+  path:
     description: "Path to the temporary directory after environment variable substitution."
-    value: ${{ steps.substitute.outputs.subst-path }}
+    value: ${{ steps.substitute.outputs.path }}
 
 runs:
   using: "composite"
@@ -32,4 +32,4 @@ runs:
         find "${{ inputs.path }}" -type f -exec bash -c 'substitute "$1"' bash {} \;
 
         # output path to temporary directory after substitution
-        echo "subst-path=${{ runner.temp }}/${{ inputs.path }}" >> "$GITHUB_OUTPUT"
+        echo "path=${{ runner.temp }}/${{ inputs.path }}" >> "$GITHUB_OUTPUT"
