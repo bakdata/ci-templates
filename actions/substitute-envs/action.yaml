@@ -1,12 +1,12 @@
 name: "Substitute envs"
-description: "Recursively substitute environment variables for a given directory"
+description: "Recursively substitute environment variables in a given directory"
 inputs:
   path:
     description: "Path to the directory to substitute environment variables in"
     required: true
 outputs:
   path:
-    description: "Path to the temporary directory after environment variable substitution."
+    description: "Path to the temporary directory after substitution"
     value: ${{ steps.substitute.outputs.path }}
 
 runs:
