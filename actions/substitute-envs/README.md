@@ -4,9 +4,9 @@ This action will recursively substitute environment variables in a given directo
 
 ## Input Parameters
 
-| Name | Required | Default Value |  Type  | Description |                                                              |
-| ---- | :------: | :-----------: | :----: | ----------- | ------------------------------------------------------------ |
-| path |    ✅    |       -       | string |             | Path to the directory to substitute environment variables in |
+| Name | Required | Default Value |  Type  | Description                                                  |
+| ---- | :------: | :-----------: | :----: | ------------------------------------------------------------ |
+| path |    ✅    |       -       | string | Path to the directory to substitute environment variables in |
 
 ## Output Parameters
 
