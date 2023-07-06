@@ -1,0 +1,35 @@
+name: "Substitute envs"
+description: "Recursively substitute environment variables in a given directory"
+inputs:
+  path:
+    description: "Path to the directory to substitute environment variables in"
+    required: true
+outputs:
+  path:
+    description: "Path to the temporary directory after substitution"
+    value: ${{ steps.substitute.outputs.path }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Substitute envs
+      id: substitute
+      shell: bash
+      run: |
+        function substitute() {
+          # create (sub-)directories
+          mkdir -p "${{ runner.temp }}/$(dirname "$1")"
+
+          # substitute only set env variables
+          envsubst "$(compgen -e | xargs printf '$%s ')" < "$1" > "${{ runner.temp }}/$1"
+
+          # copy file permissions
+          chmod --reference="$1" "${{ runner.temp }}/$1"
+        }
+        export -f substitute
+
+        # recursively substitute env variables in all files inside the directory
+        find "${{ inputs.path }}" -type f -exec bash -c 'substitute "$1"' bash {} \;
+
+        # output path to temporary directory after substitution
+        echo "path=${{ runner.temp }}/${{ inputs.path }}" >> "$GITHUB_OUTPUT"
