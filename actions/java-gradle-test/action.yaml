@@ -2,6 +2,10 @@ name: "Test Java artiacts"
 description: "Run Junit test, publish test results and optionally test signing for Sonatype"
 
 inputs:
+  integration-tests:
+    description: "Wheter to run integration tests instead of unit tests. (Default is false)"
+    required: false
+    default: false
   sonar-token:
     description: "Token for Sonarcloud."
     required: false
@@ -54,7 +58,12 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
 
     - name: Run tests
-      run: ./gradlew check --info --stacktrace
+      run: |
+        if [[ ${{ inputs.integration-tests }} == true ]]; then
+          ./gradlew check --info -PincludeTests="**/*IntegrationTest*"
+        else
+          ./gradlew check --info --stacktrace -PexcludeTests="**/*IntegrationTest*"
+        fi        
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
