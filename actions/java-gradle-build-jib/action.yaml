@@ -6,6 +6,10 @@ inputs:
     description: "Artifact name to upload tarball image, see https://github.com/actions/upload-artifact"
     required: false
     default: "image-artifact"
+  image-name:
+    description: "Name of Docker image."
+    required: false
+    default: "${{ github.event.repository.name }}"
   java-distribution:
     description: "Java distribution to be installed. (Default is microsoft)"
     required: false
@@ -41,7 +45,7 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
 
     - name: Build Docker image
-      run: ./gradlew --info --stacktrace jibBuildTar --image=${{ github.event.repository.name }}:${{ github.run_id }} -x test
+      run: ./gradlew --info --stacktrace jibBuildTar --image=${{ inputs.image-name }} -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
