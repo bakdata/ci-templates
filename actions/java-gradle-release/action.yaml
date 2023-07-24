@@ -64,7 +64,7 @@ runs:
     - name: Bump version
       id: evaluate-version
       run: |
-        old_version=$(grep "version=" gradle.properties | cut -d "=" -f2)
+        old_version=$(grep "^version=" gradle.properties | cut -d "=" -f2)
         if [[ "${{ inputs.release-type }}" == "patch" ]]; then
             release_version="${old_version%-*}"
         else
