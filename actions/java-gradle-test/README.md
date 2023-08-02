@@ -19,6 +19,7 @@ Sonatype, then these steps are skipped.
 | gradle-version          |    ❌    |    wrapper    | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
 | gradle-cache            |    ❌    |     true      | boolean | Whether Gradle caching is enabled or not                                                                      |
 | working-directory       |    ❌    |      "."      | string  | Working directory of your Gradle artifacts                                                                    |
+| download-lfs-files      |    ❌    |     false     | boolean | Whether the Git checkout action should resolve LFS files or not                                               |
 
 ## Usage
 
