@@ -21,7 +21,6 @@ Sonatype, then these steps are skipped.
 | working-directory       |    ❌    |      "."      | string  | Working directory of your Gradle artifacts                                                                    |
 | download-lfs-files      |    ❌    |     false     | boolean | Whether the Git checkout action should resolve LFS files or not                                               |
 
-
 ## Usage
 
 ```yaml
