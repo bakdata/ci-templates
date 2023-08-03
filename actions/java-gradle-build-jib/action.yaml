@@ -40,8 +40,7 @@ runs:
     - name: Check out repository
       uses: actions/checkout@v3
       with:
-        # lfs: ${{ inputs.download-lfs-files }}
-        lfs: true
+        lfs: ${{ inputs.download-lfs-files }}
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@v1.16.0
