@@ -30,11 +30,17 @@ inputs:
     description: "Working directory of your Gradle artifacts. (Default is .)"
     required: false
     default: "."
+  download-lfs-files:
+    description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
+    required: false
+    default: false
 runs:
   using: "composite"
   steps:
     - name: Check out repository
       uses: actions/checkout@v3
+      with:
+        lfs: ${{ inputs.download-lfs-files }}
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@v1.16.0

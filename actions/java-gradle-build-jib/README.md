@@ -12,6 +12,7 @@ This action builds an image tarball using [Jib Gradle](https://github.com/Google
 | gradle-version      |    ❌    |    wrapper     | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
 | gradle-cache        |    ❌    |      true      | boolean | Whether Gradle caching is enabled or not                                                                      |
 | working-directory   |    ❌    |      "."       | string  | Working directory of your Gradle artifacts                                                                    |
+| download-lfs-files  |    ❌    |     false      | boolean | Whether the Git checkout action should resolve LFS files or not                                               |
 
 ## Usage
 
