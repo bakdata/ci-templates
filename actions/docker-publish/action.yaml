@@ -40,30 +40,22 @@ runs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2.2.1
 
-    - name: Publish image
+    - name: Load image
       run: |
         if [[ $(ls -1 ${{ runner.temp }}/docker-build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
           >&2 echo "Error: A single image tar file is needed in the downloaded artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
           exit 1
         fi
 
-        fullImageName="${{ inputs.image-name }}"
-        if [[ -n "${{ inputs.image-namespace }}" ]]; then
-          fullImageName="${{ inputs.image-namespace }}/${fullImageName}"
-        fi
-        if [[ -n "${{ inputs.docker-registry }}" ]]; then
-          fullImageName="${{ inputs.docker-registry }}/${fullImageName}"
-        fi
-
         docker load --input ${{ runner.temp }}/docker-build/*.tar
-        if [[ "$GITHUB_REF" =~ ^refs/tags/.* ]]; then
-          docker tag ${{ inputs.image-name }} ${fullImageName}:latest
-          docker tag ${{ inputs.image-name }} ${fullImageName}:${GITHUB_REF/refs\/tags\//}
-          docker push ${fullImageName}:latest
-          docker push ${fullImageName}:${GITHUB_REF/refs\/tags\//}
-        else
-          docker tag ${{ inputs.image-name }} ${fullImageName}:${{ inputs.image-tag }}
-          docker push ${fullImageName}:${{ inputs.image-tag }}
-        fi
       shell: bash
       working-directory: ${{ inputs.working-directory }}
+
+    - name: Publish image
+      uses: bakdata/ci-templates/actions/docker-publish-simple@feature/separate-docker-build
+      with:
+        docker-registry: ${{ inputs.docker-registry }}
+        image-namespace: ${{ inputs.image-namespace }}
+        image-name: ${{ inputs.image-name }}
+        image-tag: ${{ inputs.image-tag }}
+        working-directory: ${{ inputs.working-directory }}
