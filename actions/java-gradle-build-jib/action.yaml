@@ -35,7 +35,7 @@ inputs:
     required: false
     default: false
   subproject:
-    description: "The Gradle subproject for which the tarball image should be built. If not specified, a tarball image for the root project will be built."
+    description: "The Gradle subproject for which the tarball image should be built (If not specified, a tarball image for the root project will be built)"
     required: false
 runs:
   using: "composite"
