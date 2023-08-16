@@ -1,5 +1,5 @@
 name: "Publish Docker image"
-description: "Publish Docker image from download artifact to any host"
+description: "Publish Docker image from downloaded artifact to any host"
 
 inputs:
   docker-registry:
@@ -52,7 +52,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
 
     - name: Publish image
-      uses: bakdata/ci-templates/actions/docker-publish-simple@feature/separate-docker-build
+      uses: bakdata/ci-templates/actions/docker-push@feature/separate-docker-build
       with:
         docker-registry: ${{ inputs.docker-registry }}
         image-namespace: ${{ inputs.image-namespace }}
