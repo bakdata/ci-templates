@@ -66,5 +66,5 @@ runs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.image-artifact-name }}
-        path: build/jib-image.tar
+        path: ${{ inputs.subproject && format('{0}/', inputs.subproject) || '' }}build/jib-image.tar
         retention-days: 1
