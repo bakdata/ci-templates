@@ -34,6 +34,9 @@ inputs:
     description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
     required: false
     default: false
+  subproject:
+    description: "The Gradle subproject for which the tarball image should be built (If not specified, a tarball image for the root project will be built)"
+    required: false
 runs:
   using: "composite"
   steps:
@@ -51,7 +54,11 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
 
     - name: Build Docker image
-      run: ./gradlew --info --stacktrace jibBuildTar --image=${{ inputs.image-name }} -x test
+      run: |
+        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jibBuildTar \
+          --info --stacktrace \
+          --image=${{ inputs.image-name }} \
+          -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
@@ -59,5 +66,5 @@ runs:
       uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.image-artifact-name }}
-        path: build/jib-image.tar
+        path: ${{ inputs.subproject && format('{0}/', inputs.subproject) || '' }}build/jib-image.tar
         retention-days: 1
