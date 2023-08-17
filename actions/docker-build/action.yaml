@@ -1,5 +1,5 @@
 name: "Build Docker image"
-description: "Use a Dockerfile to build an `image.tar` file and upload it to GitHub"
+description: "Use a Dockerfile to build an image and optionally upload it as a GitHub artifact." 
 
 inputs:
   docker-context:
@@ -10,18 +10,18 @@ inputs:
     description: "Path to the Dockerfile."
     required: false
     default: "Dockerfile"
-  image-artifact-name:
-    description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact (Default is 'image-artifact')."
-    required: false
-    default: "image-artifact"
   image-name:
     description: "Name of Docker image."
     required: false
     default: "${{ github.event.repository.name }}"
+  image-artifact-name:
+    description: "Optionally upload an image.tar file as a GitHub artifact by setting an artifact name, see https://github.com/actions/upload-artifact (Default is empty, so not uploading)."
+    required: false
+    default: ""
   retention-days:
     description: "Number of days the image artifact should be stored on GitHub."
     required: false
-    default: 1
+    default: "1"
   working-directory:
     description: "Working directory for your Docker artifacts."
     required: false
@@ -29,17 +29,24 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Build Dockerfile and store them in "${{ runner.temp }}/docker-build" directory
-      run: |
-        docker build -t ${{ inputs.image-name }} -f ${{ inputs.dockerfile-path }} ${{ inputs.docker-context }}
-        mkdir ${{ runner.temp }}/docker-build
-        docker save ${{ inputs.image-name }} > ${{ runner.temp }}/docker-build/${{ inputs.image-name }}.tar
+    - name: Build 
+      run: docker build -t "${{ inputs.image-name }}" -f "${{ inputs.dockerfile-path }}" "${{ inputs.docker-context }}"
       shell: bash
-      working-directory: ${{ inputs.working-directory }}
+      working-directory: "${{ inputs.working-directory }}"
 
-    - name: Upload Docker image tar artifact
-      uses: actions/upload-artifact@v3.1.1
+    - name: Save image 
+      if: ${{ inputs.image-artifact-name != '' }} 
+      run: |
+        mkdir "${{ runner.temp }}/docker-build"
+        docker save "${{ inputs.image-name }}" > "${{ runner.temp }}/docker-build/${{ inputs.image-name }}.tar"
+      shell: bash
+      working-directory: "${{ inputs.working-directory }}"
+
+    - name: Upload image artifact
+      if: ${{ inputs.image-artifact-name != '' }} 
+      uses: actions/upload-artifact@v3
       with:
-        name: ${{ inputs.image-artifact-name }}
-        path: ${{ runner.temp }}/docker-build
-        retention-days: ${{ inputs.retention-days }}
+        name: "${{ inputs.image-artifact-name }}"
+        path: "${{ runner.temp }}/docker-build"
+        retention-days: "${{ inputs.retention-days }}"
+

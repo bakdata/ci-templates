@@ -1,5 +1,5 @@
 name: "Publish Docker image"
-description: "Publish Docker image from downloaded artifact to any host"
+description: "Publish Docker image artifact to any host"
 
 inputs:
   docker-registry:
@@ -19,9 +19,9 @@ inputs:
     required: false
     default: "pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}"
   image-artifact-name:
-    description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact."
+    description: "Optionally upload an image.tar file as a GitHub artifact by setting an artifact name, see https://github.com/actions/upload-artifact (Default is empty, so not uploading)."
     required: false
-    default: "image-artifact"
+    default: ""
   working-directory:
     description: "Working directory for your Docker artifacts."
     required: false
@@ -29,33 +29,43 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Download Docker image tar artifact
+    - name: Download image artifact
+      if: ${{ inputs.image-artifact-name != '' }} 
       uses: actions/download-artifact@v3
       with:
-        name: ${{ inputs.image-artifact-name }}
-        path: ${{ runner.temp }}/docker-build
-
-    # setup-buildx action will create and boot a builder using by default the docker-container driver.
-    # This is not required but recommended using it to be able to build multi-platform images, export cache, etc.
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2.2.1
+        name: "${{ inputs.image-artifact-name }}"
+        path: "${{ runner.temp }}/docker-build"
 
     - name: Load image
+      if: ${{ inputs.image-artifact-name != '' }} 
       run: |
-        if [[ $(ls -1 ${{ runner.temp }}/docker-build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
-          >&2 echo "Error: A single image tar file is needed in the downloaded artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
+        if [[ $(ls -1 "${{ runner.temp }}/docker-build/*.tar" 2>/dev/null | wc -l) != 1 ]]; then
+          >&2 echo "Error: No tar file found in image artifact."
           exit 1
         fi
 
         docker load --input ${{ runner.temp }}/docker-build/*.tar
       shell: bash
-      working-directory: ${{ inputs.working-directory }}
+      working-directory: "${{ inputs.working-directory }}"
 
     - name: Publish image
-      uses: bakdata/ci-templates/actions/docker-push@1.30.0
-      with:
-        docker-registry: ${{ inputs.docker-registry }}
-        image-namespace: ${{ inputs.image-namespace }}
-        image-name: ${{ inputs.image-name }}
-        image-tag: ${{ inputs.image-tag }}
-        working-directory: ${{ inputs.working-directory }}
+      run: |
+        fullImageName="${{ inputs.image-name }}"
+        if [[ -n "${{ inputs.image-namespace }}" ]]; then
+          fullImageName="${{ inputs.image-namespace }}/${fullImageName}"
+        fi
+        if [[ -n "${{ inputs.docker-registry }}" ]]; then
+          fullImageName="${{ inputs.docker-registry }}/${fullImageName}"
+        fi
+
+        if [[ "$GITHUB_REF" =~ ^refs/tags/.* ]]; then
+          docker tag "${{ inputs.image-name }}" "${fullImageName}:latest"
+          docker tag "${{ inputs.image-name }}" "${fullImageName}:${GITHUB_REF/refs\/tags\//}"
+          docker push "${fullImageName}:latest"
+          docker push "${fullImageName}:${GITHUB_REF/refs\/tags\//}"
+        else
+          docker tag "${{ inputs.image-name }}" ${fullImageName}:${{ inputs.image-tag }}
+          docker push "${fullImageName}:${{ inputs.image-tag }}"
+        fi
+      shell: bash
+      working-directory: "${{ inputs.working-directory }}"
