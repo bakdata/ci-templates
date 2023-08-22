@@ -44,10 +44,15 @@ runs:
         version: ${{ inputs.gcloud-sdk-version }}
         project_id: ${{ inputs.gke-project }}
 
-    - name: Setup authentication
+    - name: Install GKE auth plugin
       shell: bash
       run: |
         gcloud components install gke-gcloud-auth-plugin
+        gke-gcloud-auth-plugin --version
+
+    - name: Setup authentication
+      shell: bash
+      run: |
         gcloud container clusters get-credentials "$GKE_CLUSTER" --region "$GKE_REGION" --project "$GKE_PROJECT"
       env:
         GKE_REGION: ${{ inputs.gke-region }}
