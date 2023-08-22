@@ -49,6 +49,7 @@ runs:
       run: |
         gcloud components install gke-gcloud-auth-plugin
         gke-gcloud-auth-plugin --version
+        echo "USE_GKE_GCLOUD_AUTH_PLUGIN=True" >> $GITHUB_OUTPUT
 
     - name: Setup authentication
       shell: bash
