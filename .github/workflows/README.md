@@ -2,20 +2,21 @@
 
 The following workflows can be found here:
 
-- [Docker Build and Publish](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#docker-build-and-publish)
-- [Helm Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-release)
-- [Helm Multi Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-multi-release)
-- [Release Tag Versions](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#release-tag-versions)
-- [Kustomize GKE Deploy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-deploy)
-- [Kustomize GKE Destroy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-destroy)
-- [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
-- [Python Poetry Publish PyPI](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-publish-pypi)
-- [Python Poetry Publish Snapshot](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-publish-snapshot)
-- [Java Gradle Docker](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-docker)
-- [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
-- [Java Gradle Plugin](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-plugin)
-- [Java Gradle Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-release)
-- [Bump Version Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#bump-version-release)
+- [Docker Build and Publish](#docker-build-and-publish)
+- [Helm Release](#helm-release)
+- [Helm Multi Release](#helm-multi-release)
+- [Release Tag Versions](#release-tag-versions)
+- [Kustomize GKE Deploy](#kustomize-gke-deploy)
+- [Kustomize GKE Destroy](#kustomize-gke-destroy)
+- [Python Poetry Release](#python-poetry-release)
+- [Python Poetry Publish PyPI](#python-poetry-publish-pypi)
+- [Python Poetry Publish Snapshot](#python-poetry-publish-snapshot)
+- [Java Gradle Docker](#java-gradle-docker)
+- [Java Gradle Library](#java-gradle-library)
+- [Java Gradle Plugin](#java-gradle-plugin)
+- [Java Gradle Release](#java-gradle-release)
+- [Bump Version Release](#bump-version-release)
+- [Checkout Repository](#checkout-repository)
 
 ## Docker Build and Publish
 
@@ -1122,4 +1123,47 @@ jobs:
     needs: call-workflow-passing-data
     steps:
       - run: echo Bumped Version from ${{ needs.call-workflow-passing-data.outputs.old-version }} to ${{ needs.call-workflow-passing-data.outputs.release-version }}
+```
+
+## Checkout Repository
+
+This workflow will checkout your repository and allow you to handle [LFS](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-git-large-file-storage) and [Caching](https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows) if needed.
+
+### Prerequisites
+
+Make sure your [LFS](https://docs.github.com/en/repositories/working-with-files/managing-large-files/configuring-git-large-file-storage) is properly configured.
+
+### Dependencies
+
+This workflow is built from other composite actions listed below:
+
+- [actions/checkout](https://github.com/actions/checkout)
+- [actions/cache](https://github.com/actions/cache)
+
+### Input Parameters
+
+| Name  | Required | Default Value |  Type  | Description                                                                                                  |
+| ----- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------------------ |
+| lfs   |    ❌    |    "false"    | string | Define wether to use LFS.                                                                                    |
+| cache |    ❌    |    "true"     | string | Whether to cache the LFS files in this repository. This variable has an impact only if lfs is set to `true`. |
+
+### Outputs
+
+| Name          | Description                                                                                                   |
+| ------------- | ------------------------------------------------------------------------------------------------------------- |
+| lfs-cache-hit | A [boolean value](https://github.com/actions/cache#outputs) to indicate an exact match was found for the key. |
+
+### Calling the workflow
+
+```yaml
+name: Release
+
+on:
+  workflow_dispatch:
+jobs:
+  call-workflow-passing-data:
+    name: Checkout with LFS
+    uses: bakdata/ci-templates/.github/workflows/checkout-repo.yaml@main
+    with:
+      lfs: "true"
 ```

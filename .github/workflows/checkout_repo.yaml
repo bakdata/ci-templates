@@ -1,0 +1,48 @@
+name: Reusable workflow for checking out a repository
+
+on:
+  workflow_call:
+    inputs:
+      lfs:
+        description: "Describes if the repository is using any LFS files"
+        required: false
+        default: "false"
+        type: string
+      cache:
+        description: "Describes if the repository is using any LFS files"
+        required: false
+        default: "true"
+        type: string
+    outputs:
+      lfs-cache-hit:
+        description: "A boolean value to indicate an exact match was found for the key."
+        value: ${{ jobs.checkout-repo.outputs.lfs-cache-hit }}
+
+jobs:
+  checkout-repo:
+    name: Checkout repository
+    runs-on: ubuntu-22.04
+
+    outputs:
+      lfs-cache-hit: ${{ steps.cache-lfs.outputs.cache-hit }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Create LFS file list
+        if: ${{ inputs.lfs == 'true'}}
+        run: git lfs ls-files --long | cut -d ' ' -f1 | sort > .lfs-assets-id
+
+      - name: LFS Cache
+        if: ${{ inputs.lfs == 'true' && inputs.cache == 'true' }}
+        id: cache-lfs
+        uses: actions/cache@v3
+        with:
+          path: .git/lfs/objects
+          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+          restore-keys: |
+            ${{ runner.os }}-lfs-
+
+      - name: Git LFS Pull
+        if: ${{ inputs.lfs == 'true'}}
+        run: git lfs pull
