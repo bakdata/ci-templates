@@ -36,7 +36,7 @@ runs:
       # /usr/lib/google-cloud-sdk/bin/git-credential-gcloud.sh
     - name: Remove preinstalled GCloud SDK
       shell: bash
-      run: rm -rf /usr/lib/google-cloud-sdk/bin/gcloud /usr/lib/google-cloud-sdk/bin/anthoscli /usr/lib/google-cloud-sdk/bin/docker-credential-gcloud /usr/lib/google-cloud-sdk/bin/bq /usr/lib/google-cloud-sdk/bin/gsutil /usr/lib/google-cloud-sdk/bin/git-credential-gcloud.sh || true
+      run: sudo rm -rf /usr/lib/google-cloud-sdk/bin/gcloud /usr/lib/google-cloud-sdk/bin/anthoscli /usr/lib/google-cloud-sdk/bin/docker-credential-gcloud /usr/lib/google-cloud-sdk/bin/bq /usr/lib/google-cloud-sdk/bin/gsutil /usr/lib/google-cloud-sdk/bin/git-credential-gcloud.sh || true
 
     - name: Setup GCloud SDK
       uses: google-github-actions/setup-gcloud@v1
