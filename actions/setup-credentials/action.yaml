@@ -21,12 +21,12 @@ runs:
   using: "composite"
   steps:
     - name: Authenticate at GCloud
-      uses: "google-github-actions/auth@v0"
+      uses: google-github-actions/auth@v1
       with:
         credentials_json: ${{ inputs.gke-service-account }}
 
     - name: Setup GCloud SDK
-      uses: google-github-actions/setup-gcloud@v0.6.0
+      uses: google-github-actions/setup-gcloud@v1
       with:
         version: ${{ inputs.gcloud-sdk-version }}
         project_id: ${{ inputs.gke-project }}
