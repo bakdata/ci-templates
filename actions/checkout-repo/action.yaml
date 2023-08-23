@@ -24,6 +24,7 @@ runs:
     - name: Create LFS file list
       if: ${{ inputs.lfs == 'true'}}
       run: git lfs ls-files --long | cut -d ' ' -f1 | sort > .lfs-assets-id
+      shell: bash
 
     - name: LFS Cache
       if: ${{ inputs.lfs == 'true' && inputs.cache == 'true' }}
@@ -38,3 +39,4 @@ runs:
     - name: Git LFS Pull
       if: ${{ inputs.lfs == 'true'}}
       run: git lfs pull
+      shell: bash
