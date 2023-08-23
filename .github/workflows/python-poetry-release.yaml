@@ -55,6 +55,9 @@ on:
       old-version:
         description: "The old version of the package."
         value: ${{ jobs.create-release.outputs.old-version }}
+      changelog:
+        description: "The content of the CHANGELOG.md file."
+        value: ${{ jobs.create-release.outputs.changelog }}
 
 jobs:
   create-release:
@@ -64,6 +67,7 @@ jobs:
     outputs:
       release-version: ${{ steps.bump-version.outputs.release-version }}
       old-version: ${{ steps.bump-version.outputs.old-version }}
+      changelog: ${{ steps.build-changelog.outputs.merged-changelog }}
 
     steps:
       - name: Check out repository

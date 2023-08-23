@@ -554,10 +554,11 @@ email: `[username]@users.noreply.github.com`.
 This workflow outputs two variables: The `old-version` and the `release-version`. These variables can be used in the future
 jobs (e.g., using the `release-version` to create a GitHub release).
 
-| Name            | Description                       |
-| --------------- | --------------------------------- |
-| old-version     | The old version of the package    |
-| release-version | The bumped version of the package |
+| Name            | Description                          |
+| --------------- | ------------------------------------ |
+| old-version     | The old version of the package       |
+| release-version | The bumped version of the package    |
+| changelog       | The content of the CHANGELOG.md file |
 
 ### Calling the workflow
 
@@ -588,7 +589,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: call-workflow-passing-data
     steps:
-      - run: echo Bumped Version from ${{ needs.call-workflow-passing-data.outputs.old-version }} to ${{ needs.call-workflow-passing-data.outputs.release-version }}
+      - run: echo Bumped Version from ${{ needs.call-workflow-passing-data.outputs.old-version }} to ${{ needs.call-workflow-passing-data.outputs.release-version }} with CHANGELOG.md ${{ needs.call-workflow-passing-data.outputs.changelog }}
 ```
 
 ## Python Poetry Publish PyPI
