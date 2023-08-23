@@ -17,7 +17,7 @@ inputs:
   image-tag:
     description: "Tag of Docker image."
     required: false
-    default: "pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}"
+    default: ""
   image-artifact-name:
     description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact."
     required: false
@@ -29,33 +29,55 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Download Docker image tar artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: ${{ inputs.image-artifact-name }}
-        path: ${{ runner.temp }}/docker-build
-
-    # setup-buildx action will create and boot a builder using by default the docker-container driver.
-    # This is not required but recommended using it to be able to build multi-platform images, export cache, etc.
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2.2.1
-
-    - name: Load image
+    - name: Set image-tag
+      id: img-tag-setter
       run: |
-        if [[ $(ls -1 ${{ runner.temp }}/docker-build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
-          >&2 echo "Error: A single image tar file is needed in the downloaded artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
-          exit 1
+        GH_SHA="${{ github.event.pull_request.head.sha}}"
+        if [[ -n "${{ inputs.image-tag }}" ]]; then
+          img_tag=${{ inputs.image-tag }}
+        else
+          if [[ -n "${{github.event.action}}" ]]; then
+            img_tag="pipeline-${{ github.run_id }}-git-${GH_SHA::8}"
+          else
+            img_tag="pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}"
+          fi
         fi
-
-        docker load --input ${{ runner.temp }}/docker-build/*.tar
+        echo  "img_tag=$img_tag">> $GITHUB_OUTPUT
       shell: bash
-      working-directory: ${{ inputs.working-directory }}
 
-    - name: Publish image
-      uses: bakdata/ci-templates/actions/docker-push@1.30.0
-      with:
-        docker-registry: ${{ inputs.docker-registry }}
-        image-namespace: ${{ inputs.image-namespace }}
-        image-name: ${{ inputs.image-name }}
-        image-tag: ${{ inputs.image-tag }}
-        working-directory: ${{ inputs.working-directory }}
+    - name: Set image-tag
+      run: |
+        img_tag="${{ steps.img-tag-setter.outputs.img_tag }}"
+        echo "img_tag is -> $img_tag <-"
+      shell: bash
+
+    # - name: Download Docker image tar artifact
+    #   uses: actions/download-artifact@v3
+    #   with:
+    #     name: ${{ inputs.image-artifact-name }}
+    #     path: ${{ runner.temp }}/docker-build
+
+    # # setup-buildx action will create and boot a builder using by default the docker-container driver.
+    # # This is not required but recommended using it to be able to build multi-platform images, export cache, etc.
+    # - name: Set up Docker Buildx
+    #   uses: docker/setup-buildx-action@v2.2.1
+
+    # - name: Load image
+    #   run: |
+    #     if [[ $(ls -1 ${{ runner.temp }}/docker-build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
+    #       >&2 echo "Error: A single image tar file is needed in the downloaded artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
+    #       exit 1
+    #     fi
+
+    #     docker load --input ${{ runner.temp }}/docker-build/*.tar
+    #   shell: bash
+    #   working-directory: ${{ inputs.working-directory }}
+
+    # - name: Publish image
+    #   uses: bakdata/ci-templates/actions/docker-push@1.30.0
+    #   with:
+    #     docker-registry: ${{ inputs.docker-registry }}
+    #     image-namespace: ${{ inputs.image-namespace }}
+    #     image-name: ${{ inputs.image-name }}
+    #     image-tag: "${{ steps.img-tag-setter.outputs.img_tag }}"
+    #     working-directory: ${{ inputs.working-directory }}
