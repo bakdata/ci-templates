@@ -34,7 +34,7 @@ runs:
       env:
         DEFAULT_TAG: "${{ inputs.image-tag }}"
       run: |
-        echo "!!!!!!!!!!!!!!! ${{ env.DEFAULT_TAG}}""
+        echo "!!!!!!!!!!!!!!! ${{ env.DEFAULT_TAG}}"
         echo  "img_tag=$img_tag">> $GITHUB_OUTPUT
       shell: bash
 
