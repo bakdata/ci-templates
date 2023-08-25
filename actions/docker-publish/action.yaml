@@ -17,7 +17,7 @@ inputs:
   image-tag:
     description: "Tag of Docker image."
     required: false
-    default: ${{ github.event.action == '' && github.event.pull_request.head.sha || github.sha }}
+    default: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
   image-artifact-name:
     description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact."
     required: false
