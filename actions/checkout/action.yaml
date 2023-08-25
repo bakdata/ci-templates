@@ -1,0 +1,68 @@
+name: "Checkout repository"
+description: "Composite action for checking out a repository"
+inputs:
+  cache:
+    description: "Describes if the repository is using any LFS files"
+    required: false
+    default: "true"
+  fetch-depth:
+    description: "Number of commits to fetch. 0 indicates all history for all branches and tags"
+    required: false
+    default: "1"
+  lfs:
+    description: "Describes if the repository is using any LFS files"
+    required: false
+    default: "false"
+  persist-credentials:
+    description: "Whether to configure the token or SSH key with the local git config"
+    required: false
+    default: "true"
+  ref:
+    description: "The branch, tag or SHA to checkout"
+    required: false
+    default: ""
+  repository:
+    description: "The repository name with owner"
+    required: false
+    default: ${{ github.repository }}
+  token:
+    description: "Personal access token (PAT) used to fetch the repository"
+    required: false
+    default: ${{ github.token }}
+
+outputs:
+  lfs-cache-hit:
+    description: "A boolean value to indicate an exact match was found for the key"
+    value: ${{ steps.cache-lfs.outputs.cache-hit }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+        persist-credentials: ${{ inputs.persist-credentials }}
+        ref: ${{ inputs.ref }}
+        repository: ${{ inputs.repository }}
+        token: ${{ inputs.token }}
+
+    - name: Create LFS file list
+      if: ${{ inputs.lfs == 'true'}}
+      run: git lfs ls-files --long | cut -d ' ' -f1 | sort > .lfs-assets-id
+      shell: bash
+
+    - name: LFS Cache
+      if: ${{ inputs.lfs == 'true' && inputs.cache == 'true' }}
+      id: cache-lfs
+      uses: actions/cache@v3
+      with:
+        path: .git/lfs/objects
+        key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+        restore-keys: |
+          ${{ runner.os }}-lfs-
+
+    - name: Git LFS Pull
+      if: ${{ inputs.lfs == 'true'}}
+      run: git lfs pull
+      shell: bash
