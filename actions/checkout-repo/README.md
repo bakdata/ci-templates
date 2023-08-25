@@ -17,7 +17,7 @@ This workflow is built from other composite actions listed below:
 
 | Name  | Required | Default Value |  Type  | Description                                                                                                  |
 | ----- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------------------ |
-| lfs   |    ❌    |    "false"    | string | Define wether to use LFS.                                                                                    |
+| lfs   |    ❌    |    "false"    | string | Define whether to use LFS files.                                                                                    |
 | cache |    ❌    |    "true"     | string | Whether to cache the LFS files in this repository. This variable has an impact only if lfs is set to `true`. |
 
 ### Outputs
