@@ -8,8 +8,8 @@ on:
         required: false
         default: "false"
         type: string
-      cache:
-        description: "Describes if the repository is using any LFS files"
+      lfs-cache:
+        description: "Whether to cache the LFS files in this repository. This variable has an impact only if lfs is set to true."
         required: false
         default: "true"
         type: string
