@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       lfs:
-        description: "Describes if the repository is using any LFS files"
+        description: "Define whether to checkout LFS files"
         required: false
         default: "false"
         type: string
