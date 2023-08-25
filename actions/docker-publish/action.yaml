@@ -34,13 +34,13 @@ runs:
       env:
         DEFAULT_TAG: "${{ inputs.image-tag }}"
       run: |
-        if [[ -z "${{ inputs.image-tag }}" ]]; then
-          GH_SHA=${{ env.DEFAULT_TAG}}
-          img_tag="pipeline-${{ github.run_id }}-git-${GH_SHA::8}"
-          echo  "img_tag=$img_tag">> $GITHUB_OUTPUT
-        else
-          echo  "img_tag=${{ inputs.image-tag }}">> $GITHUB_OUTPUT
-
+        # if [[ -z "${{ env.DEFAULT_TAG}}" ]]; then
+        #   GH_SHA=${{ env.DEFAULT_TAG}}
+        #   img_tag="pipeline-${{ github.run_id }}-git-${GH_SHA::8}"
+        #   echo  "img_tag=$img_tag">> $GITHUB_OUTPUT
+        # else
+        #   echo  "img_tag=${{ inputs.image-tag }}">> $GITHUB_OUTPUT
+        echo "!!!!!!!!!!!!!!! ${{ env.DEFAULT_TAG}}""
         # GH_SHA="${{ github.event.pull_request.head.sha}}"
         # if [[ -n "${{ inputs.image-tag }}" ]]; then
         #   img_tag=${{ inputs.image-tag }}
