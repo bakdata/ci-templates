@@ -34,8 +34,8 @@ runs:
       env:
         DEFAULT_TAG: "${{ inputs.image-tag }}"
       run: |
-        GH_SHA=${{ env.DEFAULT_TAG}}
-        if [$GH_SHA == *"."*  ]; then
+        GH_SHA=${{ env.DEFAULT_TAG }}
+        if [[ $GH_SHA == *"."*  ]]; then
           echo  "img_tag=$GH_SHA">> $GITHUB_OUTPUT
         else
           img_tag="pipeline-${{ github.run_id }}-git-${GH_SHA::8}"
