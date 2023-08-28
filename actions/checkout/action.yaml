@@ -39,7 +39,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: actions/checkout@v3
+      uses: bakdata/ci-templates/actions/checkout-repo@v1.26.0
       with:
         fetch-depth: ${{ inputs.fetch-depth }}
         persist-credentials: ${{ inputs.persist-credentials }}
