@@ -14,6 +14,7 @@ This action builds an image tarball using [Jib Gradle](https://github.com/Google
 | working-directory   |    ❌    |      "."       | string  | Working directory of your Gradle artifacts                                                                                               |
 | download-lfs-files  |    ❌    |     false      | boolean | Whether the Git checkout action should resolve LFS files or not                                                                          |
 | subproject          |    ❌    |                | string  | The Gradle subproject for which the tarball image should be built (If not specified, a tarball image for the root project will be built) |
+| jib-from-image      |    ❌    |                | string  | The Jib base image to use                                                                                                                |
 
 ## Usage
 

@@ -37,6 +37,9 @@ inputs:
   subproject:
     description: "The Gradle subproject for which the tarball image should be built (If not specified, a tarball image for the root project will be built)"
     required: false
+  jib-from-image:
+    description: "The Jib base image to use"
+    required: false
 runs:
   using: "composite"
   steps:
@@ -58,6 +61,7 @@ runs:
         ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jibBuildTar \
           --info --stacktrace \
           --image=${{ inputs.image-name }} \
+          ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
