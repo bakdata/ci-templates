@@ -15,7 +15,7 @@ This composite action uses Poetry to build and publish your Python packages eith
 ```yaml
 steps:
   - name: Check out repository
-    uses: bakdata/ci-templates/actions/checkout-repo@v1.26.0
+    uses: bakdata/ci-templates/actions/checkout@v1.26.0
 
     # Other steps in your workflow
 

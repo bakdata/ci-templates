@@ -8,7 +8,7 @@ jobs:
     name: dprint
     runs-on: ubuntu-latest
     steps:
-      - uses: bakdata/ci-templates/actions/checkout-repo@v1.26.0
+      - uses: bakdata/ci-templates/actions/checkout@v1.26.0
 
       - name: Check formatting
         uses: dprint/check@v2.1

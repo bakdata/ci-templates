@@ -32,7 +32,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout-repo@v1.26.0
+      uses: bakdata/ci-templates/actions/checkout@v1.26.0
 
     - name: Download build artifact
       uses: actions/download-artifact@v3
