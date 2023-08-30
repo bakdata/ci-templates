@@ -20,7 +20,7 @@ jobs:
         os: [Ubuntu, macOS, Windows]
         python-version: ["3.7", "3.8", "3.9", "3.10"]
     steps:
-      - uses: bakdata/ci-templates/actions/checkout@v1.26.0
+      - uses: bakdata/ci-templates/actions/checkout-repo@v1.26.0
 
       - name: Set up Poetry
         uses: ./actions/python-setup-poetry

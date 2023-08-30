@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@v1.26.0
+        uses: bakdata/ci-templates/actions/checkout-repo@v1.26.0
 
       - name: Set up Poetry ${{ inputs.poetry-version }}
         uses: bakdata/ci-templates/actions/python-setup-poetry@v1.5.3
