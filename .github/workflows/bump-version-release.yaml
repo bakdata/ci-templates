@@ -61,10 +61,19 @@ jobs:
 
       - name: Bump version
         id: bump-version
-        uses: bakdata/ci-templates/actions/bump-version@v1.21.2
+        uses: bakdata/ci-templates/actions/bump-version@feat/new-bumpversion
         with:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.working-directory }}
+
+      - name: Commit and push changes including .bumpversion.cfg file
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
 
       - name: Create changelog
         id: build-changelog
@@ -77,15 +86,6 @@ jobs:
           fetch-reviewers: "true"
           fetch-release-information: "true"
 
-      - name: Commit and push changes including .bumpversion.cfg file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
-        with:
-          ref: ${{ github.event.repository.default_branch }}
-          commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
-          github-username: ${{ secrets.github-username }}
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
-
       - name: Tag and release
         uses: bakdata/ci-templates/actions/tag-and-release@v1.22.0
         with:
@@ -95,3 +95,19 @@ jobs:
           github-token: ${{ secrets.github-token }}
           release-title: "${{ steps.bump-version.outputs.release-version }}"
           release-body: "${{ steps.build-changelog.outputs.single-changelog }}"
+
+      - name: Bump version
+        id: bump-version-snapshot
+        uses: bakdata/ci-templates/actions/patch-snapshot@feat/new-bumpversion
+        with:
+          working-directory: ${{ inputs.working-directory }}
+          test-version: ${{ steps.bump-version.outputs.release-version }}
+
+      - name: Commit and push changes including .bumpversion.cfg file
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          commit-message: "Bump version ${{ steps.bump-version.outputs.old-version  }} → ${{ steps.bump-version-snapshot.outputs.release-version }}"
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
