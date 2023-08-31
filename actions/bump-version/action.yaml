@@ -33,12 +33,16 @@ runs:
     - name: Bump version
       id: bump-version
       run: |
-        parameters=(--no-commit --no-tag ${{ inputs.release-type }})
+        parameters=(--no-commit --allow-dirty --no-tag ${{ inputs.release-type }})
+        test=(${{ inputs.release-type }})
         echo "old-version=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
-        if [ -n "${{ inputs.new-version }}" ]; then
+        if [[ $test == patch ]]; then
           parameters+=(--new-version ${{ inputs.new-version }})
+          bump2version --allow-dirty release
+        else
+          bump2version --allow-dirty "${parameters[@]}"
+          bump2version --allow-dirty release
         fi
-        bump2version "${parameters[@]}"
         echo "new-version=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
       shell: bash
       working-directory: ${{ inputs.working-directory }}
