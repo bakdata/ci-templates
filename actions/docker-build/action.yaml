@@ -18,6 +18,9 @@ inputs:
     description: "Name of Docker image."
     required: false
     default: "${{ github.event.repository.name }}"
+  options:
+    description: "Extra arguments passed to the `docker build` command."
+    required: false
   retention-days:
     description: "Number of days the image artifact should be stored on GitHub."
     required: false
@@ -31,7 +34,7 @@ runs:
   steps:
     - name: Build Dockerfile and store them in "${{ runner.temp }}/docker-build" directory
       run: |
-        docker build -t ${{ inputs.image-name }} -f ${{ inputs.dockerfile-path }} ${{ inputs.docker-context }}
+        docker build -t ${{ inputs.image-name }} -f ${{ inputs.dockerfile-path }} ${{ inputs.docker-context }} ${{ inputs.options }}
         mkdir ${{ runner.temp }}/docker-build
         docker save ${{ inputs.image-name }} > ${{ runner.temp }}/docker-build/${{ inputs.image-name }}.tar
       shell: bash
