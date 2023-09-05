@@ -17,7 +17,7 @@ inputs:
   image-tag:
     description: "Tag of Docker image."
     required: false
-    default: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+    default: "pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}"
   image-artifact-name:
     description: "Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact."
     required: false
@@ -29,53 +29,45 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Set image-tag
-      id: img-tag-setter
-      env:
-        DEFAULT_TAG: "${{ inputs.image-tag }}"
+    - name: Download Docker image tar artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ inputs.image-artifact-name }}
+        path: ${{ runner.temp }}/docker-build
+
+    # setup-buildx action will create and boot a builder using by default the docker-container driver.
+    # This is not required but recommended using it to be able to build multi-platform images, export cache, etc.
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2.2.1
+
+    # Replace default image tag on pull requests, because a GitHub commit sha works in a differnt way for pull requests 
+    # See https://github.com/orgs/community/discussions/25191#discussioncomment-3246770
+    - name: Replace tag 
+      id: replace-tag
       run: |
-        GH_SHA=${{ env.DEFAULT_TAG }}
-        if [[ $GH_SHA == *"."*  ]]; then
-          echo  "img_tag=$GH_SHA">> $GITHUB_OUTPUT
-        else
-          img_tag="pipeline-${{ github.run_id }}-git-${GH_SHA::8}"
-          echo  "img_tag=$img_tag">> $GITHUB_OUTPUT
+        if [[ "${{ github.event_name }}" == "pull_request" && "${{ inputs.image-tag }}" == "pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}" ]]; then
+            pullRequestSha="${{ github.event.pull_request.head.sha }}"
+            echo "tag=pipeline-${{ github.run_id }}-git-${pullRequestSha::8}" >> "$GITHUB_OUTPUT"
         fi
-      shell: bash
 
-    - name: Set image-tag
+        echo "tag=${{ inputs.image-tag }}" >> "$GITHUB_OUTPUT 
+
+    - name: Load image
       run: |
-        img_tag="${{ steps.img-tag-setter.outputs.img_tag }}"
-        echo "img_tag is -> $img_tag <-"
+        if [[ $(ls -1 ${{ runner.temp }}/docker-build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
+          >&2 echo "Error: A single image tar file is needed in the downloaded artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
+          exit 1
+        fi
+
+        docker load --input ${{ runner.temp }}/docker-build/*.tar
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
 
-    # - name: Download Docker image tar artifact
-    #   uses: actions/download-artifact@v3
-    #   with:
-    #     name: ${{ inputs.image-artifact-name }}
-    #     path: ${{ runner.temp }}/docker-build
-
-    # # setup-buildx action will create and boot a builder using by default the docker-container driver.
-    # # This is not required but recommended using it to be able to build multi-platform images, export cache, etc.
-    # - name: Set up Docker Buildx
-    #   uses: docker/setup-buildx-action@v2.2.1
-
-    # - name: Load image
-    #   run: |
-    #     if [[ $(ls -1 ${{ runner.temp }}/docker-build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
-    #       >&2 echo "Error: A single image tar file is needed in the downloaded artifact. You can upload one before using this action: https://github.com/actions/upload-artifact."
-    #       exit 1
-    #     fi
-
-    #     docker load --input ${{ runner.temp }}/docker-build/*.tar
-    #   shell: bash
-    #   working-directory: ${{ inputs.working-directory }}
-
-    # - name: Publish image
-    #   uses: bakdata/ci-templates/actions/docker-push@1.30.0
-    #   with:
-    #     docker-registry: ${{ inputs.docker-registry }}
-    #     image-namespace: ${{ inputs.image-namespace }}
-    #     image-name: ${{ inputs.image-name }}
-    #     image-tag: "${{ steps.img-tag-setter.outputs.img_tag }}"
-    #     working-directory: ${{ inputs.working-directory }}
+    - name: Publish image
+      uses: bakdata/ci-templates/actions/docker-push@1.30.0
+      with:
+        docker-registry: ${{ inputs.docker-registry }}
+        image-namespace: ${{ inputs.image-namespace }}
+        image-name: ${{ inputs.image-name }}
+        image-tag: "${{ steps.replace-tag.outputs.tag }}"
+        working-directory: ${{ inputs.working-directory }}
