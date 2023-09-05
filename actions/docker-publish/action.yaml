@@ -45,7 +45,10 @@ runs:
     - name: Replace tag 
       id: replace-tag
       run: |
-        if [[ "${{ github.event_name }}" == "pull_request" && "${{ inputs.image-tag }}" == "pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}" ]]; then
+        if [[ 
+          "${{ github.event_name }}" == "pull_request" &&
+          "${{ inputs.image-tag }}" == "pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}"
+        ]]; then
             pullRequestSha="${{ github.event.pull_request.head.sha }}"
             echo "tag=pipeline-${{ github.run_id }}-git-${pullRequestSha::8}" >> "$GITHUB_OUTPUT"
         fi
