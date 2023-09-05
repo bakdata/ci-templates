@@ -69,5 +69,5 @@ runs:
         docker-registry: ${{ inputs.docker-registry }}
         image-namespace: ${{ inputs.image-namespace }}
         image-name: ${{ inputs.image-name }}
-        image-tag: "${{ steps.replace-tag.outputs.tag }}"
+        image-tag: ${{ steps.replace-tag.outputs.tag }}
         working-directory: ${{ inputs.working-directory }}
