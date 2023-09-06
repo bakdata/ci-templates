@@ -22,7 +22,7 @@ This composite action commits the changes of your repository with an arbitrary c
 ```yaml
 steps:
   - name: Check out repository
-    uses: bakdata/ci-templates/actions/checkout-repo@v1.26.0
+    uses: bakdata/ci-templates/actions/checkout@v1.26.0
     with:
       persist-credentials: false # required for pushing to protected branch later
 

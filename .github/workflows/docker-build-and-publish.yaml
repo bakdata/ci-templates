@@ -74,7 +74,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout-repo@v1.26.0
+        uses: bakdata/ci-templates/actions/checkout@v1.26.0
         with:
           ref: ${{ inputs.ref }}
           token: ${{ secrets.github-token }}

@@ -16,7 +16,6 @@ The following workflows can be found here:
 - [Java Gradle Plugin](#java-gradle-plugin)
 - [Java Gradle Release](#java-gradle-release)
 - [Bump Version Release](#bump-version-release)
-- [Checkout Repository](#checkout-repository)
 
 ## Docker Build and Publish
 
