@@ -103,7 +103,7 @@ jobs:
           password: "${{ secrets.docker-password }}"
 
       - name: Use uploaded tar files to push new image to docker
-        uses: bakdata/ci-templates/actions/docker-publish@v1.18.1
+        uses: bakdata/ci-templates/actions/docker-publish@feat/img-tag
         with:
           docker-registry: "${{ inputs.docker-registry }}"
           image-namespace: "${{ inputs.image-namespace }}"
