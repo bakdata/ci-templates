@@ -87,8 +87,7 @@ runs:
         fi
       shell: bash
 
-    - name: Download default changelog
-      id: config
+    - name: test output
       run: |
         echo "--------------------------------------------------------------------------------------------"
         echo "${{ steps.config.outputs.path }}"
