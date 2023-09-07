@@ -66,7 +66,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@v1.26.0
+        uses: bakdata/ci-templates/actions/checkout@1.32.0
         with:
           ref: ${{ env.current-ref }}
 
@@ -97,7 +97,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@v1.26.0
+        uses: bakdata/ci-templates/actions/checkout@1.32.0
         with:
           ref: ${{ env.current-ref }}
 
@@ -141,7 +141,7 @@ jobs:
 
     steps:
       - name: Check out branch containing the artifatcs and the index.yaml file
-        uses: bakdata/ci-templates/actions/checkout@v1.26.0
+        uses: bakdata/ci-templates/actions/checkout@1.32.0
         with:
           ref: ${{ inputs.gh-pages-branch }}
 

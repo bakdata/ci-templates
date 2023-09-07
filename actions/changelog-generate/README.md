@@ -97,7 +97,7 @@ Without it, the changelog action will be unable to track down previous tags.
 
 ```yaml
 steps:
-  - uses: bakdata/ci-templates/actions/checkout@v1.26.0
+  - uses: bakdata/ci-templates/actions/checkout@1.32.0
     with:
       persist-credentials: false
       fetch-depth: 0
