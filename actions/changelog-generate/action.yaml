@@ -78,57 +78,62 @@ runs:
       id: config
       run: |
         wget -c https://github.com/bakdata/ci-templates/blob/feat/changelog-def/.github/changelog-config.json -O default-config.json
+
+        sleep 10
         echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
         cat default-config.json
+
         echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
       shell: bash
 
-    # - name: "Create changelog"
-    #   id: build_changelog
-    #   uses: mikepenz/release-changelog-builder-action@v4
-    #   with:
-    #     token: "${{ inputs.github-token }}"
-    #     configuration: "${{ inputs.config }}"
-    #     fromTag: "${{ steps.set-tags.outputs.fromtag }}"
-    #     toTag: "${{ steps.set-tags.outputs.totag }}"
-    #     outputFile: ${{ runner.temp }}/changes.md
-    #     fetchReviewers: "${{ inputs.fetch-reviewers }}"
-    #     fetchReleaseInformation: "${{ inputs.fetch-release-information }}"
-    #     commitMode: "${{ inputs.commit-mode }}"
+    - name: "Create changelog"
+      id: build_changelog
+      uses: mikepenz/release-changelog-builder-action@v4
+      with:
+        token: "${{ inputs.github-token }}"
+        configuration: "default-config.json"
+        # configuration: "${{ inputs.config }}"
+        fromTag: "${{ steps.set-tags.outputs.fromtag }}"
+        toTag: "${{ steps.set-tags.outputs.totag }}"
+        outputFile: ${{ runner.temp }}/changes.md
+        fetchReviewers: "${{ inputs.fetch-reviewers }}"
+        fetchReleaseInformation: "${{ inputs.fetch-release-information }}"
+        commitMode: "${{ inputs.commit-mode }}"
 
-    # - name: Replace default branch with new Tag
-    #   if: ${{ steps.set-tags.outputs.totag != inputs.new-tag }}
-    #   run: |
-    #     # Replace default branch with new tag
-    #     sed -i 's/\[${{ steps.set-tags.outputs.totag }}\]/\[${{ inputs.new-tag }}\]/g' ${{ runner.temp }}/changes.md
-    #     sed -i 's|releases/tag/${{ steps.set-tags.outputs.totag }}|releases/tag/${{ inputs.new-tag }}|g' ${{ runner.temp }}/changes.md
+    - name: Replace default branch with new Tag
+      if: ${{ steps.set-tags.outputs.totag != inputs.new-tag }}
+      run: |
+        # Replace default branch with new tag
+        sed -i 's/\[${{ steps.set-tags.outputs.totag }}\]/\[${{ inputs.new-tag }}\]/g' ${{ runner.temp }}/changes.md
+        sed -i 's|releases/tag/${{ steps.set-tags.outputs.totag }}|releases/tag/${{ inputs.new-tag }}|g' ${{ runner.temp }}/changes.md
 
-    #     # Set Release date
-    #     tag_date=$(date '+%Y-%m-%d')
-    #     sed -i "s/Release Date: /Release Date: \[${tag_date}\]/g" ${{ runner.temp }}/changes.md
-    #   shell: bash
+        # Set Release date
+        tag_date=$(date '+%Y-%m-%d')
+        sed -i "s/Release Date: /Release Date: \[${tag_date}\]/g" ${{ runner.temp }}/changes.md
+      shell: bash
 
-    # - name: Update GitHub Changelog
-    #   id: output-generator
-    #   run: |
-    #     # Reformat ${{ runner.temp }}/changes.md and add it to the existing changelog
-    #     echo 'single-changelog<<EOF' >> $GITHUB_OUTPUT
-    #     cat ${{ runner.temp }}/changes.md >> $GITHUB_OUTPUT
-    #     echo 'EOF' >> $GITHUB_OUTPUT
+    - name: Update GitHub Changelog
+      id: output-generator
+      run: |
+        # Reformat ${{ runner.temp }}/changes.md and add it to the existing changelog
+        echo 'single-changelog<<EOF' >> $GITHUB_OUTPUT
+        cat ${{ runner.temp }}/changes.md >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
 
-    #     # Create changelog.md in case of a first Release
-    #     if [ -n "${{ inputs.changelog-file }}" ]; then
-    #       sed -i 's/# /## /g' ${{ runner.temp }}/changes.md
-    #       echo -e "\n" >> ${{ runner.temp }}/changes.md 
-    #       if [ ! -f "${{ inputs.changelog-file }}" ]; then
-    #         echo $'# Changelog\n' >> ${{ inputs.changelog-file }}
-    #       fi
+        # Create changelog.md in case of a first Release
+        if [ -n "${{ inputs.changelog-file }}" ]; then
+          sed -i 's/# /## /g' ${{ runner.temp }}/changes.md
+          echo -e "\n" >> ${{ runner.temp }}/changes.md
+          if [ ! -f "${{ inputs.changelog-file }}" ]; then
+            echo $'# Changelog\n' >> ${{ inputs.changelog-file }}
+          fi
 
-    #       # Update global changelog and pass it to the ouput
-    #       sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ runner.temp }}/changes.md)" ${{ inputs.changelog-file }}
+          # Update global changelog and pass it to the ouput
+          sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ runner.temp }}/changes.md)" ${{ inputs.changelog-file }}
 
-    #       echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
-    #       cat ${{ inputs.changelog-file }} >> $GITHUB_OUTPUT
-    #       echo 'EOF' >> $GITHUB_OUTPUT
-    #     fi
-    #   shell: bash
+          echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
+          cat ${{ inputs.changelog-file }} >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+        fi
+      shell: bash
