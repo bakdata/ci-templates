@@ -77,7 +77,7 @@ runs:
     - name: Download default changelog
       id: config
       run: |
-        wget -c https://raw.githubusercontent.com/bakdata/ci-templates/main/.github/changelog-config.json -O default-config.json
+        wget -c https://github.com/bakdata/ci-templates/blob/feat/changelog-def/.github/changelog-config.json -O default-config.json
         echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         cat default-config.json
         echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
