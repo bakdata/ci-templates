@@ -2,20 +2,20 @@
 
 The following workflows can be found here:
 
-- [Docker Build and Publish](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#docker-build-and-publish)
-- [Helm Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-release)
-- [Helm Multi Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#helm-multi-release)
-- [Release Tag Versions](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#release-tag-versions)
-- [Kustomize GKE Deploy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-deploy)
-- [Kustomize GKE Destroy](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#kustomize-gke-destroy)
-- [Python Poetry Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-release)
-- [Python Poetry Publish PyPI](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-publish-pypi)
-- [Python Poetry Publish Snapshot](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#python-poetry-publish-snapshot)
-- [Java Gradle Docker](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-docker)
-- [Java Gradle Library](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-library)
-- [Java Gradle Plugin](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-plugin)
-- [Java Gradle Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#java-gradle-release)
-- [Bump Version Release](https://github.com/bakdata/ci-templates/tree/main/.github/workflows#bump-version-release)
+- [Docker Build and Publish](#docker-build-and-publish)
+- [Helm Release](#helm-release)
+- [Helm Multi Release](#helm-multi-release)
+- [Release Tag Versions](#release-tag-versions)
+- [Kustomize GKE Deploy](#kustomize-gke-deploy)
+- [Kustomize GKE Destroy](#kustomize-gke-destroy)
+- [Python Poetry Release](#python-poetry-release)
+- [Python Poetry Publish PyPI](#python-poetry-publish-pypi)
+- [Python Poetry Publish Snapshot](#python-poetry-publish-snapshot)
+- [Java Gradle Docker](#java-gradle-docker)
+- [Java Gradle Library](#java-gradle-library)
+- [Java Gradle Plugin](#java-gradle-plugin)
+- [Java Gradle Release](#java-gradle-release)
+- [Bump Version Release](#bump-version-release)
 
 ## Docker Build and Publish
 

@@ -24,7 +24,7 @@ This action uses another composite action listed below:
 ```yaml
 steps:
   - name: Check out repository
-    uses: actions/checkout@v3
+    uses: bakdata/ci-templates/actions/checkout@1.32.0
 
   - name: Tag and release project
     uses: bakdata/ci-templates/actions/tag-and-release@main

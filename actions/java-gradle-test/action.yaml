@@ -46,7 +46,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: actions/checkout@v3
+      uses: bakdata/ci-templates/actions/checkout@1.32.0
       with:
         fetch-depth: 0
         lfs: ${{ inputs.download-lfs-files }}
