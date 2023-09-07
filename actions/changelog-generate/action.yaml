@@ -79,11 +79,11 @@ runs:
     - name: Download default changelog
       id: config
       run: |
-        if [ -n "${{ inputs.config }}" ]; then
+        if [[ -n "${{ inputs.config }}" ]]; then
+          echo  "path=${{ inputs.config }}">> $GITHUB_OUTPUT
+        else
           wget -c https://github.com/bakdata/ci-templates/blob/feat/changelog-def/.github/changelog-config.json -O default-config.json
           echo  "path=default-config.json">> $GITHUB_OUTPUT
-        else
-          echo  "path=${{ inputs.config }}">> $GITHUB_OUTPUT
         fi
       shell: bash
 
