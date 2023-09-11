@@ -1,19 +1,19 @@
 name: Port forward Kubernetes service
 description: Creates a port forward for a Kubernetes service and keep it open in the background
 inputs:
-  service:
-    description: Name of Kubernetes service
-    required: true
-  port:
-    description: Port to be forwarded
-    required: true
-  namespace:
-    description: Kubernetes namespace
-    required: true
   kubectl-version:
     description: kubectl version, e.g. `v1.23.0` or `latest`
     default: latest
     required: false
+  namespace:
+    description: Kubernetes namespace
+    required: true
+  port:
+    description: Port to be forwarded
+    required: true
+  service:
+    description: Name of Kubernetes service
+    required: true
   timeout:
     description: Timeout for portfowrd
     default: "30"

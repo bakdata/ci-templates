@@ -6,10 +6,10 @@ This action creates a port forward for a Kubernetes service and keeps it open in
 
 | Name            | Required | Default Value |  Type  | Description                                 |
 | --------------- | :------: | :-----------: | :----: | ------------------------------------------- |
-| service         |    ✅    |       -       | string | Name of Kubernetes service                  |
-| port            |    ✅    |       -       | string | Port to be forwarded                        |
-| namespace       |    ✅    |       -       | string | Kubernetes namespace                        |
 | kubectl-version |    ❌    |    latest     | string | kubectl version, e.g. `v1.23.0` or `latest` |
+| namespace       |    ✅    |       -       | string | Kubernetes namespace                        |
+| port            |    ✅    |       -       | string | Port to be forwarded                        |
+| service         |    ✅    |       -       | string | Name of Kubernetes service                  |
 | timeout         |    ❌    |      30       | string | Timeout in seconds                          |
 
 ## Usage
