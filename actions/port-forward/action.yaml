@@ -14,6 +14,10 @@ inputs:
     description: kubectl version, e.g. `v1.23.0` or `latest`
     default: latest
     required: false
+  timeout:
+    description: Timeout for portfowrd
+    default: "30"
+    required: false
 
 runs:
   using: composite
@@ -24,15 +28,16 @@ runs:
         version: ${{ inputs.kubectl-version }}
 
     - name: Establish port forward
-      shell: bash
+      env:
+        TIMEOUT: "${{ inputs.timeout }}"
       run: |
         kubectl port-forward "services/${{ inputs.service }}" "${{ inputs.port }}:${{ inputs.port }}" --namespace ${{ inputs.namespace }} --kubeconfig ~/.kube/config > port-forward.out &
         # wait up to 60 seconds for port forwarding
-        for _ in {1..120}; do if grep -q "Forwarding from 127.0.0.1:${{ inputs.port }} -> ${{ inputs.port }}" port-forward.out; then
+        for _ in {1..$TIMEOUT}; do if grep -q "Forwarding from 127.0.0.1:${{ inputs.port }} -> ${{ inputs.port }}" port-forward.out; then
           echo "Port forwarding done"
           break
         else
-          cat port-forward.out || true
-          echo "Waiting for port forwarding..."
-          sleep 0.5
+          echo "Portforwarding failed: Timeout reached"
+          break
         fi; done
+      shell: bash
