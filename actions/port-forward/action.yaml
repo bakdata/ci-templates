@@ -1,10 +1,6 @@
 name: Port forward Kubernetes service
 description: Creates a port forward for a Kubernetes service and keep it open in the background
 inputs:
-  kubectl-version:
-    description: kubectl version, e.g. `v1.23.0` or `latest`
-    default: latest
-    required: false
   namespace:
     description: Kubernetes namespace
     required: true
@@ -14,6 +10,10 @@ inputs:
   service:
     description: Name of Kubernetes service
     required: true
+  kubectl-version:
+    description: kubectl version, e.g. `v1.23.0` or `latest`
+    default: latest
+    required: false
   timeout:
     description: Timeout for portfowrd
     default: "30"
@@ -37,7 +37,8 @@ runs:
           echo "Port forwarding done"
           break
         else
+          cat port-forward.out || true
           echo "Portforwarding failed: Timeout reached"
-          break
+          exit 1
         fi; done
       shell: bash
