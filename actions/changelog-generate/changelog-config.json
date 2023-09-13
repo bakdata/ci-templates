@@ -1,6 +1,6 @@
 {
   "categories": [
-    { "title": "## 🚀 Merged pull requests:    ", "labels": [""] }
+    { "title": "## 🚀 Merged pull requests:    ", "labels": [] }
   ],
   "ignore_labels": ["ignore"],
   "sort": { "order": "ASC", "on_property": "mergedAt" },
