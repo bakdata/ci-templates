@@ -113,7 +113,7 @@ runs:
       with:
         github-token: ${{ inputs.github-token }}
         new-tag: ${{ steps.bump-version.outputs.release-version }}
-        changelog-file: "${{ inÍputs.changelog-file }}"
+        changelog-file: "${{ inputs.changelog-file }}"
         fetch-reviewers: "true"
         fetch-release-information: "true"
 
