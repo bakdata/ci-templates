@@ -95,7 +95,7 @@ runs:
       id: build_changelog
       uses: bakdata/ci-templates/actions/changelog-generate@feat/changelog-def
       with:
-        github-token: ${{ secrets.github-token }}
+        github-token: ${{ inputs.github-token }}
         new-tag: ${{ steps.evaluate-version.outputs.release-version }}
         changelog-file: "${{ inputs.changelog-file }}"
         fetch-reviewers: "true"
