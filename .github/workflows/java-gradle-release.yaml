@@ -4,10 +4,26 @@ name: Java Gradle Release
 on:
   workflow_call:
     inputs:
+      gradle-cache:
+        description: "Whether Gradle caching is enabled or not. (Default is true)"
+        required: false
+        default: true
+        type: boolean
       release-type:
         description: "Scope of the release (major, minor or patch)."
         required: true
         type: string
+
+      changelog-config:
+        description: "Path to the changelog config"
+        required: false
+        type: string
+        default: ""
+      gradle-version:
+        description: "Gradle version to be installed. (Default is wrapper)"
+        required: false
+        type: string
+        default: "wrapper"
       java-distribution:
         description: "Java distribution to be installed. (Default is microsoft)"
         required: false
@@ -18,16 +34,6 @@ on:
         required: false
         type: string
         default: "11"
-      gradle-version:
-        description: "Gradle version to be installed. (Default is wrapper)"
-        required: false
-        type: string
-        default: "wrapper"
-      gradle-cache:
-        description: "Whether Gradle caching is enabled or not. (Default is true)"
-        required: false
-        type: boolean
-        default: true
       working-directory:
         description: "Working directory of your Gradle artifacts. (Default is .)"
         required: false
@@ -73,3 +79,4 @@ jobs:
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}
+          changelog-config: ${{ inputs.changelog-config }}
