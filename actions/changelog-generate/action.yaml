@@ -79,10 +79,10 @@ runs:
       id: config
       run: |
         if [[ -n "${{ inputs.config }}" ]]; then
-          echo  "path=${{ inputs.config }}">> $GITHUB_OUTPUT
+          echo "path=${{ inputs.config }}" >> "$GITHUB_OUTPUT"
         else
-          wget -c https://raw.githubusercontent.com/bakdata/ci-templates/blob/1.33.0/.github/changelog-config.json -O default-config.json
-          echo  "path=default-config.json">> $GITHUB_OUTPUT
+          wget -c https://raw.githubusercontent.com/bakdata/ci-templates/1.33.0/.github/changelog-config.json -O default-config.json
+          echo "path=default-config.json" >> "$GITHUB_OUTPUT"
         fi
       shell: bash
 
