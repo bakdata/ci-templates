@@ -21,7 +21,8 @@ inputs:
   config:
     description: Path to the changelog config JSON file
     required: false
-    default: "$GITHUB_ACTION_PATH/changelog-config.json"
+    default: ""
+    # default: "$GITHUB_ACTION_PATH/changelog-config.json"
   fetch-release-information:
     description: "Will enable fetching additional release information from tags."
     required: false
@@ -75,25 +76,25 @@ runs:
         echo  "fromtag=$setfrom">> $GITHUB_OUTPUT
       shell: bash
 
-    # - name: Download default changelog
-    #   id: config
-    #   run: |
-    #     if [[ -n "${{ inputs.config }}" ]]; then
-    #       echo "path=${{ inputs.config }}" >> "$GITHUB_OUTPUT"
-    #     else
-    #       wget -c https://raw.githubusercontent.com/bakdata/ci-templates/1.32.0/.github/changelog-config.json -O default-config.json
-    #       # echo "path=default-config.json" >> "$GITHUB_OUTPUT"
-    #       echo "path=actions/changelog-generate/changelog-config.json" >> "$GITHUB_OUTPUT"
-    #     fi
-    #   shell: bash
+    - name: Download default changelog
+      id: config
+      run: |
+        if [[ -n "${{ inputs.config }}" ]]; then
+          echo "path=${{ inputs.config }}" >> "$GITHUB_OUTPUT"
+        else
+          wget -c https://raw.githubusercontent.com/bakdata/ci-templates/1.32.0/.github/changelog-config.json -O default-config.json
+          echo "path=default-config.json" >> "$GITHUB_OUTPUT"
+          # echo "path=actions/changelog-generate/changelog-config.json" >> "$GITHUB_OUTPUT"
+        fi
+      shell: bash
 
     - name: "Create changelog"
       id: build_changelog
       uses: mikepenz/release-changelog-builder-action@v4
       with:
         token: "${{ inputs.github-token }}"
-        # configuration: "${{ steps.config.outputs.path }}"
-        configuration: "${{ inputs.config }}"
+        configuration: "${{ steps.config.outputs.path }}"
+        # configuration: "${{ inputs.config }}"
         fromTag: "${{ steps.set-tags.outputs.fromtag }}"
         toTag: "${{ steps.set-tags.outputs.totag }}"
         outputFile: ${{ runner.temp }}/changes.md

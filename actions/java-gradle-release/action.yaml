@@ -116,7 +116,7 @@ runs:
         changelog-file: "${{ inputs.changelog-file }}"
         fetch-reviewers: "true"
         fetch-release-information: "true"
-        config: "GITHUB_ACTION_PATH/changelog-config.json"
+        # config: "GITHUB_ACTION_PATH/changelog-config.json"
 
     - name: Commit and push changes including .bumpversion.cfg file
       uses: bakdata/ci-templates/actions/commit-and-push@1.32.0
