@@ -15,10 +15,10 @@ inputs:
     description: "Scope of the release"
     required: true
 
-  changelog-config:
-    description: "Path to the changelog config"
-    required: false
-    default: ""
+  # changelog-config:
+  #   description: "Path to the changelog config"
+  #   required: false
+  #   default: ""
   changelog-file:
     description: "Path to the changelog file"
     required: false
@@ -120,7 +120,7 @@ runs:
         changelog-file: "${{ inputs.changelog-file }}"
         fetch-reviewers: "true"
         fetch-release-information: "true"
-        config: "${{ inputs.changelog-file }}"
+        # config: "${{ inputs.changelog-file }}"
         # config: "GITHUB_ACTION_PATH/changelog-config.json"
 
     - name: Commit and push changes including .bumpversion.cfg file
