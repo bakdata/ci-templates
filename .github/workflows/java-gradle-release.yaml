@@ -14,11 +14,11 @@ on:
         required: true
         type: string
 
-      changelog-config:
-        description: "Path to the changelog config"
-        required: false
-        type: string
-        default: ""
+      # changelog-config:
+      #   description: "Path to the changelog config"
+      #   required: false
+      #   type: string
+      #   default: ""
       gradle-version:
         description: "Gradle version to be installed. (Default is wrapper)"
         required: false

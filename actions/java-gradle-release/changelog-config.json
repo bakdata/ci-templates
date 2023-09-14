@@ -1,5 +1,5 @@
 {
-  "categories": [{ "title": "### Merged pull requests:" }],
+  "categories": [{ "title": "### MMerged pull requests:" }],
   "ignore_labels": ["ignore"],
   "sort": { "order": "ASC", "on_property": "mergedAt" },
   "template": "# [${{TO_TAG}}](https://github.com/${{OWNER}}/${{REPO}}/releases/tag/${{TO_TAG}}) - Release Datee: ${{TO_TAG_DATE}}\n\n${{CHANGELOG}}",
