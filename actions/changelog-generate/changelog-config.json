@@ -5,6 +5,6 @@
   "ignore_labels": ["ignore"],
   "sort": { "order": "ASC", "on_property": "mergedAt" },
   "template": "# [${{TO_TAG}}](https://github.com/bakdata/ci-templates/releases/tag/${{TO_TAG}}) ${{TO_TAG_DATE}} \n\n${{CHANGELOG}}",
-  "pr_template": "- ${{TITLE}} [#${{NUMBER}}](${{URL}}) (@#{{AUTHOR}})\n",
+  "pr_template": "- ${{TITLE}} [#${{NUMBER}}](${{URL}}) ([@#{{AUTHOR}}](https://github.com/#{{AUTHOR}})\n",
   "empty_template": "- no changes!"
 }
