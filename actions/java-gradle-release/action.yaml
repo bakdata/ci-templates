@@ -121,7 +121,7 @@ runs:
         changelog-file: "${{ inputs.changelog-file }}"
         fetch-reviewers: "true"
         fetch-release-information: "true"
-        config: "${{ inputs.changelog-file }}"
+        config: "${{ inputs.changelog-config }}"
         # config: "GITHUB_ACTION_PATH/changelog-config.json"
 
     - name: Commit and push changes including .bumpversion.cfg file
