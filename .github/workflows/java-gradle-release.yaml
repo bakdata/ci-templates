@@ -79,4 +79,4 @@ jobs:
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}
-          changelog-config: ${{ inputs.changelog-config }}
+          # changelog-config: ${{ inputs.changelog-config }}

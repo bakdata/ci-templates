@@ -18,8 +18,8 @@ inputs:
   changelog-config:
     description: "Path to the changelog config"
     required: false
-    default: ""
-    # default: "GITHUB_ACTION_PATH/changelog-config.json"
+    # default: ""
+    default: "GITHUB_ACTION_PATH/changelog-config.json"
   changelog-file:
     description: "Path to the changelog file"
     required: false
