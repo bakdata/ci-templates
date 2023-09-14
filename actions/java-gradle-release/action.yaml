@@ -15,11 +15,11 @@ inputs:
     description: "Scope of the release"
     required: true
 
-  changelog-config:
-    description: "Path to the changelog config"
-    required: false
-    # default: ""
-    default: "$GITHUB_ACTION_PATH/changelog-config.json"
+  # changelog-config:
+  #   description: "Path to the changelog config"
+  #   required: false
+  #   # default: ""
+  #   default: "$GITHUB_ACTION_PATH/changelog-config.json"
   changelog-file:
     description: "Path to the changelog file"
     required: false
@@ -95,7 +95,7 @@ runs:
         changelog-file: "${{ inputs.changelog-file }}"
         fetch-reviewers: "true"
         fetch-release-information: "true"
-        config: "${{ inputs.changelog-config }}"
+        # config: "${{ inputs.changelog-config }}"
 
     - name: Commit and push changes including .bumpversion.cfg file
       uses: bakdata/ci-templates/actions/commit-and-push@1.32.0
