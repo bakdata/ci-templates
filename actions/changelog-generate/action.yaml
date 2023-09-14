@@ -21,8 +21,8 @@ inputs:
   config:
     description: Path to the changelog config JSON file
     required: false
-    default: ""
-    # default: "$GITHUB_ACTION_PATH/changelog-config.json"
+    # default: ""
+    default: "$GITHUB_ACTION_PATH/changelog-config.json"
   fetch-release-information:
     description: "Will enable fetching additional release information from tags."
     required: false
