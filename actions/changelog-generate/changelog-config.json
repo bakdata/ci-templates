@@ -1,7 +1,6 @@
 {
   "categories": [
-    { "title": "## 🚀 Features", "labels": ["enhancement"] },
-    { "title": "## 🐛 Fixes", "labels": ["bug"] }
+    { "title": "## 🐛 Merged pull requests:", "labels": ["bug"] }
   ],
   "ignore_labels": ["ignore"],
   "sort": { "order": "ASC", "on_property": "mergedAt" },
