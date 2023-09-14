@@ -79,32 +79,6 @@ runs:
         gradle-version: ${{ inputs.gradle-version }}
         gradle-cache: ${{ inputs.gradle-cache }}
 
-    # - name: Bump version
-    #   id: evaluate-version
-    #   run: |
-    #     old_version=$(./gradlew properties -q | grep "^version:" | awk '{print $2}' | tr -d '[:space:]' | xargs)
-    #     if [[ "${{ inputs.release-type }}" == "patch" ]]; then
-    #         release_version="${old_version%-*}"
-    #     else
-    #         release_version=$(semver bump "${{ inputs.release-type }}" "${old_version}")
-    #     fi
-    #     echo "release-version=$release_version" >> "$GITHUB_OUTPUT"
-    #   shell: bash
-
-    # - name: Create release
-    #   run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true
-    #   shell: bash
-    #   working-directory: ${{ inputs.working-directory }}
-
-    # - name: Generate changelog
-    #   id: build_changelog
-    #   uses: bakdata/ci-templates/actions/changelog-generate@feat/changelog-def
-    #   with:
-    #     github-token: ${{ inputs.github-token }}
-    #     new-tag: ${{ steps.evaluate-version.outputs.release-version }}
-    #     changelog-file: "${{ inputs.changelog-file }}"
-    #     fetch-reviewers: "true"
-    #     fetch-release-information: "true"
     - name: Bump version
       id: bump-version
       uses: bakdata/ci-templates/actions/bump-version@1.32.0
@@ -122,7 +96,6 @@ runs:
         fetch-reviewers: "true"
         fetch-release-information: "true"
         config: "${{ inputs.changelog-config }}"
-        # config: "GITHUB_ACTION_PATH/changelog-config.json"
 
     - name: Commit and push changes including .bumpversion.cfg file
       uses: bakdata/ci-templates/actions/commit-and-push@1.32.0
@@ -132,11 +105,3 @@ runs:
         github-username: ${{ inputs.github-username }}
         github-email: ${{ inputs.github-email }}
         github-token: ${{ inputs.github-token }}
-
-    # - name: Commit and push
-    #   run: |
-    #     echo  "${{ steps.build_changelog.outputs.single-changelog }}" > ${{ inputs.changelog-file }}
-    #     git add ${{ inputs.changelog-file }}
-    #     git commit -m "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}"
-    #     git push --follow-tags origin ${{ github.event.repository.default_branch }}
-    #   shell: bash
