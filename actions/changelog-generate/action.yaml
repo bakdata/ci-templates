@@ -110,8 +110,8 @@ runs:
       uses: mikepenz/release-changelog-builder-action@v4
       with:
         token: "${{ inputs.github-token }}"
-        configuration: "${{ steps.config.outputs.path }}"
-        # configuration: "${{ inputs.config }}"
+        # configuration: "${{ steps.config.outputs.path }}"
+        configuration: ${{ inputs.config }}
         fromTag: "${{ steps.set-tags.outputs.fromtag }}"
         toTag: "${{ steps.set-tags.outputs.totag }}"
         outputFile: ${{ runner.temp }}/changes.md
