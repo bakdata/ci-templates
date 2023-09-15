@@ -75,6 +75,7 @@ runs:
           fi
         fi
         echo  "fromtag=$setfrom">> $GITHUB_OUTPUT
+        echo "path=${{ inputs.config }}" >> "$GITHUB_OUTPUT"
       shell: bash
 
     # - name: Download default changelog
@@ -111,7 +112,8 @@ runs:
       uses: mikepenz/release-changelog-builder-action@v4
       with:
         token: "${{ inputs.github-token }}"
-        configuration: ${{ env.CONFIG_PATH }}
+        configuration: "${{ steps.set-tags.outputs.path }}"
+        # configuration: ${{ env.CONFIG_PATH }}
         # configuration: "${{ steps.config.outputs.path }}"
         # configuration: ${{ inputs.config }}
         fromTag: "${{ steps.set-tags.outputs.fromtag }}"
