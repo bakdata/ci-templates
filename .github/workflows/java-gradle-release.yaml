@@ -14,11 +14,6 @@ on:
         required: true
         type: string
 
-      # changelog-config:
-      #   description: "Path to the changelog config"
-      #   required: false
-      #   type: string
-      #   default: ""
       gradle-version:
         description: "Gradle version to be installed. (Default is wrapper)"
         required: false
@@ -79,4 +74,3 @@ jobs:
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
           working-directory: ${{ inputs.working-directory }}
-          # changelog-config: ${{ inputs.changelog-config }}

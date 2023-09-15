@@ -78,33 +78,6 @@ runs:
         echo "path=${{ inputs.config }}" >> "$GITHUB_OUTPUT"
       shell: bash
 
-    # - name: Download default changelog
-    #   id: config
-    #   run: |
-    #     if [[ -n "${{ inputs.config }}" ]]; then
-    #       echo "path=${{ inputs.config }}" >> "$GITHUB_OUTPUT"
-    #     # else
-    #     #   # wget -c https://raw.githubusercontent.com/bakdata/ci-templates/1.32.0/.github/changelog-config.json -O default-config.json
-    #     #   wget -c https://raw.githubusercontent.com/bakdata/ci-templates/feat/changelog-def/actions/changelog-generate/changelog-config.json -O default-config.json
-    #     #   echo "path=default-config.json" >> "$GITHUB_OUTPUT"
-    #     #   # echo "path=actions/changelog-generate/changelog-config.json" >> "$GITHUB_OUTPUT"
-    #     fi
-    #   shell: bash
-
-    # - name: Test input
-    #   run: |
-    #     # echo "----> ${{ inputs.config }} <------"
-    #     echo "----> ${{ steps.config.outputs.path }} <------"
-    #     echo "--------------------------------------------------------------------------------"
-    #     echo "--------------------------------------------------------------------------------"
-    #     echo "--------------------------------------------------------------------------------"
-    #     # cat ${{ inputs.config }}
-    #     cat ${{ steps.config.outputs.path }}
-    #     echo "--------------------------------------------------------------------------------"
-    #     echo "--------------------------------------------------------------------------------"
-    #     echo "--------------------------------------------------------------------------------"
-    #   shell: bash
-
     - name: "Create changelog"
       env:
         CONFIG_PATH: ${{ inputs.config }}
@@ -113,9 +86,6 @@ runs:
       with:
         token: "${{ inputs.github-token }}"
         configuration: "${{ steps.set-tags.outputs.path }}"
-        # configuration: ${{ env.CONFIG_PATH }}
-        # configuration: "${{ steps.config.outputs.path }}"
-        # configuration: ${{ inputs.config }}
         fromTag: "${{ steps.set-tags.outputs.fromtag }}"
         toTag: "${{ steps.set-tags.outputs.totag }}"
         outputFile: ${{ runner.temp }}/changes.md
