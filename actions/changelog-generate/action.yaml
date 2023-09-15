@@ -90,7 +90,6 @@ runs:
       shell: bash
     
     - name: Test input
-      id: config
       run: |
         # echo "----> ${{ inputs.config }} <------"
         echo "----> ${{ steps.config.outputs.path }} <------"
