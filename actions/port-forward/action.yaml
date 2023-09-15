@@ -1,18 +1,22 @@
 name: Port forward Kubernetes service
 description: Creates a port forward for a Kubernetes service and keep it open in the background
 inputs:
-  service:
-    description: Name of Kubernetes service
+  namespace:
+    description: Kubernetes namespace
     required: true
   port:
     description: Port to be forwarded
     required: true
-  namespace:
-    description: Kubernetes namespace
+  service:
+    description: Name of Kubernetes service
     required: true
   kubectl-version:
     description: kubectl version, e.g. `v1.23.0` or `latest`
     default: latest
+    required: false
+  timeout:
+    description: Timeout for portfowrd
+    default: "30"
     required: false
 
 runs:
@@ -24,15 +28,17 @@ runs:
         version: ${{ inputs.kubectl-version }}
 
     - name: Establish port forward
-      shell: bash
+      env:
+        TIMEOUT: "${{ inputs.timeout }}"
       run: |
         kubectl port-forward "services/${{ inputs.service }}" "${{ inputs.port }}:${{ inputs.port }}" --namespace ${{ inputs.namespace }} --kubeconfig ~/.kube/config > port-forward.out &
         # wait up to 60 seconds for port forwarding
-        for _ in {1..120}; do if grep -q "Forwarding from 127.0.0.1:${{ inputs.port }} -> ${{ inputs.port }}" port-forward.out; then
+        for _ in {1..$TIMEOUT}; do if grep -q "Forwarding from 127.0.0.1:${{ inputs.port }} -> ${{ inputs.port }}" port-forward.out; then
           echo "Port forwarding done"
           break
         else
           cat port-forward.out || true
-          echo "Waiting for port forwarding..."
-          sleep 0.5
+          echo "Portforwarding failed: Timeout reached"
+          exit 1
         fi; done
+      shell: bash
