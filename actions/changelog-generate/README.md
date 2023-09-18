@@ -24,7 +24,6 @@ nevertheless create the changelog so that it may be included in the release.
 
 This action is built from the following composite actions:
 
-- [checkout](https://github.com/bakdata/ci-templates/actions/checkout)
 - [release-changelog-builder-action](https://github.com/mikepenz/release-changelog-builder-action)
 
 ## Prerequisites
