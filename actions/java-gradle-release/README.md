@@ -6,10 +6,11 @@ This action releases Java Gradle artifacts by createing a tag on GitHub.
 
 This action uses the composite actions listed below:
 
-- [checkout](https://github.com/bakdata/ci-templates/actions/checkout)
-- [bump-version](https://github.com/bakdata/ci-templates/actions/bump-version)
-- [changelog-generate](https://github.com/bakdata/ci-templates/actions/changelog-generate)
-- [commit-and-push](https://github.com/bakdata/ci-templates/actions/commit-and-push)
+- [checkout](https://github.com/bakdata/ci-templates/tree/1.32.0/actions/checkout)
+- [java-gradle-setup](https://github.com/bakdata/ci-templates/tree/v1.16.0/actions/java-gradle-setup)
+- [bump-version](https://github.com/bakdata/ci-templates/tree/1.32.0/actions/bump-version)
+- [changelog-generate](https://github.com/bakdata/ci-templates/tree/1.33.0/actions/changelog-generate)
+- [commit-and-push](https://github.com/bakdata/ci-templates/tree/1.32.0/actions/commit-and-push)
 
 ## Input Parameters
 
