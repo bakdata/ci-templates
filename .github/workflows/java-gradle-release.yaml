@@ -4,16 +4,16 @@ name: Java Gradle Release
 on:
   workflow_call:
     inputs:
-      gradle-cache:
-        description: "Whether Gradle caching is enabled or not. (Default is true)"
-        required: false
-        default: true
-        type: boolean
       release-type:
         description: "Scope of the release (major, minor or patch)."
         required: true
         type: string
 
+      gradle-cache:
+        description: "Whether Gradle caching is enabled or not. (Default is true)"
+        required: false
+        default: true
+        type: boolean
       gradle-version:
         description: "Gradle version to be installed. (Default is wrapper)"
         required: false
