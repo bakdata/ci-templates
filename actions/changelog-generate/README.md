@@ -24,6 +24,7 @@ nevertheless create the changelog so that it may be included in the release.
 
 This action is built from the following composite actions:
 
+- [checkout](https://github.com/bakdata/ci-templates/actions/checkout)
 - [release-changelog-builder-action](https://github.com/mikepenz/release-changelog-builder-action)
 
 ## Prerequisites
@@ -34,28 +35,11 @@ files. A simple configuration may look like this:
 
 ```json
 {
-  "categories": [
-    {
-      "title": "## 🚀 Features",
-      "labels": ["feature", "feat", "enhancement"]
-    },
-    {
-      "title": "## 🐛 Fixes",
-      "labels": ["fix", "bug"]
-    },
-    {
-      "title": "## 🧪 Dependencies",
-      "labels": ["dependency"]
-    },
-    {
-      "title": "## 📦 Uncategorized",
-      "labels": []
-    }
-  ],
+  "categories": [{ "title": "### Merged pull requests:" }],
   "ignore_labels": ["ignore"],
   "sort": { "order": "ASC", "on_property": "mergedAt" },
-  "template": "# [${{TO_TAG}}](https://github.com/<myorganization>/<myrepository>/releases/tag/${{TO_TAG}}) - Release Date: ${{TO_TAG_DATE}}\n\n${{CHANGELOG}}",
-  "pr_template": "- ${{TITLE}}\n   - PR: ${{URL}}\n   - Assignees: ${{ASSIGNEES}}\n   - Reviewers: ${{REVIEWERS}}\n   - Approvers: ${{APPROVERS}}",
+  "template": "# [#{{TO_TAG}}](https://github.com/#{{OWNER}}/#{{REPO}}/releases/tag/#{{TO_TAG}}) - Release Date: #{{TO_TAG_DATE}}\n\n#{{CHANGELOG}}",
+  "pr_template": "- #{{TITLE}} [##{{NUMBER}}](#{{URL}}) ([@#{{AUTHOR}}](https://github.com/#{{AUTHOR}}))\n",
   "empty_template": "- no changes!"
 }
 ```
