@@ -78,8 +78,6 @@ runs:
       shell: bash
 
     - name: "Create changelog"
-      env:
-        CONFIG_PATH: ${{ inputs.config }}
       id: build_changelog
       uses: mikepenz/release-changelog-builder-action@v4
       with:
