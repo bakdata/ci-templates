@@ -1,0 +1,40 @@
+name: "Test Java artifacts"
+description: "Run Junit test, publish test results and optionally test signing for Sonatype"
+
+inputs:
+  java-distribution:
+    description: "Java distribution to be installed. (Default is microsoft)"
+    required: false
+    default: "microsoft"
+  java-version:
+    description: "Java version to be installed. (Default is 11)"
+    required: false
+    default: "11"
+  working-directory:
+    description: "Working directory of your Maven artifacts. (Default is .)"
+    required: false
+    default: "."
+  download-lfs-files:
+    description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
+    required: false
+    default: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check out repository
+      uses: bakdata/ci-templates/actions/checkout@1.32.0
+      with:
+        fetch-depth: 0
+        lfs: ${{ inputs.download-lfs-files }}
+
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: ${{ inputs.java-distribution }}
+        java-version: ${{ inputs.java-version }}
+
+    - name: Run tests
+      run: mvn test
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}

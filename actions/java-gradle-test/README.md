@@ -1,4 +1,4 @@
-# java-gradle-setup
+# java-gradle-test
 
 This action runs Junit tests, publishes the test results and tests signing for Sonatype.
 
