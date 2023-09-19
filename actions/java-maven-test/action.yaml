@@ -18,7 +18,7 @@ inputs:
     description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
     required: false
     default: false
-  test-command:
+  command:
     description: "Command to run tests with. (Default is test)"
     required: false
     default: "test"
@@ -39,6 +39,6 @@ runs:
         java-version: ${{ inputs.java-version }}
 
     - name: Run tests
-      run: mvn ${{ inputs.test-command }}
+      run: mvn ${{ inputs.command }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}

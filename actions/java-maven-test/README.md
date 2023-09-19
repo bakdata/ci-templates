@@ -10,7 +10,7 @@ This action runs Junit tests.
 | java-version       |    ❌    |      11       | string  | Java version to be installed                                                                       |
 | working-directory  |    ❌    |      "."      | string  | Working directory of your Maven artifacts                                                          |
 | download-lfs-files |    ❌    |     false     | boolean | Whether the Git checkout action should resolve LFS files or not                                    |
-| test-command       |    ❌    |     test      | string  | Command to run tests with                                                                          |
+| command            |    ❌    |     test      | string  | Command to run tests with                                                                          |
 
 ## Usage
 
@@ -22,4 +22,5 @@ steps:
       java-distribution: "microsoft" # (Optional)
       java-version: "11" # (Optional)
       working-directory: "." # (Optional)
+      command: "test" # (Optional)
 ```

@@ -14,6 +14,10 @@ inputs:
     description: "Working directory of your Maven artifacts. (Default is .)"
     required: false
     default: "."
+  command:
+    description: "Command to run build with. (Default is compile)"
+    required: false
+    default: "compile"
 runs:
   using: "composite"
   steps:
@@ -27,6 +31,6 @@ runs:
         java-version: ${{ inputs.java-version }}
 
     - name: Compile
-      run: mvn clean compile
+      run: mvn clean ${{ inputs.command }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
