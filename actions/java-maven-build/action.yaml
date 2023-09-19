@@ -30,6 +30,11 @@ runs:
         distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
 
+    - name: Set up Maven
+      uses: thermofisher/setup-maven@v1.0.0
+      with:
+        maven-version: 3.6.3
+
     - name: Compile
       run: mvn clean ${{ inputs.command }}
       shell: bash
