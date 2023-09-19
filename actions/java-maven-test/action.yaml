@@ -10,6 +10,9 @@ inputs:
     description: "Java version to be installed. (Default is 11)"
     required: false
     default: "11"
+  maven-version:
+    description: "Maven version to be installed."
+    required: true
   working-directory:
     description: "Working directory of your Maven artifacts. (Default is .)"
     required: false
@@ -31,12 +34,13 @@ runs:
       with:
         fetch-depth: 0
         lfs: ${{ inputs.download-lfs-files }}
-
-    - name: Set up Java
-      uses: actions/setup-java@v3
+    
+    - name: Set up Maven with version ${{ inputs.maven-version }}
+      uses: bakdata/ci-templates/actions/java-maven-setup@feature/maven
       with:
-        distribution: ${{ inputs.java-distribution }}
+        java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
+        maven-version: ${{ inputs.maven-version }}
 
     - name: Run tests
       run: mvn ${{ inputs.command }}

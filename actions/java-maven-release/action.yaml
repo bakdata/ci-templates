@@ -52,16 +52,12 @@ runs:
         wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
         chmod +x /usr/local/bin/semver
       shell: bash
-
-    - name: Set up Java
-      uses: actions/setup-java@v3
+    
+    - name: Set up Maven with version ${{ inputs.maven-version }}
+      uses: bakdata/ci-templates/actions/java-maven-setup@feature/maven
       with:
-        distribution: ${{ inputs.java-distribution }}
+        java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
-
-    - name: Set up Maven
-      uses: yuzhiyongcn/setup-maven@v1.0.0
-      with:
         maven-version: ${{ inputs.maven-version }}
 
     - name: Bump version
