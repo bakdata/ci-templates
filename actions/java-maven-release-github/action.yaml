@@ -1,11 +1,13 @@
-name: "Build Java artifacts"
-description: "Build Java artifacts using Maven"
+name: "Release Java artifacts"
+description: "Release Java Maven artifacts on Github"
 
 inputs:
-  build-artifact-name:
-    description: "Artifact name that is used for uploading build artifacts, see https://github.com/actions/upload-artifact (Default is build-artifact)."
-    required: false
-    default: "build-artifact"
+  github-username:
+    description: "GitHub username for requesting changes from API."
+    required: true
+  github-token:
+    description: "GitHub token for requesting changes from API."
+    required: true
   java-distribution:
     description: "Java distribution to be installed. (Default is microsoft)"
     required: false
@@ -21,16 +23,18 @@ inputs:
     description: "Working directory of your Maven artifacts. (Default is .)"
     required: false
     default: "."
-  command:
-    description: "Command to run build with. (Default is compile)"
-    required: false
-    default: "compile"
 runs:
   using: "composite"
   steps:
     - name: Check out repository
       uses: bakdata/ci-templates/actions/checkout@1.32.0
-    
+
+    - name: Download build artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: build-artifact
+        path: build
+
     - name: Set up Maven with version ${{ inputs.maven-version }}
       uses: bakdata/ci-templates/actions/java-maven-setup@feature/maven
       with:
@@ -38,14 +42,7 @@ runs:
         java-version: ${{ inputs.java-version }}
         maven-version: ${{ inputs.maven-version }}
 
-    - name: Compile
-      run: mvn clean ${{ inputs.command }}
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-
-    - name: Upload build artifact
-      uses: actions/upload-artifact@v3
+    - name: Create Github release
+      uses: softprops/action-gh-release@v1
       with:
-        name: ${{ inputs.build-artifact-name }}
-        path: ${{ inputs.working-directory }}/**/target/*.jar
-        retention-days: 1
+        files: ./target/*.jar
