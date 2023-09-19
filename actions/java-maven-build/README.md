@@ -1,6 +1,6 @@
 # java-maven-build
 
-This action builds Java artifacts using Maven and uploads `.jar` files as an artifact.
+This action builds Java artifacts using Maven.
 
 ## Input Parameters
 

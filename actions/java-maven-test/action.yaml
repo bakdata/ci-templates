@@ -1,5 +1,5 @@
 name: "Test Java artifacts"
-description: "Run Junit test, publish test results and optionally test signing for Sonatype"
+description: "Run Junit test"
 
 inputs:
   java-distribution:
@@ -18,6 +18,10 @@ inputs:
     description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
     required: false
     default: false
+  test-command:
+    description: "Command to run tests with. (Default is test)"
+    required: false
+    default: "test"
 
 runs:
   using: "composite"
@@ -35,6 +39,6 @@ runs:
         java-version: ${{ inputs.java-version }}
 
     - name: Run tests
-      run: mvn test
+      run: mvn ${{ inputs.test-command }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
