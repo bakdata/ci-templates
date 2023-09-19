@@ -4,14 +4,13 @@ This action builds Java artifacts using Maven.
 
 ## Input Parameters
 
-| Name                | Required | Default Value  |  Type  | Description                                                                                            |
-| ------------------- | :------: | :------------: | :----: | ------------------------------------------------------------------------------------------------------ |
-| build-artifact-name |    ❌    | build-artifact | string | [Artifact](https://github.com/actions/upload-artifact) name that is used for uploading build artifacts |
-| java-distribution   |    ❌    |   microsoft    | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed     |
-| java-version        |    ❌    |       11       | string | Java version to be installed                                                                           |
-| maven-version       |    ❌    |    wrapper     | string | Maven version to be installed                                                                          |
-| working-directory   |    ❌    |      "."       | string | Working directory of your Maven artifacts                                                              |
-| command             |    ❌    |    compile     | string | Command to run build with                                                                              |
+| Name              | Required | Default Value |  Type  | Description                                                                                        |
+| ----------------- | :------: | :-----------: | :----: | -------------------------------------------------------------------------------------------------- |
+| java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed |
+| java-version      |    ❌    |      11       | string | Java version to be installed                                                                       |
+| maven-version     |    ❌    |    wrapper    | string | Maven version to be installed                                                                      |
+| working-directory |    ❌    |      "."      | string | Working directory of your Maven artifacts                                                          |
+| command           |    ❌    |    compile    | string | Command to run build with                                                                          |
 
 ## Usage
 
