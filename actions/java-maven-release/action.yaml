@@ -59,6 +59,11 @@ runs:
         distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
 
+    - name: Set up Maven
+      uses: yuzhiyongcn/setup-maven@v1.0.0
+      with:
+        maven-version: ${{ inputs.maven-version }}
+
     - name: Bump version
       id: evaluate-version
       run: |

@@ -11,6 +11,7 @@ This action releases Java Maven artifacts by createing a tag on GitHub.
 | github-token      |    ✅    |       -       | string | GitHub token for requesting changes from API                                                       |
 | java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed |
 | java-version      |    ❌    |      11       | string | Java version to be installed                                                                       |
+| maven-version     |    ❌    |    wrapper    | string | Maven version to be installed                                                                      |
 | working-directory |    ❌    |      "."      | string | Working directory of your Maven artifacts                                                          |
 
 ## Usage
@@ -25,5 +26,6 @@ steps:
       github-token: ${{ secrets.github-token }}
       java-distribution: "microsoft" # (Optional)
       java-version: "11" # (Optional)
+      maven-version: "3.8.2"
       working-directory: "." # (Optional)
 ```

@@ -10,6 +10,9 @@ inputs:
     description: "Java version to be installed. (Default is 11)"
     required: false
     default: "11"
+  maven-version:
+    description: "Maven version to be installed."
+    required: true
   working-directory:
     description: "Working directory of your Maven artifacts. (Default is .)"
     required: false
@@ -23,17 +26,13 @@ runs:
   steps:
     - name: Check out repository
       uses: bakdata/ci-templates/actions/checkout@1.32.0
-
-    - name: Set up Java
-      uses: actions/setup-java@v3
+    
+    - name: Set up Maven with version ${{ inputs.maven-version }}
+      uses: bakdata/ci-templates/actions/java-maven-setup@feature/maven
       with:
-        distribution: ${{ inputs.java-distribution }}
+        java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
-
-    - name: Set up Maven
-      uses: yuzhiyongcn/setup-maven@v1.0.0
-      with:
-        maven-version: 3.6.3
+        maven-version: ${{ inputs.maven-version }}
 
     - name: Compile
       run: mvn clean ${{ inputs.command }}
