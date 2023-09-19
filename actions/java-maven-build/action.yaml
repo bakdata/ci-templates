@@ -1,0 +1,32 @@
+name: "Build Java artifacts"
+description: "Build Java artifacts using Maven"
+
+inputs:
+  java-distribution:
+    description: "Java distribution to be installed. (Default is microsoft)"
+    required: false
+    default: "microsoft"
+  java-version:
+    description: "Java version to be installed. (Default is 11)"
+    required: false
+    default: "11"
+  working-directory:
+    description: "Working directory of your Maven artifacts. (Default is .)"
+    required: false
+    default: "."
+runs:
+  using: "composite"
+  steps:
+    - name: Check out repository
+      uses: bakdata/ci-templates/actions/checkout@1.32.0
+
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: ${{ inputs.java-distribution }}
+        java-version: ${{ inputs.java-version }}
+
+    - name: Compile
+      run: mvn clean compile
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
