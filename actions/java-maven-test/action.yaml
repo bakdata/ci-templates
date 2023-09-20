@@ -46,3 +46,12 @@ runs:
       run: mvn ${{ inputs.command }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
+
+    - name: Report test results
+      uses: mikepenz/action-junit-report@v3
+      if: always() # always run even if the previous step fails
+      with:
+        report_paths: |
+          **/target/test-results/test/TEST-*.xml
+          **/target/surefire-reports/TEST-*.xml
+          **/target/failsafe-reports/TEST-*.xml
