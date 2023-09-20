@@ -93,7 +93,8 @@ runs:
 
     - name: Create changelog
       id: build-changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@1.33.0
+      uses: bakdata/ci-templates/actions/changelog-generate@feat/changelog-def
+      # uses: bakdata/ci-templates/actions/changelog-generate@1.33.0
       with:
         github-token: ${{ inputs.github-token }}
         new-tag: ${{ steps.evaluate-version.outputs.release-version }}
