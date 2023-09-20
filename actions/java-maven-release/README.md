@@ -26,8 +26,8 @@ steps:
       github-email: ${{ secrets.github-email }}
       github-username: ${{ secrets.github-username }}
       github-token: ${{ secrets.github-token }}
+      maven-version: "3.8.2"
       java-distribution: "microsoft" # (Optional)
       java-version: "11" # (Optional)
-      maven-version: "3.8.2"
       working-directory: "." # (Optional)
 ```

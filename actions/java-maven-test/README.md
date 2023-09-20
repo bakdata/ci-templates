@@ -20,9 +20,9 @@ steps:
   - name: Test
     uses: bakdata/ci-templates/actions/java-maven-test@main
     with:
+      maven-version: "3.8.2"
       java-distribution: "microsoft" # (Optional)
       java-version: "11" # (Optional)
-      maven-version: "3.8.2"
       working-directory: "." # (Optional)
       command: "test" # (Optional)
 ```

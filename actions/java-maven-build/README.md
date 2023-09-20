@@ -19,9 +19,9 @@ steps:
   - name: Build
     uses: bakdata/ci-templates/actions/java-maven-build@main
     with:
+      maven-version: "3.8.2"
       java-distribution: "microsoft" # (Optional)
       java-version: "11" # (Optional)
-      maven-version: "3.8.2"
       working-directory: "." # (Optional)
       command: "compile" # (Optional)
 ```
