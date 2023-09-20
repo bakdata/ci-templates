@@ -1,6 +1,6 @@
 # java-maven-test
 
-This action runs Junit tests.
+This action runs Junit tests and publishes the test results.
 
 ## Input Parameters
 

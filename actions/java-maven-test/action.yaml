@@ -1,5 +1,5 @@
 name: "Test Java artifacts"
-description: "Run Junit test"
+description: "Run Junit test and publish test results"
 
 inputs:
   java-distribution:
