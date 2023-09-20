@@ -2,6 +2,9 @@ name: "Setup Maven"
 description: "Setup Java and Maven"
 
 inputs:
+  maven-version:
+    description: "Maven version to be installed."
+    required: true
   java-distribution:
     description: "Java distribution to be installed. (Default is microsoft)"
     required: false
@@ -10,9 +13,6 @@ inputs:
     description: "Java version to be installed. (Default is 11)"
     required: false
     default: "11"
-  maven-version:
-    description: "Maven version to be installed."
-    required: true
 runs:
   using: "composite"
   steps:

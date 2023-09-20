@@ -10,9 +10,9 @@ This action releases Java Maven artifacts by createing a tag on GitHub.
 | github-email      |    ✅    |       -       | string | GitHub email for requesting changes from API                                                       |
 | github-username   |    ✅    |       -       | string | GitHub username for requesting changes from API                                                    |
 | github-token      |    ✅    |       -       | string | GitHub token for requesting changes from API                                                       |
+| maven-version     |    ✅    |       -       | string | Maven version to be installed                                                                      |
 | java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed |
 | java-version      |    ❌    |      11       | string | Java version to be installed                                                                       |
-| maven-version     |    ✅    |       -       | string | Maven version to be installed                                                                      |
 | working-directory |    ❌    |      "."      | string | Working directory of your Maven artifacts                                                          |
 
 ## Usage
