@@ -22,6 +22,9 @@ inputs:
     description: "Java version to be installed. (Default is 11)"
     required: false
     default: "11"
+  maven-version:
+    description: "Maven version to be installed."
+    required: true
   working-directory:
     description: "Working directory of your Maven artifacts. (Default is .)"
     required: false

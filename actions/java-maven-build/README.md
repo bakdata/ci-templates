@@ -8,7 +8,7 @@ This action builds Java artifacts using Maven.
 | ----------------- | :------: | :-----------: | :----: | -------------------------------------------------------------------------------------------------- |
 | java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed |
 | java-version      |    ❌    |      11       | string | Java version to be installed                                                                       |
-| maven-version     |    ❌    |    wrapper    | string | Maven version to be installed                                                                      |
+| maven-version     |    ✅    |       -       | string | Maven version to be installed                                                                      |
 | working-directory |    ❌    |      "."      | string | Working directory of your Maven artifacts                                                          |
 | command           |    ❌    |    compile    | string | Command to run build with                                                                          |
 
