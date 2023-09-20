@@ -36,7 +36,7 @@ runs:
         lfs: ${{ inputs.download-lfs-files }}
     
     - name: Set up Maven with version ${{ inputs.maven-version }}
-      uses: bakdata/ci-templates/actions/java-maven-setup1.33.0
+      uses: bakdata/ci-templates/actions/java-maven-setup@1.33.0
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
