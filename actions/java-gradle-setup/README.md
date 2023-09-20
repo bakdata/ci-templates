@@ -1,4 +1,4 @@
-# java-gradle-test
+# java-gradle-setup
 
 This action sets up Java and Gradle.
 
