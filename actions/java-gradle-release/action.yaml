@@ -75,18 +75,28 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
 
     - name: Bump version
-      id: bump-version
-      uses: bakdata/ci-templates/actions/bump-version@1.32.0
-      with:
-        release-type: ${{ inputs.release-type }}
-        working-directory: ${{ inputs.working-directory }}
+      id: evaluate-version
+      run: |
+        old_version=$(./gradlew properties -q | grep "^version:" | awk '{print $2}' | tr -d '[:space:]' | xargs)
+        if [[ "${{ inputs.release-type }}" == "patch" ]]; then
+            release_version="${old_version%-*}"
+        else
+            release_version=$(semver bump "${{ inputs.release-type }}" "${old_version}")
+        fi
+        echo "release-version=$release_version" >> "$GITHUB_OUTPUT"
+      shell: bash
+
+    - name: Create release
+      run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}   
 
     - name: Create changelog
       id: build-changelog
       uses: bakdata/ci-templates/actions/changelog-generate@1.33.0
       with:
         github-token: ${{ inputs.github-token }}
-        new-tag: ${{ steps.bump-version.outputs.release-version }}
+        new-tag: ${{ steps.evaluate-version.outputs.release-version }}
         changelog-file: "${{ inputs.changelog-file }}"
         fetch-reviewers: "true"
         fetch-release-information: "true"
