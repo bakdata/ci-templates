@@ -89,7 +89,7 @@ jobs:
     needs: build
 
     steps:
-      - name: Test
+      - name: Run unit tests
         uses: bakdata/ci-templates/actions/java-gradle-test@feat/split-test
         # uses: bakdata/ci-templates/actions/java-gradle-test@1.35.0
         with:
