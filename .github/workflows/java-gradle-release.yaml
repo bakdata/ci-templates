@@ -8,6 +8,17 @@ on:
         description: "Scope of the release (major, minor or patch)."
         required: true
         type: string
+
+      gradle-cache:
+        description: "Whether Gradle caching is enabled or not. (Default is true)"
+        required: false
+        default: true
+        type: boolean
+      gradle-version:
+        description: "Gradle version to be installed. (Default is wrapper)"
+        required: false
+        type: string
+        default: "wrapper"
       java-distribution:
         description: "Java distribution to be installed. (Default is microsoft)"
         required: false
@@ -18,16 +29,6 @@ on:
         required: false
         type: string
         default: "11"
-      gradle-version:
-        description: "Gradle version to be installed. (Default is wrapper)"
-        required: false
-        type: string
-        default: "wrapper"
-      gradle-cache:
-        description: "Whether Gradle caching is enabled or not. (Default is true)"
-        required: false
-        type: boolean
-        default: true
       working-directory:
         description: "Working directory of your Gradle artifacts. (Default is .)"
         required: false
@@ -62,7 +63,8 @@ jobs:
     steps:
       - name: Release on Github
         id: release
-        uses: bakdata/ci-templates/actions/java-gradle-release@1.27.0
+        uses: bakdata/ci-templates/actions/java-gradle-release@feat/gradle-release
+        # uses: bakdata/ci-templates/actions/java-gradle-release@1.35.0
         with:
           release-type: ${{ inputs.release-type }}
           github-email: ${{ secrets.github-email }}
