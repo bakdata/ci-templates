@@ -74,7 +74,7 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
 
   test:
-    name: Test and asses code quality
+    name: Test
     runs-on: ubuntu-22.04
     needs: build
 
