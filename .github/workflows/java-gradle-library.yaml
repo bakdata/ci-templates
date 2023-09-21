@@ -88,7 +88,7 @@ jobs:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           working-directory: ${{ inputs.working-directory }}
-      - name: Access code quality
+      - name: Assess code quality
         uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@feat/split-test
         # uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@1.35.0
         with:
