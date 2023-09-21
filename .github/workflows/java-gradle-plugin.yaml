@@ -80,10 +80,9 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
 
   test:
-    name: Test and asses code quality
+    name: Test
     runs-on: ubuntu-22.04
     needs: build
-
     steps:
       - name: Run unit tests
         uses: bakdata/ci-templates/actions/java-gradle-test@feat/split-test
@@ -94,6 +93,12 @@ jobs:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           working-directory: ${{ inputs.working-directory }}
+
+  assess-code:
+    name: Asses code quality
+    runs-on: ubuntu-22.04
+    needs: test
+    steps:
       - name: Assess code quality
         uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@feat/split-test
         # uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@1.35.0
@@ -112,7 +117,7 @@ jobs:
   publish:
     name: Publish
     runs-on: ubuntu-22.04
-    needs: test
+    needs: assess-code
 
     steps:
       - name: Publish
