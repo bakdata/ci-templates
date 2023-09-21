@@ -1,22 +1,19 @@
 name: "Test Java artiacts"
-description: "Run Junit test, publish test results and optionally test signing for Sonatype"
+description: "Run Junit test and publish test results"
 
 inputs:
-  sonar-token:
-    description: "Token for Sonarcloud."
+  download-lfs-files:
+    description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
     required: false
-  sonar-organization:
-    description: "Organization for Sonarcloud."
+    default: false
+  gradle-cache:
+    description: "Whether Gradle caching is enabled or not. (Default is true)"
     required: false
-  signing-secret-key-ring:
-    description: "Key ring (base64 encoded) for signing the Sonatype publication."
+    default: true
+  gradle-version:
+    description: "Gradle version to be installed. (Default is wrapper)"
     required: false
-  signing-key-id:
-    description: "Key id for signing the Sonatype publication."
-    required: false
-  signing-password:
-    description: "Password for signing the Sonatype publication."
-    required: false
+    default: "wrapper"
   java-distribution:
     description: "Java distribution to be installed. (Default is microsoft)"
     required: false
@@ -25,22 +22,10 @@ inputs:
     description: "Java version to be installed. (Default is 11)"
     required: false
     default: "11"
-  gradle-version:
-    description: "Gradle version to be installed. (Default is wrapper)"
-    required: false
-    default: "wrapper"
-  gradle-cache:
-    description: "Whether Gradle caching is enabled or not. (Default is true)"
-    required: false
-    default: true
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is .)"
     required: false
     default: "."
-  download-lfs-files:
-    description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
-    required: false
-    default: false
 
 runs:
   using: "composite"
@@ -69,25 +54,3 @@ runs:
       if: always() # always run even if the previous step fails
       with:
         report_paths: "**/build/test-results/test/TEST-*.xml"
-
-    # sonar.branch.autoconfig.disabled is necessary for autocreation of projects on Sonarcloud to work
-    - name: Assess code quality
-      if: ${{ inputs.sonar-token != '' && inputs.sonar-organization != '' }}
-      run: ./gradlew -Dsonar.branch.autoconfig.disabled=true -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=${{ inputs.sonar-organization }} --info --stacktrace sonarqube
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-      env:
-        SONAR_TOKEN: ${{ inputs.sonar-token }}
-
-    - name: Check if everything builds (incl. javadoc) for snapshot/release and signing works
-      if: ${{ inputs.signing-secret-key-ring != '' && inputs.signing-key-id != '' && inputs.signing-password != '' }}
-      run: |
-        export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
-        echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
-        ./gradlew --info --stacktrace signSonatypePublication
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-      env:
-        SIGNING_KEY_ID: ${{ inputs.signing-key-id }}
-        SIGNING_PASSWORD: ${{ inputs.signing-password }}
-        CI: true
