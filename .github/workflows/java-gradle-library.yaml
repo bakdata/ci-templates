@@ -79,7 +79,7 @@ jobs:
     needs: build
 
     steps:
-      - name: Run unit tests
+      - name:  Run unit tests
         uses: bakdata/ci-templates/actions/java-gradle-test@feat/split-test
         # uses: bakdata/ci-templates/actions/java-gradle-test@1.35.0
         with:
@@ -90,7 +90,7 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
 
   asses-code:
-    name: Test and asses code quality
+    name: Asses code quality
     runs-on: ubuntu-22.04
     needs: test
     steps:
