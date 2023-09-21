@@ -84,7 +84,7 @@ runs:
     - name: Create release
       run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true
       shell: bash
-      working-directory: ${{ inputs.working-directory }}  
+      working-directory: ${{ inputs.working-directory }}   
 
     - name: Generate changelog
       run: ./gradlew -Pchangelog.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} --stacktrace --info generateChangelog
