@@ -34,28 +34,11 @@ files. A simple configuration may look like this:
 
 ```json
 {
-  "categories": [
-    {
-      "title": "## 🚀 Features",
-      "labels": ["feature", "feat", "enhancement"]
-    },
-    { 
-      "title": "## 🐛 Fixes",
-      "labels": ["fix", "bug"] 
-    },
-    { 
-      "title": "## 🧪 Dependencies",
-      "labels": ["dependency"] 
-    },
-    { 
-      "title": "## 📦 Uncategorized",
-      "labels": [] 
-    }
-  ],
+  "categories": [{ "title": "### Merged pull requests:" }],
   "ignore_labels": ["ignore"],
   "sort": { "order": "ASC", "on_property": "mergedAt" },
-  "template": "# [${{TO_TAG}}](https://github.com/<myorganization>/<myrepository>/releases/tag/${{TO_TAG}}) - Release Date: ${{TO_TAG_DATE}}\n\n${{CHANGELOG}}",
-  "pr_template": "- ${{TITLE}}\n   - PR: ${{URL}}\n   - Assignees: ${{ASSIGNEES}}\n   - Reviewers: ${{REVIEWERS}}\n   - Approvers: ${{APPROVERS}}",
+  "template": "# [#{{TO_TAG}}](https://github.com/#{{OWNER}}/#{{REPO}}/releases/tag/#{{TO_TAG}}) - Release Date: #{{TO_TAG_DATE}}\n\n#{{CHANGELOG}}",
+  "pr_template": "- #{{TITLE}} [##{{NUMBER}}](#{{URL}}) ([@#{{AUTHOR}}](https://github.com/#{{AUTHOR}}))\n",
   "empty_template": "- no changes!"
 }
 ```
@@ -70,16 +53,16 @@ Additional configuration options can be explored
 
 ## Input Parameters
 
-| Name                      | Required |           Default Value           | Description                                                                                                                                                  |
-| ------------------------- | :------: | :-------------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| github-token              |    ✅    |                 -                 | The GitHub token for committing the changes                                                                                                                  |
-| new-tag                   |    ✅    |                 -                 | Defines until which tag the changelog will consider merged pull requests (can be a tag or a valid git ref)                                                   |
-| changelog-file            |    ❌    |          "CHANGELOG.md"           | Path to the Changelog.md file                                                                                                                                |
-| commit-mode               |    ❌    |              "false"              | Special configuration for projects which work without PRs. Uses commit messages as changelog. This mode looses access to information only available for PRs. |
-| config                    |    ❌    | "./.github/changelog-config.json" | Path to the changelog config JSON file                                                                                                                       |
-| fetch-release-information |    ❌    |              "false"              | Will enable fetching additional release information from tags.                                                                                               |
-| fetch-reviewers           |    ❌    |              "false"              | Will enable fetching the users/reviewers who approved the PR.                                                                                                |
-| old-tag                   |    ❌    |                ""                 | Defines the 'start' from where the changelog will consider merged pull requests (can be a tag or a valid git ref)                                            |
+| Name                      | Required |                Default Value                | Description                                                                                                                                                  |
+| ------------------------- | :------: | :-----------------------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| github-token              |    ✅    |                      -                      | The GitHub token for committing the changes                                                                                                                  |
+| new-tag                   |    ✅    |                      -                      | Defines until which tag the changelog will consider merged pull requests (can be a tag or a valid git ref)                                                   |
+| changelog-file            |    ❌    |               "CHANGELOG.md"                | Path to the Changelog.md file                                                                                                                                |
+| commit-mode               |    ❌    |                   "false"                   | Special configuration for projects which work without PRs. Uses commit messages as changelog. This mode looses access to information only available for PRs. |
+| config                    |    ❌    | "$GITHUB_ACTION_PATH/changelog-config.json" | Path to the changelog config JSON file                                                                                                                       |
+| fetch-release-information |    ❌    |                   "false"                   | Will enable fetching additional release information from tags.                                                                                               |
+| fetch-reviewers           |    ❌    |                   "false"                   | Will enable fetching the users/reviewers who approved the PR.                                                                                                |
+| old-tag                   |    ❌    |                     ""                      | Defines the 'start' from where the changelog will consider merged pull requests (can be a tag or a valid git ref)                                            |
 
 ## Outputs
 
@@ -106,7 +89,6 @@ steps:
     uses: bakdata/ci-templates/actions/changelog-generate@main
     with:
       github-token: ${{ secrets.GH_TOKEN }}
-      config: "./.github/changelog-config.json"
       new-tag: "1.0.0"
       changelog-file: "CHANGELOG.md"
       fetch-reviewers: "true"

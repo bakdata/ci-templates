@@ -21,7 +21,7 @@ inputs:
   config:
     description: Path to the changelog config JSON file
     required: false
-    default: "./.github/changelog-config.json"
+    default: "$GITHUB_ACTION_PATH/changelog-config.json"
   fetch-release-information:
     description: "Will enable fetching additional release information from tags."
     required: false
@@ -43,6 +43,7 @@ outputs:
     value: ${{ steps.output-generator.outputs.single-changelog }}
 runs:
   using: "composite"
+
   steps:
     - name: "Set tags"
       id: set-tags
@@ -73,6 +74,8 @@ runs:
           fi
         fi
         echo  "fromtag=$setfrom">> $GITHUB_OUTPUT
+        # when using inputs.config directly it does not work and remapping it makes it  work
+        echo "path=${{ inputs.config }}" >> "$GITHUB_OUTPUT"
       shell: bash
 
     - name: "Create changelog"
@@ -80,7 +83,7 @@ runs:
       uses: mikepenz/release-changelog-builder-action@v4
       with:
         token: "${{ inputs.github-token }}"
-        configuration: "${{ inputs.config }}"
+        configuration: "${{ steps.set-tags.outputs.path }}"
         fromTag: "${{ steps.set-tags.outputs.fromtag }}"
         toTag: "${{ steps.set-tags.outputs.totag }}"
         outputFile: ${{ runner.temp }}/changes.md
@@ -111,7 +114,7 @@ runs:
         # Create changelog.md in case of a first Release
         if [ -n "${{ inputs.changelog-file }}" ]; then
           sed -i 's/# /## /g' ${{ runner.temp }}/changes.md
-          echo -e "\n" >> ${{ runner.temp }}/changes.md 
+          echo -e "\n" >> ${{ runner.temp }}/changes.md
           if [ ! -f "${{ inputs.changelog-file }}" ]; then
             echo $'# Changelog\n' >> ${{ inputs.changelog-file }}
           fi
