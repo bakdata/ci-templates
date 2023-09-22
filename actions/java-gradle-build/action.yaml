@@ -1,32 +1,11 @@
-name: "Release Java artifacts"
-description: "Release Java Gradle artifacts on Github"
+name: "Build Java artifacts"
+description: "Build Java artifacts using Gradle"
 
 inputs:
-  github-email:
-    description: "GitHub email for requesting changes from API."
-    required: true
-  github-token:
-    description: "GitHub token for requesting changes from API."
-    required: true
-  github-username:
-    description: "GitHub username for requesting changes from API."
-    required: true
-  release-type:
-    description: "Scope of the release"
-    required: true
-
-  changelog-file:
-    description: "Path to the changelog file"
+  build-artifact-name:
+    description: "Artifact name that is used for uploading build artifacts, see https://github.com/actions/upload-artifact (Default is build-artifact)."
     required: false
-    default: "CHANGELOG.md"
-  gradle-cache:
-    description: "Whether Gradle caching is enabled or not. (Default is true)"
-    required: false
-    default: true
-  gradle-version:
-    description: "Gradle version to be installed. (Default is wrapper)"
-    required: false
-    default: "wrapper"
+    default: "build-artifact"
   java-distribution:
     description: "Java distribution to be installed. (Default is microsoft)"
     required: false
@@ -35,36 +14,23 @@ inputs:
     description: "Java version to be installed. (Default is 11)"
     required: false
     default: "11"
+  gradle-version:
+    description: "Gradle version to be installed. (Default is wrapper)"
+    required: false
+    default: "wrapper"
+  gradle-cache:
+    description: "Whether Gradle caching is enabled or not. (Default is true)"
+    required: false
+    default: true
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is .)"
     required: false
     default: "."
-
-outputs:
-  release-version:
-    description: "The bumped version of your release."
-    value: ${{ steps.evaluate-version.outputs.release-version }}
-
 runs:
   using: "composite"
   steps:
     - name: Check out repository
       uses: bakdata/ci-templates/actions/checkout@1.32.0
-      with:
-        fetch-depth: 0
-        token: ${{ inputs.github-token }}
-
-    - name: Setup git
-      run: |
-        git config user.email ${{ inputs.github-email }}
-        git config user.name ${{ inputs.github-username }}
-      shell: bash
-
-    - name: Setup semver
-      run: |
-        wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
-        chmod +x /usr/local/bin/semver
-      shell: bash
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@v1.16.0
@@ -74,39 +40,19 @@ runs:
         gradle-version: ${{ inputs.gradle-version }}
         gradle-cache: ${{ inputs.gradle-cache }}
 
-    - name: Bump version
-      id: evaluate-version
-      run: |
-        old_version=$(./gradlew properties -q | grep "^version:" | awk '{print $2}' | tr -d '[:space:]' | xargs)
-        if [[ "${{ inputs.release-type }}" == "patch" ]]; then
-            release_version="${old_version%-*}"
-        else
-            release_version=$(semver bump "${{ inputs.release-type }}" "${old_version}")
-        fi
-        echo "release-version=$release_version" >> "$GITHUB_OUTPUT"
-      shell: bash
-
-    - name: Create release
-      run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true
+    - name: Compile
+      run: ./gradlew --info --stacktrace build -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Create changelog
-      id: build-changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@feat/gradle-release
-      # uses: bakdata/ci-templates/actions/changelog-generate@1.35.0
-      with:
-        github-token: ${{ inputs.github-token }}
-        new-tag: ${{ steps.evaluate-version.outputs.release-version }}
-        changelog-file: "${{ inputs.changelog-file }}"
-        fetch-reviewers: "true"
-        fetch-release-information: "true"
+    - name: Build jar
+      run: ./gradlew --info --stacktrace jar
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
 
-    - name: Commit and push changes including .bumpversion.cfg file
-      uses: bakdata/ci-templates/actions/commit-and-push@1.32.0
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v3
       with:
-        ref: ${{ github.event.repository.default_branch }}
-        commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
-        github-username: ${{ inputs.github-username }}
-        github-email: ${{ inputs.github-email }}
-        github-token: ${{ inputs.github-token }}
+        name: ${{ inputs.build-artifact-name }}
+        path: ${{ inputs.working-directory }}/**/build/libs/*.jar
+        retention-days: 1

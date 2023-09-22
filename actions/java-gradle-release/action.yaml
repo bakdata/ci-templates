@@ -96,7 +96,7 @@ runs:
         fetch-reviewers: "true"
         fetch-release-information: "true"
 
-    - name: Commit and push changes including .bumpversion.cfg file
+    - name: Commit and push changes including the bump config file
       uses: bakdata/ci-templates/actions/commit-and-push@1.32.0
       with:
         ref: ${{ github.event.repository.default_branch }}
