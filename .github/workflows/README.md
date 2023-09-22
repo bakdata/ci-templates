@@ -11,6 +11,7 @@ The following workflows can be found here:
 - [Python Poetry Release](#python-poetry-release)
 - [Python Poetry Publish PyPI](#python-poetry-publish-pypi)
 - [Python Poetry Publish Snapshot](#python-poetry-publish-snapshot)
+- [Java Gradle Base](#java-gradle-base)
 - [Java Gradle Docker](#java-gradle-docker)
 - [Java Gradle Library](#java-gradle-library)
 - [Java Gradle Plugin](#java-gradle-plugin)
@@ -679,6 +680,8 @@ These secrets define the TestPyPI token that allow the GitHub action to release 
 | ---------- | :------: | ---------------------------------------------- |
 | pypi-token |    ✅    | The TestPyPI API token for publishing packages |
 
+<!--  -->ƒ
+
 ### Calling the workflow
 
 ```yaml
@@ -698,7 +701,7 @@ jobs:
       pypi-token: ${{ secrets.TEST_PYPI_TOKEN }}
 ```
 
-## Java Gradle Docker
+## Java Gradle Base
 
 This workflow will build, test and publish a Java Gradle project including a tarball image. Additionally,
 the workflow creates a GitHub Release when running on a tag branch.
@@ -714,6 +717,78 @@ This workflow is built from multiple composite actions listed below:
 
 - [java-gradle-build](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build)
 - [java-gradle-test](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-test)
+- [java-gradle-assess-code-quality](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-assess-code-quality)
+
+### Input Parameters
+
+| Name               | Required | Default Value |  Type   | Description                                                                                                   |
+| ------------------ | :------: | :-----------: | :-----: | ------------------------------------------------------------------------------------------------------------- |
+| java-distribution  |    ❌    |   microsoft   | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
+| java-version       |    ❌    |      11       | string  | Java version to be installed                                                                                  |
+| gradle-version     |    ❌    |    wrapper    | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
+| gradle-cache       |    ❌    |     true      | boolean | Whether Gradle caching is enabled or not                                                                      |
+| working-directory  |    ❌    |       .       | string  | Working directory of your Gradle artifacts                                                                    |
+| download-lfs-files |    ❌    |    "false"    | string  | Whether the Git checkout action should resolve LFS files or not                                               |
+
+### Secret Parameters
+
+For Sonarcloud you need to provide a `sonar-token` and a `sonar-organization` to publish code quality results. In case of Sonatype, the action
+requires you to have a `signing-secret-key-ring` (base64 encoded), a `signing-key-id` and a `signing-password` to sign
+your build artifacts and additionally an `ossrh-username` and an `ossrh-password` to publish the signed artifacts to
+Nexus.
+
+| Name                    | Required | Description                                                    |
+| ----------------------- | :------: | -------------------------------------------------------------- |
+| sonar-token             |    ✅    | Token for Sonarcloud                                           |
+| sonar-organization      |    ✅    | Organization for Sonarcloud                                    |
+| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication |
+| signing-key-id          |    ✅    | Key id for signing the Sonatype publication                    |
+| signing-password        |    ✅    | Password for signing the Sonatype publication                  |
+| ossrh-username          |    ✅    | Username for signing into Sonatype repository                  |
+| ossrh-password          |    ✅    | Password for signing into Sonatype repository                  |
+
+### Calling the workflow
+
+```yaml
+name: Call this reusable workflow
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  call-workflow-passing-data:
+    name: Java Gradle Docker
+    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@main
+    with:
+      java-distribution: "microsoft" # (Optional) Default is microsoft
+      java-version: "11" # (Optional) Default is 11
+      gradle-version: "wrapper" # (Optional) Default is wrapper
+      gradle-cache: false # (Optional) Default is true
+      working-directory: "." # (Optional) Default is .
+    secrets:
+      sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
+      sonar-organization: ${{ secrets.SONARCLOUD_ORGANIZATION }}
+      signing-secret-key-ring: ${{ secrets.SIGNING_SECRET_KEY_RING }}
+      signing-key-id: ${{ secrets.SIGNING_KEY_ID }}
+      signing-password: ${{ secrets.SIGNING_PASSWORD }}
+```
+
+## Java Gradle Docker
+
+This workflow will build, test and publish a Java Gradle project including a tarball image. Additionally,
+the workflow creates a GitHub Release when running on a tag branch.
+
+### Prerequisites
+
+Your Java project needs to be set up with Gradle and either needs to contain a `build.gradle` or a `build.gradle.kts`
+file that uses the [Sonar](https://github.com/bakdata/gradle-plugins/tree/master/sonar), [Sonatype](https://github.com/bakdata/gradle-plugins/tree/master/sonatype) and [Jib](https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin) plugins. Moreover, prepare credentials for Sonarcloud, Sonatype, GitHub and Docker.
+
+### Dependencies
+
+This workflow is built from multiple composite actions and workflows listed below:
+
+- [java-gradle-base](https://github.com/bakdata/ci-templates/tree/main/.github/workflows/java-gradle-base.yaml)
 - [java-gradle-build-jib](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build-jib)
 - [java-gradle-publish](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-publish)
 - [docker-publish](https://github.com/bakdata/ci-templates/tree/main/actions/docker-publish)
@@ -799,10 +874,9 @@ file that uses the [Sonar](https://github.com/bakdata/gradle-plugins/tree/master
 
 ### Dependencies
 
-This workflow is built from multiple composite actions listed below:
+This workflow is built from multiple composite actions and workflows listed below:
 
-- [java-gradle-build](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build)
-- [java-gradle-test](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-test)
+- [java-gradle-base](https://github.com/bakdata/ci-templates/tree/main/.github/workflows/java-gradle-base.yaml)
 - [java-gradle-publish](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-publish)
 - [java-gradle-release-github](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-release-github)
 
@@ -880,10 +954,9 @@ and Gradle Plugin Portal.
 
 ### Dependencies
 
-This workflow is built from multiple composite actions listed below:
+This workflow is built from multiple composite actions and workflows listed below:
 
-- [java-gradle-build](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-build)
-- [java-gradle-test](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-test)
+- [java-gradle-base](https://github.com/bakdata/ci-templates/tree/main/.github/workflows/java-gradle-base.yaml)
 - [java-gradle-publish](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-publish)
 - [java-gradle-publish-plugin](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-publish-plugin)
 - [java-gradle-release-github](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-release-github)
