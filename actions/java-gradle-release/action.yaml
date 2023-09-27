@@ -87,7 +87,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}   
 
     - name: Generate changelog
-      run: ./gradlew -Pchangelog.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} --stacktrace --info generateChangelog
+      run: ./gradlew -Pchangelog.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} --warning-mode all --stacktrace --info generateChangelog
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
