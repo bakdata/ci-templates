@@ -35,20 +35,20 @@ on:
         type: string
         default: false
     secrets:
-      sonar-token:
-        description: "Token for Sonarcloud."
-        required: true
-      sonar-organization:
-        description: "Organization for Sonarcloud"
-        required: true
-      signing-secret-key-ring:
-        description: "Key ring (base64 encoded) for signing the Sonatype publication."
-        required: true
       signing-key-id:
         description: "Key id for signing the Sonatype publication."
         required: true
       signing-password:
         description: "Password for signing the Sonatype publication."
+        required: true
+      signing-secret-key-ring:
+        description: "Key ring (base64 encoded) for signing the Sonatype publication."
+        required: true
+      sonar-organization:
+        description: "Organization for Sonarcloud"
+        required: true
+      sonar-token:
+        description: "Token for Sonarcloud."
         required: true
 
 jobs:
