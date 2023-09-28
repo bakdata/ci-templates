@@ -9,6 +9,11 @@ on:
         required: true
         type: string
 
+      changelog-file:
+        description: Path to the changelog file in the GitHub repository
+        required: false
+        default: "CHANGELOG.md"
+        type: string
       gradle-cache:
         description: "Whether Gradle caching is enabled or not. (Default is true)"
         required: false
@@ -67,6 +72,7 @@ jobs:
         # uses: bakdata/ci-templates/actions/java-gradle-release@1.35.0
         with:
           release-type: ${{ inputs.release-type }}
+          changelog-file: "${{ inputs.changelog-file }}"
           github-email: ${{ secrets.github-email }}
           github-username: ${{ secrets.github-username }}
           github-token: ${{ secrets.github-token }}
