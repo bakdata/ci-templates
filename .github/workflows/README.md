@@ -680,8 +680,6 @@ These secrets define the TestPyPI token that allow the GitHub action to release 
 | ---------- | :------: | ---------------------------------------------- |
 | pypi-token |    ✅    | The TestPyPI API token for publishing packages |
 
-<!--  -->ƒ
-
 ### Calling the workflow
 
 ```yaml

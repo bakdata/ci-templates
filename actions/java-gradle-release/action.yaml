@@ -2,6 +2,10 @@ name: "Release Java artifacts"
 description: "Release Java Gradle artifacts on Github"
 
 inputs:
+  changelog-file:
+    description: Path to the changelog file in the GitHub repository
+    required: false
+    default: "CHANGELOG.md"
   release-type:
     description: "Scope of the release"
     required: true
@@ -86,13 +90,15 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}   
 
-    # - name: Generate changelog
-    #   run: ./gradlew -Pchangelog.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} --warning-mode all --stacktrace --info generateChangelog
-    #   shell: bash
-    #   working-directory: ${{ inputs.working-directory }}
-    #   env:
-    #     GITHUB_USER: ${{ inputs.github-username }}
-    #     GITHUB_TOKEN: ${{ inputs.github-token }}
+    - name: Create changelog
+      id: build-changelog
+      uses: bakdata/ci-templates/actions/changelog-generate@feat/gradle-release
+      with:
+        github-token: ${{ inputs.github-token }}
+        new-tag: ${{ steps.evaluate-version.outputs.release-version }}
+        changelog-file: "${{ inputs.changelog-file }}"
+        fetch-reviewers: "true"
+        fetch-release-information: "true"
 
     - name: Commit and push
       run: |
