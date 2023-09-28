@@ -75,7 +75,7 @@ runs:
         fi
         echo  "fromtag=$setfrom">> $GITHUB_OUTPUT
         # when using inputs.config directly it does not work and remapping it makes it  work
-        path=${{ inputs.config == 'default' && format('{0}', "$GITHUB_ACTION_PATH/changelog-config.json") || inputs.config }}
+        path=${{ inputs.config == 'default' && format('{0}', $GITHUB_ACTION_PATH/changelog-config.json) || inputs.config }}
         echo "path=path" >> "$GITHUB_OUTPUT"
       shell: bash
 
