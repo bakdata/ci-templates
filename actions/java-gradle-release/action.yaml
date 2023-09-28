@@ -84,27 +84,27 @@ runs:
         fi
         echo "release-version=$release_version" >> "$GITHUB_OUTPUT"
       shell: bash
-    - name: Test version
-      run: |
-        echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-        echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-        echo  "${{ steps.evaluate-version.outputs.release-version }}"
-        echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-        echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-      shell: bash
-
-    # - name: Create release
-    #   run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true
+    # - name: Test version
+    #   run: |
+    #     echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+    #     echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+    #     echo  "${{ steps.evaluate-version.outputs.release-version }}"
+    #     echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+    #     echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
     #   shell: bash
-    #   working-directory: ${{ inputs.working-directory }}
+
+    - name: Create release
+      run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
 
     - name: Create changelog
       id: build-changelog
       uses: bakdata/ci-templates/actions/changelog-generate@feat/gradle-release
       with:
         github-token: ${{ inputs.github-token }}
-        new-tag: "2.3.0"
-        # new-tag: ${{ steps.evaluate-version.outputs.release-version }}
+        # new-tag: "2.3.0"
+        new-tag: ${{ steps.evaluate-version.outputs.release-version }}
         changelog-file: "${{ inputs.changelog-file }}"
         fetch-reviewers: "true"
         fetch-release-information: "true"
