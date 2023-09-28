@@ -69,7 +69,7 @@ on:
         required: true
 
 jobs:
-  java-gradle-base:
+  build-and-test:
     name: Build, Test and Assess code quality
     uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@feat/split-test
     # uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@1.35.0
