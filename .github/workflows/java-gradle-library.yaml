@@ -77,31 +77,32 @@ jobs:
       sonar-token: ${{ secrets.sonar-token }}
       sonar-organization: ${{ secrets.sonar-organization }}
 
-  publish:
-    name: Publish
-    runs-on: ubuntu-22.04
-    needs: build-and-test
+  # publish:
+  #   name: Publish
+  #   runs-on: ubuntu-22.04
+  #   needs: build-and-test
 
-    steps:
-      - name: Publish
-        uses: bakdata/ci-templates/actions/java-gradle-publish@v1.16.0
-        with:
-          signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
-          signing-key-id: ${{ secrets.signing-key-id }}
-          signing-password: ${{ secrets.signing-password }}
-          ossrh-username: ${{ secrets.ossrh-username }}
-          ossrh-password: ${{ secrets.ossrh-password }}
-          java-distribution: ${{ inputs.java-distribution }}
-          java-version: ${{ inputs.java-version }}
-          gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}
-          working-directory: ${{ inputs.working-directory }}
+  #   steps:
+  #     - name: Publish
+  #       uses: bakdata/ci-templates/actions/java-gradle-publish@v1.16.0
+  #       with:
+  #         signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
+  #         signing-key-id: ${{ secrets.signing-key-id }}
+  #         signing-password: ${{ secrets.signing-password }}
+  #         ossrh-username: ${{ secrets.ossrh-username }}
+  #         ossrh-password: ${{ secrets.ossrh-password }}
+  #         java-distribution: ${{ inputs.java-distribution }}
+  #         java-version: ${{ inputs.java-version }}
+  #         gradle-version: ${{ inputs.gradle-version }}
+  #         gradle-cache: ${{ inputs.gradle-cache }}
+  #         working-directory: ${{ inputs.working-directory }}
 
   release:
     name: Create Github release
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-22.04
-    needs: publish
+    # needs: publish
+    needs: build-and-test
 
     steps:
       - name: Release on Github
