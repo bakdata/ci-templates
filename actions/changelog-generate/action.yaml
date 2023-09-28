@@ -21,7 +21,7 @@ inputs:
   config:
     description: Path to the changelog config JSON file
     required: false
-    default: "$GITHUB_ACTION_PATH/changelog-config.json"
+    default: ""
   fetch-release-information:
     description: "Will enable fetching additional release information from tags."
     required: false
@@ -54,7 +54,7 @@ runs:
         if [[ "$tag_list" == *"${{ inputs.new-tag }}"* ]]; then
           echo  "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
         else
-          echo  "totag=$(git rev-parse HEAD)">> $GITHUB_OUTPUT 
+          echo  "totag=$(git rev-parse HEAD)">> $GITHUB_OUTPUT
         fi
 
         #from-tag
@@ -64,8 +64,8 @@ runs:
         # tag provided & provided tag exists
             setfrom=${{ inputs.old-tag }}
         else
-        # no tag provided or a non-existing tag was provided 
-          if [ -n "$tag_list" ]; then 
+        # no tag provided or a non-existing tag was provided
+          if [ -n "$tag_list" ]; then
             # if any tag exists then set from-tag to the latest tag
             setfrom=$(git describe --tags `git rev-list --tags --max-count=1`)
           else
@@ -73,9 +73,13 @@ runs:
             setfrom=$(git rev-list --max-parents=0 HEAD)
           fi
         fi
-        echo  "fromtag=$setfrom">> $GITHUB_OUTPUT
-        # when using inputs.config directly it does not work and remapping it makes it  work
-        echo "path=${{ inputs.config }}" >> "$GITHUB_OUTPUT"
+        echo "fromtag=$setfrom">> $GITHUB_OUTPUT
+        if [ -n "${{ inputs.config }}" ]; then
+          path="$GITHUB_ACTION_PATH/changelog-config.json)"
+        else
+          path=${{ inputs.config }}
+        fi
+        echo "path=$path" >> "$GITHUB_OUTPUT"
       shell: bash
 
     - name: "Create changelog"
