@@ -90,7 +90,7 @@ jobs:
   build-jib:
     name: Build tarball image
     runs-on: ubuntu-22.04
-    needs: java-gradle-base
+    needs: build-and-test
 
     steps:
       - name: Build tarball image
