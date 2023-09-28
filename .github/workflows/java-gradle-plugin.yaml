@@ -65,31 +65,25 @@ on:
         required: true
 
 jobs:
-  java-gradle-base:
+  build-and-test:
     name: Build, Test and Assess code quality
-    runs-on: ubuntu-22.04
-
-    steps:
-      - name: Build, Test & Assess
-        uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@feat/split-test
-        # uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@1.35.0
-
-        with:
-          java-distribution: ${{ inputs.java-distribution }}
-          java-version: ${{ inputs.java-version }}
-          gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}
-          working-directory: ${{ inputs.working-directory }}
-          signing-key-id: ${{ secrets.signing-key-id }}
-          signing-password: ${{ secrets.signing-password }}
-          signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
-          sonar-organization: ${{ secrets.sonar-organization }}
-          sonar-token: ${{ secrets.sonar-token }}
+    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@feat/split-test
+    with:
+      java-distribution: ${{ inputs.java-distribution }}
+      java-version: ${{ inputs.java-version }}
+      gradle-version: ${{ inputs.gradle-version }}
+      gradle-cache: ${{ inputs.gradle-cache }}
+      working-directory: ${{ inputs.working-directory }}
+      signing-key-id: ${{ secrets.signing-key-id }}
+      signing-password: ${{ secrets.signing-password }}
+      signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
+      sonar-organization: ${{ secrets.sonar-organization }}
+      sonar-token: ${{ secrets.sonar-token }}
 
   publish:
     name: Publish
     runs-on: ubuntu-22.04
-    needs: java-gradle-base
+    needs: build-and-test
 
     steps:
       - name: Publish
