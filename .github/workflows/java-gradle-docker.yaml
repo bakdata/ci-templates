@@ -80,6 +80,7 @@ jobs:
       gradle-version: ${{ inputs.gradle-version }}
       gradle-cache: ${{ inputs.gradle-cache }}
       working-directory: ${{ inputs.working-directory }}
+    secrets:
       signing-key-id: ${{ secrets.signing-key-id }}
       signing-password: ${{ secrets.signing-password }}
       signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
