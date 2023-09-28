@@ -30,7 +30,7 @@ on:
       changelog-config:
         description: "Changelog config path."
         required: false
-        default: "$GITHUB_ACTION_PATH/changelog-config.json"
+        default: "default"
         type: string
       working-directory:
         description: "The working directory of your Python package. (Default is root directory)"

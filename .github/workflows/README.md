@@ -533,7 +533,7 @@ This workflow is built from multiple composite actions listed below:
 | python-version    |    ❌    |                "3.10"                 | string  | Python version for setting up Poetry                                                                                              |
 | poetry-version    |    ❌    |                "1.5.1"                | string  | Poetry version to be installed                                                                                                    |
 | changelog         |    ❌    |                 true                  | boolean | If set to true, a CHANGELOG.md will be created when a release is done                                                             |
-| changelog-config  |    ❌    |    The default changelog template     | string  | Path to the changelog config file. Only needed if changelog is set to true                                                        |
+| changelog-config  |    ❌    |                default                | string  | Path to the changelog config file. Only needed if changelog is set to true                                                        |
 | working-directory |    ❌    |                 "./"                  | string  | Working directory of your Python package                                                                                          |
 
 ### Secret Parameters
@@ -1058,12 +1058,12 @@ This workflow is built from other composite actions listed below:
 
 ### Input Parameters
 
-| Name              | Required |         Default Value          |  Type   | Description                                                                |
-| ----------------- | :------: | :----------------------------: | :-----: | -------------------------------------------------------------------------- |
-| release-type      |    ✅    |               -                | string  | Scope of the release (major, minor or patch)                               |
-| changelog         |    ❌    |              true              | boolean | Create changelog for release                                               |
-| changelog-config  |    ❌    | The default changelog template | string  | Path to the changelog config file. Only needed if changelog is set to true |
-| working-directory |    ❌    |               .                | string  | Working directory of project containing `.bumpversion.cfg`                 |
+| Name              | Required | Default Value |  Type   | Description                                                                |
+| ----------------- | :------: | :-----------: | :-----: | -------------------------------------------------------------------------- |
+| release-type      |    ✅    |       -       | string  | Scope of the release (major, minor or patch)                               |
+| changelog         |    ❌    |     true      | boolean | Create changelog for release                                               |
+| changelog-config  |    ❌    |    default    | string  | Path to the changelog config file. Only needed if changelog is set to true |
+| working-directory |    ❌    |       .       | string  | Working directory of project containing `.bumpversion.cfg`                 |
 
 ### Secret Parameters
 

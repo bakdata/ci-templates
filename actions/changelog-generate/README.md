@@ -53,16 +53,16 @@ Additional configuration options can be explored
 
 ## Input Parameters
 
-| Name                      | Required |                Default Value                | Description                                                                                                                                                  |
-| ------------------------- | :------: | :-----------------------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| github-token              |    ✅    |                      -                      | The GitHub token for committing the changes                                                                                                                  |
-| new-tag                   |    ✅    |                      -                      | Defines until which tag the changelog will consider merged pull requests (can be a tag or a valid git ref)                                                   |
-| changelog-file            |    ❌    |               "CHANGELOG.md"                | Path to the Changelog.md file                                                                                                                                |
-| commit-mode               |    ❌    |                   "false"                   | Special configuration for projects which work without PRs. Uses commit messages as changelog. This mode looses access to information only available for PRs. |
-| config                    |    ❌    | "$GITHUB_ACTION_PATH/changelog-config.json" | Path to the changelog config JSON file                                                                                                                       |
-| fetch-release-information |    ❌    |                   "false"                   | Will enable fetching additional release information from tags.                                                                                               |
-| fetch-reviewers           |    ❌    |                   "false"                   | Will enable fetching the users/reviewers who approved the PR.                                                                                                |
-| old-tag                   |    ❌    |                     ""                      | Defines the 'start' from where the changelog will consider merged pull requests (can be a tag or a valid git ref)                                            |
+| Name                      | Required | Default Value  | Description                                                                                                                                                  |
+| ------------------------- | :------: | :------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| github-token              |    ✅    |       -        | The GitHub token for committing the changes                                                                                                                  |
+| new-tag                   |    ✅    |       -        | Defines until which tag the changelog will consider merged pull requests (can be a tag or a valid git ref)                                                   |
+| changelog-file            |    ❌    | "CHANGELOG.md" | Path to the Changelog.md file                                                                                                                                |
+| commit-mode               |    ❌    |    "false"     | Special configuration for projects which work without PRs. Uses commit messages as changelog. This mode looses access to information only available for PRs. |
+| config                    |    ❌    |   "default"    | Path to the changelog config JSON file                                                                                                                       |
+| fetch-release-information |    ❌    |    "false"     | Will enable fetching additional release information from tags.                                                                                               |
+| fetch-reviewers           |    ❌    |    "false"     | Will enable fetching the users/reviewers who approved the PR.                                                                                                |
+| old-tag                   |    ❌    |       ""       | Defines the 'start' from where the changelog will consider merged pull requests (can be a tag or a valid git ref)                                            |
 
 ## Outputs
 
