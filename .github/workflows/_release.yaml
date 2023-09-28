@@ -16,7 +16,7 @@ on:
 jobs:
   release:
     name: Release
-    uses: bakdata/ci-templates/.github/workflows/bump-version-release.yaml@v1.24.0
+    uses: bakdata/ci-templates/.github/workflows/bump-version-release.yaml@1.35.1
     with:
       release-type: "${{ github.event.inputs.release-type }}"
     secrets:
