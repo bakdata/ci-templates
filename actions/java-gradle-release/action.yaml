@@ -91,8 +91,8 @@ runs:
       uses: bakdata/ci-templates/actions/changelog-generate@1.33.0
       with:
         github-token: ${{ inputs.github-token }}
-        new-tag: "2.3.0"
-        # new-tag: ${{ steps.evaluate-version.outputs.release-version }}
+        # new-tag: "2.3.0"
+        new-tag: ${{ steps.evaluate-version.outputs.release-version }}
         changelog-file: "${{ inputs.changelog-file }}"
         fetch-reviewers: "true"
         fetch-release-information: "true"
