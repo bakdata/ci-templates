@@ -21,7 +21,7 @@ inputs:
   config:
     description: Path to the changelog config JSON file
     required: false
-    default: "default"
+    default: ""
   fetch-release-information:
     description: "Will enable fetching additional release information from tags."
     required: false
@@ -73,8 +73,8 @@ runs:
             setfrom=$(git rev-list --max-parents=0 HEAD)
           fi
         fi
-        echo  "fromtag=$setfrom">> $GITHUB_OUTPUT
-        if [[ "${{ inputs.config }}" == "default" ]]; then
+        echo "fromtag=$setfrom">> $GITHUB_OUTPUT
+        if [ -n "${{ inputs.config }}" ]; then
           path="$GITHUB_ACTION_PATH/changelog-config.json)"
         else
           path=${{ inputs.config }}
