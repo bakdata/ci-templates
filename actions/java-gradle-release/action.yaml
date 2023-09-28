@@ -100,7 +100,7 @@ runs:
 
     - name: Create changelog
       id: build-changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@feat/gradle-release
+      uses: bakdata/ci-templates/actions/changelog-generate@chore/automatic-changelog
       with:
         github-token: ${{ inputs.github-token }}
         # new-tag: "2.3.0"
