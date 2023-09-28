@@ -79,6 +79,10 @@ runs:
         else
           path=${{ inputs.config }}
         fi
+        if [ ! -f "$path" ]; then
+          echo "changelog config file $path doesn't exist"
+          exit 1
+        fi
         echo "path=$path" >> "$GITHUB_OUTPUT"
       shell: bash
 
