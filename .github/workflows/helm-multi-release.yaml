@@ -116,7 +116,7 @@ jobs:
           helm package ${{ env.charts-subdir }} -d ../${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
         shell: bash
         working-directory: ${{ inputs.charts-path }}
-      
+
       - name: Upload artifacts with action/upload as multi chart
         if: ${{needs.update-version.outputs.singlechart == 'false' }}
         uses: actions/upload-artifact@v3.1.1
@@ -124,9 +124,9 @@ jobs:
           name: ${{ env.charts-subdir }}
           path: ${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
           retention-days: 1
-      
+
       - name: Upload artifacts with action/upload as single chart
-        if: ${{needs.update-version.outputs.singlechart == 'true' }}
+        if: ${{needs.update-version.outputs.singlechart }}
         uses: actions/upload-artifact@v3.1.1
         with:
           path: ${{ inputs.artifact-dir }}
@@ -149,7 +149,7 @@ jobs:
         uses: actions/download-artifact@v3.0.1
         with:
           path: ${{ inputs.artifact-dir }}
-      
+
       - name: Move artifacts to root dir in case  of multiple  charts
         if: ${{needs.update-version.outputs.singlechart == 'false' }}
         run: |
@@ -165,7 +165,7 @@ jobs:
         working-directory: ${{ inputs.artifact-dir }}
 
       - name: Move artifacts to root dir in case  of a single  chart
-        if: ${{needs.update-version.outputs.singlechart == 'true' }}
+        if: ${{needs.update-version.outputs.singlechart }}
         run: |
           subdircount=$(find . -maxdepth 1 -type d | wc -l)
 
@@ -187,7 +187,7 @@ jobs:
         working-directory: "${{ inputs.artifact-dir }}/artifact"
 
       - name: Generate index.yaml file
-        run: |         
+        run: |
           helm repo index .
         shell: bash
         working-directory: "."

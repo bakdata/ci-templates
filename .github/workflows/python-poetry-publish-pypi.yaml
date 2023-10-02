@@ -48,7 +48,7 @@ jobs:
         shell: bash
         working-directory: ${{ inputs.working-directory }}
 
-      - name: Publish to ${{ inputs.publish-to-test == 'true' && 'TestPyPI' || 'PyPI' }}
+      - name: Publish to ${{ inputs.publish-to-test && 'TestPyPI' || 'PyPI' }}
         uses: bakdata/ci-templates/actions/python-poetry-publish-pypi@1.25.2
         with:
           pypi-token: ${{ secrets.pypi-token }}
