@@ -32,7 +32,7 @@ inputs:
   gradle-cache:
     description: "Whether Gradle caching is enabled or not. (Default is true)"
     required: false
-    default: true
+    default: "true"
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is .)"
     required: false
@@ -65,7 +65,7 @@ runs:
         SIGNING_PASSWORD: "${{ inputs.signing-password }}"
         OSSRH_USERNAME: "${{ inputs.ossrh-username }}"
         OSSRH_PASSWORD: "${{ inputs.ossrh-password }}"
-        CI: true
+        CI: "true"
 
     - name: Release to Nexus
       if: startsWith(github.ref, 'refs/tags/')
@@ -78,4 +78,4 @@ runs:
       env:
         SIGNING_KEY_ID: "${{ inputs.signing-key-id }}"
         SIGNING_PASSWORD: "${{ inputs.signing-password }}"
-        CI: true
+        CI: "true"
