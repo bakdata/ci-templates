@@ -130,16 +130,16 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name             | Required |             Default Value             |  Type  | Description                                                                                                                                |
-| ---------------- | :------: | :-----------------------------------: | :----: | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| page-url         |    ✅    |                                       | string | URL to the GitHub pages website of the repository.                                                                                         |
-| release-type     |    ✅    |                   -                   | string | The scope of the release (major, minor or patch)                                                                                           |
-| ref              |    ❌    | The default branch of your repository | string | The ref name to checkout the repository                                                                                                    |
-| lint-config-path |    ❌    |      ".github/lint-config.yaml"       | string | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
-| helm-version     |    ❌    |               "v3.10.1"               | string | The Helm version                                                                                                                           |
-| charts-dir       |    ❌    |                  "."                  | string | The directory containing the Helm chart and `.bumpversion.cfg` file                                                                        |
-| skip-download    |    ❌    |                "false"                | string | Skip downloading index.yaml and previous Chart versions from GitHub pages. (To be used during setup of this workflow)                      |
-| artifact-dir     |    ❌    |              "artifact"               | string | Directory inside `charts-dir` for preparation of the GitHub pages artifact.                                                                |
+| Name             | Required |             Default Value             |  Type   | Description                                                                                                                                |
+| ---------------- | :------: | :-----------------------------------: | :-----: | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| page-url         |    ✅    |                                       | string  | URL to the GitHub pages website of the repository.                                                                                         |
+| release-type     |    ✅    |                   -                   | string  | The scope of the release (major, minor or patch)                                                                                           |
+| ref              |    ❌    | The default branch of your repository | string  | The ref name to checkout the repository                                                                                                    |
+| lint-config-path |    ❌    |      ".github/lint-config.yaml"       | string  | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
+| helm-version     |    ❌    |               "v3.10.1"               | string  | The Helm version                                                                                                                           |
+| charts-dir       |    ❌    |                  "."                  | string  | The directory containing the Helm chart and `.bumpversion.cfg` file                                                                        |
+| skip-download    |    ❌    |                 false                 | boolean | Skip downloading index.yaml and previous Chart versions from GitHub pages. (To be used during setup of this workflow)                      |
+| artifact-dir     |    ❌    |              "artifact"               | string  | Directory inside `charts-dir` for preparation of the GitHub pages artifact.                                                                |
 
 ### Secret Parameters
 

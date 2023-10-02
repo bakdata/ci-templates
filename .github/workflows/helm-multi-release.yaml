@@ -118,7 +118,7 @@ jobs:
         working-directory: ${{ inputs.charts-path }}
 
       - name: Upload artifacts with action/upload as multi chart
-        if: ${{needs.update-version.outputs.singlechart == 'false' }}
+        if: ${{ needs.update-version.outputs.singlechart == 'false' }}
         uses: actions/upload-artifact@v3.1.1
         with:
           name: ${{ env.charts-subdir }}
@@ -126,7 +126,7 @@ jobs:
           retention-days: 1
 
       - name: Upload artifacts with action/upload as single chart
-        if: ${{needs.update-version.outputs.singlechart }}
+        if: ${{ needs.update-version.outputs.singlechart == 'true' }}
         uses: actions/upload-artifact@v3.1.1
         with:
           path: ${{ inputs.artifact-dir }}
@@ -151,7 +151,7 @@ jobs:
           path: ${{ inputs.artifact-dir }}
 
       - name: Move artifacts to root dir in case  of multiple  charts
-        if: ${{needs.update-version.outputs.singlechart == 'false' }}
+        if: ${{ needs.update-version.outputs.singlechart == 'false' }}
         run: |
           for subdir in */; do
             if [ ! -d "../$subdir" ]; then
@@ -165,7 +165,7 @@ jobs:
         working-directory: ${{ inputs.artifact-dir }}
 
       - name: Move artifacts to root dir in case  of a single  chart
-        if: ${{needs.update-version.outputs.singlechart }}
+        if: ${{ needs.update-version.outputs.singlechart == 'true' }}
         run: |
           subdircount=$(find . -maxdepth 1 -type d | wc -l)
 
