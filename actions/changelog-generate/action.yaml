@@ -73,11 +73,6 @@ runs:
             setfrom=$(git rev-list --max-parents=0 HEAD)
           fi
         fi
-        echo "========================"
-        echo "========================"
-        echo "${{ inputs.config }}"
-        echo "========================"
-        echo "========================"
         echo "fromtag=$setfrom">> $GITHUB_OUTPUT
         if [ -n "${{ inputs.config }}" ]; then
           path="$GITHUB_ACTION_PATH/changelog-config.json)"
@@ -89,6 +84,11 @@ runs:
           exit 1
         fi
         echo "path=$path" >> "$GITHUB_OUTPUT"
+        echo "_========================"
+        echo "_========================"
+        echo "$path"
+        echo "========================"
+        echo "========================"
       shell: bash
 
     - name: "Create changelog"
