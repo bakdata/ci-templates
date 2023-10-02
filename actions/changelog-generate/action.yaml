@@ -107,7 +107,7 @@ runs:
       shell: bash
 
     - name: Update GitHub Changelog
-      id: path
+      id: output-generator
       run: |
         # Reformat ${{ runner.temp }}/changes.md and add it to the existing changelog
         {
