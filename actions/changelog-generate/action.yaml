@@ -74,17 +74,16 @@ runs:
           fi
         fi
         echo "fromtag=$setfrom">> $GITHUB_OUTPUT
-        if [ -n "" ]; then
-        # if [ -n "${{ inputs.config }}" ]; then
+        if [ -n "${{ inputs.config }}" ]; then
           echo "_=======  its empty================="
           path="$GITHUB_ACTION_PATH/changelog-config.json)"
         else
           path=${{ inputs.config }}
         fi
-        if [ ! -f "$path" ]; then
-          echo "changelog config file $path doesn't exist"
-          exit 1
-        fi
+        # if [ ! -f "$path" ]; then
+        #   echo "changelog config file $path doesn't exist"
+        #   exit 1
+        # fi
         echo "path=$path" >> "$GITHUB_OUTPUT"
         echo "_========================"
         echo "_========================"
