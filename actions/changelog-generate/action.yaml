@@ -80,6 +80,7 @@ runs:
           path="$GITHUB_ACTION_PATH/changelog-config.json)"
         else
           path=${{ inputs.config }}
+          echo "_======= +${{ inputs.config }}+ NOOOT empty================="
         fi
       shell: bash
 
