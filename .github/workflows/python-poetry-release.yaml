@@ -105,7 +105,6 @@ jobs:
           add-untracked: "true"
       
       - name: Test changelog
-        if: ${{ steps.set-tags.outputs.totag != inputs.new-tag }}
         run: |
           echo "================="
           echo ${{ steps.build-changelog.outputs.single-changelog }}
