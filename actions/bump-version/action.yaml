@@ -44,5 +44,6 @@ runs:
           bump2version --allow-dirty release
         fi
         echo "new-version=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
+      # We use the case for release-type "patch", because if we do not we get inproper results. For example : 0.0.1-snapshot -> 0.0.3
       shell: bash
       working-directory: ${{ inputs.working-directory }}
