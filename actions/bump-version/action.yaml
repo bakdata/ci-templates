@@ -45,5 +45,7 @@ runs:
         fi
         echo "new-version=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
       # We use the case for release-type "patch", because if we do not we get inproper results. For example : 0.0.1-snapshot -> 0.0.3
+      # If release-type == patch , we use "bump2version release". This command basically removes the suffix. For example :  0.0.1-snapshot -> 0.0.1
+      # In the other case we bump the version (major or minor), then we remove the snapshot suffix
       shell: bash
       working-directory: ${{ inputs.working-directory }}
