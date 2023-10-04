@@ -34,7 +34,6 @@ runs:
       id: bump-version
       run: |
         parameters=(--no-commit --allow-dirty --no-tag ${{ inputs.release-type }})
-        test=(${{ inputs.release-type }})
         echo "old-version=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
         if [[ ${{ inputs.release-type }} == patch ]]; then
           parameters+=(--new-version ${{ inputs.new-version }})
