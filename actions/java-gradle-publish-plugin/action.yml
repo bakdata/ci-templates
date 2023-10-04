@@ -32,7 +32,7 @@ inputs:
   gradle-cache:
     description: "Whether Gradle caching is enabled or not. (Default is true)"
     required: false
-    default: true
+    default: "true"
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is .)"
     required: false
@@ -63,4 +63,4 @@ runs:
       env:
         SIGNING_KEY_ID: "${{ inputs.signing-key-id }}"
         SIGNING_PASSWORD: "${{ inputs.signing-password }}"
-        CI: true
+        CI: "true"
