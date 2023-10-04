@@ -81,7 +81,7 @@ jobs:
           java-version: ${{ inputs.java-version }}
           working-directory: ${{ inputs.working-directory }}
 
-  assess-code:
+  assess-code-quality:
     name: Asses code quality
     runs-on: ubuntu-22.04
     needs: test
