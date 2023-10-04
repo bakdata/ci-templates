@@ -8,7 +8,6 @@ inputs:
   new-tag:
     description: Version after bump
     required: true
-
   # optional inputs
   changelog-file:
     description: Path to the changelog file in the GitHub repository
@@ -114,7 +113,7 @@ runs:
           echo 'single-changelog<<EOF'
           cat ${{ runner.temp }}/changes.md
           echo EOF
-          } >> $GITHUB_OUTPUT
+        } >> $GITHUB_OUTPUT
 
         # Create changelog.md in case of a first Release
         if [ -n "${{ inputs.changelog-file }}" ]; then
