@@ -90,6 +90,7 @@ jobs:
         uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@feat/split-test
         # uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@1.35.0
         with:
+          download-lfs-files: ${{ inputs.download-lfs-files }}
           gradle-cache: ${{ inputs.gradle-cache }}
           gradle-version: ${{ inputs.gradle-version }}
           java-distribution: ${{ inputs.java-distribution }}
@@ -100,4 +101,3 @@ jobs:
           sonar-organization: ${{ secrets.sonar-organization }}
           sonar-token: ${{ secrets.sonar-token }}
           working-directory: ${{ inputs.working-directory }}
-          download-lfs-files: ${{ inputs.download-lfs-files }}
