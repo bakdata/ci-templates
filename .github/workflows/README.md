@@ -130,16 +130,16 @@ This workflow is built from multiple composite actions listed below:
 
 ### Input Parameters
 
-| Name             | Required |             Default Value             |  Type  | Description                                                                                                                                |
-| ---------------- | :------: | :-----------------------------------: | :----: | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| page-url         |    ✅    |                                       | string | URL to the GitHub pages website of the repository.                                                                                         |
-| release-type     |    ✅    |                   -                   | string | The scope of the release (major, minor or patch)                                                                                           |
-| ref              |    ❌    | The default branch of your repository | string | The ref name to checkout the repository                                                                                                    |
-| lint-config-path |    ❌    |      ".github/lint-config.yaml"       | string | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
-| helm-version     |    ❌    |               "v3.10.1"               | string | The Helm version                                                                                                                           |
-| charts-dir       |    ❌    |                  "."                  | string | The directory containing the Helm chart and `.bumpversion.cfg` file                                                                        |
-| skip-download    |    ❌    |                "false"                | string | Skip downloading index.yaml and previous Chart versions from GitHub pages. (To be used during setup of this workflow)                      |
-| artifact-dir     |    ❌    |              "artifact"               | string | Directory inside `charts-dir` for preparation of the GitHub pages artifact.                                                                |
+| Name             | Required |             Default Value             |  Type   | Description                                                                                                                                |
+| ---------------- | :------: | :-----------------------------------: | :-----: | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| page-url         |    ✅    |                                       | string  | URL to the GitHub pages website of the repository.                                                                                         |
+| release-type     |    ✅    |                   -                   | string  | The scope of the release (major, minor or patch)                                                                                           |
+| ref              |    ❌    | The default branch of your repository | string  | The ref name to checkout the repository                                                                                                    |
+| lint-config-path |    ❌    |      ".github/lint-config.yaml"       | string  | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
+| helm-version     |    ❌    |               "v3.10.1"               | string  | The Helm version                                                                                                                           |
+| charts-dir       |    ❌    |                  "."                  | string  | The directory containing the Helm chart and `.bumpversion.cfg` file                                                                        |
+| skip-download    |    ❌    |                 false                 | boolean | Skip downloading index.yaml and previous Chart versions from GitHub pages. (To be used during setup of this workflow)                      |
+| artifact-dir     |    ❌    |              "artifact"               | string  | Directory inside `charts-dir` for preparation of the GitHub pages artifact.                                                                |
 
 ### Secret Parameters
 
@@ -532,7 +532,7 @@ This workflow is built from multiple composite actions listed below:
 | ref               |    ❌    | The default branch of your repository | string  | ref name to checkout the repository                                                                                               |
 | python-version    |    ❌    |                "3.10"                 | string  | Python version for setting up Poetry                                                                                              |
 | poetry-version    |    ❌    |                "1.5.1"                | string  | Poetry version to be installed                                                                                                    |
-| changelog         |    ❌    |                 false                 | boolean | If set to true, a CHANGELOG.md will be created when a release is done                                                             |
+| changelog         |    ❌    |                 true                  | boolean | If set to true, a CHANGELOG.md will be created when a release is done                                                             |
 | changelog-config  |    ❌    |                   -                   | string  | Path to the changelog config file. Only needed if changelog is set to true                                                        |
 | working-directory |    ❌    |                 "./"                  | string  | Working directory of your Python package                                                                                          |
 
@@ -577,7 +577,7 @@ jobs:
       python-version: 3.8 # (Optional) Default value is 3.10. In this case Poetry is installed with Python 3.8
       poetry-version: "1.1.11" # (Optional) Default value is 1.5.1. In this case Poetry version 1.1.11 is installed
       working-directory: "./my-awesome-python-project" # (Optional) Default value is the root directory of your repository. In this case all the files to the given path are published
-      changelog: true # (Optional) Default to false. Set only if you want to mantain a CHANGELOG.md
+      changelog: false # (Optional) Default to true.
       changelog-config: ./my-changelog-config.json # (Optional) Set only if changelog is set to true. More information about it here https://github.com/bakdata/ci-templates/tree/main/actions/changelog-generate
     secrets:
       github-email: ${{ secrets.GH_EMAIL }}
@@ -1058,12 +1058,12 @@ This workflow is built from other composite actions listed below:
 
 ### Input Parameters
 
-| Name              | Required | Default Value |  Type   | Description                                                |
-| ----------------- | :------: | :-----------: | :-----: | ---------------------------------------------------------- |
-| release-type      |    ✅    |       -       | string  | Scope of the release (major, minor or patch)               |
-| changelog         |    ❌    |     false     | boolean | Create changelog for release                               |
-| changelog-config  |    ❌    |       -       | string  | Changelog config path                                      |
-| working-directory |    ❌    |       .       | string  | Working directory of project containing `.bumpversion.cfg` |
+| Name              | Required | Default Value |  Type   | Description                                                                |
+| ----------------- | :------: | :-----------: | :-----: | -------------------------------------------------------------------------- |
+| release-type      |    ✅    |       -       | string  | Scope of the release (major, minor or patch)                               |
+| changelog         |    ❌    |     true      | boolean | Create changelog for release                                               |
+| changelog-config  |    ❌    |       -       | string  | Path to the changelog config file. Only needed if changelog is set to true |
+| working-directory |    ❌    |       .       | string  | Working directory of project containing `.bumpversion.cfg`                 |
 
 ### Secret Parameters
 
@@ -1109,7 +1109,7 @@ jobs:
     uses: bakdata/ci-templates/.github/workflows/bump-version-release.yaml@main
     with:
       release-type: "${{ github.event.inputs.release-type }}"
-      changelog: true # (Optional) Default is false
+      changelog: false # (Optional) Default is true
       changelog-config: "./.github/changelog-config.json" # (Optional)
       working-directory: "." # (Optional) Default is .
     secrets:
