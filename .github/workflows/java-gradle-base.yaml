@@ -84,7 +84,7 @@ jobs:
   assess-code-quality:
     name: Asses code quality
     runs-on: ubuntu-22.04
-    needs: test
+    needs: build
     steps:
       - name: Assess code quality
         uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@feat/split-test
