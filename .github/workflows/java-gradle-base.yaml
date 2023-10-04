@@ -73,7 +73,7 @@ jobs:
     steps:
       - name: Run unit tests
         uses: bakdata/ci-templates/actions/java-gradle-test@feat/split-test
-        # uses: bakdata/ci-templates/actions/java-gradle-test@1.35.0
+        # uses: bakdata/ci-templates/actions/java-gradle-test@1.36.0
         with:
           gradle-cache: ${{ inputs.gradle-cache }}
           gradle-version: ${{ inputs.gradle-version }}
@@ -88,7 +88,7 @@ jobs:
     steps:
       - name: Assess code quality
         uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@feat/split-test
-        # uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@1.35.0
+        # uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@1.36.0
         with:
           download-lfs-files: ${{ inputs.download-lfs-files }}
           gradle-cache: ${{ inputs.gradle-cache }}
