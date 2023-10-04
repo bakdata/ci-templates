@@ -44,14 +44,6 @@ runs:
         name: build-artifact
         path: build
 
-    - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@v1.16.0
-      with:
-        java-distribution: ${{ inputs.java-distribution }}
-        java-version: ${{ inputs.java-version }}
-        gradle-version: ${{ inputs.gradle-version }}
-        gradle-cache: ${{ inputs.gradle-cache }}
-
     - name: Create changelog
       id: build-changelog
       uses: bakdata/ci-templates/actions/changelog-generate@1.35.2
