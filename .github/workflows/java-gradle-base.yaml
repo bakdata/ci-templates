@@ -4,6 +4,21 @@ name: Java Gradle Base
 on:
   workflow_call:
     inputs:
+      download-lfs-files:
+        description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
+        required: false
+        type: boolean
+        default: false
+      gradle-cache:
+        description: "Whether Gradle caching is enabled or not. (Default is true)"
+        required: false
+        type: boolean
+        default: true
+      gradle-version:
+        description: "Gradle version to be installed. (Default is wrapper)"
+        required: false
+        type: string
+        default: "wrapper"
       java-distribution:
         description: "Java distribution to be installed. (Default is microsoft)"
         required: false
@@ -14,26 +29,11 @@ on:
         required: false
         type: string
         default: "11"
-      gradle-version:
-        description: "Gradle version to be installed. (Default is wrapper)"
-        required: false
-        type: string
-        default: "wrapper"
-      gradle-cache:
-        description: "Whether Gradle caching is enabled or not. (Default is true)"
-        required: false
-        type: boolean
-        default: true
       working-directory:
         description: "Working directory of your Gradle artifacts. (Default is .)"
         required: false
         type: string
         default: "."
-      download-lfs-files:
-        description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
-        required: false
-        type: string
-        default: false
     secrets:
       signing-key-id:
         description: "Key id for signing the Sonatype publication."
