@@ -75,10 +75,10 @@ runs:
 
         echo "fromtag=$setfrom">> $GITHUB_OUTPUT
         if [ -n "${{ inputs.config }}" ]; then
-        echo "====> is empty"
+        echo "====>${{ inputs.config }}<==== is empty"
           path="$GITHUB_ACTION_PATH/changelog-config.json"
         else
-          echo "====> NOT empty"
+          echo "====>${{ inputs.config }}<==== NOT empty"
           path=${{ inputs.config }}
         fi
 
