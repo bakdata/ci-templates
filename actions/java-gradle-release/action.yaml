@@ -33,7 +33,7 @@ inputs:
   gradle-cache:
     description: "Whether Gradle caching is enabled or not. (Default is true)"
     required: false
-    default: true
+    default: "true"
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is .)"
     required: false
@@ -64,7 +64,7 @@ runs:
         wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
         chmod +x /usr/local/bin/semver
       shell: bash
-    
+
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@v1.16.0
       with:
@@ -88,7 +88,7 @@ runs:
     - name: Create release
       run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true
       shell: bash
-      working-directory: ${{ inputs.working-directory }}   
+      working-directory: ${{ inputs.working-directory }}
 
     - name: Create changelog
       id: build-changelog
@@ -103,6 +103,6 @@ runs:
     - name: Commit and push
       run: |
         git add CHANGELOG.md
-        git commit -m "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}" 
+        git commit -m "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}"
         git push --follow-tags origin ${{ github.event.repository.default_branch }}
       shell: bash

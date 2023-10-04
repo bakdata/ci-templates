@@ -17,7 +17,7 @@ inputs:
   gradle-cache:
     description: "Whether Gradle caching is enabled or not. (Default is true)"
     required: false
-    default: true
+    default: "true"
 runs:
   using: "composite"
   steps:

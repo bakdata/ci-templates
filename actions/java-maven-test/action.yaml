@@ -20,7 +20,7 @@ inputs:
   download-lfs-files:
     description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
     required: false
-    default: false
+    default: "false"
   command:
     description: "Command to run tests with. (Default is test)"
     required: false
@@ -34,7 +34,7 @@ runs:
       with:
         fetch-depth: 0
         lfs: ${{ inputs.download-lfs-files }}
-    
+
     - name: Set up Maven with version ${{ inputs.maven-version }}
       uses: bakdata/ci-templates/actions/java-maven-setup@1.33.0
       with:
