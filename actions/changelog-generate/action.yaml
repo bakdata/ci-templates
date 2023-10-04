@@ -73,9 +73,12 @@ runs:
           fi
         fi
         echo "fromtag=$setfrom">> $GITHUB_OUTPUT
-        if [  "${{ inputs.config }}" != '']; then
+        # if [  "${{ inputs.config }}" != '']; then
+        if [  -n "${{ inputs.config }}" ]; then
+          echo "!!!!!!!!!!!!!!  input is empty !!!!!!!!!!!!!!"
           path="$GITHUB_ACTION_PATH/changelog-config.json)"
         else
+          echo "!!!!!!!!!!!!!!  input NOOOT empty !!!!!!!!!!!!!!"
           path=${{ inputs.config }}
         fi
       shell: bash
