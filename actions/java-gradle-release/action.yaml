@@ -107,3 +107,13 @@ runs:
         github-username: ${{ inputs.github-username }}
         github-email: ${{ inputs.github-email }}
         github-token: ${{ inputs.github-token }}
+
+    - name: Tag and release
+      uses: bakdata/ci-templates/actions/tag-and-release@v1.22.0
+      with:
+        tag: "${{ steps.evaluate-version.outputs.release-version }}"
+        release-title: "${{ steps.evaluate-version.outputs.release-version }}"
+        release-body: "${{ steps.build-changelog.outputs.single-changelog }}"
+        github-username: ${{ secrets.github-username }}
+        github-email: ${{ secrets.github-email }}
+        github-token: ${{ secrets.github-token }}
