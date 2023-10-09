@@ -74,7 +74,7 @@ runs:
         fi
 
         echo "fromtag=$setfrom">> $GITHUB_OUTPUT
-        if [ -Z "${{ inputs.config }}" ]; then
+        if [[ -z "${{ inputs.config }}" ]]; then
           path="$GITHUB_ACTION_PATH/changelog-config.json"
         else
           path=${{ inputs.config }}
