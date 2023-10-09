@@ -46,7 +46,7 @@ runs:
 
     - name: Create changelog
       id: build-changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@1.35.2
+      uses: bakdata/ci-templates/actions/changelog-generate@1.37.0
       with:
         github-token: ${{ inputs.github-token }}
         new-tag: ${GITHUB_REF##*/}
