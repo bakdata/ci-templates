@@ -701,8 +701,7 @@ jobs:
 
 ## Java Gradle Base
 
-This workflow will build, test and publish a Java Gradle project including a tarball image. Additionally,
-the workflow creates a GitHub Release when running on a tag branch.
+This workflow will build, test and publish a Java Gradle project.
 
 ### Prerequisites
 
