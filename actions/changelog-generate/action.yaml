@@ -8,7 +8,6 @@ inputs:
   new-tag:
     description: Version after bump
     required: true
-
   # optional inputs
   changelog-file:
     description: Path to the changelog file in the GitHub repository
@@ -73,12 +72,14 @@ runs:
             setfrom=$(git rev-list --max-parents=0 HEAD)
           fi
         fi
+
         echo "fromtag=$setfrom">> $GITHUB_OUTPUT
-        if [ -n "${{ inputs.config }}" ]; then
-          path="$GITHUB_ACTION_PATH/changelog-config.json)"
+        if [[ -z "${{ inputs.config }}" ]]; then
+          path="$GITHUB_ACTION_PATH/changelog-config.json"
         else
           path=${{ inputs.config }}
         fi
+
         if [ ! -f "$path" ]; then
           echo "changelog config file $path doesn't exist"
           exit 1
@@ -115,9 +116,11 @@ runs:
       id: output-generator
       run: |
         # Reformat ${{ runner.temp }}/changes.md and add it to the existing changelog
-        echo 'single-changelog<<EOF' >> $GITHUB_OUTPUT
-        cat ${{ runner.temp }}/changes.md >> $GITHUB_OUTPUT
-        echo 'EOF' >> $GITHUB_OUTPUT
+        {
+          echo 'single-changelog<<EOF'
+          cat ${{ runner.temp }}/changes.md
+          echo EOF
+        } >> $GITHUB_OUTPUT
 
         # Create changelog.md in case of a first Release
         if [ -n "${{ inputs.changelog-file }}" ]; then
@@ -130,8 +133,10 @@ runs:
           # Update global changelog and pass it to the ouput
           sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ runner.temp }}/changes.md)" ${{ inputs.changelog-file }}
 
-          echo 'merged-changelog<<EOF' >> $GITHUB_OUTPUT
-          cat ${{ inputs.changelog-file }} >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
+          {
+            echo 'merged-changelog<<EOF'
+            cat ${{ inputs.changelog-file }}
+            echo EOF
+          } >> $GITHUB_OUTPUT
         fi
       shell: bash

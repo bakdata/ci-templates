@@ -7,21 +7,6 @@ on:
         description: "Scope of the release; See: https://python-poetry.org/docs/cli/#version"
         required: true
         type: string
-      ref:
-        description: "The ref name to checkout the repository."
-        required: false
-        default: ${{ github.event.repository.default_branch }}
-        type: string
-      python-version:
-        description: "The Python version for setting up Poetry. (Default is 3.10)"
-        required: false
-        default: "3.10"
-        type: string
-      poetry-version:
-        description: "The Poetry version to be installed. (Default is 1.5.1)"
-        required: false
-        default: "1.5.1"
-        type: string
       changelog:
         description: "Create changelog for release."
         required: false
@@ -31,6 +16,21 @@ on:
         description: "Changelog config path."
         required: false
         default: ""
+        type: string
+      poetry-version:
+        description: "The Poetry version to be installed. (Default is 1.5.1)"
+        required: false
+        default: "1.5.1"
+        type: string
+      python-version:
+        description: "The Python version for setting up Poetry. (Default is 3.10)"
+        required: false
+        default: "3.10"
+        type: string
+      ref:
+        description: "The ref name to checkout the repository."
+        required: false
+        default: ${{ github.event.repository.default_branch }}
         type: string
       working-directory:
         description: "The working directory of your Python package. (Default is root directory)"
@@ -85,7 +85,7 @@ jobs:
 
       - name: Create changelog
         id: build-changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@1.35.0
+        uses: bakdata/ci-templates/actions/changelog-generate@1.37.0
         if: ${{ inputs.changelog == true}}
         with:
           github-token: ${{ secrets.github-token }}
