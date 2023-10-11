@@ -8,7 +8,6 @@ on:
         description: "Scope of the release (major, minor or patch)."
         required: true
         type: string
-
       changelog-file:
         description: Path to the changelog file in the GitHub repository
         required: false
