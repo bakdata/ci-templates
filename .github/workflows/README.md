@@ -731,8 +731,7 @@ This workflow is built from multiple composite actions listed below:
 
 For Sonarcloud you need to provide a `sonar-token` and a `sonar-organization` to publish code quality results. In case of Sonatype, the action
 requires you to have a `signing-secret-key-ring` (base64 encoded), a `signing-key-id` and a `signing-password` to sign
-your build artifacts and additionally an `ossrh-username` and an `ossrh-password` to publish the signed artifacts to
-Nexus.
+your build artifacts.
 
 | Name                    | Required | Description                                                    |
 | ----------------------- | :------: | -------------------------------------------------------------- |
