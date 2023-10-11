@@ -984,8 +984,6 @@ changelog when running on a tag branch.
 | signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication |
 | signing-key-id          |    ✅    | Key id for signing the Sonatype publication                    |
 | signing-password        |    ✅    | Password for signing the Sonatype publication                  |
-| ossrh-username          |    ✅    | Username for signing into Sonatype repository                  |
-| ossrh-password          |    ✅    | Password for signing into Sonatype repository                  |
 | gradle-publish-key      |    ✅    | Key for publishing to Gradle Plugin Portal                     |
 | gradle-publish-secret   |    ✅    | Secret for publishing to Gradle Plugin Portal                  |
 | github-username         |    ✅    | GitHub username for requesting changes from API                |
