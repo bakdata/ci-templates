@@ -14,6 +14,18 @@ inputs:
   github-token:
     description: "GitHub token for requesting changes from API."
     required: true
+  changelog-file:
+    description: Path to the changelog file in the GitHub repository
+    required: false
+    default: "CHANGELOG.md"
+  gradle-cache:
+    description: "Whether Gradle caching is enabled or not. (Default is true)"
+    required: false
+    default: "true"
+  gradle-version:
+    description: "Gradle version to be installed. (Default is wrapper)"
+    required: false
+    default: "wrapper"
   java-distribution:
     description: "Java distribution to be installed. (Default is microsoft)"
     required: false
@@ -22,14 +34,6 @@ inputs:
     description: "Java version to be installed. (Default is 11)"
     required: false
     default: "11"
-  gradle-version:
-    description: "Gradle version to be installed. (Default is wrapper)"
-    required: false
-    default: "wrapper"
-  gradle-cache:
-    description: "Whether Gradle caching is enabled or not. (Default is true)"
-    required: false
-    default: "true"
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is .)"
     required: false
@@ -86,15 +90,16 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Generate changelog
-      run: ./gradlew -Pchangelog.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} --stacktrace --info generateChangelog
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-      env:
-        GITHUB_USER: ${{ inputs.github-username }}
-        GITHUB_TOKEN: ${{ inputs.github-token }}
+    - name: Create changelog
+      id: build-changelog
+      uses: bakdata/ci-templates/actions/changelog-generate@1.38.0
+      with:
+        github-token: ${{ inputs.github-token }}
+        new-tag: ${{ steps.evaluate-version.outputs.release-version }}
+        changelog-file: "${{ inputs.changelog-file }}"
+        fetch-release-information: "true"
 
-    - name: Commit and push
+    - name: Commit and push changes including the bump config file
       run: |
         git add CHANGELOG.md
         git commit -m "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}"
