@@ -2,6 +2,10 @@ name: "Release Java artifacts"
 description: "Release Java Gradle artifacts on Github"
 
 inputs:
+  changelog-file:
+    description: Path to the changelog file in the GitHub repository
+    required: false
+    default: "CHANGELOG.md"
   github-username:
     description: "GitHub username for requesting changes from API."
     required: true
@@ -40,21 +44,14 @@ runs:
         name: build-artifact
         path: build
 
-    - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@v1.16.0
+    - name: Create changelog
+      id: build-changelog
+      uses: bakdata/ci-templates/actions/changelog-generate@1.38.0
       with:
-        java-distribution: ${{ inputs.java-distribution }}
-        java-version: ${{ inputs.java-version }}
-        gradle-version: ${{ inputs.gradle-version }}
-        gradle-cache: ${{ inputs.gradle-cache }}
-
-    - name: Generate changelog
-      run: ./gradlew -Pchangelog.releaseVersion=${GITHUB_REF##*/} -Pchangelog.sinceTag=${GITHUB_REF##*/} --stacktrace --info generateChangelog
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-      env:
-        GITHUB_USER: ${{ inputs.github-username }}
-        GITHUB_TOKEN: ${{ inputs.github-token }}
+        github-token: ${{ inputs.github-token }}
+        new-tag: ${GITHUB_REF##*/}
+        changelog-file: "${{ inputs.changelog-file }}"
+        fetch-release-information: "true"
 
     - name: Create Github release
       uses: softprops/action-gh-release@v1
