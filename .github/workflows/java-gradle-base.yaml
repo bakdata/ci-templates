@@ -1,0 +1,101 @@
+name: Java Gradle Base
+# Reusable workflow for building testing and assessing code quality
+
+on:
+  workflow_call:
+    inputs:
+      download-lfs-files:
+        description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
+        required: false
+        type: boolean
+        default: false
+      gradle-cache:
+        description: "Whether Gradle caching is enabled or not. (Default is true)"
+        required: false
+        type: boolean
+        default: true
+      gradle-version:
+        description: "Gradle version to be installed. (Default is wrapper)"
+        required: false
+        type: string
+        default: "wrapper"
+      java-distribution:
+        description: "Java distribution to be installed. (Default is microsoft)"
+        required: false
+        type: string
+        default: "microsoft"
+      java-version:
+        description: "Java version to be installed. (Default is 11)"
+        required: false
+        type: string
+        default: "11"
+      working-directory:
+        description: "Working directory of your Gradle artifacts. (Default is .)"
+        required: false
+        type: string
+        default: "."
+    secrets:
+      signing-key-id:
+        description: "Key id for signing the Sonatype publication."
+        required: true
+      signing-password:
+        description: "Password for signing the Sonatype publication."
+        required: true
+      signing-secret-key-ring:
+        description: "Key ring (base64 encoded) for signing the Sonatype publication."
+        required: true
+      sonar-organization:
+        description: "Organization for Sonarcloud"
+        required: true
+      sonar-token:
+        description: "Token for Sonarcloud."
+        required: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Build
+        uses: bakdata/ci-templates/actions/java-gradle-build@v1.16.0
+        with:
+          java-distribution: ${{ inputs.java-distribution }}
+          java-version: ${{ inputs.java-version }}
+          gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
+          working-directory: ${{ inputs.working-directory }}
+
+  test:
+    name: Test
+    runs-on: ubuntu-22.04
+    needs: build
+    steps:
+      - name: Run unit tests
+        uses: bakdata/ci-templates/actions/java-gradle-test@1.39.0
+        with:
+          gradle-cache: ${{ inputs.gradle-cache }}
+          gradle-version: ${{ inputs.gradle-version }}
+          java-distribution: ${{ inputs.java-distribution }}
+          java-version: ${{ inputs.java-version }}
+          working-directory: ${{ inputs.working-directory }}
+
+  assess-code-quality:
+    name: Asses code quality
+    runs-on: ubuntu-22.04
+    needs: build
+    steps:
+      - name: Assess code quality
+        uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@1.39.0
+        with:
+          download-lfs-files: ${{ inputs.download-lfs-files }}
+          gradle-cache: ${{ inputs.gradle-cache }}
+          gradle-version: ${{ inputs.gradle-version }}
+          java-distribution: ${{ inputs.java-distribution }}
+          java-version: ${{ inputs.java-version }}
+          signing-key-id: ${{ secrets.signing-key-id }}
+          signing-password: ${{ secrets.signing-password }}
+          signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
+          sonar-organization: ${{ secrets.sonar-organization }}
+          sonar-token: ${{ secrets.sonar-token }}
+          working-directory: ${{ inputs.working-directory }}

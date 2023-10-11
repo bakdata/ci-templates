@@ -65,44 +65,26 @@ on:
         required: true
 
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-22.04
-
-    steps:
-      - name: Build
-        uses: bakdata/ci-templates/actions/java-gradle-build@v1.16.0
-        with:
-          java-distribution: ${{ inputs.java-distribution }}
-          java-version: ${{ inputs.java-version }}
-          gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}
-          working-directory: ${{ inputs.working-directory }}
-
-  test:
-    name: Test
-    runs-on: ubuntu-22.04
-    needs: build
-
-    steps:
-      - name: Test
-        uses: bakdata/ci-templates/actions/java-gradle-test@v1.16.0
-        with:
-          sonar-token: ${{ secrets.sonar-token }}
-          sonar-organization: ${{ secrets.sonar-organization }}
-          signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
-          signing-key-id: ${{ secrets.signing-key-id }}
-          signing-password: ${{ secrets.signing-password }}
-          java-distribution: ${{ inputs.java-distribution }}
-          java-version: ${{ inputs.java-version }}
-          gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}
-          working-directory: ${{ inputs.working-directory }}
+  build-and-test:
+    name: Build, Test and Assess code quality
+    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@1.39.0
+    with:
+      java-distribution: ${{ inputs.java-distribution }}
+      java-version: ${{ inputs.java-version }}
+      gradle-version: ${{ inputs.gradle-version }}
+      gradle-cache: ${{ inputs.gradle-cache }}
+      working-directory: ${{ inputs.working-directory }}
+    secrets:
+      signing-key-id: ${{ secrets.signing-key-id }}
+      signing-password: ${{ secrets.signing-password }}
+      signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
+      sonar-organization: ${{ secrets.sonar-organization }}
+      sonar-token: ${{ secrets.sonar-token }}
 
   publish:
     name: Publish
     runs-on: ubuntu-22.04
-    needs: test
+    needs: build-and-test
 
     steps:
       - name: Publish
@@ -123,7 +105,7 @@ jobs:
     name: Publish plugin
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-22.04
-    needs: test
+    needs: build-and-test
 
     steps:
       - name: Publish plugin
@@ -144,7 +126,7 @@ jobs:
     name: Create Github release
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-22.04
-    needs: publish
+    needs: [publish, publish-plugin]
 
     steps:
       - name: Release on Github
