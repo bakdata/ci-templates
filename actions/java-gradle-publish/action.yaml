@@ -54,6 +54,7 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
 
     - name: Publish to Nexus
+      if: ${{ !startsWith(github.ref, 'refs/tags/') }}
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
@@ -68,14 +69,16 @@ runs:
         CI: "true"
 
     - name: Release to Nexus
-      if: startsWith(github.ref, 'refs/tags/')
+      if: ${{ startsWith(github.ref, 'refs/tags/') }}
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
-        ./gradlew --info --stacktrace closeAndReleaseRepository -x test
+        ./gradlew --info --stacktrace publishtoNexus closeAndReleaseRepository -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
         SIGNING_KEY_ID: "${{ inputs.signing-key-id }}"
         SIGNING_PASSWORD: "${{ inputs.signing-password }}"
+        OSSRH_USERNAME: "${{ inputs.ossrh-username }}"
+        OSSRH_PASSWORD: "${{ inputs.ossrh-password }}"
         CI: "true"
