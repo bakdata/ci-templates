@@ -32,6 +32,9 @@ jobs:
   publish:
     name: Publish
     runs-on: ubuntu-22.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-pypi
+      cancel-in-progress: true
     steps:
       - name: Check out repository
         uses: bakdata/ci-templates/actions/checkout@1.32.0

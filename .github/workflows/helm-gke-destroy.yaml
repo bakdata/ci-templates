@@ -45,7 +45,9 @@ jobs:
   destroy:
     name: Destroy
     runs-on: ubuntu-22.04
-
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-destroy
+      cancel-in-progress: true
     steps:
       - name: Checkout repository
         uses: bakdata/ci-templates/actions/checkout@1.32.0

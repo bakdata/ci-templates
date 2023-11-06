@@ -65,7 +65,9 @@ on:
 jobs:
   helm-lint:
     runs-on: ubuntu-22.04
-
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-release
+      cancel-in-progress: true
     steps:
       - name: Lint Helm chart
         uses: bakdata/ci-templates/actions/helm-lint@v1.0.0
