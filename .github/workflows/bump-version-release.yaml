@@ -35,9 +35,6 @@ on:
         description: "The GitHub token for committing the changes."
         required: true
 
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-bump-version-release
-      cancel-in-progress: true
     # Map the workflow outputs to job outputs
     outputs:
       release-version:
@@ -46,6 +43,9 @@ on:
       old-version:
         description: "The old version in your `.bumpversion.cfg` file."
         value: ${{ jobs.release.outputs.old-version }}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-bump-version-release
+  cancel-in-progress: true
 
 jobs:
   release:
