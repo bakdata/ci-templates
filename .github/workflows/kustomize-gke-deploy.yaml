@@ -1,11 +1,12 @@
 name: Kustomize GKE Deploy
 # Reusable workflow for deploying resources with Kustomize on GKE Kubernetes
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-kustomize-gke-deploy
+  cancel-in-progress: true
+
 on:
   workflow_call:
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-kustomize-gke-deploy
-      cancel-in-progress: true
     inputs:
       kustomization-path:
         description: "Path to the root directory of the kustomization"

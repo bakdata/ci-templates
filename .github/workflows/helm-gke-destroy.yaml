@@ -1,11 +1,12 @@
 name: Helm GKE Destroy
 # Reusable workflow for destroying a Helm chart on GKE Kubernetes
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-destroy
+  cancel-in-progress: true
+
 on:
   workflow_call:
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-destroy
-      cancel-in-progress: true
     inputs:
       release-name:
         description: "Helm release name"

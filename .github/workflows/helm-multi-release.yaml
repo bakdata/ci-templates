@@ -1,11 +1,12 @@
 name: Helm Multi Release
 # Reusable workflow for packaging and publishing Helm charts having multiple subcharts on GitHub pages
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-multi-release
+  cancel-in-progress: true
+
 on:
   workflow_call:
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-multi-release
-      cancel-in-progress: true
     inputs:
       charts-path:
         description: "The directory containing the Helm chart(s)."

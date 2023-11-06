@@ -1,6 +1,10 @@
 name: Bump Version Release
 # Reusable workflow for creating release tags using bumpversion
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-bump-version-release
+  cancel-in-progress: true
+
 on:
   workflow_call:
     inputs:
@@ -43,9 +47,6 @@ on:
       old-version:
         description: "The old version in your `.bumpversion.cfg` file."
         value: ${{ jobs.release.outputs.old-version }}
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-bump-version-release
-  cancel-in-progress: true
 
 jobs:
   release:

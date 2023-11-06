@@ -1,11 +1,12 @@
 name: Java Gradle Docker
 # Reusable workflow for building and publishing Java Gradle artifacts including a tarball image
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-docker
+  cancel-in-progress: true
+
 on:
   workflow_call:
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-docker
-      cancel-in-progress: true
     inputs:
       docker-publisher:
         description: "Publisher to prefix Docker image."

@@ -1,11 +1,12 @@
 name: Helm GKE Deploy
 # Reusable workflow for deploying a Helm chart on GKE Kubernetes
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-deploy
+  cancel-in-progress: true
+
 on:
   workflow_call:
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-deploy
-      cancel-in-progress: true
     inputs:
       release-name:
         description: "Helm release name"

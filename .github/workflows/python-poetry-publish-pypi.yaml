@@ -1,10 +1,11 @@
 name: Reusable workflow for publishing to PyPI
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-pypi
+  cancel-in-progress: true
+
 on:
   workflow_call:
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-pypi
-      cancel-in-progress: true
     inputs:
       publish-to-test:
         description: "If set to false, the packages are published to PyPI. (Default is true)"

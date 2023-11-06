@@ -1,11 +1,11 @@
 name: Java Gradle plugin
 # Reusable workflow for building and publishing Java Gradle plugins on the Gradle Plugin Portal
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-plugin
+  cancel-in-progress: true
 on:
   workflow_call:
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-plugin
-      cancel-in-progress: true
     inputs:
       java-distribution:
         description: "Java distribution to be installed. (Default is microsoft)"

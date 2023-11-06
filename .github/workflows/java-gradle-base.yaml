@@ -1,6 +1,9 @@
 name: Java Gradle Base
 # Reusable workflow for building testing and assessing code quality
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-base
+  cancel-in-progress: true
 on:
   workflow_call:
     inputs:
@@ -9,9 +12,6 @@ on:
         required: false
         type: boolean
         default: false
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-base
-      cancel-in-progress: true
       gradle-cache:
         description: "Whether Gradle caching is enabled or not. (Default is true)"
         required: false

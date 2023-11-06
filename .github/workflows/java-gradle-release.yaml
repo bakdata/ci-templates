@@ -1,11 +1,12 @@
 name: Java Gradle Release
 # Reusable workflow for releasing Java Gradle projects
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-release
+  cancel-in-progress: true
+
 on:
   workflow_call:
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-release
-      cancel-in-progress: true
     inputs:
       release-type:
         description: "Scope of the release (major, minor or patch)."

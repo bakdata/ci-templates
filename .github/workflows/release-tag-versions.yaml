@@ -1,10 +1,11 @@
 name: Reusable workflow for releasing tag versions
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-release-version
+  cancel-in-progress: true
+
 on:
   workflow_call:
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-release-version
-      cancel-in-progress: true
     inputs:
       version-configs-dir:
         description: "The Path to the directory containing the file where the versioning is defined and `.bumpversion.cfg` file."

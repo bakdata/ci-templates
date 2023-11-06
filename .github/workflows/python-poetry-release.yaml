@@ -1,10 +1,11 @@
 name: Reusable workflow for building and releasing Python packages
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-release
+  cancel-in-progress: true
+
 on:
   workflow_call:
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-release
-      cancel-in-progress: true
     inputs:
       release-type:
         description: "Scope of the release; See: https://python-poetry.org/docs/cli/#version"

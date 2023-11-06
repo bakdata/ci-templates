@@ -1,5 +1,9 @@
 name: Test python-setup-poetry action
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-test-python-setup-poetry
+  cancel-in-progress: true
+
 on:
   pull_request:
     branches:
@@ -10,10 +14,6 @@ on:
 
 env:
   POETRY_VERSION: "1.2.2"
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-test-python-setup-poetry
-  cancel-in-progress: true
 
 jobs:
   tests:
