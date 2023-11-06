@@ -34,7 +34,9 @@ on:
 jobs:
   bump_and_release:
     runs-on: ubuntu-latest
-
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-release-version
+      cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
     steps:
       - name: Check out default branch
         uses: bakdata/ci-templates/actions/checkout@1.32.0
