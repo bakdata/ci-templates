@@ -3,6 +3,9 @@ name: Java Gradle library
 
 on:
   workflow_call:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-lib
+      cancel-in-progress: true
     inputs:
       java-distribution:
         description: "Java distribution to be installed. (Default is microsoft)"
@@ -60,9 +63,6 @@ on:
 
 jobs:
   build-and-test:
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-lib
-      cancel-in-progress: true
     name: Build, Test and Assess code quality
     uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@1.39.0
     with:

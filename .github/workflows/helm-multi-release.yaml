@@ -3,6 +3,9 @@ name: Helm Multi Release
 
 on:
   workflow_call:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-multi-release
+      cancel-in-progress: true
     inputs:
       charts-path:
         description: "The directory containing the Helm chart(s)."
@@ -47,9 +50,6 @@ on:
 jobs:
   helm-lint:
     runs-on: ubuntu-22.04
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-multi-release
-      cancel-in-progress: true
     steps:
       - name: Lint Helm chart
         uses: bakdata/ci-templates/actions/helm-lint@v1.10.0
@@ -136,7 +136,7 @@ jobs:
 
   publish-artifacts:
     runs-on: ubuntu-22.04
-    needs: [package-new-artifacts,update-version]
+    needs: [package-new-artifacts, update-version]
     env:
       artifact-dir: "${{ inputs.artifact-dir }}"
       charts-path: "${{ inputs.artifact-dir }}"

@@ -2,6 +2,9 @@ name: Reusable workflow for publishing to PyPI
 
 on:
   workflow_call:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-pypi
+      cancel-in-progress: true
     inputs:
       publish-to-test:
         description: "If set to false, the packages are published to PyPI. (Default is true)"
@@ -32,9 +35,6 @@ jobs:
   publish:
     name: Publish
     runs-on: ubuntu-22.04
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-pypi
-      cancel-in-progress: true
     steps:
       - name: Check out repository
         uses: bakdata/ci-templates/actions/checkout@1.32.0

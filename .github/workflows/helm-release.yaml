@@ -2,6 +2,9 @@ name: Reusable workflow for packaging and publishing Helm charts on GitHub pages
 
 on:
   workflow_call:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-release
+      cancel-in-progress: true
     inputs:
       page-url:
         description: "URL to the GitHub pages website of the repository."
@@ -65,9 +68,6 @@ on:
 jobs:
   helm-lint:
     runs-on: ubuntu-22.04
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-release
-      cancel-in-progress: true
     steps:
       - name: Lint Helm chart
         uses: bakdata/ci-templates/actions/helm-lint@v1.0.0

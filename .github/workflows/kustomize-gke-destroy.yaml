@@ -3,6 +3,9 @@ name: Kustomize GKE Destroy
 
 on:
   workflow_call:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-kustomize-gke-destroy
+      cancel-in-progress: true
     inputs:
       kustomization-path:
         description: "Path to the root directory of the kustomization"
@@ -41,9 +44,6 @@ jobs:
   destroy:
     name: Destroy
     runs-on: ubuntu-22.04
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-kustomize-gke-destroy
-      cancel-in-progress: true
     steps:
       - name: Checkout repository
         uses: bakdata/ci-templates/actions/checkout@1.32.0

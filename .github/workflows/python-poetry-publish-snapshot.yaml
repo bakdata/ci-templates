@@ -2,6 +2,9 @@ name: Reusable workflow for publishing Python packages as snapshot
 
 on:
   workflow_call:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-snapshot
+      cancel-in-progress: true
     inputs:
       python-version:
         description: "The Python version for setting up Poetry. (Default is 3.10)"
@@ -36,9 +39,6 @@ jobs:
   publish-snapshot:
     name: Publish snapshot
     runs-on: ubuntu-22.04
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-snapshot
-      cancel-in-progress: true
     # Map the job outputs to step outputs
     outputs:
       release-version: ${{ steps.bump-version.outputs.release-version }}

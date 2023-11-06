@@ -3,6 +3,9 @@ name: Java Gradle Release
 
 on:
   workflow_call:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-release
+      cancel-in-progress: true
     inputs:
       release-type:
         description: "Scope of the release (major, minor or patch)."
@@ -59,9 +62,6 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-22.04
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-release
-      cancel-in-progress: true
 
     # Map the job outputs to step outputs
     outputs:

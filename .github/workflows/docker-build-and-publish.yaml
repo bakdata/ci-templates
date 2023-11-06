@@ -3,6 +3,9 @@ name: Docker build and publish
 
 on:
   workflow_call:
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-docker
+      cancel-in-progress: true
     inputs:
       docker-context:
         description: "The docker context."
@@ -71,9 +74,6 @@ jobs:
   docker-build:
     name: Docker build
     runs-on: ubuntu-22.04
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-docker
-      cancel-in-progress: true
     steps:
       - name: Check out repository
         uses: bakdata/ci-templates/actions/checkout@1.32.0

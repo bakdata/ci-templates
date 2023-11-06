@@ -9,6 +9,9 @@ on:
         required: false
         type: boolean
         default: false
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-base
+      cancel-in-progress: true
       gradle-cache:
         description: "Whether Gradle caching is enabled or not. (Default is true)"
         required: false
@@ -55,9 +58,6 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-22.04
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-base
-      cancel-in-progress: true
     steps:
       - name: Build
         uses: bakdata/ci-templates/actions/java-gradle-build@v1.16.0
