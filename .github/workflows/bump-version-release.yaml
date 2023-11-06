@@ -3,9 +3,6 @@ name: Bump Version Release
 
 on:
   workflow_call:
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-bump-version-release
-      cancel-in-progress: true
     inputs:
       release-type:
         description: "Scope of the release (major, minor or patch)."
@@ -38,6 +35,9 @@ on:
         description: "The GitHub token for committing the changes."
         required: true
 
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-bump-version-release
+      cancel-in-progress: true
     # Map the workflow outputs to job outputs
     outputs:
       release-version:
