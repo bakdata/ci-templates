@@ -53,7 +53,7 @@ runs:
         gradle-version: ${{ inputs.gradle-version }}
         gradle-cache: ${{ inputs.gradle-cache }}
 
-    - name: Publish to Nexus
+    - name: Publish snapshots to Nexus
       if: ${{ !startsWith(github.ref, 'refs/tags/') }}
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
@@ -68,7 +68,7 @@ runs:
         OSSRH_PASSWORD: "${{ inputs.ossrh-password }}"
         CI: "true"
 
-    - name: Release to Nexus
+    - name: Publish releases to Nexus
       if: ${{ startsWith(github.ref, 'refs/tags/') }}
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
