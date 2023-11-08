@@ -1,9 +1,6 @@
 name: Java Gradle plugin
 # Reusable workflow for building and publishing Java Gradle plugins on the Gradle Plugin Portal
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-plugin
-  cancel-in-progress: true
 on:
   workflow_call:
     inputs:
@@ -32,6 +29,7 @@ on:
         required: false
         type: string
         default: "."
+
     secrets:
       sonar-token:
         description: "Token for Sonarcloud."
@@ -66,6 +64,10 @@ on:
       github-token:
         description: "GitHub token for requesting changes from API."
         required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-plugin
+  cancel-in-progress: true
 
 jobs:
   build-and-test:

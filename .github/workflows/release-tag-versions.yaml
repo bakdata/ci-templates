@@ -1,9 +1,5 @@
 name: Reusable workflow for releasing tag versions
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-release-version
-  cancel-in-progress: true
-
 on:
   workflow_call:
     inputs:
@@ -24,6 +20,7 @@ on:
         required: false
         default: "SNAPSHOT"
         type: string
+
     secrets:
       github-email:
         description: "The GitHub email for committing the changes."
@@ -34,6 +31,10 @@ on:
       github-token:
         description: "The GitHub token for committing the changes."
         required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-release-version
+  cancel-in-progress: true
 
 jobs:
   bump_and_release:

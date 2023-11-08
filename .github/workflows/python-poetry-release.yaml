@@ -1,9 +1,5 @@
 name: Reusable workflow for building and releasing Python packages
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-release
-  cancel-in-progress: true
-
 on:
   workflow_call:
     inputs:
@@ -41,6 +37,7 @@ on:
         required: false
         default: "./"
         type: string
+
     secrets:
       github-username:
         description: "The GitHub username for committing the changes."
@@ -60,6 +57,10 @@ on:
       old-version:
         description: "The old version of the package."
         value: ${{ jobs.create-release.outputs.old-version }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-release
+  cancel-in-progress: true
 
 jobs:
   create-release:

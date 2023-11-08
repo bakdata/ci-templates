@@ -1,9 +1,6 @@
 name: Java Gradle library
 # Reusable workflow for building and publishing Java Gradle libraries
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-lib
-  cancel-in-progress: true
 on:
   workflow_call:
     inputs:
@@ -32,6 +29,7 @@ on:
         required: false
         type: string
         default: "."
+
     secrets:
       sonar-token:
         description: "Token for Sonarcloud."
@@ -60,6 +58,10 @@ on:
       github-token:
         description: "GitHub token for requesting changes from API."
         required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-lib
+  cancel-in-progress: true
 
 jobs:
   build-and-test:

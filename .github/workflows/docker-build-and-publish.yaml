@@ -1,9 +1,6 @@
 name: Docker build and publish
 # Reusable workflow to build and push an image from a Dockerfile to any container registry
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-docker
-  cancel-in-progress: true
 on:
   workflow_call:
     inputs:
@@ -57,6 +54,7 @@ on:
         required: false
         default: "."
         type: string
+
     secrets:
       docker-user:
         description: "Username for the Docker registry login."
@@ -69,6 +67,10 @@ on:
       github-token:
         description: "GitHub token."
         required: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-docker
+  cancel-in-progress: true
 
 jobs:
   docker-build:

@@ -1,9 +1,5 @@
 name: Reusable workflow for publishing Python packages as snapshot
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-snapshot
-  cancel-in-progress: true
-
 on:
   workflow_call:
     inputs:
@@ -22,6 +18,7 @@ on:
         required: false
         default: "./"
         type: string
+
     secrets:
       pypi-token:
         description: "TestPyPI token"
@@ -35,6 +32,10 @@ on:
       old-version:
         description: "The old version of the package."
         value: ${{ jobs.publish-snapshot.outputs.old-version }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-snapshot
+  cancel-in-progress: true
 
 jobs:
   publish-snapshot:

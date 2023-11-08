@@ -1,9 +1,6 @@
 name: Java Gradle Base
 # Reusable workflow for building testing and assessing code quality
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-base
-  cancel-in-progress: true
 on:
   workflow_call:
     inputs:
@@ -37,6 +34,7 @@ on:
         required: false
         type: string
         default: "."
+
     secrets:
       signing-key-id:
         description: "Key id for signing the Sonatype publication."
@@ -53,6 +51,10 @@ on:
       sonar-token:
         description: "Token for Sonarcloud."
         required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-base
+  cancel-in-progress: true
 
 jobs:
   build:

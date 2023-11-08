@@ -1,10 +1,6 @@
 name: Helm GKE Deploy
 # Reusable workflow for deploying a Helm chart on GKE Kubernetes
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-deploy
-  cancel-in-progress: true
-
 on:
   workflow_call:
     inputs:
@@ -60,6 +56,7 @@ on:
         default: "v3.8.1"
         required: false
         type: string
+
     secrets:
       gke-service-account:
         description: "GKE service account key for authentication"
@@ -73,6 +70,10 @@ on:
       gke-cluster:
         description: "GKE cluster for authentication"
         required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-deploy
+  cancel-in-progress: true
 
 jobs:
   deploy:

@@ -1,9 +1,5 @@
 name: Reusable workflow for publishing to PyPI
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-pypi
-  cancel-in-progress: true
-
 on:
   workflow_call:
     inputs:
@@ -27,10 +23,15 @@ on:
         required: false
         default: "./"
         type: string
+
     secrets:
       pypi-token:
         description: "PyPI token"
         required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-pypi
+  cancel-in-progress: true
 
 jobs:
   publish:

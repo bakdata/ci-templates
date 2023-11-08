@@ -1,10 +1,6 @@
 name: Helm Multi Release
 # Reusable workflow for packaging and publishing Helm charts having multiple subcharts on GitHub pages
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-multi-release
-  cancel-in-progress: true
-
 on:
   workflow_call:
     inputs:
@@ -47,6 +43,10 @@ on:
       github-token:
         description: "The GitHub token for committing the changes."
         required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-multi-release
+  cancel-in-progress: true
 
 jobs:
   helm-lint:
