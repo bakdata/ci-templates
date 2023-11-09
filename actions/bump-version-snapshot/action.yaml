@@ -26,7 +26,7 @@ runs:
       id: bump-version
       run: |
         echo "old-version=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
-        bump2version --allow-dirty patch
+        bump2version --allow-dirty --no-tag --no-commit patch
         echo "new-version=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
       shell: bash
       working-directory: ${{ inputs.working-directory }}
