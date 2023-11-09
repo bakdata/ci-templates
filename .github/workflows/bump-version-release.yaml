@@ -98,7 +98,7 @@ jobs:
 
       - name: Bump version
         id: bump-version-snapshot
-        uses: bakdata/ci-templates/actions/patch-snapshot@feat/new-bumpversion
+        uses: bakdata/ci-templates/actions/bump-version-snapshot@feat/new-bumpversion
         with:
           working-directory: ${{ inputs.working-directory }}
           test-version: ${{ steps.bump-version.outputs.release-version }}
