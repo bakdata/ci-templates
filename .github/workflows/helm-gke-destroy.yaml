@@ -27,6 +27,7 @@ on:
         default: "v3.8.1"
         required: false
         type: string
+
     secrets:
       gke-service-account:
         description: "GKE service account key for authentication"
@@ -41,11 +42,14 @@ on:
         description: "GKE cluster for authentication"
         required: true
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-gke-destroy
+  cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+
 jobs:
   destroy:
     name: Destroy
     runs-on: ubuntu-22.04
-
     steps:
       - name: Checkout repository
         uses: bakdata/ci-templates/actions/checkout@1.32.0

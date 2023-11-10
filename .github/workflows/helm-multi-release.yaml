@@ -44,10 +44,13 @@ on:
         description: "The GitHub token for committing the changes."
         required: true
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-multi-release
+  cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+
 jobs:
   helm-lint:
     runs-on: ubuntu-22.04
-
     steps:
       - name: Lint Helm chart
         uses: bakdata/ci-templates/actions/helm-lint@v1.10.0
@@ -134,7 +137,7 @@ jobs:
 
   publish-artifacts:
     runs-on: ubuntu-22.04
-    needs: [package-new-artifacts,update-version]
+    needs: [package-new-artifacts, update-version]
     env:
       artifact-dir: "${{ inputs.artifact-dir }}"
       charts-path: "${{ inputs.artifact-dir }}"

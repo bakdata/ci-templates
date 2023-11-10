@@ -23,10 +23,15 @@ on:
         required: false
         default: "./"
         type: string
+
     secrets:
       pypi-token:
         description: "PyPI token"
         required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-pypi
+  cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
 
 jobs:
   publish:

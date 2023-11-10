@@ -34,6 +34,7 @@ on:
         required: false
         type: string
         default: "."
+
     secrets:
       signing-key-id:
         description: "Key id for signing the Sonatype publication."
@@ -51,11 +52,14 @@ on:
         description: "Token for Sonarcloud."
         required: true
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-base
+  cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+
 jobs:
   build:
     name: Build
     runs-on: ubuntu-22.04
-
     steps:
       - name: Build
         uses: bakdata/ci-templates/actions/java-gradle-build@v1.16.0

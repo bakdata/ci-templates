@@ -37,6 +37,7 @@ on:
         required: false
         default: "./"
         type: string
+
     secrets:
       github-username:
         description: "The GitHub username for committing the changes."

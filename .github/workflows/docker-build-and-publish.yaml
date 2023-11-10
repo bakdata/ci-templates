@@ -54,6 +54,7 @@ on:
         required: false
         default: "."
         type: string
+
     secrets:
       docker-user:
         description: "Username for the Docker registry login."
@@ -67,11 +68,14 @@ on:
         description: "GitHub token."
         required: false
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-docker
+  cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+
 jobs:
   docker-build:
     name: Docker build
     runs-on: ubuntu-22.04
-
     steps:
       - name: Check out repository
         uses: bakdata/ci-templates/actions/checkout@1.32.0

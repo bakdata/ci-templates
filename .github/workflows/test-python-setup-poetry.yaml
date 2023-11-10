@@ -11,6 +11,10 @@ on:
 env:
   POETRY_VERSION: "1.2.2"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-test-python-setup-poetry
+  cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+
 jobs:
   tests:
     name: ${{ matrix.os }} / ${{ matrix.python-version }}

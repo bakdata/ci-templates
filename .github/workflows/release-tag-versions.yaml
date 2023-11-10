@@ -20,6 +20,7 @@ on:
         required: false
         default: "SNAPSHOT"
         type: string
+
     secrets:
       github-email:
         description: "The GitHub email for committing the changes."
@@ -34,7 +35,6 @@ on:
 jobs:
   bump_and_release:
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out default branch
         uses: bakdata/ci-templates/actions/checkout@1.32.0
