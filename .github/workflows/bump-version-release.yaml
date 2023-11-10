@@ -47,6 +47,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-22.04
+    
     # Map the job outputs to step outputs
     outputs:
       release-version: ${{ steps.bump-version.outputs.release-version }}
