@@ -44,10 +44,6 @@ on:
         description: "The old version in your `.bumpversion.cfg` file."
         value: ${{ jobs.release.outputs.old-version }}
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-bump-version-release
-  cancel-in-progress: true
-
 jobs:
   release:
     runs-on: ubuntu-22.04

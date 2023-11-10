@@ -32,10 +32,6 @@ on:
         description: "The GitHub token for committing the changes."
         required: true
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-release-version
-  cancel-in-progress: true
-
 jobs:
   bump_and_release:
     runs-on: ubuntu-latest
