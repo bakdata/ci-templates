@@ -52,12 +52,14 @@ jobs:
              
           #     auto-doc -f actionfilename --colMaxWidth 10000 --colMaxWords 2000 -o $outputdocfile
           # done
-          #     docname="$(echo $workflowname | cut -d'.' -f1)"
 
           # workflows
           for workflows in .github/workflows/* ; do
-            # if [[ "$workflows" != "_*" && "$workflows" != "README" ]]; then
-              echo "$workflows"
+              current-workflow="$(echo $workflows | cut -d'/' -f3)"
+            if [[ "$current-workflow" != "_*" && "$current-workflow" != "README" ]]; then
+              echo "$current-workflow"
+              workflowname="$(echo $current-workflow | cut -d'.' -f1)"
+              echo "$workflowname"
             # fi
           done
 
