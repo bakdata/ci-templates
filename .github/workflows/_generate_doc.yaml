@@ -56,10 +56,11 @@ jobs:
           # workflows
           for workflows in .github/workflows/* ; do
               currentworkflow="$(echo $workflows | cut -d'/' -f3)"
+              echo "------->$currentworkflow<------"
             if [[ "$currentworkflow" != "_*" && "$currentworkflow" != "README.md" ]]; then
-              echo "$currentworkflow"
+              # echo "$currentworkflow"
               workflowname="$(echo $currentworkflow | cut -d'.' -f1)"
-              echo "$workflowname"
+              # echo "$workflowname"
             fi
           done
 
