@@ -42,6 +42,7 @@ jobs:
       - name: Generates docs
         shell: bash
         run: |
+          go install github.com/tj-actions/auto-doc@latest
           # actions
           for actionsubdir in actions/ ; do
               actionfilename=$actionsubdir/action.yaml
