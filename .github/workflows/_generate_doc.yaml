@@ -1,0 +1,72 @@
+name: Generate Workflow doc
+
+on:
+  push:
+  # workflow_dispatch:
+    # inputs:
+    #   filename:
+    #     description: "Workflow ou action name"
+    #     type: string
+    #     required: false
+    #     default: ".github/workflows/workflow.yaml"
+    #   file-type:
+    #     description: "Type of the file."
+    #     type: choice
+    #     required: true
+    #     default: patch
+    #     options:
+    #       - action
+    #       - workflow
+    #   output-file:
+    #     description: "File name of the documentation to be generated"
+    #     type: string
+    #     # required: true
+    #     default: ".github/workflows/TESTDOC.md"
+
+jobs:
+  workflow-doc:
+    name: Generate workflow documentation
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      # - name: Install CLI
+      #   shell: bash
+      #   run: go get -u github.com/tj-actions/auto-doc/v3
+
+      - name: Generates docs
+        shell: bash
+        run: |
+          # actions
+          # for actionsubdir in actions/ ; do
+          #     actionfilename=$actionsubdir/action.yaml
+          #     outputdocfile="docs/references/$actionsubdir"
+
+          #     echo "# Refenrences $actionsubdir" > $actionfilename
+          #     echo  "## Inputs" >> $actionfilename
+          #     echo  "## Outputs" >> $actionfilename
+             
+          #     auto-doc -f actionfilename --colMaxWidth 10000 --colMaxWords 2000 -o $outputdocfile
+          # done
+          #     docname="$(echo $workflowname | cut -d'.' -f1)"
+
+          # workflows
+          for workflows in .github/workflows ; do
+            if [[ "$worklows" != "_*" && "$worklows" != "README"; then
+              echo "$worklows"
+            fi
+          done
+
+      - name: Commit and push
+        uses: bakdata/ci-templates/actions/commit-and-push@1.39.1
+        with:
+          add-untracked: "true"
+          pass-empty-commit: "true"
+          commit-message: "Committing all the awesome changes in my repository!"
+          github-email: "${{ secrets.GH_EMAIL }}"
+          github-username: "${{ secrets.GH_USERNAME }}"
+          github-token: "${{ secrets.GH_TOKEN }}"
