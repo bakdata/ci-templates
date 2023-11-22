@@ -36,7 +36,7 @@ jobs:
 
       - name: Install CLI
         shell: bash
-        run: go install github.com/tj-actions/auto-doc@v3
+        run: go install github.com/tj-actions/auto-doc@latest
         # run: go get -u github.com/tj-actions/auto-doc/v3
 
       - name: Generates docs
