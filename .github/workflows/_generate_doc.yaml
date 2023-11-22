@@ -3,25 +3,25 @@ name: Generate Workflow doc
 on:
   push:
   # workflow_dispatch:
-    # inputs:
-    #   filename:
-    #     description: "Workflow ou action name"
-    #     type: string
-    #     required: false
-    #     default: ".github/workflows/workflow.yaml"
-    #   file-type:
-    #     description: "Type of the file."
-    #     type: choice
-    #     required: true
-    #     default: patch
-    #     options:
-    #       - action
-    #       - workflow
-    #   output-file:
-    #     description: "File name of the documentation to be generated"
-    #     type: string
-    #     # required: true
-    #     default: ".github/workflows/TESTDOC.md"
+  # inputs:
+  #   filename:
+  #     description: "Workflow ou action name"
+  #     type: string
+  #     required: false
+  #     default: ".github/workflows/workflow.yaml"
+  #   file-type:
+  #     description: "Type of the file."
+  #     type: choice
+  #     required: true
+  #     default: patch
+  #     options:
+  #       - action
+  #       - workflow
+  #   output-file:
+  #     description: "File name of the documentation to be generated"
+  #     type: string
+  #     # required: true
+  #     default: ".github/workflows/TESTDOC.md"
 
 jobs:
   workflow-doc:
@@ -42,33 +42,40 @@ jobs:
         shell: bash
         run: |
           # actions
-          # for actionsubdir in actions/ ; do
-          #     actionfilename=$actionsubdir/action.yaml
-          #     outputdocfile="docs/references/$actionsubdir"
+          for actionsubdir in actions/ ; do
+              actionfilename=$actionsubdir/action.yaml
+              outputdocfile="docs/references/actions/$actionsubdir.md"
 
-          #     echo "# Refenrences $actionsubdir" > $actionfilename
-          #     echo  "## Inputs" >> $actionfilename
-          #     echo  "## Outputs" >> $actionfilename
+              echo "# Refenrences $actionsubdir composite action" > $actionfilename
+              echo  "## Inputs" >> $actionfilename
+              echo  "## Outputs" >> $actionfilename
              
-          #     auto-doc -f actionfilename --colMaxWidth 10000 --colMaxWords 2000 -o $outputdocfile
-          # done
+              auto-doc -f $actionfilename --colMaxWidth 10000 --colMaxWords 2000 -o $outputdocfile
+          done
 
           # workflows
           for workflows in .github/workflows/* ; do
               currentworkflow="$(echo $workflows | cut -d'/' -f3)"
             if [[ $currentworkflow != _* && $currentworkflow != "README.md" ]]; then
-              echo "#### $currentworkflow ###"
               workflowname="$(echo $currentworkflow | cut -d'.' -f1)"
-              echo "+++ $workflowname"
+              
+              workflowoutputdoc="docs/references/workflows/$workflowname.md"
+              
+              echo "# Refenrences $workflowname reusable Workflow" > $workflowoutputdoc
+              echo  "## Inputs" >> $workflowoutputdoc
+              echo  "## Outputs" >> $workflowoutputdoc
+              echo  "## Secrets" >> $workflowoutputdoc
+
+              auto-doc -f $workflows --colMaxWidth 10000 --colMaxWords 2000 -o $workflowoutputdoc -r true
             fi
           done
 
-      # - name: Commit and push
-      #   uses: bakdata/ci-templates/actions/commit-and-push@1.39.1
-      #   with:
-      #     add-untracked: "true"
-      #     pass-empty-commit: "true"
-      #     commit-message: "Committing all the awesome changes in my repository!"
-      #     github-email: "${{ secrets.GH_EMAIL }}"
-      #     github-username: "${{ secrets.GH_USERNAME }}"
-      #     github-token: "${{ secrets.GH_TOKEN }}"
+      - name: Commit and push
+        uses: bakdata/ci-templates/actions/commit-and-push@1.39.1
+        with:
+          add-untracked: "true"
+          pass-empty-commit: "true"
+          commit-message: "Committing all the awesome changes in my repository!"
+          github-email: "${{ secrets.GH_EMAIL }}"
+          github-username: "${{ secrets.GH_USERNAME }}"
+          github-token: "${{ secrets.GH_TOKEN }}"
