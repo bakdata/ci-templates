@@ -34,9 +34,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      # - name: Install CLI
-      #   shell: bash
-      #   run: go get -u github.com/tj-actions/auto-doc/v3
+      - name: Install CLI
+        shell: bash
+        run: go get -u github.com/tj-actions/auto-doc/v3
 
       - name: Generates docs
         shell: bash
