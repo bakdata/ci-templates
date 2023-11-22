@@ -56,8 +56,8 @@ jobs:
 
           # workflows
           for workflows in .github/workflows/* ; do
-            # if [[ "$worklows" != "_*" && "$worklows" != "README" ]]; then
-              echo "$worklows"
+            # if [[ "$workflows" != "_*" && "$workflows" != "README" ]]; then
+              echo "$workflows"
             # fi
           done
 
