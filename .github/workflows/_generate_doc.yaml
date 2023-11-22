@@ -26,7 +26,7 @@ on:
 jobs:
   workflow-doc:
     name: Generate workflow documentation
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
@@ -36,7 +36,7 @@ jobs:
 
       - name: Install CLI
         shell: bash
-        run: go install -u github.com/tj-actions/auto-doc/v3
+        run: go install github.com/tj-actions/auto-doc/v3
         # run: go get -u github.com/tj-actions/auto-doc/v3
 
       - name: Generates docs
