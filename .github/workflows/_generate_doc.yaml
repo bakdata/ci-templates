@@ -36,7 +36,8 @@ jobs:
 
       - name: Install CLI
         shell: bash
-        run: go get -u github.com/tj-actions/auto-doc/v3
+        run: go install -u github.com/tj-actions/auto-doc/v3
+        # run: go get -u github.com/tj-actions/auto-doc/v3
 
       - name: Generates docs
         shell: bash
@@ -75,7 +76,7 @@ jobs:
         with:
           add-untracked: "true"
           pass-empty-commit: "true"
-          commit-message: "Committing all the awesome changes in my repository!"
+          commit-message: "auto-doc: Updated Docs"
           github-email: "${{ secrets.GH_EMAIL }}"
           github-username: "${{ secrets.GH_USERNAME }}"
           github-token: "${{ secrets.GH_TOKEN }}"
