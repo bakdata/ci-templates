@@ -56,17 +56,17 @@ jobs:
 
           # workflows
           for workflows in .github/workflows ; do
-            if [[ "$worklows" != "_*" && "$worklows" != "README" ]]; then
+            # if [[ "$worklows" != "_*" && "$worklows" != "README" ]]; then
               echo "$worklows"
-            fi
+            # fi
           done
 
-      - name: Commit and push
-        uses: bakdata/ci-templates/actions/commit-and-push@1.39.1
-        with:
-          add-untracked: "true"
-          pass-empty-commit: "true"
-          commit-message: "Committing all the awesome changes in my repository!"
-          github-email: "${{ secrets.GH_EMAIL }}"
-          github-username: "${{ secrets.GH_USERNAME }}"
-          github-token: "${{ secrets.GH_TOKEN }}"
+      # - name: Commit and push
+      #   uses: bakdata/ci-templates/actions/commit-and-push@1.39.1
+      #   with:
+      #     add-untracked: "true"
+      #     pass-empty-commit: "true"
+      #     commit-message: "Committing all the awesome changes in my repository!"
+      #     github-email: "${{ secrets.GH_EMAIL }}"
+      #     github-username: "${{ secrets.GH_USERNAME }}"
+      #     github-token: "${{ secrets.GH_TOKEN }}"
