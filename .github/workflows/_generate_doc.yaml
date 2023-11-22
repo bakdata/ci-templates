@@ -55,7 +55,7 @@ jobs:
           #     docname="$(echo $workflowname | cut -d'.' -f1)"
 
           # workflows
-          for workflows in .github/workflows ; do
+          for workflows in .github/workflows/* ; do
             # if [[ "$worklows" != "_*" && "$worklows" != "README" ]]; then
               echo "$worklows"
             # fi
