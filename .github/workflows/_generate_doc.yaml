@@ -60,7 +60,7 @@ jobs:
               echo "$current-workflow"
               workflowname="$(echo $current-workflow | cut -d'.' -f1)"
               echo "$workflowname"
-            # fi
+            fi
           done
 
       # - name: Commit and push
