@@ -1,5 +1,4 @@
 #!/bin/bash
-# go install github.com/tj-actions/auto-doc@latest
 
 # actions
 
