@@ -6,6 +6,15 @@ repos:
         language: script
         name: Generate doc
         entry: ./generate-doc.sh
-        stage: [manual]
-        # stage: [commit]
+        # stages:
+        #   - "manual"
 
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.17
+    hooks:
+      - id: mdformat
+        additional_dependencies:
+          - mdformat-gfm
+          - mdformat-black
+        # stages:
+        #   - "manual"

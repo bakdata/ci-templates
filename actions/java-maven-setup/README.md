@@ -6,9 +6,9 @@ This action sets up Java and Maven.
 
 | Name              | Required | Default Value |  Type  | Description                                                                                        |
 | ----------------- | :------: | :-----------: | :----: | -------------------------------------------------------------------------------------------------- |
-| maven-version     |    ✅    |       -       | string | Maven version to be installed                                                                      |
-| java-distribution |    ❌    |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed |
-| java-version      |    ❌    |      11       | string | Java version to be installed                                                                       |
+| maven-version     |    ✅     |       -       | string | Maven version to be installed                                                                      |
+| java-distribution |    ❌     |   microsoft   | string | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed |
+| java-version      |    ❌     |      11       | string | Java version to be installed                                                                       |
 
 ## Usage
 

@@ -37,16 +37,16 @@ This workflow is built from multiple composite actions listed below:
 
 | Name                | Required |                   Default Value                    |  Type  | Description                                                                                                          |
 | ------------------- | :------: | :------------------------------------------------: | :----: | -------------------------------------------------------------------------------------------------------------------- |
-| docker-context      |    ❌    |                        "."                         | string | The docker context                                                                                                   |
-| dockerfile-path     |    ❌    |                    "Dockerfile"                    | string | Path to the Dockerfile                                                                                               |
-| docker-registry     |    ❌    |                         ""                         | string | Host where the image should be pushed to                                                                             |
-| image-namespace     |    ❌    |                         ""                         | string | Namespace of Docker image                                                                                            |
-| image-name          |    ❌    |            github.event.repository.name            | string | Name of Docker image                                                                                                 |
-| image-tag           |    ❌    | pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8} | string | Tag of Docker image                                                                                                  |
-| ref                 |    ❌    |                         ""                         | string | The ref name to checkout                                                                                             |
-| retention-days      |    ❌    |                         1                          | string | Number of days the image artifact should be stored on GitHub                                                         |
-| image-artifact-name |    ❌    |                  "image-artifact"                  | string | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact |
-| working-directory   |    ❌    |                        "."                         | string | Working directory for your Docker artifacts                                                                          |
+| docker-context      |    ❌     |                        "."                         | string | The docker context                                                                                                   |
+| dockerfile-path     |    ❌     |                    "Dockerfile"                    | string | Path to the Dockerfile                                                                                               |
+| docker-registry     |    ❌     |                         ""                         | string | Host where the image should be pushed to                                                                             |
+| image-namespace     |    ❌     |                         ""                         | string | Namespace of Docker image                                                                                            |
+| image-name          |    ❌     |            github.event.repository.name            | string | Name of Docker image                                                                                                 |
+| image-tag           |    ❌     | pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8} | string | Tag of Docker image                                                                                                  |
+| ref                 |    ❌     |                         ""                         | string | The ref name to checkout                                                                                             |
+| retention-days      |    ❌     |                         1                          | string | Number of days the image artifact should be stored on GitHub                                                         |
+| image-artifact-name |    ❌     |                  "image-artifact"                  | string | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact |
+| working-directory   |    ❌     |                        "."                         | string | Working directory for your Docker artifacts                                                                          |
 
 ### Secret Parameters
 
@@ -54,9 +54,9 @@ These secrets define the user that pushes the built images to the container regi
 
 | Name            | Required | Description                                 |
 | --------------- | :------: | ------------------------------------------- |
-| docker-user     |    ✅    | Username for the Docker registry login      |
-| docker-password |    ✅    | Password for the Docker registry login      |
-| github-token    |    ❌    | The GitHub token for committing the changes |
+| docker-user     |    ✅     | Username for the Docker registry login      |
+| docker-password |    ✅     | Password for the Docker registry login      |
+| github-token    |    ❌     | The GitHub token for committing the changes |
 
 ### Calling the workflow
 
@@ -133,14 +133,14 @@ This workflow is built from multiple composite actions listed below:
 
 | Name             | Required |             Default Value             |  Type   | Description                                                                                                                                |
 | ---------------- | :------: | :-----------------------------------: | :-----: | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| page-url         |    ✅    |                                       | string  | URL to the GitHub pages website of the repository.                                                                                         |
-| release-type     |    ✅    |                   -                   | string  | The scope of the release (major, minor or patch)                                                                                           |
-| ref              |    ❌    | The default branch of your repository | string  | The ref name to checkout the repository                                                                                                    |
-| lint-config-path |    ❌    |      ".github/lint-config.yaml"       | string  | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
-| helm-version     |    ❌    |               "v3.10.1"               | string  | The Helm version                                                                                                                           |
-| charts-dir       |    ❌    |                  "."                  | string  | The directory containing the Helm chart and `.bumpversion.cfg` file                                                                        |
-| skip-download    |    ❌    |                 false                 | boolean | Skip downloading index.yaml and previous Chart versions from GitHub pages. (To be used during setup of this workflow)                      |
-| artifact-dir     |    ❌    |              "artifact"               | string  | Directory inside `charts-dir` for preparation of the GitHub pages artifact.                                                                |
+| page-url         |    ✅     |                                       | string  | URL to the GitHub pages website of the repository.                                                                                         |
+| release-type     |    ✅     |                   -                   | string  | The scope of the release (major, minor or patch)                                                                                           |
+| ref              |    ❌     | The default branch of your repository | string  | The ref name to checkout the repository                                                                                                    |
+| lint-config-path |    ❌     |      ".github/lint-config.yaml"       | string  | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
+| helm-version     |    ❌     |               "v3.10.1"               | string  | The Helm version                                                                                                                           |
+| charts-dir       |    ❌     |                  "."                  | string  | The directory containing the Helm chart and `.bumpversion.cfg` file                                                                        |
+| skip-download    |    ❌     |                 false                 | boolean | Skip downloading index.yaml and previous Chart versions from GitHub pages. (To be used during setup of this workflow)                      |
+| artifact-dir     |    ❌     |              "artifact"               | string  | Directory inside `charts-dir` for preparation of the GitHub pages artifact.                                                                |
 
 ### Secret Parameters
 
@@ -149,9 +149,9 @@ token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the em
 
 | Name            | Required | Description                                    |
 | --------------- | :------: | ---------------------------------------------- |
-| github-username |    ✅    | The GitHub username for committing the changes |
-| github-email    |    ✅    | The GitHub email for committing the changes    |
-| github-token    |    ✅    | The GitHub token for committing the changes    |
+| github-username |    ✅     | The GitHub username for committing the changes |
+| github-email    |    ✅     | The GitHub email for committing the changes    |
+| github-token    |    ✅     | The GitHub token for committing the changes    |
 
 ### Outputs
 
@@ -228,12 +228,12 @@ This workflow is built from multiple composite actions listed below:
 
 | Name             | Required |       Default Value        |  Type  | Description                                                                                                                                |
 | ---------------- | :------: | :------------------------: | :----: | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| charts-path      |    ✅    |                            | string | The path to the directory containing the Helm chart(s)                                                                                     |
-| subdirs          |    ✅    |                            | string | List of subdir to consider" Format: "['subdir1', 'subdir2', 'subdir3']"                                                                    |
-| artifact-dir     |    ❌    |        "artifacts"         | string | Directory inside `charts-dir` for preparation of the GitHub pages artifact.                                                                |
-| gh-pages-branch  |    ❌    |         "gh-pages"         | string | The branch containing all the artifacts                                                                                                    |
-| helm-version     |    ❌    |         "v3.10.1"          | string | The Helm version                                                                                                                           |
-| lint-config-path |    ❌    | ".github/lint-config.yaml" | string | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
+| charts-path      |    ✅     |                            | string | The path to the directory containing the Helm chart(s)                                                                                     |
+| subdirs          |    ✅     |                            | string | List of subdir to consider" Format: "\['subdir1', 'subdir2', 'subdir3'\]"                                                                  |
+| artifact-dir     |    ❌     |        "artifacts"         | string | Directory inside `charts-dir` for preparation of the GitHub pages artifact.                                                                |
+| gh-pages-branch  |    ❌     |         "gh-pages"         | string | The branch containing all the artifacts                                                                                                    |
+| helm-version     |    ❌     |         "v3.10.1"          | string | The Helm version                                                                                                                           |
+| lint-config-path |    ❌     | ".github/lint-config.yaml" | string | The path to the lint configuration file (For an example see <https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml>) |
 
 ### Secret Parameters
 
@@ -242,9 +242,9 @@ token (`GH_TOKEN`) of the user. You can use the no reply GitHub email for the em
 
 | Name            | Required | Description                                    |
 | --------------- | :------: | ---------------------------------------------- |
-| github-username |    ✅    | The GitHub username for committing the changes |
-| github-email    |    ✅    | The GitHub email for committing the changes    |
-| github-token    |    ✅    | The GitHub token for committing the changes    |
+| github-username |    ✅     | The GitHub username for committing the changes |
+| github-email    |    ✅     | The GitHub email for committing the changes    |
+| github-token    |    ✅     | The GitHub token for committing the changes    |
 
 ### Calling the workflow
 
@@ -290,7 +290,7 @@ jobs:
       github-token: "${{ secrets.GH_TOKEN }}"
 ```
 
----
+______________________________________________________________________
 
 ## Release Tag Versions
 
@@ -328,10 +328,10 @@ This workflow is built from multiple composite actions listed below:
 
 | Name                    | Required | Default Value |  Type  | Description                                                                                                    |
 | ----------------------- | :------: | :-----------: | :----: | -------------------------------------------------------------------------------------------------------------- |
-| version-configs-dir     |    ✅    |       -       | string | The Path to the directory containing the file where the versioning is defined and the `.bumpversion.cfg` file. |
-| release-type            |    ✅    |       -       | string | Scope of the release (major, minor or patch).                                                                  |
-| next-dev-release-type   |    ✅    |       -       | string | Scope of the next release (minor or patch) for developers.                                                     |
-| next-dev-release-suffix |    ❌    |  "SNAPSHOT"   | string | The suffix to add for the developer version.                                                                   |
+| version-configs-dir     |    ✅     |       -       | string | The Path to the directory containing the file where the versioning is defined and the `.bumpversion.cfg` file. |
+| release-type            |    ✅     |       -       | string | Scope of the release (major, minor or patch).                                                                  |
+| next-dev-release-type   |    ✅     |       -       | string | Scope of the next release (minor or patch) for developers.                                                     |
+| next-dev-release-suffix |    ❌     |  "SNAPSHOT"   | string | The suffix to add for the developer version.                                                                   |
 
 ### Secret Parameters
 
@@ -340,9 +340,9 @@ You can use the no-reply GitHub email for the email: `[username]@users.noreply.g
 
 | Name            | Required | Description                                    |
 | --------------- | :------: | ---------------------------------------------- |
-| github-username |    ✅    | The GitHub username for committing the changes |
-| github-email    |    ✅    | The GitHub email for committing the changes    |
-| github-token    |    ✅    | The GitHub token for committing the changes    |
+| github-username |    ✅     | The GitHub username for committing the changes |
+| github-email    |    ✅     | The GitHub email for committing the changes    |
+| github-token    |    ✅     | The GitHub token for committing the changes    |
 
 ### Calling the workflow
 
@@ -389,11 +389,11 @@ This workflow is built from multiple composite actions listed below:
 
 | Name               | Required | Default Value |  Type  | Description                                        |
 | ------------------ | :------: | :-----------: | :----: | -------------------------------------------------- |
-| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization    |
-| timeout            |    ❌    |      60       | string | Time out(in seconds) for CustomResourceDefinitions |
-| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | GCloud-SDK version                                 |
-| kubectl-version    |    ❌    |   "v1.23.0"   | string | Kubectl version                                    |
-| helm-version       |    ❌    |   "v3.8.1"    | string | Helm version                                       |
+| kustomization-path |    ✅     |       -       | string | Path to the root directory of the kustomization    |
+| timeout            |    ❌     |      60       | string | Time out(in seconds) for CustomResourceDefinitions |
+| gcloud-sdk-version |    ❌     |   "376.0.0"   | string | GCloud-SDK version                                 |
+| kubectl-version    |    ❌     |   "v1.23.0"   | string | Kubectl version                                    |
+| helm-version       |    ❌     |   "v3.8.1"    | string | Helm version                                       |
 
 ### Secret Parameters
 
@@ -401,10 +401,10 @@ The GKE cluster that will be used for the deployment is defined by these secrets
 
 | Name                | Required | Description                                |
 | ------------------- | :------: | ------------------------------------------ |
-| gke-service-account |    ✅    | GKE service account key for authentication |
-| gke-project         |    ✅    | GKE project id for authentication          |
-| gke-region          |    ✅    | GKE region for authentication              |
-| gke-cluster         |    ✅    | GKE cluster for authentication             |
+| gke-service-account |    ✅     | GKE service account key for authentication |
+| gke-project         |    ✅     | GKE project id for authentication          |
+| gke-region          |    ✅     | GKE region for authentication              |
+| gke-cluster         |    ✅     | GKE cluster for authentication             |
 
 ### Calling the workflow
 
@@ -454,10 +454,10 @@ This workflow is built from multiple composite actions listed below:
 
 | Name               | Required | Default Value |  Type  | Description                                     |
 | ------------------ | :------: | :-----------: | :----: | ----------------------------------------------- |
-| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization |
-| gcloud-sdk-version |    ❌    |   "376.0.0"   | string | GCloud-SDK version                              |
-| kubectl-version    |    ❌    |   "v1.23.0"   | string | Kubectl version                                 |
-| helm-version       |    ❌    |   "v3.8.1"    | string | Helm version                                    |
+| kustomization-path |    ✅     |       -       | string | Path to the root directory of the kustomization |
+| gcloud-sdk-version |    ❌     |   "376.0.0"   | string | GCloud-SDK version                              |
+| kubectl-version    |    ❌     |   "v1.23.0"   | string | Kubectl version                                 |
+| helm-version       |    ❌     |   "v3.8.1"    | string | Helm version                                    |
 
 ### Secret Parameters
 
@@ -465,10 +465,10 @@ The GKE cluster that will be used for the deployment is defined by these secrets
 
 | Name                | Required | Description                                |
 | ------------------- | :------: | ------------------------------------------ |
-| gke-service-account |    ✅    | GKE service account key for authentication |
-| gke-project         |    ✅    | GKE project id for authentication          |
-| gke-region          |    ✅    | GKE region for authentication              |
-| gke-cluster         |    ✅    | GKE cluster for authentication             |
+| gke-service-account |    ✅     | GKE service account key for authentication |
+| gke-project         |    ✅     | GKE project id for authentication          |
+| gke-region          |    ✅     | GKE region for authentication              |
+| gke-cluster         |    ✅     | GKE cluster for authentication             |
 
 ### Calling the workflow
 
@@ -529,13 +529,13 @@ This workflow is built from multiple composite actions listed below:
 
 | Name              | Required |             Default Value             |  Type   | Description                                                                                                                       |
 | ----------------- | :------: | :-----------------------------------: | :-----: | --------------------------------------------------------------------------------------------------------------------------------- |
-| release-type      |    ✅    |                   -                   | string  | Scope of the release, see the official [documentation of Poetry](https://python-poetry.org/docs/cli/#version) for possible values |
-| ref               |    ❌    | The default branch of your repository | string  | ref name to checkout the repository                                                                                               |
-| python-version    |    ❌    |                "3.10"                 | string  | Python version for setting up Poetry                                                                                              |
-| poetry-version    |    ❌    |                "1.5.1"                | string  | Poetry version to be installed                                                                                                    |
-| changelog         |    ❌    |                 true                  | boolean | If set to true, a CHANGELOG.md will be created when a release is done                                                             |
-| changelog-config  |    ❌    |                   -                   | string  | Path to the changelog config file. Only needed if changelog is set to true                                                        |
-| working-directory |    ❌    |                 "./"                  | string  | Working directory of your Python package                                                                                          |
+| release-type      |    ✅     |                   -                   | string  | Scope of the release, see the official [documentation of Poetry](https://python-poetry.org/docs/cli/#version) for possible values |
+| ref               |    ❌     | The default branch of your repository | string  | ref name to checkout the repository                                                                                               |
+| python-version    |    ❌     |                "3.10"                 | string  | Python version for setting up Poetry                                                                                              |
+| poetry-version    |    ❌     |                "1.5.1"                | string  | Poetry version to be installed                                                                                                    |
+| changelog         |    ❌     |                 true                  | boolean | If set to true, a CHANGELOG.md will be created when a release is done                                                             |
+| changelog-config  |    ❌     |                   -                   | string  | Path to the changelog config file. Only needed if changelog is set to true                                                        |
+| working-directory |    ❌     |                 "./"                  | string  | Working directory of your Python package                                                                                          |
 
 ### Secret Parameters
 
@@ -546,9 +546,9 @@ email: `[username]@users.noreply.github.com`.
 
 | Name            | Required | Description                                    |
 | --------------- | :------: | ---------------------------------------------- |
-| github-username |    ✅    | The GitHub username for committing the changes |
-| github-email    |    ✅    | The GitHub email for committing the changes    |
-| github-token    |    ✅    | The GitHub token for committing the changes    |
+| github-username |    ✅     | The GitHub username for committing the changes |
+| github-email    |    ✅     | The GitHub email for committing the changes    |
+| github-token    |    ✅     | The GitHub token for committing the changes    |
 
 ### Outputs
 
@@ -614,10 +614,10 @@ This workflow is built from multiple composite actions listed below:
 
 | Name              | Required | Default Value |  Type   | Description                                                                                                   |
 | ----------------- | :------: | :-----------: | :-----: | ------------------------------------------------------------------------------------------------------------- |
-| publish-to-test   |    ❌    |     true      | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org |
-| python-version    |    ❌    |    "3.10"     | string  | Python version for setting up Poetry                                                                          |
-| poetry-version    |    ❌    |    "1.5.1"    | string  | Poetry version to be installed                                                                                |
-| working-directory |    ❌    |     "./"      | string  | Working directory of your Python package                                                                      |
+| publish-to-test   |    ❌     |     true      | boolean | If set to true, the packages are published to test.pypi.org other wise the packages are published to pypi.org |
+| python-version    |    ❌     |    "3.10"     | string  | Python version for setting up Poetry                                                                          |
+| poetry-version    |    ❌     |    "1.5.1"    | string  | Poetry version to be installed                                                                                |
+| working-directory |    ❌     |     "./"      | string  | Working directory of your Python package                                                                      |
 
 ### Secret Parameters
 
@@ -625,7 +625,7 @@ These secrets define the PyPI token that allow the GitHub action to release the 
 
 | Name       | Required | Description                                      |
 | ---------- | :------: | ------------------------------------------------ |
-| pypi-token |    ✅    | The (Test)PyPI API token for publishing packages |
+| pypi-token |    ✅     | The (Test)PyPI API token for publishing packages |
 
 ### Calling the workflow
 
@@ -668,9 +668,9 @@ This workflow is built from multiple composite actions listed below:
 
 | Name              | Required | Default Value |  Type  | Description                              |
 | ----------------- | :------: | :-----------: | :----: | ---------------------------------------- |
-| python-version    |    ❌    |    "3.10"     | string | Python version for setting up Poetry     |
-| poetry-version    |    ❌    |    "1.5.1"    | string | Poetry version to be installed           |
-| working-directory |    ❌    |     "./"      | string | Working directory of your Python package |
+| python-version    |    ❌     |    "3.10"     | string | Python version for setting up Poetry     |
+| poetry-version    |    ❌     |    "1.5.1"    | string | Poetry version to be installed           |
+| working-directory |    ❌     |     "./"      | string | Working directory of your Python package |
 
 ### Secret Parameters
 
@@ -678,7 +678,7 @@ These secrets define the TestPyPI token that allow the GitHub action to release 
 
 | Name       | Required | Description                                    |
 | ---------- | :------: | ---------------------------------------------- |
-| pypi-token |    ✅    | The TestPyPI API token for publishing packages |
+| pypi-token |    ✅     | The TestPyPI API token for publishing packages |
 
 ### Calling the workflow
 
@@ -720,12 +720,12 @@ This workflow is built from multiple composite actions listed below:
 
 | Name               | Required | Default Value |  Type   | Description                                                                                                   |
 | ------------------ | :------: | :-----------: | :-----: | ------------------------------------------------------------------------------------------------------------- |
-| java-distribution  |    ❌    |   microsoft   | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
-| java-version       |    ❌    |      11       | string  | Java version to be installed                                                                                  |
-| gradle-version     |    ❌    |    wrapper    | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
-| gradle-cache       |    ❌    |     true      | boolean | Whether Gradle caching is enabled or not                                                                      |
-| working-directory  |    ❌    |       .       | string  | Working directory of your Gradle artifacts                                                                    |
-| download-lfs-files |    ❌    |    "false"    | string  | Whether the Git checkout action should resolve LFS files or not                                               |
+| java-distribution  |    ❌     |   microsoft   | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
+| java-version       |    ❌     |      11       | string  | Java version to be installed                                                                                  |
+| gradle-version     |    ❌     |    wrapper    | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
+| gradle-cache       |    ❌     |     true      | boolean | Whether Gradle caching is enabled or not                                                                      |
+| working-directory  |    ❌     |       .       | string  | Working directory of your Gradle artifacts                                                                    |
+| download-lfs-files |    ❌     |    "false"    | string  | Whether the Git checkout action should resolve LFS files or not                                               |
 
 ### Secret Parameters
 
@@ -735,11 +735,11 @@ your build artifacts.
 
 | Name                    | Required | Description                                                    |
 | ----------------------- | :------: | -------------------------------------------------------------- |
-| signing-key-id          |    ✅    | Key id for signing the Sonatype publication                    |
-| signing-password        |    ✅    | Password for signing the Sonatype publication                  |
-| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication |
-| sonar-organization      |    ✅    | Organization for Sonarcloud                                    |
-| sonar-token             |    ✅    | Token for Sonarcloud                                           |
+| signing-key-id          |    ✅     | Key id for signing the Sonatype publication                    |
+| signing-password        |    ✅     | Password for signing the Sonatype publication                  |
+| signing-secret-key-ring |    ✅     | Key ring (base64 encoded) for signing the Sonatype publication |
+| sonar-organization      |    ✅     | Organization for Sonarcloud                                    |
+| sonar-token             |    ✅     | Token for Sonarcloud                                           |
 
 ### Calling the workflow
 
@@ -792,12 +792,12 @@ This workflow is built from multiple composite actions and workflows listed belo
 
 | Name              | Required | Default Value |  Type   | Description                                                                                                   |
 | ----------------- | :------: | :-----------: | :-----: | ------------------------------------------------------------------------------------------------------------- |
-| docker-publisher  |    ✅    |       -       | string  | Publisher to prefix Docker image                                                                              |
-| java-distribution |    ❌    |   microsoft   | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
-| java-version      |    ❌    |      11       | string  | Java version to be installed                                                                                  |
-| gradle-version    |    ❌    |    wrapper    | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
-| gradle-cache      |    ❌    |     true      | boolean | Whether Gradle caching is enabled or not                                                                      |
-| working-directory |    ❌    |       .       | string  | Working directory of your Gradle artifacts                                                                    |
+| docker-publisher  |    ✅     |       -       | string  | Publisher to prefix Docker image                                                                              |
+| java-distribution |    ❌     |   microsoft   | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
+| java-version      |    ❌     |      11       | string  | Java version to be installed                                                                                  |
+| gradle-version    |    ❌     |    wrapper    | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
+| gradle-cache      |    ❌     |     true      | boolean | Whether Gradle caching is enabled or not                                                                      |
+| working-directory |    ❌     |       .       | string  | Working directory of your Gradle artifacts                                                                    |
 
 ### Secret Parameters
 
@@ -810,17 +810,17 @@ a tag branch.
 
 | Name                    | Required | Description                                                    |
 | ----------------------- | :------: | -------------------------------------------------------------- |
-| sonar-token             |    ✅    | Token for Sonarcloud                                           |
-| sonar-organization      |    ✅    | Organization for Sonarcloud                                    |
-| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication |
-| signing-key-id          |    ✅    | Key id for signing the Sonatype publication                    |
-| signing-password        |    ✅    | Password for signing the Sonatype publication                  |
-| ossrh-username          |    ✅    | Username for signing into Sonatype repository                  |
-| ossrh-password          |    ✅    | Password for signing into Sonatype repository                  |
-| docker-username         |    ✅    | Username for publishing to Dockerhub                           |
-| docker-password         |    ✅    | Password for publishing to Dockerhub                           |
-| github-username         |    ✅    | GitHub username for requesting changes from API                |
-| github-token            |    ✅    | GitHub token for requesting changes from API                   |
+| sonar-token             |    ✅     | Token for Sonarcloud                                           |
+| sonar-organization      |    ✅     | Organization for Sonarcloud                                    |
+| signing-secret-key-ring |    ✅     | Key ring (base64 encoded) for signing the Sonatype publication |
+| signing-key-id          |    ✅     | Key id for signing the Sonatype publication                    |
+| signing-password        |    ✅     | Password for signing the Sonatype publication                  |
+| ossrh-username          |    ✅     | Username for signing into Sonatype repository                  |
+| ossrh-password          |    ✅     | Password for signing into Sonatype repository                  |
+| docker-username         |    ✅     | Username for publishing to Dockerhub                           |
+| docker-password         |    ✅     | Password for publishing to Dockerhub                           |
+| github-username         |    ✅     | GitHub username for requesting changes from API                |
+| github-token            |    ✅     | GitHub token for requesting changes from API                   |
 
 ### Calling the workflow
 
@@ -878,11 +878,11 @@ This workflow is built from multiple composite actions and workflows listed belo
 
 | Name              | Required | Default Value |  Type   | Description                                                                                                   |
 | ----------------- | :------: | :-----------: | :-----: | ------------------------------------------------------------------------------------------------------------- |
-| java-distribution |    ❌    |   microsoft   | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
-| java-version      |    ❌    |      11       | string  | Java version to be installed                                                                                  |
-| gradle-version    |    ❌    |    wrapper    | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
-| gradle-cache      |    ❌    |     true      | boolean | Whether Gradle caching is enabled or not                                                                      |
-| working-directory |    ❌    |       .       | string  | Working directory of your Gradle artifacts                                                                    |
+| java-distribution |    ❌     |   microsoft   | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
+| java-version      |    ❌     |      11       | string  | Java version to be installed                                                                                  |
+| gradle-version    |    ❌     |    wrapper    | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
+| gradle-cache      |    ❌     |     true      | boolean | Whether Gradle caching is enabled or not                                                                      |
+| working-directory |    ❌     |       .       | string  | Working directory of your Gradle artifacts                                                                    |
 
 ### Secret Parameters
 
@@ -894,15 +894,15 @@ changelog when running on a tag branch.
 
 | Name                    | Required | Description                                                    |
 | ----------------------- | :------: | -------------------------------------------------------------- |
-| sonar-token             |    ✅    | Token for Sonarcloud                                           |
-| sonar-organization      |    ✅    | Organization for Sonarcloud                                    |
-| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication |
-| signing-key-id          |    ✅    | Key id for signing the Sonatype publication                    |
-| signing-password        |    ✅    | Password for signing the Sonatype publication                  |
-| ossrh-username          |    ✅    | Username for signing into Sonatype repository                  |
-| ossrh-password          |    ✅    | Password for signing into Sonatype repository                  |
-| github-username         |    ✅    | GitHub username for requesting changes from API                |
-| github-token            |    ✅    | GitHub token for requesting changes from API                   |
+| sonar-token             |    ✅     | Token for Sonarcloud                                           |
+| sonar-organization      |    ✅     | Organization for Sonarcloud                                    |
+| signing-secret-key-ring |    ✅     | Key ring (base64 encoded) for signing the Sonatype publication |
+| signing-key-id          |    ✅     | Key id for signing the Sonatype publication                    |
+| signing-password        |    ✅     | Password for signing the Sonatype publication                  |
+| ossrh-username          |    ✅     | Username for signing into Sonatype repository                  |
+| ossrh-password          |    ✅     | Password for signing into Sonatype repository                  |
+| github-username         |    ✅     | GitHub username for requesting changes from API                |
+| github-token            |    ✅     | GitHub token for requesting changes from API                   |
 
 ### Calling the workflow
 
@@ -959,11 +959,11 @@ This workflow is built from multiple composite actions and workflows listed belo
 
 | Name              | Required | Default Value |  Type   | Description                                                                                                   |
 | ----------------- | :------: | :-----------: | :-----: | ------------------------------------------------------------------------------------------------------------- |
-| java-distribution |    ❌    |   microsoft   | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
-| java-version      |    ❌    |      11       | string  | Java version to be installed                                                                                  |
-| gradle-version    |    ❌    |    wrapper    | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
-| gradle-cache      |    ❌    |     true      | boolean | Whether Gradle caching is enabled or not                                                                      |
-| working-directory |    ❌    |       .       | string  | Working directory of your Gradle artifacts                                                                    |
+| java-distribution |    ❌     |   microsoft   | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
+| java-version      |    ❌     |      11       | string  | Java version to be installed                                                                                  |
+| gradle-version    |    ❌     |    wrapper    | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
+| gradle-cache      |    ❌     |     true      | boolean | Whether Gradle caching is enabled or not                                                                      |
+| working-directory |    ❌     |       .       | string  | Working directory of your Gradle artifacts                                                                    |
 
 ### Secret Parameters
 
@@ -976,17 +976,17 @@ changelog when running on a tag branch.
 
 | Name                    | Required | Description                                                    |
 | ----------------------- | :------: | -------------------------------------------------------------- |
-| sonar-token             |    ✅    | Token for Sonarcloud                                           |
-| sonar-organization      |    ✅    | Organization for Sonarcloud                                    |
-| signing-secret-key-ring |    ✅    | Key ring (base64 encoded) for signing the Sonatype publication |
-| signing-key-id          |    ✅    | Key id for signing the Sonatype publication                    |
-| signing-password        |    ✅    | Password for signing the Sonatype publication                  |
-| ossrh-username          |    ✅    | Username for signing into Sonatype repository                  |
-| ossrh-password          |    ✅    | Password for signing into Sonatype repository                  |
-| gradle-publish-key      |    ✅    | Key for publishing to Gradle Plugin Portal                     |
-| gradle-publish-secret   |    ✅    | Secret for publishing to Gradle Plugin Portal                  |
-| github-username         |    ✅    | GitHub username for requesting changes from API                |
-| github-token            |    ✅    | GitHub token for requesting changes from API                   |
+| sonar-token             |    ✅     | Token for Sonarcloud                                           |
+| sonar-organization      |    ✅     | Organization for Sonarcloud                                    |
+| signing-secret-key-ring |    ✅     | Key ring (base64 encoded) for signing the Sonatype publication |
+| signing-key-id          |    ✅     | Key id for signing the Sonatype publication                    |
+| signing-password        |    ✅     | Password for signing the Sonatype publication                  |
+| ossrh-username          |    ✅     | Username for signing into Sonatype repository                  |
+| ossrh-password          |    ✅     | Password for signing into Sonatype repository                  |
+| gradle-publish-key      |    ✅     | Key for publishing to Gradle Plugin Portal                     |
+| gradle-publish-secret   |    ✅     | Secret for publishing to Gradle Plugin Portal                  |
+| github-username         |    ✅     | GitHub username for requesting changes from API                |
+| github-token            |    ✅     | GitHub token for requesting changes from API                   |
 
 ### Calling the workflow
 
@@ -1042,13 +1042,13 @@ This workflow is built from another composite action listed below:
 
 | Name              | Required | Default Value  |  Type   | Description                                                                                                   |
 | ----------------- | :------: | :------------: | :-----: | ------------------------------------------------------------------------------------------------------------- |
-| release-type      |    ✅    |       -        | string  | Scope of the release (major, minor or patch)                                                                  |
-| changelog-file    |    ❌    | "CHANGELOG.md" | string  | Path to the Changelog.md file                                                                                 |
-| gradle-cache      |    ❌    |      true      | boolean | Whether Gradle caching is enabled or not                                                                      |
-| gradle-version    |    ❌    |    wrapper     | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
-| java-distribution |    ❌    |   microsoft    | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
-| java-version      |    ❌    |       11       | string  | Java version to be installed                                                                                  |
-| working-directory |    ❌    |       .        | string  | Working directory of your Gradle artifacts                                                                    |
+| release-type      |    ✅     |       -        | string  | Scope of the release (major, minor or patch)                                                                  |
+| changelog-file    |    ❌     | "CHANGELOG.md" | string  | Path to the Changelog.md file                                                                                 |
+| gradle-cache      |    ❌     |      true      | boolean | Whether Gradle caching is enabled or not                                                                      |
+| gradle-version    |    ❌     |    wrapper     | string  | [Gradle version](https://github.com/gradle/gradle-build-action#use-a-specific-gradle-version) to be installed |
+| java-distribution |    ❌     |   microsoft    | string  | [Java distribution](https://github.com/actions/setup-java#supported-distributions) to be installed            |
+| java-version      |    ❌     |       11       | string  | Java version to be installed                                                                                  |
+| working-directory |    ❌     |       .        | string  | Working directory of your Gradle artifacts                                                                    |
 
 ### Secret Parameters
 
@@ -1057,9 +1057,9 @@ a `github-token`.
 
 | Name            | Required | Description                                |
 | --------------- | :------: | ------------------------------------------ |
-| github-username |    ✅    | GitHub username for committing the changes |
-| github-email    |    ✅    | GitHub email for committing the changes    |
-| github-token    |    ✅    | GitHub token for committing the changes    |
+| github-username |    ✅     | GitHub username for committing the changes |
+| github-email    |    ✅     | GitHub email for committing the changes    |
+| github-token    |    ✅     | GitHub token for committing the changes    |
 
 ### Outputs
 
@@ -1128,10 +1128,10 @@ This workflow is built from other composite actions listed below:
 
 | Name              | Required | Default Value |  Type   | Description                                                                |
 | ----------------- | :------: | :-----------: | :-----: | -------------------------------------------------------------------------- |
-| release-type      |    ✅    |       -       | string  | Scope of the release (major, minor or patch)                               |
-| changelog         |    ❌    |     true      | boolean | Create changelog for release                                               |
-| changelog-config  |    ❌    |       -       | string  | Path to the changelog config file. Only needed if changelog is set to true |
-| working-directory |    ❌    |       .       | string  | Working directory of project containing `.bumpversion.cfg`                 |
+| release-type      |    ✅     |       -       | string  | Scope of the release (major, minor or patch)                               |
+| changelog         |    ❌     |     true      | boolean | Create changelog for release                                               |
+| changelog-config  |    ❌     |       -       | string  | Path to the changelog config file. Only needed if changelog is set to true |
+| working-directory |    ❌     |       .       | string  | Working directory of project containing `.bumpversion.cfg`                 |
 
 ### Secret Parameters
 
@@ -1140,9 +1140,9 @@ a `github-token`.
 
 | Name            | Required | Description                                |
 | --------------- | :------: | ------------------------------------------ |
-| github-username |    ✅    | GitHub username for committing the changes |
-| github-email    |    ✅    | GitHub email for committing the changes    |
-| github-token    |    ✅    | GitHub token for committing the changes    |
+| github-username |    ✅     | GitHub username for committing the changes |
+| github-email    |    ✅     | GitHub email for committing the changes    |
+| github-token    |    ✅     | GitHub token for committing the changes    |
 
 ### Outputs
 
