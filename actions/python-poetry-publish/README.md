@@ -6,11 +6,11 @@ This composite action uses Poetry to build and publish your Python packages to a
 
 | Name              | Required | Default Value | Description                                        |
 | ----------------- | :------: | :-----------: | -------------------------------------------------- |
-| index-name        |    ✅     |       -       | The package index name for publishing packages     |
-| index-url         |    ✅     |       -       | The package index url for publishing packages      |
-| index-username    |    ✅     |       -       | The package index username for publishing packages |
-| index-password    |    ✅     |       -       | The package index password for publishing packages |
-| working-directory |    ❌     |     "./"      | The working directory of your Python package.      |
+| index-name        |    ✅    |       -       | The package index name for publishing packages     |
+| index-url         |    ✅    |       -       | The package index url for publishing packages      |
+| index-username    |    ✅    |       -       | The package index username for publishing packages |
+| index-password    |    ✅    |       -       | The package index password for publishing packages |
+| working-directory |    ❌    |     "./"      | The working directory of your Python package.      |
 
 ## Usage
 
