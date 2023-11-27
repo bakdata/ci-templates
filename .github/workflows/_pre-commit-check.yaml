@@ -1,0 +1,18 @@
+name: Pre-Commit Check
+
+on:
+  pull_request:
+
+jobs:
+  pre-commit-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if Pre-Commit Ran Locally
+        run: |
+          if [ -f .git/COMMIT_EDITMSG ]; then
+            echo "Pre-Commit were not run locally. Please run 'pre-commit run --all-files' locally before committing."
+            exit 1
+          else
+            echo "Pre-Commit were run locally. Proceeding with the workflow."
+          fi
