@@ -1,17 +1,5 @@
 # Refenrences helm-release reusable Workflow
 
-## Secrets
-
-<!-- AUTO-DOC-SECRETS:START - Do not remove or modify this section -->
-
-| SECRET          | REQUIRED | DESCRIPTION                                     |
-| --------------- | -------- | ----------------------------------------------- |
-| github-email    | true     | The GitHub email for committing the changes.    |
-| github-token    | true     | The GitHub token for committing the changes.    |
-| github-username | true     | The GitHub username for committing the changes. |
-
-<!-- AUTO-DOC-SECRETS:END -->
-
 ## Inputs
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
