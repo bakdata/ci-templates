@@ -18,3 +18,11 @@
 | working-directory   | string | false    | `"."`                                   | Working directory of your Gradle artifacts. (Default is .)                                                                               |
 
 <!-- AUTO-DOC-INPUT:END -->
+
+## Outputs
+
+<!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
+
+No outputs.
+
+<!-- AUTO-DOC-OUTPUT:END -->

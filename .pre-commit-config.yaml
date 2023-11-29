@@ -6,6 +6,8 @@ repos:
         language: script
         name: Generate doc
         entry: ./generate-doc.sh
+        types: [file]
+
         # stages:
         #   - "manual"
 

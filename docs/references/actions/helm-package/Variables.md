@@ -1,3 +1,13 @@
+# Refenrences helm-package composite action
+
+## Outputs
+
+<!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
+
+No outputs.
+
+<!-- AUTO-DOC-OUTPUT:END -->
+
 ## Inputs
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
@@ -13,11 +23,6 @@
 
 <!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
 
-No outputs.
-
-<!-- AUTO-DOC-OUTPUT:END -->
-
-->
 No outputs.
 
 <!-- AUTO-DOC-OUTPUT:END -->
