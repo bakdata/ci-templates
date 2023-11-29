@@ -4,16 +4,31 @@ repos:
       - id: auto-doc
         language: python
         name: Generate doc
-        entry: python3 ./generate-doc.py
-        stages:
-          - "pre-commit"
-        # types: [python3]
+        entry: python3 generate-doc.py
+        types: [python3]
+        # stages:
+        #   - "pre-commit"
 
-  - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.17
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
     hooks:
-      - id: mdformat
-        additional_dependencies:
-          - mdformat-gfm
-          - mdformat-black
-        files: '.*Variables\.md$'
+      - id: check-yaml
+      - id: trailing-whitespace
+
+  # - repo: https://github.com/executablebooks/mdformat
+  #   rev: 0.7.17
+  #   hooks:
+  #     - id: mdformat
+  #       additional_dependencies:
+  #         - mdformat-gfm
+  #         - mdformat-black
+  #       files: '.*Variables\.md$'
+
+  # - repo: local
+  #   hooks:
+  #     - id: format-markdown
+  #       language: python
+  #       name: Format Markdown with dprint
+  #       entry: python format_md_with_dprint.py
+  #       files: \.md$
+  #       types: [file]

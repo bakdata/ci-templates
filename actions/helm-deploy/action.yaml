@@ -53,7 +53,7 @@ runs:
         else
           echo "No repository specified; Skipping step"
         fi
-    
+
     - name: Deploy Helm chart
       shell: bash
       run: |
@@ -63,7 +63,7 @@ runs:
           echo "Deploying with multiple value files"
           parameters+=($(echo '${{ inputs.values-yaml }}' | jq -r '[ .[] | . = "--values \(.)"] | join(" ")'))
         else
-          echo "Deploying with single value file"          
+          echo "Deploying with single value file"
           parameters+=(--values ${{ inputs.values-yaml }})
         fi
 

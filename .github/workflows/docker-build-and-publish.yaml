@@ -94,7 +94,7 @@ jobs:
           retention-days: "${{ inputs.retention-days }}"
           working-directory: "${{ inputs.working-directory }}"
 
- 
+
   docker-publish:
     name: Docker publish
     runs-on: ubuntu-22.04
