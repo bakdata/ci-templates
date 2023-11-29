@@ -6,9 +6,9 @@ This composite action uses Poetry to build and publish your Python packages eith
 
 | Name              | Required | Default Value | Description                                                                                          |
 | ----------------- | :------: | :-----------: | ---------------------------------------------------------------------------------------------------- |
-| pypi-token        |    ✅     |       -       | The (Test)PyPI API token for publishing packages                                                     |
-| publish-to-test   |    ❌     |     true      | If set to true, the packages are published to TestPyPI other wise the packages are published to PyPI |
-| working-directory |    ❌     |     "./"      | The working directory of your Python package.                                                        |
+| pypi-token        |    ✅    |       -       | The (Test)PyPI API token for publishing packages                                                     |
+| publish-to-test   |    ❌    |     true      | If set to true, the packages are published to TestPyPI other wise the packages are published to PyPI |
+| working-directory |    ❌    |     "./"      | The working directory of your Python package.                                                        |
 
 ## Usage
 

@@ -18,9 +18,9 @@ current_version = 0.0.1
 
 | Name              | Required | Default Value | Description                                           |
 | ----------------- | :------: | :-----------: | ----------------------------------------------------- |
-| release-type      |    ✅     |       -       | The scope of the release (major, minor or patch)      |
-| working-directory |    ❌     |       .       | The directory containing the `.bumpversion.cfg` file. |
-| new-version       |    ❌     |       .       | New version to use for the bump                       |
+| release-type      |    ✅    |       -       | The scope of the release (major, minor or patch)      |
+| working-directory |    ❌    |       .       | The directory containing the `.bumpversion.cfg` file. |
+| new-version       |    ❌    |       .       | New version to use for the bump                       |
 
 ### Outputs
 

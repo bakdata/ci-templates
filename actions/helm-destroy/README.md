@@ -6,8 +6,8 @@ This action will destroy a Helm chart on a Kubernetes cluster.
 
 | Name         | Required | Default Value |  Type  | Description                             |
 | ------------ | :------: | :-----------: | :----: | --------------------------------------- |
-| release-name |    ✅     |       -       | string | The release name of the Helm deployment |
-| namespace    |    ✅     |       -       | string | The namespace of the Helm deployment    |
+| release-name |    ✅    |       -       | string | The release name of the Helm deployment |
+| namespace    |    ✅    |       -       | string | The namespace of the Helm deployment    |
 
 ## Usage
 

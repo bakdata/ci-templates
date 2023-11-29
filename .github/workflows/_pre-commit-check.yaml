@@ -31,8 +31,8 @@ jobs:
 
       - name: Check if pre-commit ran locally
         run: |
-          # if git rev-parse --verify ${{ github.ref }} >/dev/null 2>&1; then
-          if git rev-parse --verify HEAD >/dev/null 2>&1; then
+          if git rev-parse --verify ${{ github.ref }} >/dev/null 2>&1; then
+          # if git rev-parse --verify HEAD >/dev/null 2>&1; then
             echo "Checking if pre-commit ran locally..."
             if [ -f .pre_commit_ran ]; then
               echo "Pre-commit checks were run locally."

@@ -12,12 +12,12 @@ This action uses another composite action listed below:
 
 | Name            | Required | Default Value | Description                                       |
 | --------------- | :------: | :-----------: | ------------------------------------------------- |
-| tag             |    ✅     |       -       | The version of the tag to be released, e.g. 1.0.0 |
-| github-username |    ✅     |       -       | The GitHub username for committing the changes    |
-| github-email    |    ✅     |       -       | The GitHub email for committing the changes       |
-| github-token    |    ✅     |       -       | The GitHub token for committing the changes       |
-| release-title   |    ✅     |       -       | Title for the GitHub release                      |
-| release-body    |    ❌     |       -       | Description for the GitHub release                |
+| tag             |    ✅    |       -       | The version of the tag to be released, e.g. 1.0.0 |
+| github-username |    ✅    |       -       | The GitHub username for committing the changes    |
+| github-email    |    ✅    |       -       | The GitHub email for committing the changes       |
+| github-token    |    ✅    |       -       | The GitHub token for committing the changes       |
+| release-title   |    ✅    |       -       | Title for the GitHub release                      |
+| release-body    |    ❌    |       -       | Description for the GitHub release                |
 
 ## Usage
 

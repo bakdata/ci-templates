@@ -10,8 +10,8 @@ Create a `kustomization.yaml` file for your deployment.
 
 | Name               | Required | Default Value |  Type  | Description                                        |
 | ------------------ | :------: | :-----------: | :----: | -------------------------------------------------- |
-| kustomization-path |    ✅     |       -       | string | Path to the root directory of the kustomization    |
-| timeout            |    ❌     |      60       | string | Time out(in seconds) for CustomResourceDefinitions |
+| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization    |
+| timeout            |    ❌    |      60       | string | Time out(in seconds) for CustomResourceDefinitions |
 
 ## Usage
 

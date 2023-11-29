@@ -6,7 +6,7 @@ This action will destroy a `kustomization.yaml` file on a Kubernetes cluster.
 
 | Name               | Required | Default Value |  Type  | Description                                     |
 | ------------------ | :------: | :-----------: | :----: | ----------------------------------------------- |
-| kustomization-path |    ✅     |       -       | string | Path to the root directory of the kustomization |
+| kustomization-path |    ✅    |       -       | string | Path to the root directory of the kustomization |
 
 ## Usage
 
