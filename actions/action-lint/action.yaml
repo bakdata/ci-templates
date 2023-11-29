@@ -1,6 +1,5 @@
 name: "Lint actions and workflows"
 description: "Lint all actions and workflows of a repository"
-
 inputs:
   ref:
     description: "The ref name to checkout the repository."
