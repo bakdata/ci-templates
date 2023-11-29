@@ -12,10 +12,10 @@ This action uses another composite action listed below:
 
 | Name              | Required | Default Value |                   Type                    | Description                                                                                                                       |
 | ----------------- | :------: | :-----------: | :---------------------------------------: | --------------------------------------------------------------------------------------------------------------------------------- |
-| release-type      |    ✅    |       -       |                  string                   | Scope of the release, see the official [documentation of Poetry](https://python-poetry.org/docs/cli/#version) for possible values |
-| python-version    |    ❌    |     3.10      |                  number                   | The Python version for setting up Poetry.                                                                                         |
-| poetry-version    |    ❌    |     1.2.2     |                  number                   | The Poetry version to be installed.                                                                                               |
-| working-directory |    ❌    |       .       | The root directory of the Poetry project. |                                                                                                                                   |
+| release-type      |    ✅     |       -       |                  string                   | Scope of the release, see the official [documentation of Poetry](https://python-poetry.org/docs/cli/#version) for possible values |
+| python-version    |    ❌     |     3.10      |                  number                   | The Python version for setting up Poetry.                                                                                         |
+| poetry-version    |    ❌     |     1.2.2     |                  number                   | The Poetry version to be installed.                                                                                               |
+| working-directory |    ❌     |       .       | The root directory of the Poetry project. |                                                                                                                                   |
 
 ## Output Parameters
 

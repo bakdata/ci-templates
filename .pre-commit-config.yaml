@@ -1,5 +1,4 @@
 repos:
-
   - repo: local
     hooks:
       - id: auto-doc
@@ -16,5 +15,3 @@ repos:
           - mdformat-gfm
           - mdformat-black
         files: '\.md$'
-        # stages:
-        # - "manual"

@@ -6,8 +6,8 @@ This action will lint all actions and workflows of a repository.
 
 | Name                | Required | Default Value |  Type  | Description                                |
 | ------------------- | :------: | :-----------: | :----: | ------------------------------------------ |
-| ref                 |    ❌    |      ""       | string | The ref name to checkout the repository.   |
-| action-lint-version |    ❌    |    v1.6.22    | string | The action lint repository version to use. |
+| ref                 |    ❌     |      ""       | string | The ref name to checkout the repository.   |
+| action-lint-version |    ❌     |    v1.6.22    | string | The action lint repository version to use. |
 
 ## Usage
 
