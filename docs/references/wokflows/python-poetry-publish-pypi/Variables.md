@@ -25,3 +25,6 @@ No outputs.
 | pypi-token |   true   | PyPI token  |
 
 <!-- AUTO-DOC-SECRETS:END -->
+## Inputs
+## Outputs
+## Secrets
