@@ -1,12 +1,11 @@
 repos:
-
   - repo: local
     hooks:
       - id: auto-doc
-        language: script
+        language: python
         name: Generate doc
-        entry: ./generate-doc.sh
-        types: [file]
+        entry: python3 ./generate-doc.py
+        # types: [python3]
 
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.17
@@ -15,4 +14,4 @@ repos:
         additional_dependencies:
           - mdformat-gfm
           - mdformat-black
-        files: '\.md$'
+        files: '.*Variables\.md$'

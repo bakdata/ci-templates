@@ -1,5 +1,0 @@
-- id: auto-doc
-  name: Documentation generator
-  description: Gerate actions and workflows references
-  entry: hooks/generate-doc.sh
-  language: script

@@ -3,6 +3,18 @@ import os
 import shutil
 
 
+class Colors:
+    RED = '\033[91m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    BLUE = '\033[94m'
+    RESET = '\033[0m'
+
+
+def print_colored(text, color):
+    print(f"{color}{text}{Colors.RESET}")
+
+
 def calculate_sha(file_path):
     sha = hashlib.sha256()
 
@@ -19,14 +31,15 @@ def copy_file(source_path, destination_path):
     try:
         # Copy the file from source_path to destination_path
         shutil.copy(source_path, destination_path)
-        print(
-            f"........ File updated successfully from {source_path} to {destination_path}")
+        print_colored(
+            f"File updated successfully from {source_path} to {destination_path}", Colors.BLUE)
     except FileNotFoundError:
-        print(f"Source file not found.")
+        print_colored(f"Source file not found.", Colors.RED)
     except PermissionError:
-        print("Permission error. Make sure you have the necessary permissions.")
+        print_colored(
+            "Permission error. Make sure you have the necessary permissions.", Colors.RED)
     except Exception as e:
-        print(f"An error occurred: {e}")
+        print_colored(f"An error occurred: {e}", Colors.RED)
 
 
 # actions
@@ -100,6 +113,8 @@ for workflow in os.listdir(workflow_dir):
                        "tmp_output": tmp_docu_output_workflow})
 
 
+print_colored(
+    "--------------------------------------------------------", Colors.BLUE)
 # Correction
 need_updates = []
 for entry in changes:
@@ -115,17 +130,24 @@ for entry in changes:
 
 for entry in need_updates:
     outdated_file = entry["existing"]
+    path_to_doc = outdated_file.split("/Variables.md")[0]
+    print_colored(path_to_doc, Colors.BLUE)
+    if not os.path.exists(path_to_doc):
+        os.makedirs(path_to_doc)
     new_file = entry["tmp_output"]
-    print(f"........ File {outdated_file} needs to be updated ")
+    print_colored(
+        f"File {outdated_file} needs to be updated ", Colors.YELLOW)
     copy_file(new_file, outdated_file)
 
 if not need_updates:
-    print("√√√√√√√√√ Documentation up to date")
+    print_colored("√ Documentation up to date", Colors.GREEN)
 else:
-    print("øøøøøøøøø Error: The documentation is not up to date. Re running pre-commit may help .")
+    print_colored(
+        "Error: The documentation is not up to date. Re running pre-commit may help.", Colors.RED)
     os._exit(1)
 
 # remove tmp dir
-shutil.rmtree("tmps")
+if os.path.exists("tmps"):
+    shutil.rmtree("tmps")
 # exit succcesfully
 os._exit(0)

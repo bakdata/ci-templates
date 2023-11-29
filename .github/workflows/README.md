@@ -290,8 +290,6 @@ jobs:
       github-token: "${{ secrets.GH_TOKEN }}"
 ```
 
----
-
 ## Release Tag Versions
 
 This workflow enables the release of tag versions as well as the creation of a new snapshot version for developers to work on the next release. The workflow allows you to choose the sort of release that will be performed as well as how to generate the snapshot version.
