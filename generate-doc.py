@@ -1,6 +1,6 @@
+import hashlib
 import os
 import shutil
-import hashlib
 
 
 def calculate_sha(file_path):
@@ -61,7 +61,7 @@ for entry in changes:
     # hash_tmp_file = digest_tmp.hexdigest()
     hash_existing_file = calculate_sha(existing_f)
     hash_tmp_file = calculate_sha(tmp_f)
-    
+
     print(f"{hash_existing_file}\n{hash_tmp_file}\n---")
 
 # workflows
