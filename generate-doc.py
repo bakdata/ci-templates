@@ -112,7 +112,6 @@ for workflow in os.listdir(workflow_dir):
         changes.append({"existing": docs_output_path,
                        "tmp_output": tmp_docu_output_workflow})
 
-
 print_colored(
     "--------------------------------------------------------", Colors.BLUE)
 # Correction
