@@ -27,7 +27,3 @@
 No outputs.
 
 <!-- AUTO-DOC-OUTPUT:END -->
-
-## Inputs
-
-## Outputs

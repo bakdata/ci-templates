@@ -1,15 +1,5 @@
 # Refenrences checkout composite action
 
-## Outputs
-
-<!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
-
-| OUTPUT        | TYPE   | DESCRIPTION                                                      |
-| ------------- | ------ | ---------------------------------------------------------------- |
-| lfs-cache-hit | string | A boolean value to indicate an exact match was found for the key |
-
-<!-- AUTO-DOC-OUTPUT:END -->
-
 ## Inputs
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->

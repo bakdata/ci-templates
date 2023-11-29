@@ -28,7 +28,3 @@
 | release-version | string | The bumped version of your release. |
 
 <!-- AUTO-DOC-OUTPUT:END -->
-
-## Inputs
-
-## Outputs
