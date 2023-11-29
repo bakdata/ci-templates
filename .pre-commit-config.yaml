@@ -5,6 +5,8 @@ repos:
         language: python
         name: Generate doc
         entry: python3 ./generate-doc.py
+        stages:
+          - "pre-commit"
         # types: [python3]
 
   - repo: https://github.com/executablebooks/mdformat
