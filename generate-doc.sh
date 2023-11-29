@@ -10,7 +10,6 @@ for actionsubdir in actions/*; do
     echo "# Refenrences $actionname composite action" >$outputdocfile
     echo "## Inputs" >>$outputdocfile
     echo "## Outputs" >>$outputdocfile
-
     auto-doc -f $actionfilename --colMaxWidth 10000 --colMaxWords 2000 -o $outputdocfile
 done
 
