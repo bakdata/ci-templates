@@ -16,14 +16,3 @@
 | old-tag                   | string | false    |                  | Previous version. Let empty for releases                       |
 
 <!-- AUTO-DOC-INPUT:END -->
-
-## Outputs
-
-<!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
-
-| OUTPUT           | TYPE   | DESCRIPTION                                           |
-| ---------------- | ------ | ----------------------------------------------------- |
-| merged-changelog | string | Changelog containing listing of all single changelogs |
-| single-changelog | string | Changelog containing changes of the latest tag        |
-
-<!-- AUTO-DOC-OUTPUT:END -->
