@@ -153,9 +153,8 @@ def run():
 
 
 if __name__ == "__main__":
-    print(
-        f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Current working directory: {os.getcwd()}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-
+    print_colored(
+        f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Current working directory: {os.getcwd()}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", Colors.RED)
     run()
     # exit succcesfully
     # remove tmp dir
