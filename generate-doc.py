@@ -153,6 +153,9 @@ def run():
 
 
 if __name__ == "__main__":
+    print(
+        f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Current working directory: {os.getcwd()}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
     run()
     # exit succcesfully
     # remove tmp dir

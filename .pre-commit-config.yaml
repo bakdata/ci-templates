@@ -8,9 +8,6 @@ repos:
         language: python
         name: Generate doc
         entry: python3 generate-doc.py
-        # types: [python3]
-        # stages:
-        #   - "pre-commit"
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
