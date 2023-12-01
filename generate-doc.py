@@ -56,27 +56,28 @@ def run():
         # checking if it is a subidr
         if not os.path.isfile(action_subdir_path):
             action_file = os.path.join(action_subdir_path, "action.y*")
+            # exclude action directory without an action.yaml file
+            if os.path.exists(action_file):
+                # create docu in tmp dir
+                tmp_docu_output_dir = os.path.join(
+                    tmp_action, action_name)
+                if not os.path.exists(tmp_docu_output_dir):
+                    os.makedirs(tmp_docu_output_dir)
 
-            # create docu in tmp dir
-            tmp_docu_output_dir = os.path.join(
-                tmp_action, action_name)
-            if not os.path.exists(tmp_docu_output_dir):
-                os.makedirs(tmp_docu_output_dir)
+                tmp_docu_output_action = os.path.join(
+                    tmp_action, action_name, "Variables.md")
 
-            tmp_docu_output_action = os.path.join(
-                tmp_action, action_name, "Variables.md")
+                with open(tmp_docu_output_action, 'w') as file:
+                    l1 = f"# Refenrences {action_name} composite action\n"
+                    l2 = "## Inputs\n"
+                    l3 = "## Outputs\n"
+                    file.writelines([l1, l2, l3])
+                os.system(
+                    f"auto-doc -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action}")
 
-            with open(tmp_docu_output_action, 'w') as file:
-                l1 = f"# Refenrences {action_name} composite action\n"
-                l2 = "## Inputs\n"
-                l3 = "## Outputs\n"
-                file.writelines([l1, l2, l3])
-            os.system(
-                f"auto-doc -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action}")
-
-            output_file_action = f"docs/references/actions/{action_name}/Variables.md"
-            changes.append({"existing": output_file_action,
-                            "tmp_output": tmp_docu_output_action})
+                output_file_action = f"docs/references/actions/{action_name}/Variables.md"
+                changes.append({"existing": output_file_action,
+                                "tmp_output": tmp_docu_output_action})
 
     # go through workflows
     tmp_workflow = "tmps/workflows"
