@@ -23,7 +23,7 @@ repos:
           - mdformat-gfm
           - mdformat-black
         # files: '.*Variables\.md$'
-        # dir: docs/
+        dir: docs/
         files: '.*\.md$'
         exclude: '.*Readme\.md$'
 

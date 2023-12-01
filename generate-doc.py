@@ -168,7 +168,6 @@ def run():
     if os.path.exists("tmps"):
         shutil.rmtree("tmps")
 
-
 if __name__ == "__main__":
     run()
     # exit succcesfully
