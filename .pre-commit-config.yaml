@@ -1,7 +1,7 @@
 default_language_version:
   python: python3.11.4
 exclude: ".*tmps.*"
-fail_fast: true
+# fail_fast: true
 
 repos:
   - repo: local
