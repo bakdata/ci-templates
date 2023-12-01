@@ -1,5 +1,7 @@
 default_language_version:
   python: python3.11.4
+exclude: ".*tmps.*"
+fail_fast: true
 
 repos:
   - repo: local
@@ -7,6 +9,7 @@ repos:
       - id: auto-doc
         language: python
         name: Generate doc
+        dir: .
         entry: python3 generate-doc.py
         types:
           - "python"
@@ -17,7 +20,6 @@ repos:
     hooks:
       - id: check-yaml
       - id: trailing-whitespace
-        exclude: '.*tmps.*'
 
   # - repo: https://github.com/executablebooks/mdformat
   #   rev: 0.7.17
