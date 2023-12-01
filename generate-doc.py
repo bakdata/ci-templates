@@ -15,16 +15,16 @@ def print_colored(text, color):
     print(f"{color}{text}{Colors.RESET}")
 
 
-def calculate_sha(file_path):
-    sha = hashlib.sha256()
+# def calculate_sha(file_path):
+#     sha = hashlib.sha256()
 
-    with open(file_path, 'rb') as file:
-        # Read the file in chunks to avoid memory issues with large files
-        chunk_size = 8192
-        while chunk := file.read(chunk_size):
-            sha.update(chunk)
+#     with open(file_path, 'rb') as file:
+#         # Read the file in chunks to avoid memory issues with large files
+#         chunk_size = 8192
+#         while chunk := file.read(chunk_size):
+#             sha.update(chunk)
 
-    return sha.hexdigest()
+#     return sha.hexdigest()
 
 
 def copy_file(source_path, destination_path):
@@ -42,16 +42,21 @@ def copy_file(source_path, destination_path):
         print_colored(f"An error occurred: {e}", Colors.RED)
 
 
-def remove_formatting(text):
+def remove_formatting(content):
     # Remove whitespaces and newlines
-    return ''.join(text.split())
+    return content.replace(" ", "").replace("\n", "").replace("-", "")
+    # return ''.join(text.split())
 
 
 def files_equal(file1_path, file2_path):
     with open(file1_path, 'r') as file1, open(file2_path, 'r') as file2:
         content1 = remove_formatting(file1.read())
         content2 = remove_formatting(file2.read())
-
+        print_colored("a===========================================",Colors.RED)
+        print_colored(content1,Colors.BLUE)
+        print_colored("\n--------\n",Colors.GREEN)
+        print_colored(content2,Colors.BLUE)
+        print_colored("b===========================================",Colors.RED)
         return content1 == content2
 
 
@@ -138,6 +143,8 @@ def run():
         file_exist = os.path.exists(existing_f)
         if (file_exist and not files_equal(existing_f, tmp_f)) or (not file_exist):
             need_updates.append(entry)
+            print_colored("!!!!!!!!changing some file", Colors.RED)
+            # print_colored()
             # hash_existing_file = calculate_sha(existing_f)
             # hash_tmp_file = calculate_sha(tmp_f)
             # if hash_existing_file != hash_tmp_file or not os.path.exists(tmp_docu_output_dir):
@@ -167,6 +174,7 @@ def run():
     # remove tmp dir
     if os.path.exists("tmps"):
         shutil.rmtree("tmps")
+
 
 if __name__ == "__main__":
     run()
