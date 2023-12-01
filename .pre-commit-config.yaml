@@ -21,6 +21,22 @@ repos:
       - id: check-yaml
       - id: trailing-whitespace
 
+  - repo: https://github.com/markdownlint/markdownlint
+    rev: v0.13.0
+    hooks:
+      - id: markdownlint
+        files: '.*\.md$'
+        exclude: '.*Readme\.md$'
+      - id: markdownlint_docker
+        files: '.*\.md$'
+        exclude: '.*Readme\.md$'
+
+  # - repo: local
+  #   hooks:
+  #     - id: custom-shell-command
+  #       name: Execute Shell Command
+  #       entry: "mdl docs/"
+  #       language: system
   # - repo: https://github.com/executablebooks/mdformat
   #   rev: 0.7.17
   #   hooks:
