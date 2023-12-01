@@ -15,18 +15,6 @@ def print_colored(text, color):
     print(f"{color}{text}{Colors.RESET}")
 
 
-# def calculate_sha(file_path):
-#     sha = hashlib.sha256()
-
-#     with open(file_path, 'rb') as file:
-#         # Read the file in chunks to avoid memory issues with large files
-#         chunk_size = 8192
-#         while chunk := file.read(chunk_size):
-#             sha.update(chunk)
-
-#     return sha.hexdigest()
-
-
 def copy_file(source_path, destination_path):
     try:
         # Copy the file from source_path to destination_path
@@ -43,7 +31,7 @@ def copy_file(source_path, destination_path):
 
 
 def remove_formatting(content):
-    # Remove whitespaces and newlines
+    # Remove whitespaces and newlines and hyphens
     return content.replace(" ", "").replace("\n", "").replace("-", "")
 
 
@@ -126,7 +114,6 @@ def run():
 
             changes.append({"existing": docs_output_path,
                             "tmp_output": tmp_docu_output_workflow})
-
     print_colored(
         "--------------------------------------------------------", Colors.BLUE)
 
@@ -139,14 +126,6 @@ def run():
         if (file_exist and not files_equal(existing_f, tmp_f)) or (not file_exist):
             need_updates.append(entry)
             print_colored("!!!!!!!!changing some file", Colors.RED)
-            # print_colored()
-            # hash_existing_file = calculate_sha(existing_f)
-            # hash_tmp_file = calculate_sha(tmp_f)
-            # if hash_existing_file != hash_tmp_file or not os.path.exists(tmp_docu_output_dir):
-            # if not compare_files(existing_f, tmp_f):
-            #     need_updates.append(entry)
-        # else:
-        #     need_updates.append(entry)
 
     for entry in need_updates:
         outdated_file = entry["existing"]
@@ -173,5 +152,3 @@ def run():
 
 if __name__ == "__main__":
     run()
-    # exit succcesfully
-    # os._exit(0)
