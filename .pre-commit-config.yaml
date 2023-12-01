@@ -18,14 +18,14 @@ repos:
       - id: check-yaml
       - id: trailing-whitespace
 
-  # - repo: https://github.com/executablebooks/mdformat
-  #   rev: 0.7.17
-  #   hooks:
-  #     - id: mdformat
-  #       additional_dependencies:
-  #         - mdformat-gfm
-  #         - mdformat-black
-  #       files: '.*Variables\.md$'
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.17
+    hooks:
+      - id: mdformat
+        additional_dependencies:
+          - mdformat-gfm
+          - mdformat-black
+        files: '.*Variables\.md$'
 
   # - repo: local
   #   hooks:
