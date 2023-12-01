@@ -24,8 +24,8 @@ repos:
           - mdformat-gfm
           - mdformat-black
         dir: docs/
-        files: '.*Variables\.md$'
-        # files: '.*\.md$'
+        # files: '.*Variables\.md$'
+        files: '.*\.md$'
         exclude: '.*Readme\.md$'
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
