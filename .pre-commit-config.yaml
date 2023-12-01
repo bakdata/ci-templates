@@ -25,7 +25,9 @@ repos:
         additional_dependencies:
           - mdformat-gfm
           - mdformat-black
-        files: '.*Variables\.md$'
+        # files: '.*Variables\.md$'
+        files: \.md$
+        exclude: '.*Readme\.md$'
 
   # - repo: local
   #   hooks:
