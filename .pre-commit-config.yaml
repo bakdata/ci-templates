@@ -27,9 +27,14 @@ repos:
       - id: markdownlint
         files: '.*\.md$'
         exclude: '.*Readme\.md$'
+        types:
+          - "file"
+
       - id: markdownlint_docker
         files: '.*\.md$'
         exclude: '.*Readme\.md$'
+        types:
+          - "file"
 
   # - repo: local
   #   hooks:
