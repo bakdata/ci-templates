@@ -42,6 +42,19 @@ def copy_file(source_path, destination_path):
         print_colored(f"An error occurred: {e}", Colors.RED)
 
 
+def remove_formatting(text):
+    # Remove whitespaces and newlines
+    return ''.join(text.split())
+
+
+def files_equal(file1_path, file2_path):
+    with open(file1_path, 'r') as file1, open(file2_path, 'r') as file2:
+        content1 = remove_formatting(file1.read())
+        content2 = remove_formatting(file2.read())
+
+        return content1 == content2
+
+
 def run():
 
     # actions
@@ -122,13 +135,16 @@ def run():
     for entry in changes:
         existing_f = entry["existing"]
         tmp_f = entry["tmp_output"]
-        if os.path.exists(existing_f):
-            hash_existing_file = calculate_sha(existing_f)
-            hash_tmp_file = calculate_sha(tmp_f)
-            if hash_existing_file != hash_tmp_file or not os.path.exists(tmp_docu_output_dir):
-                need_updates.append(entry)
-        else:
+        file_exist = os.path.exists(existing_f)
+        if (file_exist and not files_equal(existing_f, tmp_f)) or (not file_exist):
             need_updates.append(entry)
+            # hash_existing_file = calculate_sha(existing_f)
+            # hash_tmp_file = calculate_sha(tmp_f)
+            # if hash_existing_file != hash_tmp_file or not os.path.exists(tmp_docu_output_dir):
+            # if not compare_files(existing_f, tmp_f):
+            #     need_updates.append(entry)
+        # else:
+        #     need_updates.append(entry)
 
     for entry in need_updates:
         outdated_file = entry["existing"]
@@ -152,7 +168,9 @@ def run():
     if os.path.exists("tmps"):
         shutil.rmtree("tmps")
 
+
 if __name__ == "__main__":
+
     run()
     # exit succcesfully
     # os._exit(0)
