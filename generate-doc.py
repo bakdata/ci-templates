@@ -156,4 +156,4 @@ def run():
 if __name__ == "__main__":
     run()
     # exit succcesfully
-    os._exit(0)
+    # os._exit(0)
