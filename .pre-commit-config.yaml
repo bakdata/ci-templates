@@ -1,7 +1,7 @@
 default_language_version:
   python: python3.11.4
 # exclude: ".*tmps.*"
-fail_fast: true
+# fail_fast: true
 
 repos:
   - repo: local
@@ -15,12 +15,6 @@ repos:
           - "python"
           - "file"
 
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
-    hooks:
-      - id: check-yaml
-      - id: trailing-whitespace
-
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.17
     hooks:
@@ -29,9 +23,16 @@ repos:
           - mdformat-gfm
           - mdformat-black
         # files: '.*Variables\.md$'
-        dir: docs/
+        # dir: docs/
         files: '.*\.md$'
         exclude: '.*Readme\.md$'
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: check-yaml
+      - id: trailing-whitespace
+
 
   # - repo: https://github.com/markdownlint/markdownlint
   #   rev: v0.13.0
