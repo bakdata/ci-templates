@@ -45,18 +45,13 @@ def copy_file(source_path, destination_path):
 def remove_formatting(content):
     # Remove whitespaces and newlines
     return content.replace(" ", "").replace("\n", "").replace("-", "")
-    # return ''.join(text.split())
 
 
 def files_equal(file1_path, file2_path):
     with open(file1_path, 'r') as file1, open(file2_path, 'r') as file2:
         content1 = remove_formatting(file1.read())
         content2 = remove_formatting(file2.read())
-        print_colored("a===========================================",Colors.RED)
-        print_colored(content1,Colors.BLUE)
-        print_colored("\n--------\n",Colors.GREEN)
-        print_colored(content2,Colors.BLUE)
-        print_colored("b===========================================",Colors.RED)
+
         return content1 == content2
 
 
