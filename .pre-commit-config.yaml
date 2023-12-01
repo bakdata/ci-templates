@@ -1,6 +1,7 @@
 default_language_version:
   python: python3.11.4
-# exclude: ".*tmps.*"
+# default_stages: [pre-commit]
+exclude: ".*tmps.*"
 fail_fast: true
 
 repos:
