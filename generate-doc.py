@@ -44,7 +44,7 @@ def files_equal(file1_path, file2_path):
 
 def run():
 
-    # actions
+    # go through actions
     tmp_action = "tmps/actions"
     if not os.path.exists(tmp_action):
         os.makedirs(tmp_action)
@@ -78,7 +78,7 @@ def run():
             changes.append({"existing": output_file_action,
                             "tmp_output": tmp_docu_output_action})
 
-    # workflows
+    # go through workflows
     tmp_workflow = "tmps/workflows"
     if not os.path.exists(tmp_workflow):
         os.makedirs(tmp_workflow)
