@@ -5,4 +5,4 @@
 # mac specific
 .DS_Store
 .bash_history
-tmps/
+tmps
