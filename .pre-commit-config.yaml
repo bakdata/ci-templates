@@ -17,6 +17,8 @@ repos:
         #   - "text"
         entry: python3 generate-doc.py
         stages: [pre-commit, pre-merge-commit, pre-push, manual]
+        language_version: python3.11.4
+          # python:
 
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.17

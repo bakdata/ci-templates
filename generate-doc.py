@@ -19,7 +19,7 @@ def copy_file(source_path, destination_path):
         # Copy the file from source_path to destination_path
         shutil.copy(source_path, destination_path)
         print_colored(
-            f"File updated successfully from {source_path} to {destination_path}", Colors.BLUE)
+            f"File updated successfully: {destination_path}", Colors.BLUE)
     except FileNotFoundError:
         print_colored(f"Source file not found.", Colors.RED)
     except PermissionError:
@@ -146,8 +146,12 @@ def run():
         os._exit(1)
 
     # remove tmp dir
-    if os.path.exists("tmps"):
-        shutil.rmtree("tmps")
-
+    if os.path.exists("./tmps"):
+        try:
+            shutil.rmtree("./tmps")
+        except FileExistsError:
+            print("File already deleted")
+        except FileNotFoundError:
+            print("File already deleted")
 if __name__ == "__main__":
     run()
