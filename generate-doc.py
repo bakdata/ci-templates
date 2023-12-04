@@ -134,6 +134,7 @@ def run():
         if not os.path.exists(path_to_doc):
             os.makedirs(path_to_doc)
         new_file = entry["tmp_output"]
+
         print_colored(
             f"File {outdated_file} needs to be updated ", Colors.YELLOW)
         copy_file(new_file, outdated_file)
