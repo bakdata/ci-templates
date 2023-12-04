@@ -11,9 +11,10 @@ repos:
         language: python
         name: Generate doc
         dir: .
-        types:
-          - "python"
-          - "file"
+        # types:
+        #   - "python"
+        #   - "file"
+        #   - "text"
         entry: python3 generate-doc.py
         stages: [pre-commit, pre-merge-commit, pre-push, manual]
 
