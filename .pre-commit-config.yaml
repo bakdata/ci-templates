@@ -10,11 +10,9 @@ repos:
       - id: auto-doc
         language: python
         name: Generate doc
-        dir: .
+        dir: docs/
+        files: ".*"
         entry: python3 generate-doc.py
-        types:
-          - "python"
-          - "file"
         stages: [pre-commit, pre-merge-commit, pre-push, manual]
 
   - repo: https://github.com/executablebooks/mdformat
