@@ -6,6 +6,7 @@
 
 | INPUT             | TYPE   | REQUIRED | DEFAULT   | DESCRIPTION                                                                                                            |
 | ----------------- | ------ | -------- | --------- | ---------------------------------------------------------------------------------------------------------------------- |
+| poetry-version    | string | false    | `"1.2.2"` | The Poetry version to be installed.                                                                                    |
 | python-version    | string | false    | `"3.10"`  | The Python version for the Poetry virtual environment.                                                                 |
 | release-type      | string | true     |           | Scope of the release: patch, minor, major, or snapshot. See https://python-poetry.org/docs/cli/#version for reference. |
 | working-directory | string | false    | `"."`     | The root directory of the Poetry project.                                                                              |

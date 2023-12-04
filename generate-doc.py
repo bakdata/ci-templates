@@ -129,9 +129,8 @@ def run():
         file_exist = os.path.exists(existing_f)
         if (file_exist and not files_equal(existing_f, tmp_f)) or (not file_exist):
             need_updates.append(entry)
-            print_colored(entry, Colors.RED)
-    for entry in need_updates:
 
+    for entry in need_updates:
         outdated_file = entry["existing"]
         path_to_doc = outdated_file.split("/Variables.md")[0]
         print_colored(path_to_doc, Colors.YELLOW)
@@ -139,7 +138,6 @@ def run():
             os.makedirs(path_to_doc)
         new_file = entry["tmp_output"]
         copy_file(new_file, outdated_file)
-
 
     if not need_updates:
         print_colored("√ Documentation up to date", Colors.GREEN)
