@@ -129,7 +129,9 @@ def run():
         file_exist = os.path.exists(existing_f)
         if (file_exist and not files_equal(existing_f, tmp_f)) or (not file_exist):
             need_updates.append(entry)
+            print_colored(entry, Colors.RED)
     for entry in need_updates:
+
         outdated_file = entry["existing"]
         path_to_doc = outdated_file.split("/Variables.md")[0]
         print_colored(path_to_doc, Colors.YELLOW)
