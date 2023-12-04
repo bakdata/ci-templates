@@ -1,6 +1,6 @@
 default_language_version:
   python: python3.11.4
-default_stages: [pre-commit, pre-merge-commit, pre-push, manual]
+default_stages: [pre-commit]
 exclude: ".*tmps.*"
 # fail_fast: true
 
@@ -11,14 +11,10 @@ repos:
         language: python
         name: Generate doc
         dir: .
-        # types:
-        #   - "python"
-        #   - "file"
-        #   - "text"
+        types:
+          - "python"
+          - "file"
         entry: python3 generate-doc.py
-        stages: [pre-commit, pre-merge-commit, pre-push, manual]
-        language_version: python3.11.4
-          # python:
 
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.17
@@ -30,43 +26,9 @@ repos:
         dir: docs/
         files: '.*\.md$'
         exclude: '.*Readme\.md$'
-        stages: [pre-commit, pre-merge-commit, pre-push, manual]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
     hooks:
       - id: check-yaml
-        stages: [pre-commit, pre-merge-commit, pre-push, manual]
       - id: trailing-whitespace
-        stages: [pre-commit, pre-merge-commit, pre-push, manual]
-
-  # - repo: https://github.com/markdownlint/markdownlint
-  #   rev: v0.13.0
-  #   hooks:
-  #     - id: markdownlint
-  #       files: '.*\.md$'
-  #       exclude: '.*Readme\.md$'
-  #       types:
-  #         - "file"
-
-  #     - id: markdownlint_docker
-  #       files: '.*\.md$'
-  #       exclude: '.*Readme\.md$'
-  #       types:
-  #         - "file"
-
-  # - repo: local
-  #   hooks:
-  #     - id: custom-shell-command
-  #       name: Execute Shell Command
-  #       entry: "mdl docs/"
-  #       language: system
-
-  # - repo: local
-  #   hooks:
-  #     - id: format-markdown
-  #       language: python
-  #       name: Format Markdown with dprint
-  #       entry: python format_md_with_dprint.py
-  #       files: \.md$
-  #       types: [file]

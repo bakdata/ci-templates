@@ -147,11 +147,8 @@ def run():
 
     # remove tmp dir
     if os.path.exists("./tmps"):
-        try:
-            shutil.rmtree("./tmps")
-        except FileExistsError:
-            print("File already deleted")
-        except FileNotFoundError:
-            print("File already deleted")
+        shutil.rmtree("./tmps")
+
+
 if __name__ == "__main__":
     run()
