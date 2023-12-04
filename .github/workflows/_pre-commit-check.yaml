@@ -23,16 +23,16 @@ jobs:
 
       - name: Check if pre-commit ran locally
         run: |
-          # if git rev-parse --verify ${{ github.ref }} >/dev/null 2>&1; then
-          # # if git rev-parse --verify HEAD >/dev/null 2>&1; then
-          #   echo "Checking if pre-commit ran locally..."
-          #   if [ -f .pre_commit_ran ]; then
-          #     echo "Pre-commit checks were run locally."
-          #   else
-          #     echo "Pre-commit checks were not run locally. Please run 'pre-commit run --all-files' before pushing."
-          #     exit 1
-          #   fi
-          # else
-          #   echo "This is not a push to a branch. Skipping pre-commit check."
-          # fi
-          pre-commit run
+          if git rev-parse --verify ${{ github.ref }} >/dev/null 2>&1; then
+          # if git rev-parse --verify HEAD >/dev/null 2>&1; then
+            echo "Checking if pre-commit ran locally..."
+            if [ -f .pre_commit_ran ]; then
+              echo "Pre-commit checks were run locally."
+            else
+              echo "Pre-commit checks were not run locally. Please run 'pre-commit run --all-files' before pushing."
+              exit 1
+            fi
+          else
+            echo "This is not a push to a branch. Skipping pre-commit check."
+          fi
+          # pre-commit run

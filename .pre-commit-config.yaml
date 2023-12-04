@@ -12,9 +12,9 @@ repos:
         name: Generate doc
         dir: .
         entry: python3 generate-doc.py
-        # types:
-        #   - "python"
-        #   - "file"
+        types:
+          - "python"
+          - "file"
 
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.17

@@ -43,7 +43,7 @@ def files_equal(file1_path, file2_path):
 
 
 def run():
-    # go through actions
+ # go through actions
     tmp_action = "tmps/actions"
     if not os.path.exists(tmp_action):
         os.makedirs(tmp_action)
@@ -131,10 +131,6 @@ def run():
         if not os.path.exists(path_to_doc):
             os.makedirs(path_to_doc)
         new_file = entry["tmp_output"]
-
-        print_colored(
-            f"File {outdated_file} needs to be updated ", Colors.YELLOW)
-        copy_file(new_file, outdated_file)
 
     if not need_updates:
         print_colored("√ Documentation up to date", Colors.GREEN)
