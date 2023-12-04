@@ -43,7 +43,6 @@ def files_equal(file1_path, file2_path):
 
 
 def run():
-
     # go through actions
     tmp_action = "tmps/actions"
     if not os.path.exists(tmp_action):
@@ -125,7 +124,6 @@ def run():
         file_exist = os.path.exists(existing_f)
         if (file_exist and not files_equal(existing_f, tmp_f)) or (not file_exist):
             need_updates.append(entry)
-            print_colored("!!!!!!!!changing some file", Colors.RED)
 
     for entry in need_updates:
         outdated_file = entry["existing"]
