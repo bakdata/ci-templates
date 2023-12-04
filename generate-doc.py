@@ -52,11 +52,14 @@ def run():
     for action_name in os.listdir(action_dir):
         action_subdir_path = os.path.join(action_dir, action_name)
         output_dir_action = f"docs/references/actions/{action_name}"
-        # checking if it is a subidr
+        # checking if it is a subidr)
         if not os.path.isfile(action_subdir_path):
-            action_file = os.path.join(action_subdir_path, "action.y*")
+            action_file = f"{action_subdir_path}/action.y*"
+            action_file1 = f"{action_subdir_path}/action.yml"
+            action_file2 = f"{action_subdir_path}/action.yaml"
+
             # exclude action directory without an action.yaml file
-            if os.path.exists(action_file):
+            if os.path.exists(action_file1) or os.path.exists(action_file2):
                 # create docu in tmp dir
                 tmp_docu_output_dir = os.path.join(
                     tmp_action, action_name)
@@ -74,7 +77,9 @@ def run():
                 os.system(
                     f"auto-doc -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action}")
 
-                output_file_action = f"docs/references/actions/{action_name}/Variables.md"
+                # output_file_action = f"docs/references/actions/{action_name}/Variables.md"
+                output_file_action = os.path.join(
+                    output_dir_action, "Variables.md")
                 changes.append({"existing": output_file_action,
                                 "tmp_output": tmp_docu_output_action})
 
@@ -127,7 +132,7 @@ def run():
     for entry in need_updates:
         outdated_file = entry["existing"]
         path_to_doc = outdated_file.split("/Variables.md")[0]
-        print_colored(path_to_doc, Colors.BLUE)
+        print_colored(path_to_doc, Colors.YELLOW)
         if not os.path.exists(path_to_doc):
             os.makedirs(path_to_doc)
         new_file = entry["tmp_output"]

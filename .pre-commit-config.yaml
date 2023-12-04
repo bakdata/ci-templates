@@ -1,6 +1,6 @@
 default_language_version:
   python: python3.11.4
-default_stages: [pre-commit]
+default_stages: [pre-commit, pre-merge-commit, pre-push, manual]
 exclude: ".*tmps.*"
 # fail_fast: true
 
@@ -15,6 +15,7 @@ repos:
         types:
           - "python"
           - "file"
+        stages: [pre-commit, pre-merge-commit, pre-push, manual]
 
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.17
@@ -26,13 +27,15 @@ repos:
         dir: docs/
         files: '.*\.md$'
         exclude: '.*Readme\.md$'
+        stages: [pre-commit, pre-merge-commit, pre-push, manual]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
     hooks:
       - id: check-yaml
+        stages: [pre-commit, pre-merge-commit, pre-push, manual]
       - id: trailing-whitespace
-
+        stages: [pre-commit, pre-merge-commit, pre-push, manual]
 
   # - repo: https://github.com/markdownlint/markdownlint
   #   rev: v0.13.0

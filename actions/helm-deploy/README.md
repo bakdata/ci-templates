@@ -10,17 +10,17 @@ Create a `values.yaml` file according to the documentation of the specific Helm 
 
 | Name                | Required | Default Value |  Type  | Description                                                                                       |
 | ------------------- | :------: | :-----------: | :----: | ------------------------------------------------------------------------------------------------- |
-| release-name        |    ✅    |       -       | string | The release name of the Helm deployment                                                           |
-| namespace           |    ✅    |       -       | string | The namespace of the Helm deployment                                                              |
-| chart               |    ✅    |       -       | string | The name of the Helm chart                                                                        |
-| values-yaml         |    ✅    |       -       | string | File path as string for a single values.yaml file or as JSON array for multiple values.yaml files |
-| chart-version       |    ❌    |       -       | string | The version of the Helm chart                                                                     |
-| post-renderer       |    ❌    |       -       | string | File path as string for a Helm post renderer                                                      |
-| timeout             |    ❌    |     1200      | string | Timeout for the Helm command in seconds                                                           |
-| repository-name     |    ❌    |       -       | string | The local name for adding the Helm repository                                                     |
-| repository-url      |    ❌    |       -       | string | The url for adding the Helm repository                                                            |
-| repository-username |    ❌    |       -       | string | User for the login to the repository                                                              |
-| repository-password |    ❌    |       -       | string | Password for the login to the repository                                                          |
+| release-name        |    ✅     |       -       | string | The release name of the Helm deployment                                                           |
+| namespace           |    ✅     |       -       | string | The namespace of the Helm deployment                                                              |
+| chart               |    ✅     |       -       | string | The name of the Helm chart                                                                        |
+| values-yaml         |    ✅     |       -       | string | File path as string for a single values.yaml file or as JSON array for multiple values.yaml files |
+| chart-version       |    ❌     |       -       | string | The version of the Helm chart                                                                     |
+| post-renderer       |    ❌     |       -       | string | File path as string for a Helm post renderer                                                      |
+| timeout             |    ❌     |     1200      | string | Timeout for the Helm command in seconds                                                           |
+| repository-name     |    ❌     |       -       | string | The local name for adding the Helm repository                                                     |
+| repository-url      |    ❌     |       -       | string | The url for adding the Helm repository                                                            |
+| repository-username |    ❌     |       -       | string | User for the login to the repository                                                              |
+| repository-password |    ❌     |       -       | string | Password for the login to the repository                                                          |
 
 ## Usage
 
