@@ -1,9 +1,8 @@
 default_language_version:
   python: python3.
   # python: python3.11.4
-default_stages: [manual]
+default_stages: [pre-commit, manual]
 exclude: ".*tmps.*"
-
 
 repos:
   - repo: local
@@ -11,7 +10,6 @@ repos:
       - id: auto-doc
         language: python
         name: Generate doc
-        # dir: .
         types:
           - "python"
           - "file"
@@ -24,7 +22,6 @@ repos:
         additional_dependencies:
           - mdformat-gfm
           - mdformat-black
-        # dir: docs/
         files: '.*\.md$'
         exclude: '.*Readme\.md$'
 
