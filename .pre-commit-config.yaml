@@ -10,8 +10,10 @@ repos:
       - id: auto-doc
         language: python
         name: Generate doc
-        dir: docs/
-        files: ".+"
+        dir: .
+        types:
+          - "python"
+          - "file"
         entry: python3 generate-doc.py
         stages: [pre-commit, pre-merge-commit, pre-push, manual]
 
