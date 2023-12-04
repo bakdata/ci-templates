@@ -115,6 +115,7 @@ def run():
                             "tmp_output": tmp_docu_output_workflow})
     print_colored(
         "--------------------------------------------------------", Colors.BLUE)
+
     # Correction
     need_updates = []
     for entry in changes:
