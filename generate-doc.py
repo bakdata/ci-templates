@@ -136,6 +136,8 @@ def run():
         if not os.path.exists(path_to_doc):
             os.makedirs(path_to_doc)
         new_file = entry["tmp_output"]
+        copy_file(new_file, outdated_file)
+
 
     if not need_updates:
         print_colored("√ Documentation up to date", Colors.GREEN)
