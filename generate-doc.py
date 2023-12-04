@@ -18,8 +18,6 @@ def copy_file(source_path, destination_path):
     try:
         # Copy the file from source_path to destination_path
         shutil.copy(source_path, destination_path)
-        print_colored(
-            f"File updated successfully: {destination_path}", Colors.BLUE)
     except FileNotFoundError:
         print_colored(f"Source file not found.", Colors.RED)
     except PermissionError:
@@ -143,12 +141,13 @@ def run():
         print_colored("√ Documentation up to date", Colors.GREEN)
     else:
         print_colored(
-            "Error: The documentation is not up to date. Re running pre-commit may help.", Colors.RED)
+            "\nError: The documentation is not up to date. Re running pre-commit may help.", Colors.RED)
         os._exit(1)
 
     # remove tmp dir
     if os.path.exists("./tmps"):
         shutil.rmtree("./tmps")
+
 
 if __name__ == "__main__":
     run()

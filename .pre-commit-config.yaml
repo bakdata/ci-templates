@@ -1,19 +1,19 @@
 default_language_version:
-  python: python3.
-  # python: python3.11.4
+  # python: python3.
+  python: python3.11.4
 default_stages: [pre-commit, manual]
 exclude: ".*tmps.*"
 
 repos:
-  # - repo: local
-  #   hooks:
-  #     - id: auto-doc
-  #       language: python
-  #       name: Generate doc
-  #       types:
-  #         - "python"
-  #         - "file"
-  #       entry: python3 generate-doc.py
+  - repo: local
+    hooks:
+      - id: auto-doc
+        language: python
+        name: Generate doc
+        types:
+          - "python"
+          - "file"
+        entry: python3 generate-doc.py
 
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.17
