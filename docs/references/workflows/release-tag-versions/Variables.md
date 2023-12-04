@@ -32,3 +32,7 @@ No outputs.
 | github-username | true     | The GitHub username for committing the changes. |
 
 <!-- AUTO-DOC-SECRETS:END -->
+
+<!-- AUTO-DOC-SECRETS:START - Do not remove or modify this section -->
+
+|
