@@ -1,9 +1,7 @@
-# default_language_version:
-#   python: python3.
-# python: python3.11.4
+default_language_version:
+  python: python3.
 default_stages: [pre-commit, manual]
-# default_stages: [pre-commit]
-# exclude: ".*tmps.*"
+exclude: ".*tmps.*"
 
 repos:
   - repo: local
@@ -12,6 +10,7 @@ repos:
         language: python
         name: Generate doc
         entry: python3 generate-doc.py
+        always_run: true
 
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.17
@@ -20,11 +19,14 @@ repos:
         additional_dependencies:
           - mdformat-gfm
           - mdformat-black
-        files: '.*\.md$'
+        files: '.*Variables\.md$'
         exclude: '.*Readme\.md$'
+        always_run: true
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
     hooks:
       - id: check-yaml
+        always_run: true
       - id: trailing-whitespace
+        always_run: true

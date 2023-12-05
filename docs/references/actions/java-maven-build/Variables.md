@@ -12,10 +12,8 @@
 | working-directory | string |  false   |     `"."`     | Working directory of your Maven artifacts. (Default is .) |
 
 <!-- AUTO-DOC-INPUT:END -->
+## Outputs
 
-<!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
-
-|       INPUT       |  TYPE  | REQUIRED |    DEFAULT    |                        DESCRIPTION                        |
-|-------------------|--------|----------|---------------|-----------------------------------------------------------|
-|      command      | string |  false   |  `"compile"`  |      Command to run build with. (Default is compile)      |
-| java-distribution | string 
+<!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
+No outputs.
+<!-- AUTO-DOC-OUTPUT:END -->
