@@ -27,7 +27,7 @@ jobs:
       - name: Run pre-commit
         run: |
           echo "=================-================="
-          auto-doc
+          auto-doc -h
           echo "=================-================="
           # go install github.com/tj-actions/auto-doc@v3
           # pre-commit install
