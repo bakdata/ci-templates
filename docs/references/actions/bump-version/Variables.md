@@ -17,7 +17,8 @@
 <!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
 
 | OUTPUT          | TYPE   | DESCRIPTION                                      |
-| --------------- | ------ | ------------------------------------------------ |
+| --------------- | ------ 
+| ------------------------------------------------ |
 | old-version     | string | The old version in your `.bumpversion.cfg` file. |
 | release-version | string | The bumped version of your project.              |
 
