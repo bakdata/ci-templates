@@ -19,8 +19,9 @@ repos:
         additional_dependencies:
           - mdformat-gfm
           - mdformat-black
-        files: '.*\.md$'
-        exclude: '.*README\.md$'
+        files: 'docs.*\.md$'
+        # files: '^(?!README\.md$)docs..*\.md$'
+        # exclude: '.*README\.md$'
         always_run: true
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
