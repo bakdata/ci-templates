@@ -6,7 +6,6 @@
 
 | INPUT           | TYPE   | REQUIRED | DEFAULT     | DESCRIPTION     |
 | --------------- | ------ | -------- | ----------- | --------------- |
-| helm-version    | string | false    | `"v3.10.1"` | Helm version    |
 | kubectl-version | string | false    | `"v1.23.0"` | Kubectl version |
 
 <!-- AUTO-DOC-INPUT:END -->
