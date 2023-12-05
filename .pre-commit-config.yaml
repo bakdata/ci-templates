@@ -1,7 +1,6 @@
 default_language_version:
   python: python3.
 # default_stages: [pre-commit, manual]
-exclude: ".*tmps.*"
 
 repos:
   - repo: local
@@ -20,7 +19,7 @@ repos:
           - mdformat-gfm
           - mdformat-black
         files: 'docs.*\.md$'
-        # files: '^(?!README\.md$)docs..*\.md$'
+        # files: '^(?!README\.md$)docs.*\.md$'
         # exclude: '.*README\.md$'
         always_run: true
 
@@ -29,5 +28,7 @@ repos:
     hooks:
       - id: check-yaml
         always_run: true
+        files: 'docs.*\.md$'
       - id: trailing-whitespace
+        files: 'docs.*\.md$'
         always_run: true
