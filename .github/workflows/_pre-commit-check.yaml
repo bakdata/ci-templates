@@ -12,9 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # - name: Set up Python
-      #   uses: actions/setup-python@v3
-
       - name: Installation
         run: |
           # pip install --upgrade pip
@@ -29,7 +26,5 @@ jobs:
           echo "=================-================="
           auto-doc -h
           echo "=================-================="
-          # go install github.com/tj-actions/auto-doc@v3
-          # pre-commit install
-          pre-commit run --all-files
+          pre-commit run
         working-directory: .

@@ -1,7 +1,7 @@
 default_language_version:
   python: python3.
   # python: python3.11.4
-default_stages: [pre-commit, manual]
+# default_stages: [pre-commit, manual]
 exclude: ".*tmps.*"
 
 repos:
