@@ -1,5 +1,5 @@
-default_language_version:
-  python: 3.11.4
+# default_language_version:
+#   python: 3.11.4
 default_stages: [pre-commit, manual]
 # default_stages: [commit, manual]
 # default_stages: [commit]
