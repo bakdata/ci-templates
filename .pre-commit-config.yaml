@@ -1,8 +1,4 @@
-# default_language_version:
-#   python: 3.11.4
 default_stages: [pre-commit, manual]
-# default_stages: [commit, manual]
-# default_stages: [commit]
 
 repos:
   - repo: local
@@ -21,7 +17,6 @@ repos:
         additional_dependencies:
           - mdformat-gfm
           - mdformat-black
-        # files: '^(?!README\.md$)docs.*\.md$'
         exclude: '.*README\.md$'
         always_run: true
         require_serial: true
