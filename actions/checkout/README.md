@@ -17,13 +17,13 @@ This workflow is built from other composite actions listed below:
 
 | Name                | Required |       Default Value        |  Type  | Description                                                                                                  |
 | ------------------- | :------: | :------------------------: | :----: | ------------------------------------------------------------------------------------------------------------ |
-| cache               |    ❌     |           "true"           | string | Whether to cache the LFS files in this repository. This variable has an impact only if lfs is set to `true`. |
-| fetch-depth         |    ❌     |            "1"             | string | Number of commits to fetch. 0 indicates all history for all branches and tags.                               |
-| lfs                 |    ❌     |          "false"           | string | Define whether to use LFS files.                                                                             |
-| persist-credentials |    ❌     |           "true"           | string | Whether to configure the token or SSH key with the local git config.                                         |
-| ref                 |    ❌     |             ""             | string | The branch, tag or SHA to checkout.                                                                          |
-| repository          |    ❌     | "${{ github.repository }}" | string | The repository name with owner.                                                                              |
-| token               |    ❌     |   "${{ github.token }}"    | string | Personal access token (PAT) used to fetch the repository.                                                    |
+| cache               |    ❌    |           "true"           | string | Whether to cache the LFS files in this repository. This variable has an impact only if lfs is set to `true`. |
+| fetch-depth         |    ❌    |            "1"             | string | Number of commits to fetch. 0 indicates all history for all branches and tags.                               |
+| lfs                 |    ❌    |          "false"           | string | Define whether to use LFS files.                                                                             |
+| persist-credentials |    ❌    |           "true"           | string | Whether to configure the token or SSH key with the local git config.                                         |
+| ref                 |    ❌    |             ""             | string | The branch, tag or SHA to checkout.                                                                          |
+| repository          |    ❌    | "${{ github.repository }}" | string | The repository name with owner.                                                                              |
+| token               |    ❌    |   "${{ github.token }}"    | string | Personal access token (PAT) used to fetch the repository.                                                    |
 
 ### Outputs
 

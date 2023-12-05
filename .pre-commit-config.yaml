@@ -20,7 +20,7 @@ repos:
           - mdformat-gfm
           - mdformat-black
         files: '.*\.md$'
-        exclude: '.*Readme\.md$'
+        exclude: '.*README\.md$'
         always_run: true
 
   - repo: https://github.com/pre-commit/pre-commit-hooks

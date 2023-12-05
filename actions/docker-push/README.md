@@ -10,11 +10,11 @@ Have a Docker image with name `${{ image-name }}` available in the Docker contex
 
 | Name              | Required |                   Default Value                    | Description                                 |
 | ----------------- | :------: | :------------------------------------------------: | ------------------------------------------- |
-| docker-registry   |    ❌     |                         ""                         | Host where the image should be pushed to    |
-| image-namespace   |    ❌     |                         ""                         | Namespace of Docker image                   |
-| image-name        |    ❌     |            github.event.repository.name            | Name of Docker image                        |
-| image-tag         |    ❌     | pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8} | Tag of Docker image                         |
-| working-directory |    ❌     |                        "."                         | Working directory for your Docker artifacts |
+| docker-registry   |    ❌    |                         ""                         | Host where the image should be pushed to    |
+| image-namespace   |    ❌    |                         ""                         | Namespace of Docker image                   |
+| image-name        |    ❌    |            github.event.repository.name            | Name of Docker image                        |
+| image-tag         |    ❌    | pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8} | Tag of Docker image                         |
+| working-directory |    ❌    |                        "."                         | Working directory for your Docker artifacts |
 
 ## Usage
 

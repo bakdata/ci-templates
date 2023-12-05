@@ -16,9 +16,9 @@ target-branch: "main"
 
 | Name             | Required |       Default Value        |  Type  | Description                                                                                                                              |
 | ---------------- | :------: | :------------------------: | :----: | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| ref              |    ❌     |     The current branch     | string | The ref name to checkout the repository                                                                                                  |
-| lint-config-path |    ❌     | ".github/lint-config.yaml" | string | The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml) |
-| helm-version     |    ❌     |         "v3.10.1"          | string | The Helm version                                                                                                                         |
+| ref              |    ❌    |     The current branch     | string | The ref name to checkout the repository                                                                                                  |
+| lint-config-path |    ❌    | ".github/lint-config.yaml" | string | The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml) |
+| helm-version     |    ❌    |         "v3.10.1"          | string | The Helm version                                                                                                                         |
 
 ## Usage
 
