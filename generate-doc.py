@@ -144,9 +144,6 @@ def run():
             "\nError: The documentation is not up to date. Re running pre-commit may help.", Colors.RED)
         os._exit(1)
 
-    # remove tmp dir
-    # if os.path.exists("./tmps"):
-    #     shutil.rmtree("./tmps")
 
 if __name__ == "__main__":
     run()
