@@ -1,5 +1,5 @@
 # default_stages: [pre-commit, manual]
-default_stages: [manual]
+# default_stages: [manual]
 
 repos:
   - repo: local
