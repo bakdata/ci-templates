@@ -6,7 +6,7 @@
 
 | INPUT | TYPE   | REQUIRED | DEFAULT | DESCRIPTION                                                  |
 | ----- | ------ | -------- | ------- | ------------------------------------------------------------ |
-| path  | string | true     |         | Path to the directory to substitute environment variables in |
+Path to the directory to substitute environment variables in |
 
 <!-- AUTO-DOC-INPUT:END -->
 

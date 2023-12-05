@@ -7,7 +7,7 @@
 | INPUT             | TYPE   | REQUIRED | DEFAULT  | DESCRIPTION                                                                |
 | ----------------- | ------ | -------- | -------- | -------------------------------------------------------------------------- |
 | publish-to-test   | string | false    | `"true"` | If set to false, the packages are published to PyPI. (Default is true)     |
-| pypi-token        | string | true     |          | The PyPI token for publishing packages.                                    |
+he PyPI token for publishing packages.                                    |
 | working-directory | string | false    | `"./"`   | The working directory of your Python packages. (Default is root directory) |
 
 <!-- AUTO-DOC-INPUT:END -->
