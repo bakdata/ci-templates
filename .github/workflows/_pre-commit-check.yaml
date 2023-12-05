@@ -5,19 +5,23 @@ on:
 
 jobs:
   pre-commit-check:
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
+    runs-on: macos-13
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v3
+      # - name: Set up Python
+      #   uses: actions/setup-python@v3
 
       - name: Installation
         run: |
-          pip install pre-commit
-          go install github.com/tj-actions/auto-doc@latest
+          # pip install --upgrade pip
+          # pip install pre-commit
+          # go install github.com/tj-actions/auto-doc@latest
+          brew install pre-commit
+          brew install tj-actions/tap/auto-doc
         working-directory: .
 
       - name: Run pre-commit
