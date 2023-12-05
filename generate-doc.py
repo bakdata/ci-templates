@@ -145,8 +145,8 @@ def run():
         os._exit(1)
 
     # remove tmp dir
-    if os.path.exists("./tmps"):
-        shutil.rmtree("./tmps")
+    # if os.path.exists("./tmps"):
+    #     shutil.rmtree("./tmps")
 
 
 if __name__ == "__main__":
