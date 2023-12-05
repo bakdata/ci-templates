@@ -14,6 +14,29 @@ def print_colored(text, color):
     print(f"{color}{text}{Colors.RESET}")
 
 
+def safe_make_dir(directory_path):
+    if not os.path.isdir(directory_path):
+        try:
+            os.makedirs(directory_path)
+        except FileExistsError:
+            shutil.rmtree(directory_path)
+            safe_make_dir(directory_path)
+        except Exception as e:
+            print_colored(
+                f"Error while removing directory '{directory_path}': {e}", Colors.BLUE)
+
+
+def safe_remove_directory(directory_path):
+    if os.path.exists(directory_path):
+        try:
+            shutil.rmtree(directory_path)
+            print(f"Directory '{directory_path}' successfully removed.")
+        except Exception as e:
+            print(f"Error while removing directory '{directory_path}': {e}")
+    else:
+        print(f"Directory '{directory_path}' does not exist.")
+
+
 def copy_file(source_path, destination_path):
     try:
         # Copy the file from source_path to destination_path
@@ -42,9 +65,9 @@ def files_equal(file1_path, file2_path):
 
 def run():
  # go through actions
+    safe_make_dir("tmps")
     tmp_action = "tmps/actions"
-    if not os.path.exists(tmp_action):
-        os.makedirs(tmp_action)
+    safe_make_dir(tmp_action)
     action_dir = "actions"
     changes = []
     for action_name in os.listdir(action_dir):
@@ -61,8 +84,7 @@ def run():
                 # create docu in tmp dir
                 tmp_docu_output_dir = os.path.join(
                     tmp_action, action_name)
-                if not os.path.exists(tmp_docu_output_dir):
-                    os.makedirs(tmp_docu_output_dir)
+                safe_make_dir(tmp_docu_output_dir)
 
                 tmp_docu_output_action = os.path.join(
                     tmp_action, action_name, "Variables.md")
@@ -83,8 +105,7 @@ def run():
 
     # go through workflows
     tmp_workflow = "tmps/workflows"
-    if not os.path.exists(tmp_workflow):
-        os.makedirs(tmp_workflow)
+    safe_make_dir(tmp_workflow)
 
     workflow_dir = ".github/workflows"
     for workflow in os.listdir(workflow_dir):
@@ -96,8 +117,7 @@ def run():
             # create docu in tmp dir
             tmp_workflow_output_dir = os.path.join(
                 tmp_workflow, workflow_name)
-            if not os.path.exists(tmp_workflow_output_dir):
-                os.makedirs(tmp_workflow_output_dir)
+            safe_make_dir(tmp_workflow_output_dir)
 
             tmp_docu_output_workflow = os.path.join(
                 tmp_workflow_output_dir, "Variables.md")
@@ -132,8 +152,7 @@ def run():
         outdated_file = entry["existing"]
         path_to_doc = outdated_file.split("/Variables.md")[0]
         print_colored(path_to_doc, Colors.YELLOW)
-        if not os.path.exists(path_to_doc):
-            os.makedirs(path_to_doc)
+        safe_make_dir(path_to_doc)
         new_file = entry["tmp_output"]
         copy_file(new_file, outdated_file)
 
@@ -143,6 +162,10 @@ def run():
         print_colored(
             "\nError: The documentation is not up to date. Re running pre-commit may help.", Colors.RED)
         os._exit(1)
+
+    # remove tmp dir
+    # if os.path.isdir("tmps"):
+    #     shutil.rmtree("tmps")
 
 
 if __name__ == "__main__":
