@@ -6,7 +6,7 @@
 |       INPUT       |  TYPE  | REQUIRED |    DEFAULT    |                        DESCRIPTION                        |
 |-------------------|--------|----------|---------------|-----------------------------------------------------------|
 | java-distribution | string |  false   | `"microsoft"` | Java distribution to be installed. (Default is microsoft) |
-   |    `"11"`     |       Java version to be installed. (Default is 11)       |
+|   java-version    | string |  false   |    `"11"`     |       Java version to be installed. (Default is 11)       |
 |   maven-version   | string |   true   |               |              Maven version to be installed.               |
 
 <!-- AUTO-DOC-INPUT:END -->
