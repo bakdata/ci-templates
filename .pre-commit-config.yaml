@@ -7,7 +7,7 @@ repos:
         entry: python3 generate-doc.py
         always_run: true
         require_serial: true
-        # verbose: true
+        verbose: true
 
   - repo: https://github.com/executablebooks/mdformat
     rev: 0.7.17
