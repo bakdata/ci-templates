@@ -27,7 +27,7 @@ def safe_make_dir(directory_path):
 
 
 def safe_remove_directory(directory_path):
-    if os.path.exists(directory_path):
+    if os.path.isdir(directory_path):
         try:
             shutil.rmtree(directory_path)
             print(f"Directory '{directory_path}' successfully removed.")
@@ -164,8 +164,7 @@ def run():
         os._exit(1)
 
     # remove tmp dir
-    if os.path.isdir("tmps"):
-        shutil.rmtree("tmps")
+    safe_remove_directory("tmps")
 
 
 if __name__ == "__main__":
