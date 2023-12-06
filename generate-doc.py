@@ -169,7 +169,7 @@ def run():
         #     "\nError: The documentation is not up to date. Re running pre-commit may help.", Colors.RED)
         # raise RuntimeError(
         #     "\nError: The documentation is not up to date. Re running pre-commit may help.")
-        print(f"{Colors.RED}")
+        # print(f"{Colors.RED}")
         raise DocGenerationError(
             "Error: The documentation is not up to date. Re running pre-commit may help.")
 
