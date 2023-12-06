@@ -36,7 +36,6 @@ def safe_remove_directory(directory_path):
     if os.path.isdir(directory_path):
         try:
             shutil.rmtree(directory_path)
-            print(f"Directory '{directory_path}' successfully removed.")
         except Exception as e:
             print(f"Error while removing directory '{directory_path}': {e}")
     else:
@@ -45,7 +44,6 @@ def safe_remove_directory(directory_path):
 
 def copy_file(source_path, destination_path):
     try:
-        # Copy the file from source_path to destination_path
         shutil.copy(source_path, destination_path)
     except FileNotFoundError:
         print_colored(f"Source file not found.", Colors.RED)
@@ -79,7 +77,8 @@ def run():
     for action_name in os.listdir(action_dir):
         action_subdir_path = os.path.join(action_dir, action_name)
         output_dir_action = f"docs/references/actions/{action_name}"
-        # checking if it is a subidr)
+
+        # Itterate over subidrs of the actions dir
         if not os.path.isfile(action_subdir_path):
             action_file = f"{action_subdir_path}/action.y*"
             action_file1 = f"{action_subdir_path}/action.yml"
@@ -102,8 +101,6 @@ def run():
                     file.writelines([l1, l2, l3])
                 os.system(
                     f"auto-doc -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action}")
-
-                # output_file_action = f"docs/references/actions/{action_name}/Variables.md"
                 output_file_action = os.path.join(
                     output_dir_action, "Variables.md")
                 changes.append({"existing": output_file_action,
@@ -167,9 +164,6 @@ def run():
     else:
         raise DocGenerationError()
 
-        # os._exit(1)
-
-    # remove tmp dir
     safe_remove_directory("tmps")
 
 
