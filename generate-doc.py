@@ -139,8 +139,6 @@ def run():
 
             changes.append({"existing": docs_output_path,
                             "tmp_output": tmp_docu_output_workflow})
-    print_colored(
-        "--------------------------------------------------------", Colors.BLUE)
 
     # Correction
     need_updates = []
@@ -158,7 +156,6 @@ def run():
         safe_make_dir(path_to_doc)
         new_file = entry["tmp_output"]
         copy_file(new_file, outdated_file)
-
     if not need_updates:
         print_colored("√ Documentation up to date", Colors.GREEN)
     else:
