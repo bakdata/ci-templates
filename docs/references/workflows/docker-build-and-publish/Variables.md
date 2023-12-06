@@ -6,7 +6,7 @@
 
 | INPUT               | TYPE   | REQUIRED | DEFAULT                                                | DESCRIPTION                                                                                                           |
 | ------------------- | ------ | -------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
-| docker-context3      | string | false    | `"."`                                                  | The docker context.                                                                                                   |
+| docker-context      | string | false    | `"."`                                                  | The docker context.                                                                                                   |
 | docker-registry     | string | false    |                                                        | Host where the image should be pushed to.                                                                             |
 | dockerfile-path     | string | false    | `"Dockerfile"`                                         | Path to the Dockerfile.                                                                                               |
 | image-artifact-name | string | false    | `"image-artifact"`                                     | Name of the artifact that contains the Docker image.tar file to push, see https://github.com/actions/upload-artifact. |
