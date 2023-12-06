@@ -6,7 +6,6 @@
 
 | INPUT               | TYPE   | REQUIRED | DEFAULT                      | DESCRIPTION                                                                   |
 | ------------------- | ------ | -------- | ---------------------------- | ----------------------------------------------------------------------------- |
-| cache               | string | false    | `"true"`                     | Describes if the repository is using any LFS files                            |
 | fetch-depth         | string | false    | `"1"`                        | Number of commits to fetch. 0 indicates all history for all branches and tags |
 | lfs                 | string | false    | `"false"`                    | Describes if the repository is using any LFS files                            |
 | persist-credentials | string | false    | `"true"`                     | Whether to configure the token or SSH key with the local git config           |

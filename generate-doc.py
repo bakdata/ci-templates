@@ -100,7 +100,7 @@ def run():
                     l3 = "## Outputs\n"
                     file.writelines([l1, l2, l3])
                 os.system(
-                    f"auto-doc -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action}")
+                    f"auto-doc -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action} > /dev/null")
                 output_file_action = os.path.join(
                     output_dir_action, "Variables.md")
                 changes.append({"existing": output_file_action,
@@ -133,7 +133,7 @@ def run():
                 file.writelines([l1, l2, l3, l4])
 
             os.system(
-                f"auto-doc -f {workflow_path} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_workflow} -r")
+                f"auto-doc -f {workflow_path} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_workflow} -r > /dev/null")
             docs_output_path = os.path.join(
                 output_dir_workflow, "Variables.md")
 
