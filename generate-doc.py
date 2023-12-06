@@ -171,6 +171,7 @@ def run():
         #     "\nError: The documentation is not up to date. Re running pre-commit may help.", Colors.RED)
         # raise RuntimeError(
         #     "\nError: The documentation is not up to date. Re running pre-commit may help.")
+        
         raise ColoredExitError(
             "\nError: The documentation is not up to date. Re running pre-commit may help.")
 
