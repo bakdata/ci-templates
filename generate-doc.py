@@ -159,9 +159,12 @@ def run():
     if not need_updates:
         print_colored("√ Documentation up to date", Colors.GREEN)
     else:
-        print_colored(
-            "\nError: The documentation is not up to date. Re running pre-commit may help.", Colors.RED)
-        os._exit(1)
+        # print_colored(
+        #     "\nError: The documentation is not up to date. Re running pre-commit may help.", Colors.RED)
+        raise RuntimeError(
+            "\nError: The documentation is not up to date. Re running pre-commit may help.")
+
+        # os._exit(1)
 
     # remove tmp dir
     safe_remove_directory("tmps")

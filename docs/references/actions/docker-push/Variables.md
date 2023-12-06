@@ -6,7 +6,7 @@
 
 | INPUT             | TYPE   | REQUIRED | DEFAULT                                                | DESCRIPTION                                  |
 | ----------------- | ------ | -------- | ------------------------------------------------------ | -------------------------------------------- |
-| docker-registry   | string | false    |                                                        | Host where the image should be pushed to.    |
+| docker-registry4   | string | false    |                                                        | Host where the image should be pushed to.    |
 | image-name        | string | false    | `"${{ github.event.repository.name }}"`                | Name of Docker image.                        |
 | image-namespace   | string | false    |                                                        | Namespace of Docker image.                   |
 | image-tag         | string | false    | `"pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}"` | Tag of Docker image.                         |
