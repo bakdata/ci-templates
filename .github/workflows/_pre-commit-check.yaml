@@ -20,5 +20,4 @@ jobs:
       - name: Run pre-commit
         run: |
           pre-commit run --all-files
-          # pre-commit run --verbose --all-files
         working-directory: .

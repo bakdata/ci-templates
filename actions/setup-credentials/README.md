@@ -15,7 +15,6 @@ This action will set up authentication for GCloud and a Google Kubernetes Engine
 ## Usage
 
 ```yaml
----
 steps:
   - name: Setup environment
     uses: bakdata/ci-templates/actions/setup-credentials@main
