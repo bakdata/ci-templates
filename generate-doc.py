@@ -15,9 +15,9 @@ def print_colored(text, color):
 
 
 class DocGenerationError(Exception):
-    def __init__(self, message):
-        self.message = message
-        super().__init__(f"{Colors.RED}{message}{Colors.RESET}")
+    def __init__(self):
+        self.message = "Error: The documentation is not up to date. Re running pre-commit may help."
+        super().__init__(f"{Colors.RED}{self.message}{Colors.RESET}")
 
 
 def safe_make_dir(directory_path):
@@ -165,13 +165,7 @@ def run():
     if not need_updates:
         print_colored("√ Documentation up to date", Colors.GREEN)
     else:
-        # print_colored(
-        #     "\nError: The documentation is not up to date. Re running pre-commit may help.", Colors.RED)
-        # raise RuntimeError(
-        #     "\nError: The documentation is not up to date. Re running pre-commit may help.")
-        # print(f"{Colors.RED}")
-        raise DocGenerationError(
-            "Error: The documentation is not up to date. Re running pre-commit may help.")
+        raise DocGenerationError()
 
         # os._exit(1)
 
