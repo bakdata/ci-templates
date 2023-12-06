@@ -14,12 +14,10 @@ def print_colored(text, color):
     print(f"{color}{text}{Colors.RESET}")
 
 
-class ColoredExitError(Exception):
-    # '\033[91m' sets the text color to red
-    def __init__(self, message, color='\033[91m'):
+class DocGenerationError(Exception):
+    def __init__(self, message):
         self.message = message
-        self.color = color
-        super().__init__(f"{color}{message}\033[0m")
+        super().__init__(f"{Colors.RED}{message}{Colors.RESET}")
 
 
 def safe_make_dir(directory_path):
@@ -171,9 +169,9 @@ def run():
         #     "\nError: The documentation is not up to date. Re running pre-commit may help.", Colors.RED)
         # raise RuntimeError(
         #     "\nError: The documentation is not up to date. Re running pre-commit may help.")
-        
-        raise ColoredExitError(
-            "\nError: The documentation is not up to date. Re running pre-commit may help.")
+        print(f"{Colors.RED}")
+        raise DocGenerationError(
+            "Error: The documentation is not up to date. Re running pre-commit may help.")
 
         # os._exit(1)
 
