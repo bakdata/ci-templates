@@ -29,7 +29,7 @@ def safe_make_dir(directory_path):
             safe_make_dir(directory_path)
         except Exception as e:
             print_colored(
-                f"Error while removing directory '{directory_path}': {e}", Colors.BLUE)
+                f"Error while creating directory '{directory_path}': {e}", Colors.BLUE)
 
 
 def safe_remove_directory(directory_path):
@@ -69,7 +69,8 @@ def files_equal(file1_path, file2_path):
 
 def run():
  # go through actions
-    safe_make_dir("tmps")
+    # safe_make_dir("tmps")
+    os.makedirs("tmps", exist_ok=True)
     tmp_action = "tmps/actions"
     safe_make_dir(tmp_action)
     action_dir = "actions"
@@ -95,11 +96,13 @@ def run():
                     tmp_action, action_name, "Variables.md")
 
                 with open(tmp_docu_output_action, 'w') as file:
-                    file.writelines(
+                    file.writelines([
                         f"# Refenrences {action_name} composite action\n",
                         "## Inputs\n",
-                        "## Outputs\n",
+                        "## Outputs\n"]
                     )
+                    cmd = os.environ.get("DOC_CMD")
+                    print_colored(cmd, Colors.RED)
                 os.system(
                     f"auto-doc -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action} > /dev/null")
                 output_file_action = os.path.join(
@@ -152,7 +155,7 @@ def run():
 
     for entry in need_updates:
         outdated_file = entry["existing"]
-        path_to_doc = outdated_file.split("/Variables.md")[0]
+        path_to_doc = os.path.dirname(outdated_file)
         print_colored(path_to_doc, Colors.YELLOW)
         safe_make_dir(path_to_doc)
         new_file = entry["tmp_output"]
