@@ -68,11 +68,13 @@ def files_equal(file1_path, file2_path):
 
 
 def run():
+    auto_doc_cmd = os.environ.get("DOC_CMD")
+
  # go through actions
-    # safe_make_dir("tmps")
+
     os.makedirs("tmps", exist_ok=True)
     tmp_action = "tmps/actions"
-    safe_make_dir(tmp_action)
+    os.makedirs(tmp_action, exist_ok=True)
     action_dir = "actions"
     changes = []
     for action_name in os.listdir(action_dir):
@@ -90,8 +92,8 @@ def run():
                 # create docu in tmp dir
                 tmp_docu_output_dir = os.path.join(
                     tmp_action, action_name)
-                safe_make_dir(tmp_docu_output_dir)
 
+                os.makedirs(tmp_docu_output_dir, exist_ok=True)
                 tmp_docu_output_action = os.path.join(
                     tmp_action, action_name, "Variables.md")
 
@@ -101,10 +103,8 @@ def run():
                         "## Inputs\n",
                         "## Outputs\n"]
                     )
-                    cmd = os.environ.get("DOC_CMD")
-                    print_colored(cmd, Colors.RED)
                 os.system(
-                    f"auto-doc -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action} > /dev/null")
+                    f"{auto_doc_cmd} -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action} > /dev/null")
                 output_file_action = os.path.join(
                     output_dir_action, "Variables.md")
                 changes.append({"existing": output_file_action,
@@ -112,7 +112,7 @@ def run():
 
     # go through workflows
     tmp_workflow = "tmps/workflows"
-    safe_make_dir(tmp_workflow)
+    os.makedirs(tmp_workflow, exist_ok=True)
 
     workflow_dir = ".github/workflows"
     for workflow in os.listdir(workflow_dir):
@@ -124,7 +124,8 @@ def run():
             # create docu in tmp dir
             tmp_workflow_output_dir = os.path.join(
                 tmp_workflow, workflow_name)
-            safe_make_dir(tmp_workflow_output_dir)
+
+            os.makedirs(tmp_workflow_output_dir, exist_ok=True)
 
             tmp_docu_output_workflow = os.path.join(
                 tmp_workflow_output_dir, "Variables.md")
@@ -137,7 +138,7 @@ def run():
                 file.writelines([l1, l2, l3, l4])
 
             os.system(
-                f"auto-doc -f {workflow_path} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_workflow} -r > /dev/null")
+                f"{auto_doc_cmd} -f {workflow_path} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_workflow} -r > /dev/null")
             docs_output_path = os.path.join(
                 output_dir_workflow, "Variables.md")
 
@@ -157,7 +158,7 @@ def run():
         outdated_file = entry["existing"]
         path_to_doc = os.path.dirname(outdated_file)
         print_colored(path_to_doc, Colors.YELLOW)
-        safe_make_dir(path_to_doc)
+        os.makedirs(path_to_doc, exist_ok=True)
         new_file = entry["tmp_output"]
         copy_file(new_file, outdated_file)
     if not need_updates:
