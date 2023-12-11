@@ -95,10 +95,11 @@ def run():
                     tmp_action, action_name, "Variables.md")
 
                 with open(tmp_docu_output_action, 'w') as file:
-                    l1 = f"# Refenrences {action_name} composite action\n"
-                    l2 = "## Inputs\n"
-                    l3 = "## Outputs\n"
-                    file.writelines([l1, l2, l3])
+                    file.writelines(
+                        f"# Refenrences {action_name} composite action\n",
+                        "## Inputs\n",
+                        "## Outputs\n",
+                    )
                 os.system(
                     f"auto-doc -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action} > /dev/null")
                 output_file_action = os.path.join(
