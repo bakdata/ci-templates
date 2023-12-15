@@ -1,5 +1,7 @@
+import glob
 import os
 import shutil
+import subprocess
 
 
 class Colors:
@@ -8,6 +10,16 @@ class Colors:
     YELLOW = '\033[93m'
     BLUE = '\033[94m'
     RESET = '\033[0m'
+
+
+def auto_doc_installed():
+    auto_doc_cmd = os.environ.get("DOC_CMD")
+    try:
+        subprocess.run(
+            auto_doc_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
+        return True
+    except subprocess.CalledProcessError as e:
+        return f"Error: {e.stderr}"
 
 
 def print_colored(text, color):
@@ -62,40 +74,35 @@ def run():
     os.makedirs("tmps", exist_ok=True)
     tmp_action = "tmps/actions"
     os.makedirs(tmp_action, exist_ok=True)
-    action_dir = "actions"
     changes = []
-    for action_name in os.listdir(action_dir):
-        action_subdir_path = os.path.join(action_dir, action_name)
+
+    action_files = glob.glob("actions/**/action.yaml")
+    action_files.extend(glob.glob("actions/**/action.yml"))
+    for action_file in action_files:
+        action_name = os.path.basename(os.path.dirname(action_file))
+
+        # create docu in tmp dir
         output_dir_action = f"docs/references/actions/{action_name}"
+        tmp_docu_output_dir = os.path.join(
+            tmp_action, action_name)
 
-        # Itterate over subidrs of the actions dir
-        if not os.path.isfile(action_subdir_path):
-            action_file = f"{action_subdir_path}/action.y*"
-            action_file1 = f"{action_subdir_path}/action.yml"
-            action_file2 = f"{action_subdir_path}/action.yaml"
+        os.makedirs(tmp_docu_output_dir, exist_ok=True)
+        tmp_docu_output_action = os.path.join(
+            tmp_action, action_name, "Variables.md")
 
-            # exclude action directory without an action.yaml file
-            if os.path.exists(action_file1) or os.path.exists(action_file2):
-                # create docu in tmp dir
-                tmp_docu_output_dir = os.path.join(
-                    tmp_action, action_name)
+        with open(tmp_docu_output_action, 'w') as file:
+            file.writelines([
+                f"# Refenrences {action_name} composite action\n",
+                "## Inputs\n",
+                "## Outputs\n"]
+            )
 
-                os.makedirs(tmp_docu_output_dir, exist_ok=True)
-                tmp_docu_output_action = os.path.join(
-                    tmp_action, action_name, "Variables.md")
-
-                with open(tmp_docu_output_action, 'w') as file:
-                    file.writelines([
-                        f"# Refenrences {action_name} composite action\n",
-                        "## Inputs\n",
-                        "## Outputs\n"]
-                    )
-                os.system(
-                    f"{auto_doc_cmd} -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action} > /dev/null")
-                output_file_action = os.path.join(
-                    output_dir_action, "Variables.md")
-                changes.append({"existing": output_file_action,
-                                "tmp_output": tmp_docu_output_action})
+        os.system(
+            f"{auto_doc_cmd} -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action} > /dev/null")
+        output_file_action = os.path.join(
+            output_dir_action, "Variables.md")
+        changes.append({"existing": output_file_action,
+                        "tmp_output": tmp_docu_output_action})
 
     # go through workflows
     tmp_workflow = "tmps/workflows"
@@ -157,4 +164,5 @@ def run():
 
 
 if __name__ == "__main__":
-    run()
+    if auto_doc_installed():
+        run()
