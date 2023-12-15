@@ -20,18 +20,6 @@ class DocGenerationError(Exception):
         super().__init__(f"{Colors.RED}{self.message}{Colors.RESET}")
 
 
-def safe_make_dir(directory_path):
-    if not os.path.isdir(directory_path):
-        try:
-            os.makedirs(directory_path)
-        except FileExistsError:
-            shutil.rmtree(directory_path)
-            safe_make_dir(directory_path)
-        except Exception as e:
-            print_colored(
-                f"Error while creating directory '{directory_path}': {e}", Colors.BLUE)
-
-
 def safe_remove_directory(directory_path):
     if os.path.isdir(directory_path):
         try:
@@ -71,7 +59,6 @@ def run():
     auto_doc_cmd = os.environ.get("DOC_CMD")
 
  # go through actions
-
     os.makedirs("tmps", exist_ok=True)
     tmp_action = "tmps/actions"
     os.makedirs(tmp_action, exist_ok=True)
