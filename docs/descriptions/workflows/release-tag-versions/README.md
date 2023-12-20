@@ -3,6 +3,7 @@
 This workflow enables the release of tag versions as well as the creation of a new snapshot version for developers to work on the next release. The workflow allows you to choose the sort of release that will be performed as well as how to generate the snapshot version.
 
 ## Prerequisites
+
 Create, and configure your `.bumpversion.cfg` file and make sure it's in the `version-configs-dir` directory. A minimal configuration with `Chart.yaml` being the versioning file could look like this:
 
 ```cfg
