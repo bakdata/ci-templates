@@ -20,75 +20,75 @@ The following workflows can be found here:
 
 ## Bump version release
 
-- [Description](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/descriptions/workflows/bump-version-release)
-- [References](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/references/workflows/bump-version-release)
+- [Description](https://github.com/bakdata/ci-templates/tree/main/docs/descriptions/workflows/bump-version-release)
+- [References](https://github.com/bakdata/ci-templates/tree/main/docs/references/workflows/bump-version-release)
 
 ## Docker Build and Publish
 
-- [Description](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/descriptions/workflows/docker-build-and-publish)
-- [References](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/references/workflows/docker-build-and-publish)
+- [Description](https://github.com/bakdata/ci-templates/tree/main/docs/descriptions/workflows/docker-build-and-publish)
+- [References](https://github.com/bakdata/ci-templates/tree/main/docs/references/workflows/docker-build-and-publish)
 
 ## Helm Multi Release
 
-- [Description](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/descriptions/workflows/helm-multi-release)
-- [References](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/references/workflows/bump-version-release)
+- [Description](https://github.com/bakdata/ci-templates/tree/main/docs/descriptions/workflows/helm-multi-release)
+- [References](https://github.com/bakdata/ci-templates/tree/main/docs/references/workflows/bump-version-release)
 
 ## Helm Release
 
-- [Description](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/descriptions/workflows/helm-release)
-- [References](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/references/workflows/helm-release)
+- [Description](https://github.com/bakdata/ci-templates/tree/main/docs/descriptions/workflows/helm-release)
+- [References](https://github.com/bakdata/ci-templates/tree/main/docs/references/workflows/helm-release)
 
 ## Java Gradle Base
 
-- [Description](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/descriptions/workflows/java-gradle-base)
-- [References](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/references/workflows/java-gradle-base)
+- [Description](https://github.com/bakdata/ci-templates/tree/main/docs/descriptions/workflows/java-gradle-base)
+- [References](https://github.com/bakdata/ci-templates/tree/main/docs/references/workflows/java-gradle-base)
 
 ## Java Gradle Docker
 
-- [Description](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/descriptions/workflows/java-gradle-docker)
-- [References](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/references/workflows/java-gradle-docker)
+- [Description](https://github.com/bakdata/ci-templates/tree/main/docs/descriptions/workflows/java-gradle-docker)
+- [References](https://github.com/bakdata/ci-templates/tree/main/docs/references/workflows/java-gradle-docker)
 
 ## Java Gradle Library
 
-- [Description](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/descriptions/workflows/java-gradle-library)
-- [References](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/references/workflows/java-gradle-library)
+- [Description](https://github.com/bakdata/ci-templates/tree/main/docs/descriptions/workflows/java-gradle-library)
+- [References](https://github.com/bakdata/ci-templates/tree/main/docs/references/workflows/java-gradle-library)
 
 ## Java Gradle Plugin
 
-- [Description](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/descriptions/workflows/java-gradle-plugin)
-- [References](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/references/workflows/java-gradle-plugin)
+- [Description](https://github.com/bakdata/ci-templates/tree/main/docs/descriptions/workflows/java-gradle-plugin)
+- [References](https://github.com/bakdata/ci-templates/tree/main/docs/references/workflows/java-gradle-plugin)
 
 ## Java Gradle Release
 
-- [Description](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/descriptions/workflows/java-gradle-release)
-- [References](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/references/workflows/java-gradle-release)
+- [Description](https://github.com/bakdata/ci-templates/tree/main/docs/descriptions/workflows/java-gradle-release)
+- [References](https://github.com/bakdata/ci-templates/tree/main/docs/references/workflows/java-gradle-release)
 
 ## Kustomize GKE Deploy
 
-- [Description](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/descriptions/workflows/kustomize-gke-deploy)
-- [References](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/references/workflows/kustomize-gke-deploy)
+- [Description](https://github.com/bakdata/ci-templates/tree/main/docs/descriptions/workflows/kustomize-gke-deploy)
+- [References](https://github.com/bakdata/ci-templates/tree/main/docs/references/workflows/kustomize-gke-deploy)
 
 ## Kustomize GKE Destroy
 
-- [Description](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/descriptions/workflows/kustomize-gke-destroy)
-- [References](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/references/workflows/kustomize-gke-destroy)
+- [Description](https://github.com/bakdata/ci-templates/tree/main/docs/descriptions/workflows/kustomize-gke-destroy)
+- [References](https://github.com/bakdata/ci-templates/tree/main/docs/references/workflows/kustomize-gke-destroy)
 
 ## Python Poetry Publish PyPI
 
-- [Description](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/descriptions/workflows/python-poetry-publish-pypi)
-- [References](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/references/workflows/python-poetry-publish-pypi)
+- [Description](https://github.com/bakdata/ci-templates/tree/main/docs/descriptions/workflows/python-poetry-publish-pypi)
+- [References](https://github.com/bakdata/ci-templates/tree/main/docs/references/workflows/python-poetry-publish-pypi)
 
 ## Python Poetry Publish Snapshot
 
-- [Description](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/descriptions/workflows/python-poetry-publish-snapshot)
-- [References](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/references/workflows/python-poetry-publish-snapshot)
+- [Description](https://github.com/bakdata/ci-templates/tree/main/docs/descriptions/workflows/python-poetry-publish-snapshot)
+- [References](https://github.com/bakdata/ci-templates/tree/main/docs/references/workflows/python-poetry-publish-snapshot)
 
 ## Python Poetry Release
 
-- [Description](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/descriptions/workflows/python-poetry-release)
-- [References](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/references/workflows/python-poetry-release)
+- [Description](https://github.com/bakdata/ci-templates/tree/main/docs/descriptions/workflows/python-poetry-release)
+- [References](https://github.com/bakdata/ci-templates/tree/main/docs/references/workflows/python-poetry-release)
 
 ## Release Tag Versions
 
-- [Description](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/descriptions/workflows/release-tag-versions)
-- [References](https://github.com/bakdata/ci-templates/tree/feat/doc/docs/references/workflows/release-tag-versions)
+- [Description](https://github.com/bakdata/ci-templates/tree/main/docs/descriptions/workflows/release-tag-versions)
+- [References](https://github.com/bakdata/ci-templates/tree/main/docs/references/workflows/release-tag-versions)

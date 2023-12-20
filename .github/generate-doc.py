@@ -14,6 +14,8 @@ class Colors:
 
 def auto_doc_installed():
     auto_doc_cmd = os.environ.get("DOC_CMD")
+    if auto_doc_cmd == "":
+        auto_doc_cmd = "auto-doc"
     try:
         subprocess.run(
             auto_doc_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
@@ -69,6 +71,8 @@ def files_equal(file1_path, file2_path):
 
 def run():
     auto_doc_cmd = os.environ.get("DOC_CMD")
+    if auto_doc_cmd == "":
+        auto_doc_cmd = "auto-doc"
 
  # go through actions
     os.makedirs("tmps", exist_ok=True)
