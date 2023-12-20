@@ -1,4 +1,4 @@
-# Generate Changelog
+# Description generate-changelog composite action
 
 This action will enable the automated creation of a changelog.
 The changelog template needs to be configured using a `changelog-config.json`.
@@ -51,27 +51,7 @@ because the action looks for this pattern to make the date format easily readabl
 Additional configuration options can be explored
 [here](https://github.com/mikepenz/release-changelog-builder-action#configuration-specification).
 
-## Input Parameters
-
-| Name                      | Required | Default Value  | Description                                                                                                                                                  |
-| ------------------------- | :------: | :------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| github-token              |    ✅    |       -        | The GitHub token for committing the changes                                                                                                                  |
-| new-tag                   |    ✅    |       -        | Defines until which tag the changelog will consider merged pull requests (can be a tag or a valid git ref)                                                   |
-| changelog-file            |    ❌    | "CHANGELOG.md" | Path to the Changelog.md file                                                                                                                                |
-| commit-mode               |    ❌    |    "false"     | Special configuration for projects which work without PRs. Uses commit messages as changelog. This mode looses access to information only available for PRs. |
-| config                    |    ❌    |       ""       | Path to the changelog config JSON file                                                                                                                       |
-| fetch-release-information |    ❌    |    "false"     | Will enable fetching additional release information from tags.                                                                                               |
-| fetch-reviewers           |    ❌    |    "false"     | Will enable fetching the users/reviewers who approved the PR.                                                                                                |
-| old-tag                   |    ❌    |       ""       | Defines the 'start' from where the changelog will consider merged pull requests (can be a tag or a valid git ref)                                            |
-
-## Outputs
-
-| Name             | Description                                           |
-| ---------------- | ----------------------------------------------------- |
-| merged-changelog | Changelog containing listing of all single changelogs |
-| single-changelog | Changelog containing changes of the latest tag        |
-
-## Calling the workflow
+## Usage
 
 By default, just a single commit for the ref/SHA that started the process is retrieved.
 In the [checkout action](https://github.com/actions/checkout), enter `fetch-depth: 0` to retrieve

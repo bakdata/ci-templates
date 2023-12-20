@@ -1,4 +1,4 @@
-# bump-version
+# Description bump-version composite action
 
 This action will bump the version of your project according to the `.bumpversion.cfg` file.
 
@@ -13,23 +13,6 @@ current_version = 0.0.1
 
 > **Note**
 > Changes made to the `.bumpversion.cfg` file by this action are **not** pushed back to GitHub. If you need this functionality, please use the [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push) action subsequently.
-
-## Input Parameters
-
-| Name              | Required | Default Value | Description                                           |
-| ----------------- | :------: | :-----------: | ----------------------------------------------------- |
-| release-type      |    ✅    |       -       | The scope of the release (major, minor or patch)      |
-| working-directory |    ❌    |       .       | The directory containing the `.bumpversion.cfg` file. |
-| new-version       |    ❌    |       .       | New version to use for the bump                       |
-
-### Outputs
-
-This action outputs the following variables:
-
-| Name            | Description                                     |
-| --------------- | ----------------------------------------------- |
-| old-version     | The old version in your `.bumpversion.cfg` file |
-| release-version | The bumped version of your project              |
 
 ## Usage
 
