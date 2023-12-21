@@ -95,3 +95,4 @@ jobs:
           github-token: ${{ secrets.github-token }}
           release-title: "${{ steps.bump-version.outputs.release-version }}"
           release-body: "${{ steps.build-changelog.outputs.single-changelog }}"
+          
