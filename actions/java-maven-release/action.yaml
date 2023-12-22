@@ -55,7 +55,7 @@ runs:
         wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
         chmod +x /usr/local/bin/semver
       shell: bash
-    
+
     - name: Set up Maven with version ${{ inputs.maven-version }}
       uses: bakdata/ci-templates/actions/java-maven-setup@1.33.0
       with:

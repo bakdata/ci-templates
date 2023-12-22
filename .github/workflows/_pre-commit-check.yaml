@@ -1,0 +1,25 @@
+name: Pre-Commit Check
+
+on:
+  pull_request:
+
+jobs:
+  pre-commit-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Installation
+        run: |
+          pip install pre-commit
+          wget https://github.com/tj-actions/auto-doc/releases/download/v3.4.0/auto-doc_3.4.0_Linux_x86_64.tar.gz
+          tar -xf auto-doc_3.4.0_Linux_x86_64.tar.gz
+        working-directory: .
+
+      - name: Run pre-commit
+        run: |
+          pre-commit run --all-files
+        env:
+          DOC_CMD: "./auto-doc"
+        working-directory: .
