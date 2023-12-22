@@ -39,14 +39,14 @@ Also, follow the following steps to ensure that you can create the documentation
   - using brew: `brew install auto-doc`
   - using the GitHub repository:
     ```shell
-      wget https://github.com/tj-actions/auto-doc/releases/download/v3.4.0/auto-doc_3.4.0_Darwin_arm64.tar.gz
-      tar -xf auto-doc_3.4.0_Darwin_arm64.tar.gz
+    wget https://github.com/tj-actions/auto-doc/releases/download/v3.4.0/auto-doc_3.4.0_Darwin_arm64.tar.gz
+    tar -xf auto-doc_3.4.0_Darwin_arm64.tar.gz
     ```
 - Linux:
   - using the GitHub repository:
     ```shell
-      wget https://github.com/tj-actions/auto-doc/releases/download/v3.4.0/auto-doc_3.4.0_Linux_x86_64.tar.gz
-      tar -xf auto-doc_3.4.0_Linux_x86_64.tar.gz
+    wget https://github.com/tj-actions/auto-doc/releases/download/v3.4.0/auto-doc_3.4.0_Linux_x86_64.tar.gz
+    tar -xf auto-doc_3.4.0_Linux_x86_64.tar.gz
     ```
 
 ### Use `auto-doc`
