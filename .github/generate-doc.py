@@ -14,7 +14,7 @@ class Colors:
 
 def auto_doc_installed():
     auto_doc_cmd = os.environ.get("DOC_CMD")
-    if auto_doc_cmd == "":
+    if auto_doc_cmd is None or auto_doc_cmd == "":
         auto_doc_cmd = "auto-doc"
     try:
         subprocess.run(
@@ -71,7 +71,7 @@ def files_equal(file1_path, file2_path):
 
 def run():
     auto_doc_cmd = os.environ.get("DOC_CMD")
-    if auto_doc_cmd == "":
+    if auto_doc_cmd is None or auto_doc_cmd == "":
         auto_doc_cmd = "auto-doc"
 
  # go through actions
