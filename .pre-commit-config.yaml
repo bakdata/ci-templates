@@ -1,0 +1,34 @@
+repos:
+  - repo: local
+    hooks:
+      - id: auto-doc
+        language: python
+        name: Generate doc
+        entry: python3 .github/generate-doc.py
+        always_run: true
+        require_serial: true
+        verbose: true
+
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.17
+    hooks:
+      - id: mdformat
+        additional_dependencies:
+          - mdformat-gfm
+          - mdformat-black
+        exclude: '.*README\.md$'
+        always_run: true
+        require_serial: true
+        files: '.*\.md$'
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: check-yaml
+        always_run: true
+        require_serial: true
+        files: 'docs.*\.md$'
+      - id: trailing-whitespace
+        always_run: true
+        require_serial: true
+        files: 'docs.*\.md$'

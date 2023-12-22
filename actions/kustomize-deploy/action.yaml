@@ -17,10 +17,10 @@ runs:
       run: |
         customResourceDefinitions="$(kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -i kind=CustomResourceDefinition)"
         if [[ ! -z "$customResourceDefinitions" ]]; then
-          echo "$customResourceDefinitions" | kubectl apply -f -
+          echo "$customResourceDefinitions" | kubectl apply -f - --server-side --force-conflicts
           echo "$customResourceDefinitions" | kubectl wait --for condition=established --timeout=${{ inputs.timeout }}s -f -
         fi
-    
+
     - name: Deploy Kustomize app
       shell: bash
-      run: kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -x kind=CustomResourceDefinition | kubectl apply -f -
+      run: kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -x kind=CustomResourceDefinition | kubectl apply -f - --server-side --force-conflicts

@@ -5,3 +5,6 @@
 # mac specific
 .DS_Store
 .bash_history
+tmp*
+auto-doc*
+./test*
