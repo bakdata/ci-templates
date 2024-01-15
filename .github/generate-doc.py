@@ -1,5 +1,7 @@
 import glob
+import markdown2
 import os
+import re
 import shutil
 import subprocess
 
@@ -10,6 +12,137 @@ class Colors:
     YELLOW = '\033[93m'
     BLUE = '\033[94m'
     RESET = '\033[0m'
+
+
+def format_markdown_file(filename):
+    with open(filename, 'r+') as file:
+        content = file.read()
+        formatted_content = markdown2.markdown(content)
+    with open(filename, 'w') as file:
+        file.write(formatted_content)
+    replace_string_in_markdown(filename, "<p>", "")
+    replace_string_in_markdown(filename, "</p>", "")
+    # replace_string_in_markdown(filename, "<li>", "")
+    # replace_string_in_markdown(filename, "</li>", "")
+
+
+def contains_subsection(file_path, target_subsection_title):
+    section_pattern = re.compile(r'^\s*#{1}\s+(.*)$', re.MULTILINE)
+    subsection_pattern = re.compile(r'^\s*#{2}\s+(.*)$', re.MULTILINE)
+
+    with open(file_path, 'r', encoding='utf-8') as file:
+        markdown_text = file.read()
+
+    section_matches = section_pattern.finditer(markdown_text)
+
+    for match in section_matches:
+        section_title = match.group(1)
+        section_start = match.end()
+
+        if section_title.lower() == target_subsection_title.lower():
+            return bool(subsection_pattern.search(markdown_text, section_start))
+
+    return False
+
+
+def replace_string_in_markdown(file_path, old_string, new_string):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        content = file.read()
+
+    modified_content = content.replace(old_string, new_string)
+
+    with open(file_path, 'w', encoding='utf-8') as file:
+        file.write(modified_content)
+    return modified_content
+
+
+def extract_subsection(file_path, target_subsection_title):
+    html_subsection_pattern = re.compile(
+        r'<h2>(.*?)<\/h2>', re.IGNORECASE | re.DOTALL)
+    with open(file_path, 'r', encoding='utf-8') as file:
+        markdown_text = file.read()
+    html_subsection_matches = html_subsection_pattern.finditer(markdown_text)
+
+    # Iterate over matches to find the target subsection
+    for match in html_subsection_matches:
+        current_subsection_title = match.group(1).strip()
+
+        if current_subsection_title.lower() == target_subsection_title.lower():
+
+            subsection_start = match.start()
+            next_subsection_match = next(html_subsection_matches, None)
+            subsection_end = next_subsection_match.start(
+            ) if next_subsection_match else len(markdown_text)
+
+            subsection_content = markdown_text[match.end(
+            ):subsection_end].strip()
+
+            subsubsection_matches = html_subsection_pattern.finditer(
+                subsection_content)
+            subsubsections = [{"title": submatch.group(1).strip(
+            ), "content": ''} for submatch in subsubsection_matches]
+
+            return {
+                "title": current_subsection_title,
+                "content": subsection_content,
+                "subsubsections": subsubsections
+            }
+
+    return None
+
+
+def update_doc(readme_path, reference_path):
+    placeholder = [
+        '\n',
+        '## References',
+        '\n',
+        'Empty substring created',
+        '\n',
+        '### Subsubsection',
+        '\n',
+        'Placeholder']
+    updated = False
+
+    # Create the dir in case documentation is not created yet
+    directory_path = os.path.dirname(readme_path)
+    os.makedirs(directory_path, exist_ok=True)
+
+    # Create Readme if it does not exist yet
+    ci_name = os.path.basename(directory_path)
+    file_exist = os.path.exists(readme_path)
+    if not file_exist:
+        with open(readme_path, 'w') as file:
+            file.write(f"# Documentation for {ci_name}")
+            file.writelines(placeholder)
+
+    with open(readme_path, 'r', encoding='utf-8') as file1:
+        readme_content = file1.read()
+
+    target_subsection_title = 'References'
+
+    # add subsection if it does not exist
+    if not readme_content.__contains__(f"## {target_subsection_title}") and not readme_content.__contains__(f"<h2>{target_subsection_title}</h2>"):
+        with open(readme_path, 'a', encoding='utf-8') as file_readme:
+            file_readme.writelines(placeholder)
+    format_markdown_file(readme_path)
+    readme_extraction_result = extract_subsection(
+        readme_path, target_subsection_title)
+
+    reference_extraction_result = extract_subsection(
+        reference_path, target_subsection_title)
+
+    if file_exist:
+        readme_result_as_str = readme_extraction_result["content"]
+        reference_result_as_str = reference_extraction_result["content"]
+
+        # if not readme_result_as_str == new_content:
+        if not contents_equal(readme_result_as_str, reference_result_as_str):
+            replace_string_in_markdown(
+                readme_path, readme_result_as_str, reference_result_as_str)
+            print_colored(readme_path, Colors.YELLOW)
+            updated = True
+
+    return updated
 
 
 def auto_doc_installed():
@@ -29,8 +162,8 @@ def print_colored(text, color):
 
 
 class DocGenerationError(Exception):
-    def __init__(self):
-        self.message = "Error: The documentation is not up to date. Re running pre-commit may help."
+    def __init__(self, count):
+        self.message = f"Error: The documentation is not up to date. {count} inconsistency(ies) where found.  Re running pre-commit may help."
         super().__init__(f"{Colors.RED}{self.message}{Colors.RESET}")
 
 
@@ -61,18 +194,23 @@ def remove_formatting(content):
     return content.replace(" ", "").replace("\n", "").replace("-", "")
 
 
-def files_equal(file1_path, file2_path):
-    with open(file1_path, 'r') as file1, open(file2_path, 'r') as file2:
-        content1 = remove_formatting(file1.read())
-        content2 = remove_formatting(file2.read())
+def contents_equal(file1, file2):
+    content1 = remove_formatting(file1)
+    content2 = remove_formatting(file2)
 
-        return content1 == content2
+    return content1 == content2
 
 
 def run():
     auto_doc_cmd = os.environ.get("DOC_CMD")
     if auto_doc_cmd is None or auto_doc_cmd == "":
         auto_doc_cmd = "auto-doc"
+
+    template = [
+        "# References",
+        "## Inputs",
+        "## Outputs",
+        "## Secrets"]
 
  # go through actions
     os.makedirs("tmps", exist_ok=True)
@@ -86,7 +224,7 @@ def run():
         action_name = os.path.basename(os.path.dirname(action_file))
 
         # create docu in tmp dir
-        output_dir_action = f"docs/references/actions/{action_name}"
+        output_dir_action = f"docs/actions/{action_name}"
         tmp_docu_output_dir = os.path.join(
             tmp_action, action_name)
 
@@ -94,18 +232,17 @@ def run():
         tmp_docu_output_action = os.path.join(
             tmp_action, action_name, "Variables.md")
 
-        with open(tmp_docu_output_action, 'w') as file:
-            file.writelines([
-                f"# Refenrences {action_name} composite action\n",
-                "## Inputs\n",
-                "## Outputs\n"]
-            )
+        with open(tmp_docu_output_action, 'w') as file_action_template:
+            for line in template[: -1]:
+                file_action_template.write(line + '\n')
 
         os.system(
             f"{auto_doc_cmd} -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action} > /dev/null")
+        replace_string_in_markdown(tmp_docu_output_action, "# ", "## ")
+        format_markdown_file(tmp_docu_output_action)
         output_file_action = os.path.join(
-            output_dir_action, "Variables.md")
-        changes.append({"existing": output_file_action,
+            output_dir_action, "README.md")
+        changes.append({"readme": output_file_action,
                         "tmp_output": tmp_docu_output_action})
 
     # go through workflows
@@ -117,7 +254,8 @@ def run():
         workflow_name = workflow.split(".")[0]
         if not workflow.startswith("_") and workflow != "README.md":
             workflow_path = os.path.join(workflow_dir, workflow)
-            output_dir_workflow = f"docs/references/workflows/{workflow_name}"
+            # Test with only one workflow
+            output_dir_workflow = f"docs/workflows/{workflow_name}"
 
             # create docu in tmp dir
             tmp_workflow_output_dir = os.path.join(
@@ -128,43 +266,37 @@ def run():
             tmp_docu_output_workflow = os.path.join(
                 tmp_workflow_output_dir, "Variables.md")
 
-            with open(tmp_docu_output_workflow, 'w') as file:
-                l1 = f"# Refenrences {workflow_name} reusable Workflow\n"
-                l2 = "## Inputs\n"
-                l3 = "## Outputs\n"
-                l4 = "## Secrets\n"
-                file.writelines([l1, l2, l3, l4])
+            with open(tmp_docu_output_workflow, 'w') as file_workflow_template:
+                for line in template:
+                    file_workflow_template.write(line + '\n')
 
             os.system(
                 f"{auto_doc_cmd} -f {workflow_path} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_workflow} -r > /dev/null")
-            docs_output_path = os.path.join(
-                output_dir_workflow, "Variables.md")
+            replace_string_in_markdown(
+                tmp_docu_output_workflow, "# ", "## ")
 
-            changes.append({"existing": docs_output_path,
+            format_markdown_file(tmp_docu_output_workflow)
+            workflow_doc_file = os.path.join(
+                output_dir_workflow, "README.md")
+
+            changes.append({"readme": workflow_doc_file,
                             "tmp_output": tmp_docu_output_workflow})
 
     # Correction
-    need_updates = []
+    count = 0
     for entry in changes:
-        existing_f = entry["existing"]
+        readme_f = entry["readme"]
         tmp_f = entry["tmp_output"]
-        file_exist = os.path.exists(existing_f)
-        if (file_exist and not files_equal(existing_f, tmp_f)) or (not file_exist):
-            need_updates.append(entry)
+        was_updated = update_doc(readme_f, tmp_f)
 
-    for entry in need_updates:
-        outdated_file = entry["existing"]
-        path_to_doc = os.path.dirname(outdated_file)
-        print_colored(path_to_doc, Colors.YELLOW)
-        os.makedirs(path_to_doc, exist_ok=True)
-        new_file = entry["tmp_output"]
-        copy_file(new_file, outdated_file)
-    if not need_updates:
+        if was_updated:
+            count += 1
+    if count == 0:
         print_colored("√ Documentation up to date", Colors.GREEN)
+        safe_remove_directory("tmps")
     else:
-        raise DocGenerationError()
-
-    safe_remove_directory("tmps")
+        safe_remove_directory("tmps")
+        raise DocGenerationError(count)
 
 
 if __name__ == "__main__":
