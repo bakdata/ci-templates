@@ -38,15 +38,15 @@ jobs:
       gradle-cache: false # (Optional) Default is true
       working-directory: "." # (Optional) Default is .
     secrets:
-      sonar-token: ${{ secrets.SONARCLOUD<em>TOKEN }}
-      sonar-organization: ${{ secrets.SONARCLOUD</em>ORGANIZATION }}
-      signing-secret-key-ring: ${{ secrets.SIGNING<em>SECRET</em>KEY<em>RING }}
-      signing-key-id: ${{ secrets.SIGNING</em>KEY<em>ID }}
-      signing-password: ${{ secrets.SIGNING</em>PASSWORD }}
-      ossrh-username: ${{ secrets.OSSHR<em>USERNAME }}
-      ossrh-password: ${{ secrets.OSSHR</em>PASSWORD }}
-      github-username: ${{ secrets.GH<em>USERNAME }}
-      github-token: ${{ secrets.GH</em>TOKEN }}
+      sonar-token: ${{ secrets.SONARCLOUD_TOKEN }}
+      sonar-organization: ${{ secrets.SONARCLOUD_ORGANIZATION }}
+      signing-secret-key-ring: ${{ secrets.SIGNING_SECRET_KEY_RING }}
+      signing-key-id: ${{ secrets.SIGNING_KEY_ID }}
+      signing-password: ${{ secrets.SIGNING_PASSWORD }}
+      ossrh-username: ${{ secrets.OSSHR_USERNAME }}
+      ossrh-password: ${{ secrets.OSSHR_PASSWORD }}
+      github-username: ${{ secrets.GH_USERNAME }}
+      github-token: ${{ secrets.GH_TOKEN }}
 ```
 
 <h2>References</h2>

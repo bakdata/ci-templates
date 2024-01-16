@@ -40,8 +40,8 @@ jobs:
       image-artifact-name: "my-image-artifact"
       working-directory: "."
     secrets:
-      docker-user: "${{ secrets.DOCKER<em>USER }}"
-      docker-password: "${{ secrets.DOCKER</em>PWD }}"
+      docker-user: "${{ secrets.DOCKER_USER }}"
+      docker-password: "${{ secrets.DOCKER_PWD }}"
       github-token: ${{ secrets.GH_TOKEN }}
 ```
 

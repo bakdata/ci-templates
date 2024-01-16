@@ -9,7 +9,7 @@ steps:
   - name: Setup environment
     uses: bakdata/ci-templates/actions/setup-credentials@main
     with:
-      gke-service-account: ${{ secrets.GKE<em>SERVICE</em>ACCOUNT }}
+      gke-service-account: ${{ secrets.GKE_SERVICE_ACCOUNT }}
       gke-project: "my-awesome-project"
       gke-region: "us-west1"
       gke-cluster: "my-awesome-cluster"

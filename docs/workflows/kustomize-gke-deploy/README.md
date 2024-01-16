@@ -38,10 +38,10 @@ jobs:
       kubectl-version: "v1.23.0" #optional
       helm-version: "v3.8.1"
     secrets:
-      gke-service-account: ${{ secrets.GKE<em>DEV</em>SERVICE<em>ACCOUNT }}
-      gke-project: ${{ secrets.GKE</em>DEV<em>PROJECT }}
-      gke-region: ${{ secrets.GKE</em>DEV<em>REGION }}
-      gke-cluster: ${{ secrets.GKE</em>DEV_CLUSTER }}
+      gke-service-account: ${{ secrets.GKE_DEV_SERVICE_ACCOUNT }}
+      gke-project: ${{ secrets.GKE_DEV_PROJECT }}
+      gke-region: ${{ secrets.GKE_DEV_REGION }}
+      gke-cluster: ${{ secrets.GKE_DEV_CLUSTER }}
 ```
 
 <h2>References</h2>

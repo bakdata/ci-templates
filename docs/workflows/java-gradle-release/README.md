@@ -41,8 +41,8 @@ jobs:
       gradle-cache: false # (Optional) Default is true
       working-directory: "." # (Optional) Default is .
     secrets:
-      github-username: "${{ secrets.GH<em>USERNAME }}"
-      github-email: "${{ secrets.GH</em>EMAIL }}"
+      github-username: "${{ secrets.GH_USERNAME }}"
+      github-email: "${{ secrets.GH_EMAIL }}"
       github-token: "${{ secrets.GH_TOKEN }}"
 
 use-output-of-workflow:

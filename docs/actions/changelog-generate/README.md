@@ -37,17 +37,17 @@ files. A simple configuration may look like this:
 <code>json
 {
   "categories": [{ "title": "### Merged pull requests:" }],
-  "ignore<em>labels": ["ignore"],
-  "sort": { "order": "ASC", "on</em>property": "mergedAt" },
-  "template": "# <a href="https://github.com/#{{OWNER}}/#{{REPO}}/releases/tag/#{{TO_TAG}}">#{{TO<em>TAG}}</a> - Release Date: #{{TO</em>TAG<em>DATE}}\n\n#{{CHANGELOG}}",
-  "pr</em>template": "- #{{TITLE}} <a href="#{{URL}}">##{{NUMBER}}</a> (<a href="https://github.com/#{{AUTHOR}}">@#{{AUTHOR}}</a>)\n",
+  "ignore_labels": ["ignore"],
+  "sort": { "order": "ASC", "on_property": "mergedAt" },
+  "template": "# <a href="https://github.com/#{{OWNER}}/#{{REPO}}/releases/tag/#{{TO_TAG}}">#{{TO_TAG}}</a> - Release Date: #{{TO_TAG_DATE}}\n\n#{{CHANGELOG}}",
+  "pr_template": "- #{{TITLE}} <a href="#{{URL}}">##{{NUMBER}}</a> (<a href="https://github.com/#{{AUTHOR}}">@#{{AUTHOR}}</a>)\n",
   "empty_template": "- no changes!"
 }
 </code>
 
 Make sure to update the link
-<code>https://github.com/&lt;myorganization&gt;/&lt;myrepository&gt;/releases/tag/${{TO<em>TAG}}</code>
-accordingly and make sure to include <code>- Release Date: ${{TO</em>TAG_DATE}}</code>
+<code>https://github.com/&lt;myorganization&gt;/&lt;myrepository&gt;/releases/tag/${{TO_TAG}}</code>
+accordingly and make sure to include <code>- Release Date: ${{TO_TAG_DATE}}</code>
 because the action looks for this pattern to make the date format easily readable.
 
 Additional configuration options can be explored
@@ -67,18 +67,18 @@ steps:
       persist-credentials: false
       fetch-depth: 0
   - name: Create changelog
-    id: build<em>changelog
+    id: build_changelog
     uses: bakdata/ci-templates/actions/changelog-generate@main
     with:
-      github-token: ${{ secrets.GH</em>TOKEN }}
+      github-token: ${{ secrets.GH_TOKEN }}
       new-tag: "1.0.0"
       changelog-file: "CHANGELOG.md"
       fetch-reviewers: "true"
       fetch-release-information: "true"
   - name: Use output
     run: |
-      echo  "${{ steps.build<em>changelog.outputs.single-changelog }}" &gt; tag</em>changelog.md
-      echo  "${{ steps.build<em>changelog.outputs.merged-changelog }}" &gt; global</em>changelog.md
+      echo  "${{ steps.build_changelog.outputs.single-changelog }}" &gt; tag_changelog.md
+      echo  "${{ steps.build_changelog.outputs.merged-changelog }}" &gt; global_changelog.md
     shell: bash
 </code>
 

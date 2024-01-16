@@ -22,8 +22,8 @@ def format_markdown_file(filename):
         file.write(formatted_content)
     replace_string_in_markdown(filename, "<p>", "")
     replace_string_in_markdown(filename, "</p>", "")
-    # replace_string_in_markdown(filename, "<li>", "")
-    # replace_string_in_markdown(filename, "</li>", "")
+    replace_string_in_markdown(filename, "<em>", "_")
+    replace_string_in_markdown(filename, "</em>", "_")
 
 
 def contains_subsection(file_path, target_subsection_title):
@@ -213,7 +213,7 @@ def run():
         "## Secrets"]
 
  # go through actions
-    os.makedirs("tmps", exist_ok=True)
+    os.makedirs("tmps/", exist_ok=True)
     tmp_action = "tmps/actions"
     os.makedirs(tmp_action, exist_ok=True)
     changes = []
@@ -293,9 +293,9 @@ def run():
             count += 1
     if count == 0:
         print_colored("√ Documentation up to date", Colors.GREEN)
-        safe_remove_directory("tmps")
+        safe_remove_directory("tmps/")
     else:
-        safe_remove_directory("tmps")
+        safe_remove_directory("tmps/")
         raise DocGenerationError(count)
 
 

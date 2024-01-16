@@ -31,7 +31,7 @@ jobs:
       poetry-version: "1.1.11" # (Optional) Default value is 1.5.1. In this case Poetry version 1.1.11 is installed
       working-directory: "./my-awesome-python-project" # (Optional) Default value is the root directory of your repository. In this case all the files to the given path are published
     secrets:
-      pypi-token: ${{ secrets.TEST<em>PYPI</em>TOKEN }}
+      pypi-token: ${{ secrets.TEST_PYPI_TOKEN }}
 ```
 
 <h2>References</h2>

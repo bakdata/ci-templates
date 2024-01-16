@@ -1,6 +1,6 @@
 <h1>Description docker-push composite action</h1>
 
-This action publishes a Docker image to a Docker registry. When this action is used on a tag branch, the image is tagged with <code>latest</code> and the tag version of the branch (e.g. <code>1.2.3</code>). For all other branches, the tag <code>pipeline-${{ github.run<em>id }}-git-${GITHUB</em>SHA::8}</code> is used as an image tag.
+This action publishes a Docker image to a Docker registry. When this action is used on a tag branch, the image is tagged with <code>latest</code> and the tag version of the branch (e.g. <code>1.2.3</code>). For all other branches, the tag <code>pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}</code> is used as an image tag.
 
 <h2>Prerequisites</h2>
 

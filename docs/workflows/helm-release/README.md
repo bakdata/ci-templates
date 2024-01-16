@@ -11,8 +11,8 @@ Your Helm chart and <code>.bumpversion.cfg</code> need to be located inside the 
 current_version = 0.0.1
 
 [bumpversion:file:charts/Chart.yaml]
-search = version: {current<em>version}
-replace = version: {new</em>version}
+search = version: {current_version}
+replace = version: {new_version}
 ```
 
 Additionally, you need to create the lint configuration file <code>.github/lint-config.yaml</code> and configure it to your liking.
@@ -68,8 +68,8 @@ jobs:
       skip-download: "false" # (Optional)
       artifact-dir: "artifact" # (Optional)
     secrets:
-      github-email: "${{ secrets.GH<em>EMAIL }}"
-      github-username: "${{ secrets.GH</em>USERNAME }}"
+      github-email: "${{ secrets.GH_EMAIL }}"
+      github-username: "${{ secrets.GH_USERNAME }}"
       github-token: "${{ secrets.GH_TOKEN }}"
 ```
 

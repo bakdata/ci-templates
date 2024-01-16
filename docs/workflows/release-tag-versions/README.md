@@ -16,11 +16,11 @@ serialize =
 
 [bumpversion:file:path/to/Chart.yaml]
 search =
-  version: {current<em>version}
-  appVersion: {current</em>version}
+  version: {current_version}
+  appVersion: {current_version}
 replace =
-  version: {new<em>version}
-  appVersion: {new</em>version}
+  version: {new_version}
+  appVersion: {new_version}
 ```
 
 <h2>Dependencies</h2>
@@ -37,7 +37,7 @@ This workflow is built from multiple composite actions listed below:
 <code>yaml
 name: Release multiple Helm Charts
 on:
-  workflow<em>dispatch:
+  workflow_dispatch:
     inputs:
       release-type:
         description: "Scope of the release (major, minor or patch)."
@@ -57,9 +57,9 @@ jobs:
       next-dev-release-type: "${{ inputs.next-dev-release-type }}"
       next-dev-release-suffix: "SNAPSHOT"
     secrets:
-      github-email: "${{ secrets.GH</em>EMAIL }}"
-      github-username: "${{ secrets.GH<em>USERNAME }}"
-      github-token: "${{ secrets.GH</em>TOKEN }}"
+      github-email: "${{ secrets.GH_EMAIL }}"
+      github-username: "${{ secrets.GH_USERNAME }}"
+      github-token: "${{ secrets.GH_TOKEN }}"
 </code>
 
 <h2>References</h2>

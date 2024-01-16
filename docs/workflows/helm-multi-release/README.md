@@ -51,8 +51,8 @@ jobs:
       subdirs: "['subdir1', 'subdir2', 'subdir3']"
       gh-pages-branch: gh-pages
     secrets:
-      github-email: "${{ secrets.GH<em>EMAIL }}"
-      github-username: "${{ secrets.GH</em>USERNAME }}"
+      github-email: "${{ secrets.GH_EMAIL }}"
+      github-username: "${{ secrets.GH_USERNAME }}"
       github-token: "${{ secrets.GH_TOKEN }}"
 ```
 
@@ -72,8 +72,8 @@ jobs:
       subdirs: "['.']"
       gh-pages-branch: gh-pages
     secrets:
-      github-email: "${{ secrets.GH<em>EMAIL }}"
-      github-username: "${{ secrets.GH</em>USERNAME }}"
+      github-email: "${{ secrets.GH_EMAIL }}"
+      github-username: "${{ secrets.GH_USERNAME }}"
       github-token: "${{ secrets.GH_TOKEN }}"
 ```
 
