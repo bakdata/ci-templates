@@ -12,6 +12,11 @@ on:
         required: false
         default: true
         type: boolean
+      changelog-file:
+        description: Path to the changelog file in the GitHub repository
+        required: false
+        default: "CHANGELOG.md"
+        type: string
       changelog-config:
         description: "Changelog config path."
         required: false
@@ -87,11 +92,12 @@ jobs:
       - name: Create changelog
         id: build-changelog
         uses: bakdata/ci-templates/actions/changelog-generate@1.38.0
-        if: ${{ inputs.changelog == true}}
+        if: ${{ inputs.changelog == true }}
         with:
           github-token: ${{ secrets.github-token }}
-          config: ${{ inputs.changelog-config }}
           new-tag: ${{ steps.bump-version.outputs.release-version }}
+          changelog-file: ${{ inputs.changelog-file }}
+          config: ${{ inputs.changelog-config }}
           fetch-reviewers: "true"
           fetch-release-information: "true"
 

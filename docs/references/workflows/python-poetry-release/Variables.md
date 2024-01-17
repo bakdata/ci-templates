@@ -8,6 +8,7 @@
 | ----------------- | ------- | -------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
 | changelog         | boolean | false    | `true`                                            | Create changelog for release.                                             |
 | changelog-config  | string  | false    |                                                   | Changelog config path.                                                    |
+| changelog-file    | string  | false    | `"CHANGELOG.md"`                                  | Path to the changelog file in the GitHub repository                       |
 | poetry-version    | string  | false    | `"1.5.1"`                                         | The Poetry version to be installed. (Default is 1.5.1)                    |
 | python-version    | string  | false    | `"3.10"`                                          | The Python version for setting up Poetry. (Default is 3.10)               |
 | ref               | string  | false    | `"${{ github.event.repository.default_branch }}"` | The ref name to checkout the repository.                                  |
