@@ -61,8 +61,8 @@ runs:
 
     - name: Setup semver
       run: |
-        wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
-        chmod +x /usr/local/bin/semver
+        sudo wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
+        sudo chmod +x /usr/local/bin/semver
       shell: bash
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
