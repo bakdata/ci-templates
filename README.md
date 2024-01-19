@@ -36,7 +36,7 @@ Also, follow the following steps to ensure that you can create the documentation
 ### install `auto-doc` which is the software used for documentation generation:
 
 - On MacOS:
-  - using brew: `brew install auto-doc`
+  - using brew: `brew install tj-actions/tap/auto-doc`
   - using the GitHub repository:
     ```shell
     wget https://github.com/tj-actions/auto-doc/releases/download/v3.4.0/auto-doc_3.4.0_Darwin_arm64.tar.gz
