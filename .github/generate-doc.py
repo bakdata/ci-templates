@@ -6,6 +6,9 @@ import shutil
 import subprocess
 
 
+target_subsection_title = 'References'
+
+
 class Colors:
     RED = '\033[91m'
     GREEN = '\033[92m'
@@ -18,7 +21,7 @@ def contains_subsection(file_path, target_subsection_title):
     section_pattern = re.compile(r'^\s*#{1}\s+(.*)$', re.MULTILINE)
     subsection_pattern = re.compile(r'^\s*#{2}\s+(.*)$', re.MULTILINE)
 
-    with open(file_path, 'r', encoding='utf-8') as file:
+    with open(file_path, 'r') as file:
         markdown_text = file.read()
 
     section_matches = section_pattern.finditer(markdown_text)
@@ -34,26 +37,14 @@ def contains_subsection(file_path, target_subsection_title):
 
 
 def replace_string_in_markdown(file_path, old_string, new_string):
-    with open(file_path, 'r', encoding='utf-8') as file:
+    with open(file_path, 'r') as file:
         content = file.read()
 
     modified_content = content.replace(old_string, new_string)
 
-    with open(file_path, 'w', encoding='utf-8') as file:
+    with open(file_path, 'w') as file:
         file.write(modified_content)
     return modified_content
-
-
-def remove_formatting(content):
-    # Remove whitespaces and newlines and hyphens
-    return content.replace(" ", "").replace("\n", "").replace("-", "")
-
-
-def contents_equal(file1, file2):
-    content1 = remove_formatting(file1)
-    content2 = remove_formatting(file2)
-
-    return content1 == content2
 
 
 def extract_subsection_content(markdown_content, subsection_title):
@@ -76,16 +67,27 @@ def extract_subsection_content(markdown_content, subsection_title):
         return None
 
 
+def remove_formatting(content):
+    # Remove whitespaces and newlines and hyphens
+    try:
+        return content.replace(
+            " ", "").replace("\n", "").replace("-", "")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
+def contents_equal(file1, file2):
+    print_colored(file1, Colors.BLUE)
+    content1 = remove_formatting(file1)
+    print_colored(file2, Colors.YELLOW)
+    content2 = remove_formatting(file2)
+
+    return content1 == content2
+
+
 def update_doc(readme_path, reference_path):
-    placeholder = [
-        '\n',
-        '## References',
-        '\n',
-        'Empty substring created',
-        '\n',
-        '### Subsubsection',
-        '\n',
-        'Placeholder']
+    subsection_placeholder = ['## References', 'Empty substring created',
+                              '### Subsubsection', 'Placeholder']
     updated = False
 
     # Create the dir in case documentation is not created yet
@@ -98,24 +100,30 @@ def update_doc(readme_path, reference_path):
     if not file_exist:
         with open(readme_path, 'w') as file:
             file.write(f"# Documentation for {ci_name}")
-            file.writelines(placeholder)
+            for line in subsection_placeholder:
+                file.write(line + "\n")
 
-    with open(readme_path, 'r', encoding='utf-8') as file1:
+    with open(readme_path, 'r') as file1:
         readme_content = file1.read()
-    with open(reference_path, 'r', encoding='utf-8') as file2:
+    with open(reference_path, 'r') as file2:
         reference_content = file2.read()
-
-    target_subsection_title = 'References'
 
     # add subsection if it does not exist
     if not readme_content.__contains__(f"## {target_subsection_title}"):
-        with open(readme_path, 'a', encoding='utf-8') as file_readme:
-            for line in placeholder:
-                file_readme.write(line)
+        print_colored("**********", Colors.RED)
+        print_colored(readme_path, Colors.RED)
+        print_colored(os.access(readme_path, os.W_OK), Colors.RED)
+        try:
+            with open(readme_path, 'a') as file_readme:
+                for line in subsection_placeholder:
+                    file_readme.write(line + "\n")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
     readme_extraction_result = extract_subsection_content(
         readme_content, target_subsection_title)
 
+    print_colored(readme_content, Colors.GREEN)
     reference_extraction_result = extract_subsection_content(
         reference_content, target_subsection_title)
 
@@ -178,9 +186,13 @@ def run():
 
     template = [
         "# References",
+        "\n",
         "## Inputs",
+        "\n",
         "## Outputs",
-        "## Secrets"]
+        "\n",
+        "## Secrets",
+        "\n"]
 
  # go through actions
     os.makedirs("tmps/", exist_ok=True)
