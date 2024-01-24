@@ -14,18 +14,6 @@ class Colors:
     RESET = '\033[0m'
 
 
-def format_markdown_file(filename):
-    with open(filename, 'r+') as file:
-        content = file.read()
-        formatted_content = markdown2.markdown(content)
-    with open(filename, 'w') as file:
-        file.write(formatted_content)
-    replace_string_in_markdown(filename, "<p>", "")
-    replace_string_in_markdown(filename, "</p>", "")
-    replace_string_in_markdown(filename, "<em>", "_")
-    replace_string_in_markdown(filename, "</em>", "_")
-
-
 def contains_subsection(file_path, target_subsection_title):
     section_pattern = re.compile(r'^\s*#{1}\s+(.*)$', re.MULTILINE)
     subsection_pattern = re.compile(r'^\s*#{2}\s+(.*)$', re.MULTILINE)
@@ -56,39 +44,36 @@ def replace_string_in_markdown(file_path, old_string, new_string):
     return modified_content
 
 
-def extract_subsection(file_path, target_subsection_title):
-    html_subsection_pattern = re.compile(
-        r'<h2>(.*?)<\/h2>', re.IGNORECASE | re.DOTALL)
-    with open(file_path, 'r', encoding='utf-8') as file:
-        markdown_text = file.read()
-    html_subsection_matches = html_subsection_pattern.finditer(markdown_text)
+def remove_formatting(content):
+    # Remove whitespaces and newlines and hyphens
+    return content.replace(" ", "").replace("\n", "").replace("-", "")
 
-    # Iterate over matches to find the target subsection
-    for match in html_subsection_matches:
-        current_subsection_title = match.group(1).strip()
 
-        if current_subsection_title.lower() == target_subsection_title.lower():
+def contents_equal(file1, file2):
+    content1 = remove_formatting(file1)
+    content2 = remove_formatting(file2)
 
-            subsection_start = match.start()
-            next_subsection_match = next(html_subsection_matches, None)
-            subsection_end = next_subsection_match.start(
-            ) if next_subsection_match else len(markdown_text)
+    return content1 == content2
 
-            subsection_content = markdown_text[match.end(
-            ):subsection_end].strip()
 
-            subsubsection_matches = html_subsection_pattern.finditer(
-                subsection_content)
-            subsubsections = [{"title": submatch.group(1).strip(
-            ), "content": ''} for submatch in subsubsection_matches]
+def extract_subsection_content(markdown_content, subsection_title):
+    # Define the pattern for detecting headers (## Subsection Title)
+    pattern = re.compile(
+        r'^##\s' + re.escape(subsection_title) + r'\s*$', re.MULTILINE)
 
-            return {
-                "title": current_subsection_title,
-                "content": subsection_content,
-                "subsubsections": subsubsections
-            }
+    # Find the start and end positions of the subsection
+    match = pattern.search(markdown_content)
+    if match:
+        start_position = match.end()
+        next_header = pattern.search(markdown_content[start_position:])
+        end_position = next_header.start() if next_header else len(markdown_content)
 
-    return None
+        # Extract the content of the subsection
+        subsection_content = markdown_content[start_position:end_position].strip(
+        )
+        return subsection_content
+    else:
+        return None
 
 
 def update_doc(readme_path, reference_path):
@@ -117,30 +102,27 @@ def update_doc(readme_path, reference_path):
 
     with open(readme_path, 'r', encoding='utf-8') as file1:
         readme_content = file1.read()
+    with open(reference_path, 'r', encoding='utf-8') as file2:
+        reference_content = file2.read()
 
     target_subsection_title = 'References'
 
     # add subsection if it does not exist
-    if not readme_content.__contains__(f"## {target_subsection_title}") and not readme_content.__contains__(f"<h2>{target_subsection_title}</h2>"):
+    if not readme_content.__contains__(f"## {target_subsection_title}"):
         with open(readme_path, 'a', encoding='utf-8') as file_readme:
-            file_readme.writelines(placeholder)
-    format_markdown_file(readme_path)
-    readme_extraction_result = extract_subsection(
-        readme_path, target_subsection_title)
+            for line in placeholder:
+                file_readme.write(line)
 
-    reference_extraction_result = extract_subsection(
-        reference_path, target_subsection_title)
+    readme_extraction_result = extract_subsection_content(
+        readme_content, target_subsection_title)
 
-    if file_exist:
-        readme_result_as_str = readme_extraction_result["content"]
-        reference_result_as_str = reference_extraction_result["content"]
+    reference_extraction_result = extract_subsection_content(
+        reference_content, target_subsection_title)
 
-        # if not readme_result_as_str == new_content:
-        if not contents_equal(readme_result_as_str, reference_result_as_str):
-            replace_string_in_markdown(
-                readme_path, readme_result_as_str, reference_result_as_str)
-            print_colored(readme_path, Colors.YELLOW)
-            updated = True
+    if file_exist and not contents_equal(readme_extraction_result, reference_extraction_result):
+        replace_string_in_markdown(
+            readme_path, readme_extraction_result, reference_extraction_result)
+        updated = True
 
     return updated
 
@@ -189,18 +171,6 @@ def copy_file(source_path, destination_path):
         print_colored(f"An error occurred: {e}", Colors.RED)
 
 
-def remove_formatting(content):
-    # Remove whitespaces and newlines and hyphens
-    return content.replace(" ", "").replace("\n", "").replace("-", "")
-
-
-def contents_equal(file1, file2):
-    content1 = remove_formatting(file1)
-    content2 = remove_formatting(file2)
-
-    return content1 == content2
-
-
 def run():
     auto_doc_cmd = os.environ.get("DOC_CMD")
     if auto_doc_cmd is None or auto_doc_cmd == "":
@@ -222,7 +192,6 @@ def run():
     action_files.extend(glob.glob("actions/**/action.yml"))
     for action_file in action_files:
         action_name = os.path.basename(os.path.dirname(action_file))
-
         # create docu in tmp dir
         output_dir_action = f"docs/actions/{action_name}"
         tmp_docu_output_dir = os.path.join(
@@ -235,11 +204,10 @@ def run():
         with open(tmp_docu_output_action, 'w') as file_action_template:
             for line in template[: -1]:
                 file_action_template.write(line + '\n')
-
         os.system(
             f"{auto_doc_cmd} -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action} > /dev/null")
         replace_string_in_markdown(tmp_docu_output_action, "# ", "## ")
-        format_markdown_file(tmp_docu_output_action)
+
         output_file_action = os.path.join(
             output_dir_action, "README.md")
         changes.append({"readme": output_file_action,
@@ -275,7 +243,6 @@ def run():
             replace_string_in_markdown(
                 tmp_docu_output_workflow, "# ", "## ")
 
-            format_markdown_file(tmp_docu_output_workflow)
             workflow_doc_file = os.path.join(
                 output_dir_workflow, "README.md")
 
