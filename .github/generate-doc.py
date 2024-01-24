@@ -7,6 +7,7 @@ import subprocess
 
 
 target_subsection_title = 'References'
+readme_file = "README.md"
 
 
 class Colors:
@@ -17,34 +18,12 @@ class Colors:
     RESET = '\033[0m'
 
 
-def contains_subsection(file_path, target_subsection_title):
-    section_pattern = re.compile(r'^\s*#{1}\s+(.*)$', re.MULTILINE)
-    subsection_pattern = re.compile(r'^\s*#{2}\s+(.*)$', re.MULTILINE)
-
-    with open(file_path, 'r') as file:
-        markdown_text = file.read()
-
-    section_matches = section_pattern.finditer(markdown_text)
-
-    for match in section_matches:
-        section_title = match.group(1)
-        section_start = match.end()
-
-        if section_title.lower() == target_subsection_title.lower():
-            return bool(subsection_pattern.search(markdown_text, section_start))
-
-    return False
-
-
 def replace_string_in_markdown(file_path, old_string, new_string):
     with open(file_path, 'r') as file:
         content = file.read()
-
     modified_content = content.replace(old_string, new_string)
-
     with open(file_path, 'w') as file:
         file.write(modified_content)
-    return modified_content
 
 
 def extract_subsection_content(markdown_content, subsection_title):
@@ -107,7 +86,7 @@ def update_doc(readme_path, reference_path):
         reference_content = file2.read()
 
     # add subsection if it does not exist
-    if not readme_content.__contains__(f"## {target_subsection_title}"):
+    if f"## {target_subsection_title}" not in readme_content:
         try:
             with open(readme_path, 'a') as file_readme:
                 for line in subsection_placeholder:
@@ -121,7 +100,7 @@ def update_doc(readme_path, reference_path):
     reference_extraction_result = extract_subsection_content(
         reference_content, target_subsection_title)
 
-    if file_exist and not contents_equal(readme_extraction_result, reference_extraction_result):
+    if not contents_equal(readme_extraction_result, reference_extraction_result):
         replace_string_in_markdown(
             readme_path, readme_extraction_result, reference_extraction_result)
         updated = True
@@ -215,7 +194,7 @@ def run():
         replace_string_in_markdown(tmp_docu_output_action, "# ", "## ")
 
         output_file_action = os.path.join(
-            output_dir_action, "README.md")
+            output_dir_action, readme_file)
         changes.append({"readme": output_file_action,
                         "tmp_output": tmp_docu_output_action})
 
@@ -226,7 +205,7 @@ def run():
     workflow_dir = ".github/workflows"
     for workflow in os.listdir(workflow_dir):
         workflow_name = workflow.split(".")[0]
-        if not workflow.startswith("_") and workflow != "README.md":
+        if not workflow.startswith("_") and workflow != readme_file:
             workflow_path = os.path.join(workflow_dir, workflow)
             # Test with only one workflow
             output_dir_workflow = f"docs/workflows/{workflow_name}"
@@ -250,7 +229,7 @@ def run():
                 tmp_docu_output_workflow, "# ", "## ")
 
             workflow_doc_file = os.path.join(
-                output_dir_workflow, "README.md")
+                output_dir_workflow, readme_file)
 
             changes.append({"readme": workflow_doc_file,
                             "tmp_output": tmp_docu_output_workflow})
