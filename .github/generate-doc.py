@@ -77,9 +77,7 @@ def remove_formatting(content):
 
 
 def contents_equal(file1, file2):
-    print_colored(file1, Colors.BLUE)
     content1 = remove_formatting(file1)
-    print_colored(file2, Colors.YELLOW)
     content2 = remove_formatting(file2)
 
     return content1 == content2
@@ -110,9 +108,6 @@ def update_doc(readme_path, reference_path):
 
     # add subsection if it does not exist
     if not readme_content.__contains__(f"## {target_subsection_title}"):
-        print_colored("**********", Colors.RED)
-        print_colored(readme_path, Colors.RED)
-        print_colored(os.access(readme_path, os.W_OK), Colors.RED)
         try:
             with open(readme_path, 'a') as file_readme:
                 for line in subsection_placeholder:
@@ -123,7 +118,6 @@ def update_doc(readme_path, reference_path):
     readme_extraction_result = extract_subsection_content(
         readme_content, target_subsection_title)
 
-    print_colored(readme_content, Colors.GREEN)
     reference_extraction_result = extract_subsection_content(
         reference_content, target_subsection_title)
 
