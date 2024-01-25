@@ -33,9 +33,9 @@ on:
         description: "The old version of the package."
         value: ${{ jobs.publish-snapshot.outputs.old-version }}
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-snapshot
-  cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-snapshot
+#   cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
 
 jobs:
   publish-snapshot:
