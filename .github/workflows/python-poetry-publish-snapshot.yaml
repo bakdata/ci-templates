@@ -60,7 +60,7 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
 
       - name: Build and publish package to TestPyPI
-        uses: bakdata/ci-templates/actions/python-poetry-publish-pypi@test/python-poetry-snapshot
+        uses: bakdata/ci-templates/actions/python-poetry-publish-pypi@1.40.3
         with:
           pypi-token: ${{ secrets.pypi-token }}
           publish-to-test: "true"
