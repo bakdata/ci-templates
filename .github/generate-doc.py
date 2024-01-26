@@ -125,8 +125,11 @@ def print_colored(text, color):
 
 class DocGenerationError(Exception):
     def __init__(self, count, inconsistencies):
-        self.message = f"Error: The documentation is not up to date. {count} inconsistency(ies) where found. Re running pre-commit may help. Inconstencies:{inconsistencies}"
-        super().__init__(f"{Colors.RED}{self.message}{Colors.RESET}")
+        inconsistencies_str = f"Error: The documentation is not up to date. {count} inconsistency(ies) where found. Re running pre-commit may help. Inconstencies:\n"
+        for i in inconsistencies:
+            inconsistencies_str += f"{i}\n"
+        # self.message = inconsistencies_str
+        super().__init__(f"{Colors.RED}{inconsistencies_str}{Colors.RESET}")
         # for i in inconsistencies:
         #     print_colored(i, Colors.YELLOW)
 
