@@ -127,7 +127,7 @@ class DocGenerationError(Exception):
     def __init__(self, count, inconsistencies):
         inconsistencies_str = f"{Colors.RED}Error: The documentation is not up to date. {count} inconsistency(ies) where found. Re running pre-commit may help. Inconstencies:\n{Colors.RESET}"
         for i in inconsistencies:
-            inconsistencies_str += f"{Colors.RED}{i}\n{Colors.RESET}"
+            inconsistencies_str += f"{Colors.RED}- {i}\n{Colors.RESET}"
         super().__init__(inconsistencies_str)
 
 
