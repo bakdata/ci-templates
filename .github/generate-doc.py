@@ -1,7 +1,12 @@
 import glob
 import os
+import re
 import shutil
 import subprocess
+
+
+TARGET_SUBSECTION_TITLE = 'References'
+README_FILE = "README.md"
 
 
 class Colors:
@@ -10,6 +15,96 @@ class Colors:
     YELLOW = '\033[93m'
     BLUE = '\033[94m'
     RESET = '\033[0m'
+
+
+def replace_string_in_markdown(file_path, old_string, new_string):
+    with open(file_path, 'r') as file:
+        content = file.read()
+    modified_content = content.replace(old_string, new_string)
+    with open(file_path, 'w') as file:
+        file.write(modified_content)
+
+
+def extract_subsection_content(markdown_content, subsection_title):
+    # Define the pattern for detecting headers (## Subsection Title)
+    pattern = re.compile(
+        r'^##\s' + re.escape(subsection_title) + r'\s*$', re.MULTILINE)
+
+    # Find the start and end positions of the subsection
+    match = pattern.search(markdown_content)
+    if match:
+        start_position = match.end()
+        next_header = pattern.search(markdown_content[start_position:])
+        end_position = next_header.start() if next_header else len(markdown_content)
+
+        # Extract the content of the subsection
+        subsection_content = markdown_content[start_position:end_position].strip(
+        )
+        return subsection_content
+    else:
+        return None
+
+
+def remove_formatting(content):
+    # Remove whitespaces and newlines and hyphens
+    try:
+        return content.replace(
+            " ", "").replace("\n", "").replace("-", "")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
+def contents_equal(file1, file2):
+    content1 = remove_formatting(file1)
+    content2 = remove_formatting(file2)
+
+    return content1 == content2
+
+
+def update_doc(readme_path, reference_path):
+    subsection_placeholder = ['## References', 'Empty substring created',
+                              '### Subsubsection', 'Placeholder']
+    updated = False
+
+    # Create the dir in case documentation is not created yet
+    directory_path = os.path.dirname(readme_path)
+    os.makedirs(directory_path, exist_ok=True)
+
+    # Create Readme if it does not exist yet
+    ci_name = os.path.basename(directory_path)
+    file_exist = os.path.exists(readme_path)
+    if not file_exist:
+        with open(readme_path, 'w') as file:
+            file.write(f"# Documentation for {ci_name}")
+            for line in subsection_placeholder:
+                file.write(line + "\n")
+
+    with open(readme_path, 'r') as file1:
+        readme_content = file1.read()
+    with open(reference_path, 'r') as file2:
+        reference_content = file2.read()
+
+    # add subsection if it does not exist
+    if f"## {TARGET_SUBSECTION_TITLE}" not in readme_content:
+        try:
+            with open(readme_path, 'a') as file_readme:
+                for line in subsection_placeholder:
+                    file_readme.write(line + "\n")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+    readme_extraction_result = extract_subsection_content(
+        readme_content, TARGET_SUBSECTION_TITLE)
+
+    reference_extraction_result = extract_subsection_content(
+        reference_content, TARGET_SUBSECTION_TITLE)
+
+    if not contents_equal(readme_extraction_result, reference_extraction_result):
+        replace_string_in_markdown(
+            readme_path, readme_extraction_result, reference_extraction_result)
+        updated = True
+
+    return updated
 
 
 def auto_doc_installed():
@@ -29,9 +124,11 @@ def print_colored(text, color):
 
 
 class DocGenerationError(Exception):
-    def __init__(self):
-        self.message = "Error: The documentation is not up to date. Re running pre-commit may help."
-        super().__init__(f"{Colors.RED}{self.message}{Colors.RESET}")
+    def __init__(self, count, inconsistencies):
+        inconsistencies_str = f"{Colors.RED}Error: The documentation is not up to date. {count} inconsistency(ies) where found. Re running pre-commit may help. Inconstencies:\n{Colors.RESET}"
+        for i in inconsistencies:
+            inconsistencies_str += f"{Colors.RED}- {i}\n{Colors.RESET}"
+        super().__init__(inconsistencies_str)
 
 
 def safe_remove_directory(directory_path):
@@ -56,26 +153,23 @@ def copy_file(source_path, destination_path):
         print_colored(f"An error occurred: {e}", Colors.RED)
 
 
-def remove_formatting(content):
-    # Remove whitespaces and newlines and hyphens
-    return content.replace(" ", "").replace("\n", "").replace("-", "")
-
-
-def files_equal(file1_path, file2_path):
-    with open(file1_path, 'r') as file1, open(file2_path, 'r') as file2:
-        content1 = remove_formatting(file1.read())
-        content2 = remove_formatting(file2.read())
-
-        return content1 == content2
-
-
 def run():
     auto_doc_cmd = os.environ.get("DOC_CMD")
     if auto_doc_cmd is None or auto_doc_cmd == "":
         auto_doc_cmd = "auto-doc"
 
- # go through actions
-    os.makedirs("tmps", exist_ok=True)
+    template = [
+        "# References",
+        "\n",
+        "## Inputs",
+        "\n",
+        "## Outputs",
+        "\n",
+        "## Secrets",
+        "\n"]
+
+    # go through actions
+    os.makedirs("tmps/", exist_ok=True)
     tmp_action = "tmps/actions"
     os.makedirs(tmp_action, exist_ok=True)
     changes = []
@@ -84,9 +178,8 @@ def run():
     action_files.extend(glob.glob("actions/**/action.yml"))
     for action_file in action_files:
         action_name = os.path.basename(os.path.dirname(action_file))
-
         # create docu in tmp dir
-        output_dir_action = f"docs/references/actions/{action_name}"
+        output_dir_action = f"docs/actions/{action_name}"
         tmp_docu_output_dir = os.path.join(
             tmp_action, action_name)
 
@@ -94,18 +187,16 @@ def run():
         tmp_docu_output_action = os.path.join(
             tmp_action, action_name, "Variables.md")
 
-        with open(tmp_docu_output_action, 'w') as file:
-            file.writelines([
-                f"# Refenrences {action_name} composite action\n",
-                "## Inputs\n",
-                "## Outputs\n"]
-            )
-
+        with open(tmp_docu_output_action, 'w') as file_action_template:
+            for line in template[: -1]:
+                file_action_template.write(line + '\n')
         os.system(
             f"{auto_doc_cmd} -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action} > /dev/null")
+        replace_string_in_markdown(tmp_docu_output_action, "# ", "## ")
+
         output_file_action = os.path.join(
-            output_dir_action, "Variables.md")
-        changes.append({"existing": output_file_action,
+            output_dir_action, README_FILE)
+        changes.append({"readme": output_file_action,
                         "tmp_output": tmp_docu_output_action})
 
     # go through workflows
@@ -115,9 +206,9 @@ def run():
     workflow_dir = ".github/workflows"
     for workflow in os.listdir(workflow_dir):
         workflow_name = workflow.split(".")[0]
-        if not workflow.startswith("_") and workflow != "README.md":
+        if not workflow.startswith("_") and workflow != README_FILE:
             workflow_path = os.path.join(workflow_dir, workflow)
-            output_dir_workflow = f"docs/references/workflows/{workflow_name}"
+            output_dir_workflow = f"docs/workflows/{workflow_name}"
 
             # create docu in tmp dir
             tmp_workflow_output_dir = os.path.join(
@@ -128,43 +219,37 @@ def run():
             tmp_docu_output_workflow = os.path.join(
                 tmp_workflow_output_dir, "Variables.md")
 
-            with open(tmp_docu_output_workflow, 'w') as file:
-                l1 = f"# Refenrences {workflow_name} reusable Workflow\n"
-                l2 = "## Inputs\n"
-                l3 = "## Outputs\n"
-                l4 = "## Secrets\n"
-                file.writelines([l1, l2, l3, l4])
+            with open(tmp_docu_output_workflow, 'w') as file_workflow_template:
+                for line in template:
+                    file_workflow_template.write(line + '\n')
 
             os.system(
                 f"{auto_doc_cmd} -f {workflow_path} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_workflow} -r > /dev/null")
-            docs_output_path = os.path.join(
-                output_dir_workflow, "Variables.md")
+            replace_string_in_markdown(
+                tmp_docu_output_workflow, "# ", "## ")
 
-            changes.append({"existing": docs_output_path,
+            workflow_doc_file = os.path.join(
+                output_dir_workflow, README_FILE)
+
+            changes.append({"readme": workflow_doc_file,
                             "tmp_output": tmp_docu_output_workflow})
 
     # Correction
-    need_updates = []
+    count = 0
+    inconsistencies = []
     for entry in changes:
-        existing_f = entry["existing"]
+        readme_f = entry["readme"]
         tmp_f = entry["tmp_output"]
-        file_exist = os.path.exists(existing_f)
-        if (file_exist and not files_equal(existing_f, tmp_f)) or (not file_exist):
-            need_updates.append(entry)
-
-    for entry in need_updates:
-        outdated_file = entry["existing"]
-        path_to_doc = os.path.dirname(outdated_file)
-        print_colored(path_to_doc, Colors.YELLOW)
-        os.makedirs(path_to_doc, exist_ok=True)
-        new_file = entry["tmp_output"]
-        copy_file(new_file, outdated_file)
-    if not need_updates:
+        was_updated = update_doc(readme_f, tmp_f)
+        if was_updated:
+            inconsistencies.append(readme_f)
+            count += 1
+    if count == 0:
         print_colored("√ Documentation up to date", Colors.GREEN)
+        safe_remove_directory("tmps/")
     else:
-        raise DocGenerationError()
-
-    safe_remove_directory("tmps")
+        safe_remove_directory("tmps/")
+        raise DocGenerationError(count, inconsistencies)
 
 
 if __name__ == "__main__":
