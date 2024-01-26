@@ -1,13 +1,12 @@
 import glob
-import markdown2
 import os
 import re
 import shutil
 import subprocess
 
 
-target_subsection_title = 'References'
-readme_file = "README.md"
+TARGET_SUBSECTION_TITLE = 'References'
+README_FILE = "README.md"
 
 
 class Colors:
@@ -86,7 +85,7 @@ def update_doc(readme_path, reference_path):
         reference_content = file2.read()
 
     # add subsection if it does not exist
-    if f"## {target_subsection_title}" not in readme_content:
+    if f"## {TARGET_SUBSECTION_TITLE}" not in readme_content:
         try:
             with open(readme_path, 'a') as file_readme:
                 for line in subsection_placeholder:
@@ -95,10 +94,10 @@ def update_doc(readme_path, reference_path):
             print(f"An error occurred: {e}")
 
     readme_extraction_result = extract_subsection_content(
-        readme_content, target_subsection_title)
+        readme_content, TARGET_SUBSECTION_TITLE)
 
     reference_extraction_result = extract_subsection_content(
-        reference_content, target_subsection_title)
+        reference_content, TARGET_SUBSECTION_TITLE)
 
     if not contents_equal(readme_extraction_result, reference_extraction_result):
         replace_string_in_markdown(
@@ -194,7 +193,7 @@ def run():
         replace_string_in_markdown(tmp_docu_output_action, "# ", "## ")
 
         output_file_action = os.path.join(
-            output_dir_action, readme_file)
+            output_dir_action, README_FILE)
         changes.append({"readme": output_file_action,
                         "tmp_output": tmp_docu_output_action})
 
@@ -205,9 +204,8 @@ def run():
     workflow_dir = ".github/workflows"
     for workflow in os.listdir(workflow_dir):
         workflow_name = workflow.split(".")[0]
-        if not workflow.startswith("_") and workflow != readme_file:
+        if not workflow.startswith("_") and workflow != README_FILE:
             workflow_path = os.path.join(workflow_dir, workflow)
-            # Test with only one workflow
             output_dir_workflow = f"docs/workflows/{workflow_name}"
 
             # create docu in tmp dir
@@ -229,7 +227,7 @@ def run():
                 tmp_docu_output_workflow, "# ", "## ")
 
             workflow_doc_file = os.path.join(
-                output_dir_workflow, readme_file)
+                output_dir_workflow, README_FILE)
 
             changes.append({"readme": workflow_doc_file,
                             "tmp_output": tmp_docu_output_workflow})
