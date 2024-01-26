@@ -124,9 +124,11 @@ def print_colored(text, color):
 
 
 class DocGenerationError(Exception):
-    def __init__(self, count):
+    def __init__(self, count, inconsistencies):
         self.message = f"Error: The documentation is not up to date. {count} inconsistency(ies) where found.  Re running pre-commit may help."
         super().__init__(f"{Colors.RED}{self.message}{Colors.RESET}")
+        for i in inconsistencies:
+            print_colored(i, Colors.YELLOW)
 
 
 def safe_remove_directory(directory_path):
@@ -166,7 +168,7 @@ def run():
         "## Secrets",
         "\n"]
 
- # go through actions
+    # go through actions
     os.makedirs("tmps/", exist_ok=True)
     tmp_action = "tmps/actions"
     os.makedirs(tmp_action, exist_ok=True)
@@ -247,8 +249,6 @@ def run():
         safe_remove_directory("tmps/")
     else:
         safe_remove_directory("tmps/")
-        for i in inconsistencies:
-            print_colored(i, Colors.YELLOW)
         raise DocGenerationError(count)
 
 
