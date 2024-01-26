@@ -12,6 +12,10 @@ class Colors:
     RESET = '\033[0m'
 
 
+def print_colored(text, color):
+    print(f"{color}{text}{Colors.RESET}")
+
+
 def auto_doc_installed():
     auto_doc_cmd = os.environ.get("DOC_CMD")
     if auto_doc_cmd is None or auto_doc_cmd == "":
@@ -22,10 +26,6 @@ def auto_doc_installed():
         return True
     except subprocess.CalledProcessError as e:
         return f"Error: {e.stderr}"
-
-
-def print_colored(text, color):
-    print(f"{color}{text}{Colors.RESET}")
 
 
 class DocGenerationError(Exception):
