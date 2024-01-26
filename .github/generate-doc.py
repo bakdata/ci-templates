@@ -249,7 +249,7 @@ def run():
         safe_remove_directory("tmps/")
     else:
         safe_remove_directory("tmps/")
-        raise DocGenerationError(count)
+        raise DocGenerationError(count, inconsistencies)
 
 
 if __name__ == "__main__":
