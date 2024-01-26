@@ -125,13 +125,10 @@ def print_colored(text, color):
 
 class DocGenerationError(Exception):
     def __init__(self, count, inconsistencies):
-        inconsistencies_str = f"Error: The documentation is not up to date. {count} inconsistency(ies) where found. Re running pre-commit may help. Inconstencies:\n"
+        inconsistencies_str = f"{Colors.RED}Error: The documentation is not up to date. {count} inconsistency(ies) where found. Re running pre-commit may help. Inconstencies:\n{Colors.RESET}"
         for i in inconsistencies:
-            inconsistencies_str += f"{i}\n"
-        # self.message = inconsistencies_str
-        super().__init__(f"{Colors.RED}{inconsistencies_str}{Colors.RESET}")
-        # for i in inconsistencies:
-        #     print_colored(i, Colors.YELLOW)
+            inconsistencies += f"{Colors.RED}{i}\n{Colors.RESET}"
+        super().__init__(inconsistencies_str)
 
 
 def safe_remove_directory(directory_path):
