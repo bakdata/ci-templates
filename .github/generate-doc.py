@@ -234,18 +234,21 @@ def run():
 
     # Correction
     count = 0
+    inconsistencies = []
     for entry in changes:
         readme_f = entry["readme"]
         tmp_f = entry["tmp_output"]
         was_updated = update_doc(readme_f, tmp_f)
-
         if was_updated:
+            inconsistencies.append(readme_f)
             count += 1
     if count == 0:
         print_colored("√ Documentation up to date", Colors.GREEN)
         safe_remove_directory("tmps/")
     else:
         safe_remove_directory("tmps/")
+        for i in inconsistencies:
+            print_colored(i, Colors.YELLOW)
         raise DocGenerationError(count)
 
 
