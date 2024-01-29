@@ -1,26 +1,67 @@
-import glob
-import os
+import re
 import yaml
 
 
-class Colors:
-    RED = '\033[91m'
-    GREEN = '\033[92m'
-    YELLOW = '\033[93m'
-    BLUE = '\033[94m'
-    RESET = '\033[0m'
+DEPENDENCIES_SUBSECTION_TITLE = "Dependencies"
+DEPENDENCIES_PLACEHOLDER = ['## Dependencies',
+                            'No external actions in use here.']
 
 
-def print_colored(text, color):
-    print(f"{color}{text}{Colors.RESET}")
+def remove_formatting(content):
+    # Remove whitespaces and newlines and hyphens
+    try:
+        return content.replace(
+            " ", "").replace("\n", "").replace("-", "")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
-def extract_dependencies(data):
+def replace_string_in_markdown(file_path, old_string, new_string):
+    with open(file_path, 'r') as file:
+        content = file.read()
+    modified_content = content.replace(old_string, new_string)
+    with open(file_path, 'w') as file:
+        file.write(modified_content)
+
+
+def contents_equal(file1, file2):
+    content1 = remove_formatting(file1)
+    content2 = remove_formatting(file2)
+
+    return content1 == content2
+
+
+def extract_subsection_content(markdown_content, subsection_title):
+    # Defines the pattern for detecting headers (## Subsection Title)
+    pattern = re.compile(
+        r'^##\s' + re.escape(subsection_title) + r'\s*$', re.MULTILINE)
+
+    # Finds the start and end positions of the subsection
+    match = pattern.search(markdown_content)
+    if match:
+        start_position = match.end()
+        next_header = pattern.search(markdown_content[start_position:])
+        if next_header:
+            end_position = next_header.start() + start_position
+        else:
+            end_position = len(markdown_content)
+
+        # Extracs the content of the subsection
+        subsection_content = markdown_content[start_position:end_position].strip(
+        )
+        return subsection_content
+    else:
+        return None
+
+
+def extract_dependencies(ci_file):
     uses_values = []
 
-    if isinstance(data, dict):
-        for key, run in data.items():
-            # if key == "jobs" and isinstance(value, list):
+    with open(ci_file, 'r') as file:
+        yaml_data = yaml.safe_load(file)
+
+    if isinstance(yaml_data, dict):
+        for key, run in yaml_data.items():
             if key == "runs":
                 if isinstance(run, dict):
                     steps = run.get("steps", [])
@@ -45,57 +86,50 @@ def extract_dependencies(data):
     return uses_values
 
 
-def generate_link(dependency):
-    link = ""
-    base = "https://github.com/"
-    if "bakdata" in dependency:
-        separator = "ci-templates/"
-        prefix, sufix = dependency.split(separator)
-        base += prefix + separator
-        sufix, tag = sufix.split("@")
-        tag = f"blob/{tag}/"
-        link = base + tag + sufix
-    else:
-        link = base + dependency.replace("@", "/tree/")
-    return link
+def generate_links(used_ci):
+    dependencies = []
+    for dep in used_ci:
+        link = ""
+        dependency_link = ""
+        base = "https://github.com/"
+        if "bakdata" in dep:
+            separator = "ci-templates/"
+            prefix, sufix = dep.split(separator)
+            base += prefix + separator
+            sufix, tag = sufix.split("@")
+            tag = f"blob/{tag}/"
+            link = base + tag + sufix
+        else:
+            link = base + dep.replace("@", "/tree/")
+
+        dependency_link = f"- [{dep}]({link})\n"
+        dependencies.append(dependency_link)
+
+    return dependencies
 
 
-def main():
+def update_dependencies(readme_path: str, dependencies: list):
+    updated = False
+    if dependencies:
+        with open(readme_path, 'r') as file1:
+            readme_content = file1.read()
 
-    # go through actions
-    action_readme_path = "action-README.md"
-    action_files = glob.glob("actions/**/action.yaml")
-    action_files.extend(glob.glob("actions/**/action.yml"))
-    for action_file in action_files:
-        action_name = os.path.basename(os.path.dirname(action_file))
-
-        with open(action_file, 'r') as file:
-            yaml_data = yaml.safe_load(file)
-        uses_values = extract_dependencies(yaml_data)
-
-        with open(action_readme_path, 'a') as file:
-            file.write(f"\n# Dependencies for {action_name}\n")
-            for dep in uses_values:
-                link = generate_link(dep)
-                file.write(f"- [{dep}]({link})\n")
-
-    # go through workflows
-    workflow_readme_path = "workflow-README.md"
-    workflow_dir = ".github/workflows"
-    for workflow in os.listdir(workflow_dir):
-        workflow_name = workflow.split(".")[0]
-        if not workflow.startswith("_") and workflow != "README.md":
-            workflow_path = os.path.join(workflow_dir, workflow)
-            with open(workflow_path, 'r') as workflow_file:
-                workflow_data = yaml.safe_load(workflow_file)
-            workflow_uses_values = extract_dependencies(workflow_data)
-
-            with open(workflow_readme_path, 'a') as workflow_file:
-                workflow_file.write(f"\n# Dependencies for {workflow_name}\n")
-                for dep in workflow_uses_values:
-                    link = generate_link(dep)
-                    workflow_file.write(f"- [{dep}]({link})\n")
-
-
-if __name__ == "__main__":
-    main()
+        if f"## {DEPENDENCIES_SUBSECTION_TITLE}" not in readme_content:
+            try:
+                with open(readme_path, 'a') as file_readme:
+                    for line in DEPENDENCIES_PLACEHOLDER:
+                        file_readme.write(line + "\n")
+                    file_readme.write("\n")
+            except Exception as e:
+                print(f"An error occurred: {e}")
+        with open(readme_path, 'r') as file2:
+            new_readme_content = file2.read()
+        readme_extraction_result = extract_subsection_content(
+            new_readme_content, DEPENDENCIES_SUBSECTION_TITLE)
+        param_join_result = ''.join(dependencies)
+        dependencies_subsection = readme_extraction_result.split("\n## ")[0]
+        if not contents_equal(dependencies_subsection, param_join_result):
+            replace_string_in_markdown(
+                readme_path, dependencies_subsection, param_join_result)
+            updated = True
+    return updated
