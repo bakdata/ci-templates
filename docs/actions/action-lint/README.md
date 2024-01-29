@@ -12,7 +12,7 @@ steps:
 
 ## Dependencies
 
-- [bakdata/ci-templates/actions/checkout@1.33.0](https://github.com/bakdata/ci-templates/blob/1.32.0/actions/checkout)
+- [bakdata/ci-templates/actions/checkout@1.32.0](https://github.com/bakdata/ci-templates/blob/1.32.0/actions/checkout)
 
 ## References
 
