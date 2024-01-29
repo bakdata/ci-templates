@@ -87,7 +87,7 @@ jobs:
   assess-code-quality:
     name: Asses code quality
     runs-on: ubuntu-22.04
-    needs: build
+    needs: test
     steps:
       - name: Assess code quality
         uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@1.39.0
