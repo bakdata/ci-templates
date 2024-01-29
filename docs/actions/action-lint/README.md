@@ -12,7 +12,7 @@ steps:
 
 ## Dependencies
 
-- [bakdata/ci-templates/actions/checkout@1.32.0](https://github.com/bakdata/ci-templates/blob/1.32.0/actions/checkout)
+- [bakdata/ci-templates/actions/checkout@1.33.0](https://github.com/bakdata/ci-templates/blob/1.32.0/actions/checkout)
 
 ## References
 
@@ -23,7 +23,7 @@ steps:
 | INPUT               | TYPE   | REQUIRED | DEFAULT     | DESCRIPTION                                |
 | ------------------- | ------ | -------- | ----------- | ------------------------------------------ |
 | action-lint-version | string | false    | `"v1.6.22"` | The action lint repository version to use. |
-| ref2                | string | false    |             | The ref name to checkout the repository.   |
+| ref                 | string | false    |             | The ref name to checkout the repository.   |
 
 <!-- AUTO-DOC-INPUT:END -->
 
