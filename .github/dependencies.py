@@ -7,6 +7,12 @@ DEPENDENCIES_PLACEHOLDER = ['## Dependencies',
                             'No external actions in use here.']
 
 
+def read_file(file_path: str):
+    with open(file_path, 'r') as file:
+        content = file.read()
+    return content
+
+
 def remove_formatting(content):
     # Remove whitespaces and newlines and hyphens
     try:
@@ -17,8 +23,7 @@ def remove_formatting(content):
 
 
 def replace_string_in_markdown(file_path, old_string, new_string):
-    with open(file_path, 'r') as file:
-        content = file.read()
+    content = read_file(file_path)
     modified_content = content.replace(old_string, new_string)
     with open(file_path, 'w') as file:
         file.write(modified_content)
@@ -111,8 +116,7 @@ def generate_links(used_ci):
 def update_dependencies(readme_path: str, dependencies: list):
     updated = False
     if dependencies:
-        with open(readme_path, 'r') as file1:
-            readme_content = file1.read()
+        readme_content = read_file(readme_path)
 
         if f"## {DEPENDENCIES_SUBSECTION_TITLE}" not in readme_content:
             try:
@@ -122,8 +126,7 @@ def update_dependencies(readme_path: str, dependencies: list):
                     file_readme.write("\n")
             except Exception as e:
                 print(f"An error occurred: {e}")
-        with open(readme_path, 'r') as file2:
-            new_readme_content = file2.read()
+        new_readme_content = read_file(readme_path)
         readme_extraction_result = extract_subsection_content(
             new_readme_content, DEPENDENCIES_SUBSECTION_TITLE)
         param_join_result = ''.join(dependencies)

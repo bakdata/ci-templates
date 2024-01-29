@@ -1,4 +1,4 @@
-from dependencies import contents_equal, extract_dependencies, extract_subsection_content, generate_links, replace_string_in_markdown, update_dependencies
+from dependencies import contents_equal, extract_dependencies, extract_subsection_content, generate_links, read_file, replace_string_in_markdown, update_dependencies
 import glob
 import os
 import shutil
@@ -38,10 +38,8 @@ def update_doc(readme_path, reference_path):
             for line in subsection_placeholder:
                 file.write(line + "\n")
 
-    with open(readme_path, 'r') as file1:
-        readme_content = file1.read()
-    with open(reference_path, 'r') as file2:
-        reference_content = file2.read()
+    readme_content = read_file(readme_path)
+    reference_content = read_file(reference_path)
 
     # add subsection if it does not exist
     if f"## {TARGET_SUBSECTION_TITLE}" not in readme_content:
@@ -51,15 +49,14 @@ def update_doc(readme_path, reference_path):
                     file_readme.write(line + "\n")
         except Exception as e:
             print(f"An error occurred: {e}")
-    with open(readme_path, 'r') as file3:
-        new_readme_content = file3.read()
+    new_readme_content = read_file(readme_path)
     readme_extraction_result = extract_subsection_content(
         new_readme_content, TARGET_SUBSECTION_TITLE)
     readme_references_subsection = readme_extraction_result.split("\n## ")[0]
-    
+
     reference_extraction_result = extract_subsection_content(
         reference_content, TARGET_SUBSECTION_TITLE)
-    
+
     if not contents_equal(readme_references_subsection, reference_extraction_result):
         replace_string_in_markdown(
             readme_path, readme_references_subsection, reference_extraction_result)
