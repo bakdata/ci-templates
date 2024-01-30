@@ -25,7 +25,7 @@ This composite action utilizes Jib to efficiently build a container image and au
 | class             | string | true     |         | The entrypoint class to be used for the image |
 | image             | string | true     |         | The image name with its repository name       |
 | tags              | string | true     |         | The tags to use to release the image          |
-| working-directory | string | true     |         | working directory to run the commands         |
+| working-directory | string | true     |         | Working directory to run the commands         |
 
 <!-- AUTO-DOC-INPUT:END -->
 
