@@ -1,0 +1,29 @@
+name: "Build and upload Jib "
+description: "Build the Jib image and upload it to the image repository"
+
+inputs:
+  image:
+    description: "The image name with its repository name"
+    required: true
+  tags:
+    description: "The tags to use to release the image"
+    required: true
+  class:
+    description: "The entrypoint class to be used for the image"
+    required: true
+  working-directory:
+    description: "Working directory to run the commands"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Build & push Docker image
+      run: |
+        ./gradlew jib \
+          --info --stacktrace \
+          --image=${{ inputs.image }} \
+          -Djib.container.mainClass=${{ inputs.class }} \
+          -Djib.to.tags=${{ inputs.tags }}
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}

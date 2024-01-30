@@ -1,4 +1,4 @@
-# Description jib-uploader composite action
+# Description java-gradle-build-push-jib composite action
 
 This composite action utilizes Jib to efficiently build a container image and automatically upload it to the referenced container repository.
 
