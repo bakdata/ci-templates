@@ -1,4 +1,4 @@
-from dependencies import contents_equal, extract_dependencies, extract_subsection_content, generate_links, read_file, replace_string_in_markdown, update_dependencies
+from dependencies import create_non_existing_docu, contents_equal, extract_dependencies, extract_subsection_content, generate_links, read_file, replace_string_in_markdown, update_dependencies
 import glob
 import os
 import shutil
@@ -25,18 +25,8 @@ def update_doc(readme_path, reference_path):
                               '### Subsubsection', 'Placeholder']
     updated = False
 
-    # Create the dir in case documentation is not created yet
-    directory_path = os.path.dirname(readme_path)
-    os.makedirs(directory_path, exist_ok=True)
-
-    # Create Readme if it does not exist yet
-    ci_name = os.path.basename(directory_path)
-    file_exist = os.path.exists(readme_path)
-    if not file_exist:
-        with open(readme_path, 'w') as file:
-            file.write(f"# Documentation for {ci_name}")
-            for line in subsection_placeholder:
-                file.write(line + "\n")
+    create_non_existing_docu(file_path=readme_path,
+                             placeholder=subsection_placeholder)
 
     readme_content = read_file(readme_path)
     reference_content = read_file(reference_path)

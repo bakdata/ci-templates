@@ -1,3 +1,4 @@
+import os
 import re
 import yaml
 
@@ -5,6 +6,21 @@ import yaml
 DEPENDENCIES_SUBSECTION_TITLE = "Dependencies"
 DEPENDENCIES_PLACEHOLDER = ['## Dependencies',
                             'No external actions in use here.']
+
+
+def create_non_existing_docu(file_path: str, placeholder: list):
+    # Create the dir in case documentation is not created yet
+    directory_path = os.path.dirname(file_path)
+    os.makedirs(directory_path, exist_ok=True)
+
+    # Create Readme if it does not exist yet
+    ci_name = os.path.basename(directory_path)
+    file_exist = os.path.exists(file_path)
+    if not file_exist:
+        with open(file_path, 'w') as file:
+            file.write(f"# Documentation for {ci_name}\n")
+            for line in placeholder:
+                file.write(line + "\n")
 
 
 def read_file(file_path: str):
@@ -115,6 +131,9 @@ def generate_links(used_ci):
 
 def update_dependencies(readme_path: str, dependencies: list):
     updated = False
+
+    create_non_existing_docu(file_path=readme_path,
+                             placeholder=DEPENDENCIES_PLACEHOLDER)
     if dependencies:
         readme_content = read_file(readme_path)
 

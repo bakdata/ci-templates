@@ -20,6 +20,60 @@ The upper bound might be either existing or new.
 If the new tag does not yet exist, the action will
 nevertheless create the changelog so that it may be included in the release.
 
+## Prerequisites
+
+Create a file called `changelog-config.json` that contains the changelog configurations.
+The mentioned action's documentation goes into great detail about how to create and utilize config
+files. A simple configuration may look like this:
+
+```json
+{
+  "categories": [{ "title": "### Merged pull requests:" }],
+  "ignore_labels": ["ignore"],
+  "sort": { "order": "ASC", "on_property": "mergedAt" },
+  "template": "# [#{{TO_TAG}}](https://github.com/#{{OWNER}}/#{{REPO}}/releases/tag/#{{TO_TAG}}) - Release Date: #{{TO_TAG_DATE}}\n\n#{{CHANGELOG}}",
+  "pr_template": "- #{{TITLE}} [##{{NUMBER}}](#{{URL}}) ([@#{{AUTHOR}}](https://github.com/#{{AUTHOR}}))\n",
+  "empty_template": "- no changes!"
+}
+```
+
+Make sure to update the link
+`https://github.com/<myorganization>/<myrepository>/releases/tag/${{TO_TAG}}`
+accordingly and make sure to include `- Release Date: ${{TO_TAG_DATE}}`
+because the action looks for this pattern to make the date format easily readable.
+
+Additional configuration options can be explored
+[here](https://github.com/mikepenz/release-changelog-builder-action#configuration-specification).
+
+## Usage
+
+By default, just a single commit for the ref/SHA that started the process is retrieved.
+In the [checkout action](https://github.com/actions/checkout), enter `fetch-depth: 0` to retrieve
+all history for all branches and tags.
+Without it, the changelog action will be unable to track down previous tags.
+
+```yaml
+steps:
+  - uses: bakdata/ci-templates/actions/checkout@1.32.0
+    with:
+      persist-credentials: false
+      fetch-depth: 0
+  - name: Create changelog
+    id: build_changelog
+    uses: bakdata/ci-templates/actions/changelog-generate@main
+    with:
+      github-token: ${{ secrets.GH_TOKEN }}
+      new-tag: "1.0.0"
+      changelog-file: "CHANGELOG.md"
+      fetch-reviewers: "true"
+      fetch-release-information: "true"
+  - name: Use output
+    run: |
+      echo  "${{ steps.build_changelog.outputs.single-changelog }}" > tag_changelog.md
+      echo  "${{ steps.build_changelog.outputs.merged-changelog }}" > global_changelog.md
+    shell: bash
+```
+
 ## Dependencies
 
 - [mikepenz/release-changelog-builder-action@v4](https://github.com/mikepenz/release-changelog-builder-action/tree/v4)
