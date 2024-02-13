@@ -73,7 +73,7 @@ runs:
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
-        ./gradlew --info --stacktrace publishtoNexus closeAndReleaseRepository -x test
+        ./gradlew --info --stacktrace publishToNexus closeAndReleaseRepository -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
