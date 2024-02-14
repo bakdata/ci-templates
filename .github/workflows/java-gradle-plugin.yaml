@@ -114,13 +114,13 @@ jobs:
 
     steps:
       - name: Publish plugin
-        uses: bakdata/ci-templates/actions/java-gradle-publish-plugin@v1.16.0
+        uses: bakdata/ci-templates/actions/java-gradle-publish-plugin@v1.40.7
         with:
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
           signing-password: ${{ secrets.signing-password }}
-          ossrh-username: ${{ secrets.ossrh-username }}
-          ossrh-password: ${{ secrets.ossrh-password }}
+          gradle-publish-key: ${{ secrets.gradle-publish-key }}
+          gradle-publish-secret: ${{ secrets.gradle-publish-secret }}
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
