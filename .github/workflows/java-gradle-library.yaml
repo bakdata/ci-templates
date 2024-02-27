@@ -88,7 +88,7 @@ jobs:
 
     steps:
       - name: Publish
-        uses: bakdata/ci-templates/actions/java-gradle-publish@feature/new-publish-plugin
+        uses: bakdata/ci-templates/actions/java-gradle-publish@1.41.0
         with:
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
