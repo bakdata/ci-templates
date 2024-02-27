@@ -29,14 +29,15 @@ on:
         type: boolean
         default: true
       gradle-cache-read-only:
-        description: "Whether Gradle caching should be read-only. (Default is true)"
+        description: "Whether Gradle caching should be read-only. (Default is false)"
         required: false
         type: boolean
         default: false
       gradle-refresh-dependencies:
         description: "Whether Gradle should refresh dependencies. (Default is true)"
         required: false
-        default: "true"
+        type: boolean
+        default: true
       working-directory:
         description: "Working directory of your Gradle artifacts. (Default is .)"
         required: false
