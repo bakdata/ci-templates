@@ -20,10 +20,10 @@ on:
         type: boolean
         default: false
       gradle-refresh-dependencies:
-        description: "Whether Gradle should refresh dependencies. (Default is true)"
+        description: "Whether Gradle should refresh dependencies. (Default is false)"
         required: false
         type: boolean
-        default: true
+        default: false
       gradle-version:
         description: "Gradle version to be installed. (Default is wrapper)"
         required: false
