@@ -139,6 +139,8 @@ jobs:
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
+          gradle-cache-read-only: true
+          gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
           working-directory: ${{ inputs.working-directory }}
 
   release:
