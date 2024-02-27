@@ -6,32 +6,9 @@ inputs:
     description: Path to the changelog file in the GitHub repository
     required: false
     default: "CHANGELOG.md"
-  github-username:
-    description: "GitHub username for requesting changes from API."
-    required: true
   github-token:
     description: "GitHub token for requesting changes from API."
     required: true
-  java-distribution:
-    description: "Java distribution to be installed. (Default is microsoft)"
-    required: false
-    default: "microsoft"
-  java-version:
-    description: "Java version to be installed. (Default is 11)"
-    required: false
-    default: "11"
-  gradle-version:
-    description: "Gradle version to be installed. (Default is wrapper)"
-    required: false
-    default: "wrapper"
-  gradle-cache:
-    description: "Whether Gradle caching is enabled or not. (Default is true)"
-    required: false
-    default: "true"
-  working-directory:
-    description: "Working directory of your Gradle artifacts. (Default is .)"
-    required: false
-    default: "."
 runs:
   using: "composite"
   steps:

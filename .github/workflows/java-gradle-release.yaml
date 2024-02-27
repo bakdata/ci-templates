@@ -23,6 +23,10 @@ on:
         required: false
         type: boolean
         default: false
+      gradle-refresh-dependencies:
+        description: "Whether Gradle should refresh dependencies. (Default is true)"
+        required: false
+        default: "true"
       gradle-version:
         description: "Gradle version to be installed. (Default is wrapper)"
         required: false
@@ -85,4 +89,5 @@ jobs:
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
           gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
+          gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
           working-directory: ${{ inputs.working-directory }}

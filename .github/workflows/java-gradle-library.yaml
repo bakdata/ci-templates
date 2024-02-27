@@ -29,6 +29,10 @@ on:
         required: false
         type: boolean
         default: false
+      gradle-refresh-dependencies:
+        description: "Whether Gradle should refresh dependencies. (Default is true)"
+        required: false
+        default: "true"
       working-directory:
         description: "Working directory of your Gradle artifacts. (Default is .)"
         required: false
@@ -78,6 +82,7 @@ jobs:
       gradle-version: ${{ inputs.gradle-version }}
       gradle-cache: ${{ inputs.gradle-cache }}
       gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
+      gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
       working-directory: ${{ inputs.working-directory }}
 
     secrets:
@@ -106,6 +111,7 @@ jobs:
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
           gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
+          gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
           working-directory: ${{ inputs.working-directory }}
 
   release:

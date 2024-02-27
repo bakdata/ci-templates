@@ -23,9 +23,13 @@ inputs:
     required: false
     default: "true"
   gradle-cache-read-only:
-    description: "Whether Gradle caching should be read-only. (Default is true)"
+    description: "Whether Gradle caching should be read-only. By default this value is 'false' for workflows on the GitHub default branch and 'true' for workflows on other branches."
     required: false
-    default: "true"
+    default: ${{ github.event.repository != null && github.ref_name != github.event.repository.default_branch }}
+  gradle-refresh-dependencies:
+    description: "Whether Gradle should refresh dependencies. (Default is false)"
+    required: false
+    default: "false"
   gradle-version:
     description: "Gradle version to be installed. (Default is wrapper)"
     required: false
@@ -91,7 +95,7 @@ runs:
       shell: bash
 
     - name: Create release
-      run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true --refresh-dependencies
+      run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -PdisablePushToRemote=true ${{ inputs.gradle-refresh-dependencies && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
