@@ -48,14 +48,16 @@ jobs:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT              | TYPE    | REQUIRED | DEFAULT       | DESCRIPTION                                                                         |
-| ------------------ | ------- | -------- | ------------- | ----------------------------------------------------------------------------------- |
-| download-lfs-files | boolean | false    | `false`       | Whether the Git checkout action should resolve LFS files or not. (Default is false) |
-| gradle-cache       | boolean | false    | `true`        | Whether Gradle caching is enabled or not. (Default is true)                         |
-| gradle-version     | string  | false    | `"wrapper"`   | Gradle version to be installed. (Default is wrapper)                                |
-| java-distribution  | string  | false    | `"microsoft"` | Java distribution to be installed. (Default is microsoft)                           |
-| java-version       | string  | false    | `"11"`        | Java version to be installed. (Default is 11)                                       |
-| working-directory  | string  | false    | `"."`         | Working directory of your Gradle artifacts. (Default is .)                          |
+| INPUT                       | TYPE    | REQUIRED | DEFAULT       | DESCRIPTION                                                                         |
+| --------------------------- | ------- | -------- | ------------- | ----------------------------------------------------------------------------------- |
+| download-lfs-files          | boolean | false    | `false`       | Whether the Git checkout action should resolve LFS files or not. (Default is false) |
+| gradle-cache                | boolean | false    | `true`        | Whether Gradle caching is enabled or not. (Default is true)                         |
+| gradle-cache-read-only      | boolean | false    | `false`       | Whether Gradle caching should be read-only. (Default is false)                      |
+| gradle-refresh-dependencies | boolean | false    | `true`        | Whether Gradle should refresh dependencies. (Default is true)                       |
+| gradle-version              | string  | false    | `"wrapper"`   | Gradle version to be installed. (Default is wrapper)                                |
+| java-distribution           | string  | false    | `"microsoft"` | Java distribution to be installed. (Default is microsoft)                           |
+| java-version                | string  | false    | `"11"`        | Java version to be installed. (Default is 11)                                       |
+| working-directory           | string  | false    | `"."`         | Working directory of your Gradle artifacts. (Default is .)                          |
 
 <!-- AUTO-DOC-INPUT:END -->
 
