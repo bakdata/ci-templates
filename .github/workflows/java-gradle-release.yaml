@@ -18,6 +18,11 @@ on:
         required: false
         default: true
         type: boolean
+      gradle-cache-read-only:
+        description: "Whether Gradle caching should be read-only. (Default is true)"
+        required: false
+        type: boolean
+        default: false
       gradle-version:
         description: "Gradle version to be installed. (Default is wrapper)"
         required: false
@@ -68,7 +73,7 @@ jobs:
     steps:
       - name: Release on Github
         id: release
-        uses: bakdata/ci-templates/actions/java-gradle-release@1.38.0
+        uses: bakdata/ci-templates/actions/java-gradle-release@feature/improved-gradle-caching
         with:
           release-type: ${{ inputs.release-type }}
           changelog-file: "${{ inputs.changelog-file }}"
@@ -79,4 +84,5 @@ jobs:
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
+          gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
           working-directory: ${{ inputs.working-directory }}

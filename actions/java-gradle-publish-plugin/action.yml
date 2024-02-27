@@ -33,6 +33,10 @@ inputs:
     description: "Whether Gradle caching is enabled or not. (Default is true)"
     required: false
     default: "true"
+  gradle-cache-read-only:
+    description: "Whether Gradle caching should be read-only. (Default is true)"
+    required: false
+    default: "true"
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is .)"
     required: false
@@ -46,18 +50,19 @@ runs:
         fetch-depth: 0
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@v1.16.0
+      uses: bakdata/ci-templates/actions/java-gradle-setup@feature/improved-gradle-caching
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
         gradle-version: ${{ inputs.gradle-version }}
         gradle-cache: ${{ inputs.gradle-cache }}
+        gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
 
     - name: Publish plugin
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
-        ./gradlew --info --stacktrace -Pgradle.publish.key=${{ inputs.gradle-publish-key }} -Pgradle.publish.secret=${{ inputs.gradle-publish-secret }} publishPlugins -x test
+        ./gradlew --info --stacktrace -Pgradle.publish.key=${{ inputs.gradle-publish-key }} -Pgradle.publish.secret=${{ inputs.gradle-publish-secret }} publishPlugins -x test --refresh-dependencies
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:

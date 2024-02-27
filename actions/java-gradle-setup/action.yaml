@@ -18,6 +18,10 @@ inputs:
     description: "Whether Gradle caching is enabled or not. (Default is true)"
     required: false
     default: "true"
+  gradle-cache-read-only:
+    description: "Whether Gradle caching should be read-only. (Default is true)"
+    required: false
+    default: "true"
 runs:
   using: "composite"
   steps:
@@ -31,3 +35,4 @@ runs:
       with:
         gradle-version: ${{ inputs.gradle-version }}
         cache-disabled: ${{ inputs.gradle-cache == 'false' }}
+        cache-read-only: ${{ inputs.gradle-cache-read-only == 'true' }}
