@@ -18,16 +18,6 @@ on:
         required: false
         default: true
         type: boolean
-      gradle-cache-read-only:
-        description: "Whether Gradle caching should be read-only. (Default is false)"
-        required: false
-        type: boolean
-        default: false
-      gradle-refresh-dependencies:
-        description: "Whether Gradle should refresh dependencies. (Default is true)"
-        required: false
-        type: boolean
-        default: true
       gradle-version:
         description: "Gradle version to be installed. (Default is wrapper)"
         required: false
@@ -89,6 +79,4 @@ jobs:
           java-version: ${{ inputs.java-version }}
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
-          gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
-          gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
           working-directory: ${{ inputs.working-directory }}
