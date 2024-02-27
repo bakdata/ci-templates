@@ -108,7 +108,7 @@ jobs:
         with:
           download-lfs-files: ${{ inputs.download-lfs-files }}
           gradle-cache: ${{ inputs.gradle-cache }}
-          gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
+          gradle-cache-read-only: true
           gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
           gradle-version: ${{ inputs.gradle-version }}
           java-distribution: ${{ inputs.java-distribution }}
