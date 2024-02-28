@@ -21,6 +21,10 @@ steps:
       working-directory: "./tarball"
 ```
 
+## Dependencies
+
+- [docker/setup-buildx-action@v2.2.1](https://github.com/docker/setup-buildx-action/tree/v2.2.1)
+
 ## References
 
 ### Inputs

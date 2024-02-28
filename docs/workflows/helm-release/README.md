@@ -31,43 +31,8 @@ Currently, it is not possible to download a previously created Pages artifact as
 
 ## Dependencies
 
-This workflow is built from multiple composite actions listed below:
-
-- [helm-lint](https://github.com/bakdata/ci-templates/tree/main/actions/helm-lint)
-- [bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/bump-version)
-- [helm-package](https://github.com/bakdata/ci-templates/tree/main/actions/helm-package)
-- [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
-
-## Calling the workflow
-
-```yaml
-name: Call this reusable workflow
-
-on:
-  workflow_dispatch:
-    inputs:
-      release-type:
-        description: "The scope of the release (major, minor or patch)."
-        default: "patch"
-        required: false
-
-jobs:
-  call-workflow-passing-data:
-    uses: bakdata/ci-templates/.github/workflows/helm-release.yaml@main
-    with:
-      page-url: https://example.github.io/your-repository
-      release-type: ${{ inputs.release-type }}
-      ref: "my-awesome-ref" # (Optional)
-      lint-config-path: "my-lint-config.yaml" # (Optional)
-      helm-version: "v3.10.1" # (Optional)
-      charts-dir: charts # (Optional)
-      skip-download: "false" # (Optional)
-      artifact-dir: "artifact" # (Optional)
-    secrets:
-      github-email: "${{ secrets.GH_EMAIL }}"
-      github-username: "${{ secrets.GH_USERNAME }}"
-      github-token: "${{ secrets.GH_TOKEN }}"
-```
+- [bakdata/ci-templates/actions/checkout@1.32.0](https://github.com/bakdata/ci-templates/blob/1.32.0/actions/checkout)
+- [bakdata/ci-templates/actions/java-gradle-setup@v1.16.0](https://github.com/bakdata/ci-templates/blob/v1.16.0/actions/java-gradle-setup)
 
 ## References
 

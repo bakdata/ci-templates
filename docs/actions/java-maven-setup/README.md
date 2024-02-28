@@ -14,6 +14,11 @@ steps:
       java-version: "11" # (Optional)
 ```
 
+## Dependencies
+
+- [actions/setup-java@v3](https://github.com/actions/setup-java/tree/v3)
+- [yuzhiyongcn/setup-maven@v1.0.0](https://github.com/yuzhiyongcn/setup-maven/tree/v1.0.0)
+
 ## References
 
 ### Inputs

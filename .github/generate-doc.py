@@ -1,9 +1,8 @@
+from dependencies import create_non_existing_docu, contents_equal, extract_dependencies, extract_subsection_content, generate_links, read_file, replace_string_in_markdown, update_dependencies
 import glob
 import os
-import re
 import shutil
 import subprocess
-
 
 TARGET_SUBSECTION_TITLE = 'References'
 README_FILE = "README.md"
@@ -17,48 +16,8 @@ class Colors:
     RESET = '\033[0m'
 
 
-def replace_string_in_markdown(file_path, old_string, new_string):
-    with open(file_path, 'r') as file:
-        content = file.read()
-    modified_content = content.replace(old_string, new_string)
-    with open(file_path, 'w') as file:
-        file.write(modified_content)
-
-
-def extract_subsection_content(markdown_content, subsection_title):
-    # Define the pattern for detecting headers (## Subsection Title)
-    pattern = re.compile(
-        r'^##\s' + re.escape(subsection_title) + r'\s*$', re.MULTILINE)
-
-    # Find the start and end positions of the subsection
-    match = pattern.search(markdown_content)
-    if match:
-        start_position = match.end()
-        next_header = pattern.search(markdown_content[start_position:])
-        end_position = next_header.start() if next_header else len(markdown_content)
-
-        # Extract the content of the subsection
-        subsection_content = markdown_content[start_position:end_position].strip(
-        )
-        return subsection_content
-    else:
-        return None
-
-
-def remove_formatting(content):
-    # Remove whitespaces and newlines and hyphens
-    try:
-        return content.replace(
-            " ", "").replace("\n", "").replace("-", "")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-
-def contents_equal(file1, file2):
-    content1 = remove_formatting(file1)
-    content2 = remove_formatting(file2)
-
-    return content1 == content2
+def print_colored(text, color):
+    print(f"{color}{text}{Colors.RESET}")
 
 
 def update_doc(readme_path, reference_path):
@@ -66,23 +25,11 @@ def update_doc(readme_path, reference_path):
                               '### Subsubsection', 'Placeholder']
     updated = False
 
-    # Create the dir in case documentation is not created yet
-    directory_path = os.path.dirname(readme_path)
-    os.makedirs(directory_path, exist_ok=True)
+    create_non_existing_docu(file_path=readme_path,
+                             placeholder=subsection_placeholder)
 
-    # Create Readme if it does not exist yet
-    ci_name = os.path.basename(directory_path)
-    file_exist = os.path.exists(readme_path)
-    if not file_exist:
-        with open(readme_path, 'w') as file:
-            file.write(f"# Documentation for {ci_name}")
-            for line in subsection_placeholder:
-                file.write(line + "\n")
-
-    with open(readme_path, 'r') as file1:
-        readme_content = file1.read()
-    with open(reference_path, 'r') as file2:
-        reference_content = file2.read()
+    readme_content = read_file(readme_path)
+    reference_content = read_file(reference_path)
 
     # add subsection if it does not exist
     if f"## {TARGET_SUBSECTION_TITLE}" not in readme_content:
@@ -92,16 +39,17 @@ def update_doc(readme_path, reference_path):
                     file_readme.write(line + "\n")
         except Exception as e:
             print(f"An error occurred: {e}")
-
+    new_readme_content = read_file(readme_path)
     readme_extraction_result = extract_subsection_content(
-        readme_content, TARGET_SUBSECTION_TITLE)
+        new_readme_content, TARGET_SUBSECTION_TITLE)
+    readme_references_subsection = readme_extraction_result.split("\n## ")[0]
 
     reference_extraction_result = extract_subsection_content(
         reference_content, TARGET_SUBSECTION_TITLE)
 
-    if not contents_equal(readme_extraction_result, reference_extraction_result):
+    if not contents_equal(readme_references_subsection, reference_extraction_result):
         replace_string_in_markdown(
-            readme_path, readme_extraction_result, reference_extraction_result)
+            readme_path, readme_references_subsection, reference_extraction_result)
         updated = True
 
     return updated
@@ -117,10 +65,6 @@ def auto_doc_installed():
         return True
     except subprocess.CalledProcessError as e:
         return f"Error: {e.stderr}"
-
-
-def print_colored(text, color):
-    print(f"{color}{text}{Colors.RESET}")
 
 
 class DocGenerationError(Exception):
@@ -177,7 +121,13 @@ def run():
     action_files = glob.glob("actions/**/action.yaml")
     action_files.extend(glob.glob("actions/**/action.yml"))
     for action_file in action_files:
+
+        # generate a list of dependencies containing links to GH-repos
+        action_dependencies = extract_dependencies(action_file)
+        action_dependencies_links = generate_links(action_dependencies)
+
         action_name = os.path.basename(os.path.dirname(action_file))
+
         # create docu in tmp dir
         output_dir_action = f"docs/actions/{action_name}"
         tmp_docu_output_dir = os.path.join(
@@ -196,8 +146,10 @@ def run():
 
         output_file_action = os.path.join(
             output_dir_action, README_FILE)
+
         changes.append({"readme": output_file_action,
-                        "tmp_output": tmp_docu_output_action})
+                        "tmp_output": tmp_docu_output_action,
+                       "dependencies": action_dependencies_links})
 
     # go through workflows
     tmp_workflow = "tmps/workflows"
@@ -207,6 +159,11 @@ def run():
     for workflow in os.listdir(workflow_dir):
         workflow_name = workflow.split(".")[0]
         if not workflow.startswith("_") and workflow != README_FILE:
+
+            # generate a list of dependencies containing links to GH-repos
+            workflow_dependencies = extract_dependencies(action_file)
+            workflow_dependencies_links = generate_links(workflow_dependencies)
+
             workflow_path = os.path.join(workflow_dir, workflow)
             output_dir_workflow = f"docs/workflows/{workflow_name}"
 
@@ -232,7 +189,8 @@ def run():
                 output_dir_workflow, README_FILE)
 
             changes.append({"readme": workflow_doc_file,
-                            "tmp_output": tmp_docu_output_workflow})
+                            "tmp_output": tmp_docu_output_workflow,
+                            "dependencies": workflow_dependencies_links})
 
     # Correction
     count = 0
@@ -240,8 +198,14 @@ def run():
     for entry in changes:
         readme_f = entry["readme"]
         tmp_f = entry["tmp_output"]
+        dependencies_found = entry["dependencies"]
+
+        dep_updated = update_dependencies(
+            readme_path=readme_f, dependencies=dependencies_found)
+
         was_updated = update_doc(readme_f, tmp_f)
-        if was_updated:
+
+        if was_updated or dep_updated:
             inconsistencies.append(readme_f)
             count += 1
     if count == 0:

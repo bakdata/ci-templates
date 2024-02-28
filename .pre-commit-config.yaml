@@ -2,6 +2,7 @@ repos:
   - repo: local
     hooks:
       - id: auto-doc
+        additional_dependencies: ["pyyaml"]
         language: python
         name: Generate doc
         entry: python3 .github/generate-doc.py

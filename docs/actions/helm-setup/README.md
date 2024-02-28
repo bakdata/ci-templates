@@ -13,6 +13,11 @@ steps:
       helm-version: "v3.10.1" # optional
 ```
 
+## Dependencies
+
+- [azure/setup-kubectl@v3](https://github.com/azure/setup-kubectl/tree/v3)
+- [azure/setup-helm@v3](https://github.com/azure/setup-helm/tree/v3)
+
 ## References
 
 ### Inputs

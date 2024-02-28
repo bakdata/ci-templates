@@ -10,11 +10,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Installation
+      - name: Installations
         run: |
+          # install pre-commit
           pip install pre-commit
           wget https://github.com/tj-actions/auto-doc/releases/download/v3.4.0/auto-doc_3.4.0_Linux_x86_64.tar.gz
           tar -xf auto-doc_3.4.0_Linux_x86_64.tar.gz
+          # install python yaml library
+          pip install pyyaml
         working-directory: .
 
       - name: Run pre-commit

@@ -1,5 +1,10 @@
 # Description of test-python-setup-poetry reusable Workflow
 
+## Dependencies
+
+- [bakdata/ci-templates/actions/checkout@1.32.0](https://github.com/bakdata/ci-templates/blob/1.32.0/actions/checkout)
+- [bakdata/ci-templates/actions/java-gradle-setup@v1.16.0](https://github.com/bakdata/ci-templates/blob/v1.16.0/actions/java-gradle-setup)
+
 ## References
 
 ### Inputs

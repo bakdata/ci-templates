@@ -14,6 +14,10 @@ steps:
       namespace: infrastructure
 ```
 
+## Dependencies
+
+- [azure/setup-kubectl@v3](https://github.com/azure/setup-kubectl/tree/v3)
+
 ## References
 
 ### Inputs

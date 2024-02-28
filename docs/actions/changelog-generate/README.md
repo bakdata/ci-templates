@@ -20,12 +20,6 @@ The upper bound might be either existing or new.
 If the new tag does not yet exist, the action will
 nevertheless create the changelog so that it may be included in the release.
 
-## Dependencies
-
-This action is built from the following composite actions:
-
-- [release-changelog-builder-action](https://github.com/mikepenz/release-changelog-builder-action)
-
 ## Prerequisites
 
 Create a file called `changelog-config.json` that contains the changelog configurations.
@@ -79,6 +73,10 @@ steps:
       echo  "${{ steps.build_changelog.outputs.merged-changelog }}" > global_changelog.md
     shell: bash
 ```
+
+## Dependencies
+
+- [mikepenz/release-changelog-builder-action@v4](https://github.com/mikepenz/release-changelog-builder-action/tree/v4)
 
 ## References
 

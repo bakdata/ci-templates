@@ -24,6 +24,12 @@ steps:
       helm-version: "v3.10.1" # (Optional)
 ```
 
+## Dependencies
+
+- [bakdata/ci-templates/actions/checkout@1.32.0](https://github.com/bakdata/ci-templates/blob/1.32.0/actions/checkout)
+- [azure/setup-helm@v3](https://github.com/azure/setup-helm/tree/v3)
+- [helm/chart-testing-action@v2.0.1](https://github.com/helm/chart-testing-action/tree/v2.0.1)
+
 ## References
 
 ### Inputs

@@ -4,26 +4,7 @@ This composite action bumps the Python package version depending on the release 
 
 ## Dependencies
 
-This action uses another composite action listed below:
-
-- [python-setup-poetry](https://github.com/bakdata/ci-templates/tree/main/actions/python-setup-poetry)
-
-## Usage
-
-```yaml
-steps:
-  # Other steps in your workflow
-  - name: Bump version
-    id: bump-version
-    uses: bakdata/ci-templates/actions/python-poetry-bump-version@main
-    with:
-      release-type: ${{ inputs.release-type }}
-      python-version: ${{ inputs.python-version }}
-      poetry-version: ${{ inputs.poetry-version }}
-
-  - name: Use bump version output
-    run: echo Bumped version from ${{ steps.bump-version.outputs.old-version }} to ${{ steps.bump-version.outputs.release-version }}
-```
+- [bakdata/ci-templates/actions/python-setup-poetry@v1.5.3](https://github.com/bakdata/ci-templates/blob/v1.5.3/actions/python-setup-poetry)
 
 ## References
 

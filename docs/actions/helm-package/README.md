@@ -18,6 +18,10 @@ steps:
   # Rest of the workflow steps
 ```
 
+## Dependencies
+
+- [azure/setup-helm@v3](https://github.com/azure/setup-helm/tree/v3)
+
 ## References
 
 ### Inputs

@@ -25,40 +25,8 @@ replace =
 
 ## Dependencies
 
-This workflow is built from multiple composite actions listed below:
-
-- [bump-version](https://github.com/bakdata/ci-templates/tree/main/actions/bump-version)
-- [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
-
-## Calling the workflow
-
-```yaml
-name: Release multiple Helm Charts
-on:
-  workflow_dispatch:
-    inputs:
-      release-type:
-        description: "Scope of the release (major, minor or patch)."
-        required: true
-        type: string
-      next-dev-release-type:
-        description: "Scope of the next release (minor or patch) for developers"
-        required: true
-        type: string
-jobs:
-  call-workflow-passing-data:
-    name: Release & Publish Helm chart
-    uses: bakdata/ci-templates/.github/workflows/release-tag-versions.yaml@main
-    with:
-      version-configs-dir: "."
-      release-type: "${{ inputs.release-type }}"
-      next-dev-release-type: "${{ inputs.next-dev-release-type }}"
-      next-dev-release-suffix: "SNAPSHOT"
-    secrets:
-      github-email: "${{ secrets.GH_EMAIL }}"
-      github-username: "${{ secrets.GH_USERNAME }}"
-      github-token: "${{ secrets.GH_TOKEN }}"
-```
+- [bakdata/ci-templates/actions/checkout@1.32.0](https://github.com/bakdata/ci-templates/blob/1.32.0/actions/checkout)
+- [bakdata/ci-templates/actions/java-gradle-setup@v1.16.0](https://github.com/bakdata/ci-templates/blob/v1.16.0/actions/java-gradle-setup)
 
 ## References
 

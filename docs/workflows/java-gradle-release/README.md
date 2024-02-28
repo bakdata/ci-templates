@@ -10,45 +10,8 @@ file that uses the [Researchgate Release](https://plugins.gradle.org/plugin/net.
 
 ## Dependencies
 
-This workflow is built from another composite action listed below:
-
-- [java-gradle-setup](https://github.com/bakdata/ci-templates/tree/main/actions/java-gradle-setup)
-
-## Calling the workflow
-
-```yaml
-name: Release
-
-on:
-  workflow_dispatch:
-    inputs:
-      release-type:
-        description: "The scope of the release (major, minor or patch)."
-        default: "patch"
-        required: false
-
-jobs:
-  call-workflow-passing-data:
-    name: Java Gradle Release
-    uses: bakdata/ci-templates/.github/workflows/java-gradle-release.yaml@main
-    with:
-      release-type: "${{ github.event.inputs.release-type }}"
-      java-distribution: "microsoft" # (Optional) Default is microsoft
-      java-version: "11" # (Optional) Default is 11
-      gradle-version: "wrapper" # (Optional) Default is wrapper
-      gradle-cache: false # (Optional) Default is true
-      working-directory: "." # (Optional) Default is .
-    secrets:
-      github-username: "${{ secrets.GH_USERNAME }}"
-      github-email: "${{ secrets.GH_EMAIL }}"
-      github-token: "${{ secrets.GH_TOKEN }}"
-
-  use-output-of-workflow:
-    runs-on: ubuntu-latest
-    needs: call-workflow-passing-data
-    steps:
-      - run: echo Bumped Version from ${{ needs.call-workflow-passing-data.outputs.old-version }} to ${{ needs.call-workflow-passing-data.outputs.release-version }}
-```
+- [bakdata/ci-templates/actions/checkout@1.32.0](https://github.com/bakdata/ci-templates/blob/1.32.0/actions/checkout)
+- [bakdata/ci-templates/actions/java-gradle-setup@v1.16.0](https://github.com/bakdata/ci-templates/blob/v1.16.0/actions/java-gradle-setup)
 
 ## References
 

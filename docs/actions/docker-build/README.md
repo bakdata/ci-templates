@@ -21,6 +21,10 @@ steps:
       working-directory: "./tarball"
 ```
 
+## Dependencies
+
+- [actions/upload-artifact@v3.1.1](https://github.com/actions/upload-artifact/tree/v3.1.1)
+
 ## References
 
 ### Inputs

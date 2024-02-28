@@ -24,54 +24,8 @@ We upload the newly created artifacts as well as the `index.yaml` file to `gh-pa
 
 ## Dependencies
 
-This workflow is built from multiple composite actions listed below:
-
-- [helm-lint](https://github.com/bakdata/ci-templates/tree/main/actions/helm-lint)
-- [commit-and-push](https://github.com/bakdata/ci-templates/tree/main/actions/commit-and-push)
-
-## Calling the workflow
-
-### Multi-chart
-
-```yaml
-name: Release multiple Helm Charts
-on:
-  workflow_dispatch:
-
-jobs:
-  call-workflow-passing-data:
-    name: Release & Publish Helm chart
-    uses: bakdata/ci-templates/.github/workflows/helm-multi-release.yaml@main
-    with:
-      charts-path: "./charts"
-      subdirs: "['subdir1', 'subdir2', 'subdir3']"
-      gh-pages-branch: gh-pages
-    secrets:
-      github-email: "${{ secrets.GH_EMAIL }}"
-      github-username: "${{ secrets.GH_USERNAME }}"
-      github-token: "${{ secrets.GH_TOKEN }}"
-```
-
-### Single chart
-
-```yaml
-name: Release multiple Helm Charts
-on:
-  workflow_dispatch:
-
-jobs:
-  call-workflow-passing-data:
-    name: Release & Publish Helm chart
-    uses: bakdata/ci-templates/.github/workflows/helm-multi-release.yaml@main
-    with:
-      charts-path: "./helm-chart"
-      subdirs: "['.']"
-      gh-pages-branch: gh-pages
-    secrets:
-      github-email: "${{ secrets.GH_EMAIL }}"
-      github-username: "${{ secrets.GH_USERNAME }}"
-      github-token: "${{ secrets.GH_TOKEN }}"
-```
+- [bakdata/ci-templates/actions/checkout@1.32.0](https://github.com/bakdata/ci-templates/blob/1.32.0/actions/checkout)
+- [bakdata/ci-templates/actions/java-gradle-setup@v1.16.0](https://github.com/bakdata/ci-templates/blob/v1.16.0/actions/java-gradle-setup)
 
 ## References
 

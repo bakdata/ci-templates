@@ -14,6 +14,11 @@ steps:
       gradle-version: "wrapper" # (Optional)
 ```
 
+## Dependencies
+
+- [actions/setup-java@v3](https://github.com/actions/setup-java/tree/v3)
+- [gradle/gradle-build-action@v2](https://github.com/gradle/gradle-build-action/tree/v2)
+
 ## References
 
 ### Inputs

@@ -18,6 +18,10 @@ steps:
   # Rest of your workflow
 ```
 
+## Dependencies
+
+- [actions/setup-python@v4](https://github.com/actions/setup-python/tree/v4)
+
 ## References
 
 ### Inputs

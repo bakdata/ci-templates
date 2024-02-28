@@ -16,6 +16,11 @@ steps:
       command: "compile" # (Optional)
 ```
 
+## Dependencies
+
+- [bakdata/ci-templates/actions/checkout@1.32.0](https://github.com/bakdata/ci-templates/blob/1.32.0/actions/checkout)
+- [bakdata/ci-templates/actions/java-maven-setup@1.33.0](https://github.com/bakdata/ci-templates/blob/1.33.0/actions/java-maven-setup)
+
 ## References
 
 ### Inputs

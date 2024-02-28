@@ -6,13 +6,6 @@ This composite action will checkout your repository and allow you to handle [LFS
 
 Make sure your [LFS](https://docs.github.com/en/repositories/working-with-files/managing-large-files/configuring-git-large-file-storage) is properly configured.
 
-### Dependencies
-
-This workflow is built from other composite actions listed below:
-
-- [actions/checkout](https://github.com/actions/checkout)
-- [actions/cache](https://github.com/actions/cache)
-
 ## Usage
 
 ```yaml
@@ -25,6 +18,11 @@ steps:
     shell: bash
     run: ls -al .
 ```
+
+## Dependencies
+
+- [actions/checkout@v4](https://github.com/actions/checkout/tree/v4)
+- [actions/cache@v3](https://github.com/actions/cache/tree/v3)
 
 ## References
 

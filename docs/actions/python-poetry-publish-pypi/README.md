@@ -19,6 +19,10 @@ steps:
       working-directory: ${{ inputs.working-directory }}
 ```
 
+## Dependencies
+
+- [bakdata/ci-templates/actions/python-poetry-publish@1.40.4](https://github.com/bakdata/ci-templates/blob/1.40.4/actions/python-poetry-publish)
+
 ## References
 
 ### Inputs

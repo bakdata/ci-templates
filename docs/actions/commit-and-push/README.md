@@ -31,6 +31,10 @@ steps:
   # Rest of the workflow steps
 ```
 
+## Dependencies
+
+- [ad-m/github-push-action@v0.6.0](https://github.com/ad-m/github-push-action/tree/v0.6.0)
+
 ## References
 
 ### Inputs

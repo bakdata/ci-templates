@@ -22,6 +22,12 @@ steps:
       working-directory: "./tarball"
 ```
 
+## Dependencies
+
+- [actions/download-artifact@v3](https://github.com/actions/download-artifact/tree/v3)
+- [docker/setup-buildx-action@v2.2.1](https://github.com/docker/setup-buildx-action/tree/v2.2.1)
+- [bakdata/ci-templates/actions/docker-push@1.30.0](https://github.com/bakdata/ci-templates/blob/1.30.0/actions/docker-push)
+
 ## References
 
 ### Inputs

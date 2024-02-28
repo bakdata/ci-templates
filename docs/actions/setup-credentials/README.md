@@ -16,6 +16,11 @@ steps:
       gcloud-sdk-version: "376.0.0" # optional
 ```
 
+## Dependencies
+
+- [google-github-actions/auth@v2](https://github.com/google-github-actions/auth/tree/v2)
+- [google-github-actions/setup-gcloud@v0.6.0](https://github.com/google-github-actions/setup-gcloud/tree/v0.6.0)
+
 ## References
 
 ### Inputs
