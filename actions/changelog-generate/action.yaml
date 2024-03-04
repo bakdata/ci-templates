@@ -60,7 +60,6 @@ runs:
         #from-tag
         setfrom=""
      
-        git tag -l
         from_tag_list=$(git tag -l --no-contains $setto --sort=-creatordate) || from_tag_list=""
         if [[ -n "${{ inputs.old-tag }}" ]] && [[ "$from_tag_list" == *"${{ inputs.old-tag }}"* ]]; then
         # tag provided & provided tag exists
