@@ -68,6 +68,9 @@ on:
       gradle-publish-secret:
         description: "Secret for publishing to Gradle Plugin Portal."
         required: true
+      github-username:
+        description: "GitHub username for requesting changes from API."
+        required: true
       github-token:
         description: "GitHub token for requesting changes from API."
         required: true

@@ -71,7 +71,6 @@ jobs:
         uses: bakdata/ci-templates/actions/java-gradle-release@fix/changelog
         with:
           release-type: ${{ inputs.release-type }}
-          changelog-file: ${{ inputs.changelog-file }}
           github-email: ${{ secrets.github-email }}
           github-username: ${{ secrets.github-username }}
           github-token: ${{ secrets.github-token }}
@@ -80,4 +79,5 @@ jobs:
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
           gradle-cache-read-only: true
+          gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
           working-directory: ${{ inputs.working-directory }}
