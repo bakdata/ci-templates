@@ -120,7 +120,7 @@ runs:
         # Reformat ${{ runner.temp }}/changes.md and add it to the existing changelog
         {
           echo 'single-changelog='
-          cat changes.md
+          cat ${{ runner.temp }}/changes.md
         } >> $GITHUB_OUTPUT
 
         # Create changelog.md in case of a first Release
