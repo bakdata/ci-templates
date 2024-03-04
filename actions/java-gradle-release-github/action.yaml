@@ -28,7 +28,7 @@ runs:
       uses: bakdata/ci-templates/actions/changelog-generate@fix/changelog
       with:
         github-token: ${{ inputs.github-token }}
-        new-tag: ${GITHUB_REF##*/}
+        new-tag: ${{ github.ref_name }}
         changelog-file: ${{ inputs.changelog-file }}
         fetch-release-information: "true"
 

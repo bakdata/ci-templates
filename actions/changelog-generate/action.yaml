@@ -60,10 +60,8 @@ runs:
         #from-tag
         setfrom=""
      
-        echo "To tag: $setto"
         git tag -l
         from_tag_list=$(git tag -l --no-contains $setto --sort=-creatordate) || from_tag_list=""
-        echo "From tags: $from_tag_list"
         if [[ -n "${{ inputs.old-tag }}" ]] && [[ "$from_tag_list" == *"${{ inputs.old-tag }}"* ]]; then
         # tag provided & provided tag exists
             setfrom=${{ inputs.old-tag }}
@@ -77,7 +75,6 @@ runs:
             setfrom=$(git rev-list --max-parents=0 HEAD)
           fi
         fi
-        echo "From tag: $setfrom"
 
         echo "fromtag=$setfrom">> $GITHUB_OUTPUT
         if [[ -z "${{ inputs.config }}" ]]; then
