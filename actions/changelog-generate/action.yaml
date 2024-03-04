@@ -119,9 +119,8 @@ runs:
       run: |
         # Reformat ${{ runner.temp }}/changes.md and add it to the existing changelog
         {
-          echo 'single-changelog<<EOF'
-          cat ${{ runner.temp }}/changes.md
-          echo EOF
+          echo 'single-changelog'
+          cat changes.md
         } >> $GITHUB_OUTPUT
 
         # Create changelog.md in case of a first Release
@@ -136,9 +135,8 @@ runs:
           sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ runner.temp }}/changes.md)" ${{ inputs.changelog-file }}
 
           {
-            echo 'merged-changelog<<EOF'
+            echo 'merged-changelog'
             cat ${{ inputs.changelog-file }}
-            echo EOF
           } >> $GITHUB_OUTPUT
         fi
       shell: bash
