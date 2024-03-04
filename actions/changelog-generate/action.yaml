@@ -34,9 +34,6 @@ inputs:
     required: false
     default: ""
 outputs:
-  merged-changelog:
-    description: "Changelog containing listing of all single changelogs"
-    value: ${{ steps.output-generator.outputs.merged-changelog }}
   single-changelog:
     description: "Changelog containing changes of the latest tag"
     value: ${{ steps.output-generator.outputs.single-changelog }}
@@ -132,9 +129,5 @@ runs:
 
           # Update global changelog and pass it to the ouput
           sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ runner.temp }}/changes.md)" ${{ inputs.changelog-file }}
-
-          echo "merged-changelog<<EOF" >> $GITHUB_OUTPUT
-          cat ${{ inputs.changelog-file }} >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
         fi
       shell: bash
