@@ -72,7 +72,7 @@ runs:
           --image=${{ inputs.image-name }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           -x test \
-          ${{ inputs.gradle-refresh-dependencies && '--refresh-dependencies' || '' }}
+          ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 

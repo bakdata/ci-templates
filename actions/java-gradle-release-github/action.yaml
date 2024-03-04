@@ -57,7 +57,7 @@ runs:
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
 
     - name: Generate changelog
-      run: ./gradlew -Pchangelog.githubRepository=${{ github.event.repository.name }} -Pchangelog.futureVersionTag=${{ github.ref_name }} -Pchangelog.sinceTag=${{ github.ref_name }} --stacktrace --info generateChangelog ${{ inputs.gradle-refresh-dependencies && '--refresh-dependencies' || '' }}
+      run: ./gradlew -Pchangelog.githubRepository=${{ github.event.repository.name }} -Pchangelog.futureVersionTag=${{ github.ref_name }} -Pchangelog.sinceTag=${{ github.ref_name }} --stacktrace --info generateChangelog ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
