@@ -34,6 +34,9 @@ inputs:
     required: false
     default: ""
 outputs:
+  merged-changelog:
+    description: "Changelog containing listing of all single changelogs"
+    value: ${{ steps.output-generator.outputs.merged-changelog }}
   single-changelog:
     description: "Changelog containing changes of the latest tag"
     value: ${{ steps.output-generator.outputs.single-changelog }}
@@ -44,30 +47,28 @@ runs:
     - name: "Set tags"
       id: set-tags
       run: |
-        to_tag_list=$(git tag) || to_tag_list=""
+        tag_list=$(git tag) || tag_list=""
 
         # to-tag
-        if [[ "$to_tag_list" == *"${{ inputs.new-tag }}"* ]]; then
-          setto=${{ inputs.new-tag }}
+        if [[ "$tag_list" == *"${{ inputs.new-tag }}"* ]]; then
+          echo  "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
         else
-          setto=$(git rev-parse HEAD)
+          echo  "totag=$(git rev-parse HEAD)">> $GITHUB_OUTPUT
         fi
-        echo "totag=$setto">> $GITHUB_OUTPUT
 
         #from-tag
         setfrom=""
-     
-        from_tag_list=$(git tag -l --no-contains $setto --sort=-creatordate) || from_tag_list=""
-        if [[ -n "${{ inputs.old-tag }}" ]] && [[ "$from_tag_list" == *"${{ inputs.old-tag }}"* ]]; then
+
+        if [[ -n "${{ inputs.old-tag }}" ]] && [[ "$tag_list" == *"${{ inputs.old-tag }}"* ]]; then
         # tag provided & provided tag exists
             setfrom=${{ inputs.old-tag }}
         else
         # no tag provided or a non-existing tag was provided
-          if [ -n "$from_tag_list" ]; then
+          if [ -n "$tag_list" ]; then
             # if any tag exists then set from-tag to the latest tag
-            setfrom=$(echo $from_tag_list | cut -d ' ' -f 1)
+            setfrom=$(git describe --tags `git rev-list --tags --max-count=1`)
           else
-            # if no tag exists then use the first commit as fromtag
+            # if no tag exists then use the frist commit as fromtag
             setfrom=$(git rev-list --max-parents=0 HEAD)
           fi
         fi
@@ -115,7 +116,6 @@ runs:
       id: output-generator
       run: |
         # Reformat ${{ runner.temp }}/changes.md and add it to the existing changelog
-        cat ${{ runner.temp }}/changes.md
         {
           echo 'single-changelog<<EOF'
           cat ${{ runner.temp }}/changes.md
@@ -132,5 +132,11 @@ runs:
 
           # Update global changelog and pass it to the ouput
           sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ runner.temp }}/changes.md)" ${{ inputs.changelog-file }}
+
+          {
+            echo 'merged-changelog<<EOF'
+            cat ${{ inputs.changelog-file }}
+            echo EOF
+          } >> $GITHUB_OUTPUT
         fi
       shell: bash
