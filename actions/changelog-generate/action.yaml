@@ -60,7 +60,9 @@ runs:
         #from-tag
         setfrom=""
      
+        echo "To tag: $setto"
         from_tag_list=$(git tag -l --no-contains $setto --sort=-creatordate) || from_tag_list=""
+        echo "From tags: $from_tag_list"
         if [[ -n "${{ inputs.old-tag }}" ]] && [[ "$from_tag_list" == *"${{ inputs.old-tag }}"* ]]; then
         # tag provided & provided tag exists
             setfrom=${{ inputs.old-tag }}
@@ -70,10 +72,11 @@ runs:
             # if any tag exists then set from-tag to the latest tag
             setfrom=$(echo $from_tag_list | cut -d ' ' -f 1)
           else
-            # if no tag exists then use the frist commit as fromtag
+            # if no tag exists then use the first commit as fromtag
             setfrom=$(git rev-list --max-parents=0 HEAD)
           fi
         fi
+        echo "From tag: $setfrom"
 
         echo "fromtag=$setfrom">> $GITHUB_OUTPUT
         if [[ -z "${{ inputs.config }}" ]]; then
