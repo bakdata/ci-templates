@@ -30,6 +30,7 @@ runs:
         github-token: ${{ inputs.github-token }}
         new-tag: ${{ github.ref_name }}
         changelog-file: ${{ inputs.changelog-file }}
+        fetch-reviewers: "true"
         fetch-release-information: "true"
 
     - name: Create Github release

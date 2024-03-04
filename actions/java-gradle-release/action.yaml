@@ -106,6 +106,7 @@ runs:
         github-token: ${{ inputs.github-token }}
         new-tag: ${{ steps.evaluate-version.outputs.release-version }}
         changelog-file: ${{ inputs.changelog-file }}
+        fetch-reviewers: "true"
         fetch-release-information: "true"
 
     - name: Commit and push changes including the bump config file
