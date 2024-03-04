@@ -119,7 +119,7 @@ runs:
       run: |
         # Reformat ${{ runner.temp }}/changes.md and add it to the existing changelog
         {
-          echo 'single-changelog'
+          echo 'single-changelog='
           cat changes.md
         } >> $GITHUB_OUTPUT
 
@@ -135,7 +135,7 @@ runs:
           sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ runner.temp }}/changes.md)" ${{ inputs.changelog-file }}
 
           {
-            echo 'merged-changelog'
+            echo 'merged-changelog='
             cat ${{ inputs.changelog-file }}
           } >> $GITHUB_OUTPUT
         fi
