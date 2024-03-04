@@ -50,8 +50,6 @@ runs:
   steps:
     - name: Check out repository
       uses: bakdata/ci-templates/actions/checkout@1.32.0
-      with:
-        fetch-depth: 0
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@1.42.0
