@@ -19,7 +19,7 @@ runs:
         name: build-artifact
         path: build
 
-    - name: Generate
+    - name: Generate changelog
       id: build-changelog
       uses: bakdata/ci-templates/actions/changelog-generate@feature/gradle-changelog-action
       with:
