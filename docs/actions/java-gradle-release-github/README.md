@@ -23,10 +23,9 @@ steps:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT          | TYPE   | REQUIRED | DEFAULT          | DESCRIPTION                                         |
-| -------------- | ------ | -------- | ---------------- | --------------------------------------------------- |
-| changelog-file | string | false    | `"CHANGELOG.md"` | Path to the changelog file in the GitHub repository |
-| github-token   | string | true     |                  | GitHub token for requesting changes from API.       |
+| INPUT        | TYPE   | REQUIRED | DEFAULT | DESCRIPTION                                   |
+| ------------ | ------ | -------- | ------- | --------------------------------------------- |
+| github-token | string | true     |         | GitHub token for requesting changes from API. |
 
 <!-- AUTO-DOC-INPUT:END -->
 
