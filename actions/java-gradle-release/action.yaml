@@ -95,7 +95,7 @@ runs:
       shell: bash
 
     - name: Create release
-      run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -Prelease.disablePushToRemote=true -Prelease.requireBranch=master ${{ inputs.gradle-refresh-dependencies && '--refresh-dependencies' || '' }}
+      run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -Prelease.disablePushToRemote=true -Prelease.requireBranch=${{ github.event.repository.default_branch }} ${{ inputs.gradle-refresh-dependencies && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
