@@ -42,6 +42,7 @@ on:
       changelog-file:
         description: Path to the changelog file in the GitHub repository
         required: false
+        type: string
         default: "CHANGELOG.md"
 
     secrets:

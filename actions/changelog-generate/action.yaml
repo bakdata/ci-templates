@@ -65,7 +65,7 @@ runs:
         # tag provided & provided tag exists
             setfrom=${{ inputs.old-tag }}
         else
-        # no tag provided or a non-existing tag was provided   
+        # no tag provided or a non-existing tag was provided
           if [ -n "$from_tag_list" ]; then
             # if any tag exists then set from-tag to the latest tag
             setfrom=$(echo $from_tag_list | cut -d ' ' -f 1)
