@@ -101,11 +101,11 @@ runs:
 
     - name: Create changelog
       id: build-changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@1.38.0
+      uses: bakdata/ci-templates/actions/changelog-generate@fix/changelog
       with:
         github-token: ${{ inputs.github-token }}
         new-tag: ${{ steps.evaluate-version.outputs.release-version }}
-        changelog-file: "${{ inputs.changelog-file }}"
+        changelog-file: ${{ inputs.changelog-file }}
         fetch-release-information: "true"
 
     - name: Commit and push changes including the bump config file

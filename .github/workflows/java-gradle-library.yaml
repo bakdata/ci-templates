@@ -39,6 +39,10 @@ on:
         required: false
         type: string
         default: "."
+      changelog-file:
+        description: Path to the changelog file in the GitHub repository
+        required: false
+        default: "CHANGELOG.md"
 
     secrets:
       sonar-token:
@@ -61,9 +65,6 @@ on:
         required: true
       ossrh-password:
         description: "Password for signing into Sonatype repository."
-        required: true
-      github-username:
-        description: "GitHub username for requesting changes from API."
         required: true
       github-token:
         description: "GitHub token for requesting changes from API."
@@ -123,12 +124,7 @@ jobs:
 
     steps:
       - name: Release on Github
-        uses: bakdata/ci-templates/actions/java-gradle-release-github@v1.16.0
+        uses: bakdata/ci-templates/actions/java-gradle-release-github@fix/changelog
         with:
-          github-username: ${{ secrets.github-username }}
           github-token: ${{ secrets.github-token }}
-          java-distribution: ${{ inputs.java-distribution }}
-          java-version: ${{ inputs.java-version }}
-          gradle-version: ${{ inputs.gradle-version }}
-          gradle-cache: ${{ inputs.gradle-cache }}
-          working-directory: ${{ inputs.working-directory }}
+          changelog-file: ${{ inputs.changelog-file }}

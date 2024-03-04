@@ -68,10 +68,10 @@ jobs:
     steps:
       - name: Release on Github
         id: release
-        uses: bakdata/ci-templates/actions/java-gradle-release@1.42.0
+        uses: bakdata/ci-templates/actions/java-gradle-release@fix/changelog
         with:
           release-type: ${{ inputs.release-type }}
-          changelog-file: "${{ inputs.changelog-file }}"
+          changelog-file: ${{ inputs.changelog-file }}
           github-email: ${{ secrets.github-email }}
           github-username: ${{ secrets.github-username }}
           github-token: ${{ secrets.github-token }}

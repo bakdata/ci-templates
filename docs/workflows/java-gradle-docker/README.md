@@ -58,16 +58,17 @@ jobs:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT                       | TYPE    | REQUIRED | DEFAULT       | DESCRIPTION                                                                                       |
-| --------------------------- | ------- | -------- | ------------- | ------------------------------------------------------------------------------------------------- |
-| docker-publisher            | string  | true     |               | Publisher to prefix Docker image.                                                                 |
-| gradle-cache                | boolean | false    | `true`        | Whether Gradle caching is enabled or not. (Default is true)                                       |
-| gradle-cache-read-only      | boolean | false    | `false`       | Whether Gradle caching should be read-only. Only used for build and test jobs. (Default is false) |
-| gradle-refresh-dependencies | boolean | false    | `false`       | Whether Gradle should refresh dependencies. (Default is false)                                    |
-| gradle-version              | string  | false    | `"wrapper"`   | Gradle version to be installed. (Default is wrapper)                                              |
-| java-distribution           | string  | false    | `"microsoft"` | Java distribution to be installed. (Default is microsoft)                                         |
-| java-version                | string  | false    | `"11"`        | Java version to be installed. (Default is 11)                                                     |
-| working-directory           | string  | false    | `"."`         | Working directory of your Gradle artifacts. (Default is .)                                        |
+| INPUT                       | TYPE    | REQUIRED | DEFAULT        | DESCRIPTION                                                                                       |
+| --------------------------- | ------- | -------- | -------------- | ------------------------------------------------------------------------------------------------- |
+| changelog-file              |         | false    | `CHANGELOG.md` | Path to the changelog file in the GitHub repository                                               |
+| docker-publisher            | string  | true     |                | Publisher to prefix Docker image.                                                                 |
+| gradle-cache                | boolean | false    | `true`         | Whether Gradle caching is enabled or not. (Default is true)                                       |
+| gradle-cache-read-only      | boolean | false    | `false`        | Whether Gradle caching should be read-only. Only used for build and test jobs. (Default is false) |
+| gradle-refresh-dependencies | boolean | false    | `false`        | Whether Gradle should refresh dependencies. (Default is false)                                    |
+| gradle-version              | string  | false    | `"wrapper"`    | Gradle version to be installed. (Default is wrapper)                                              |
+| java-distribution           | string  | false    | `"microsoft"`  | Java distribution to be installed. (Default is microsoft)                                         |
+| java-version                | string  | false    | `"11"`         | Java version to be installed. (Default is 11)                                                     |
+| working-directory           | string  | false    | `"."`          | Working directory of your Gradle artifacts. (Default is .)                                        |
 
 <!-- AUTO-DOC-INPUT:END -->
 
@@ -88,7 +89,6 @@ No outputs.
 | docker-password         | true     | Password for publishing to Dockerhub.                           |
 | docker-username         | true     | Username for publishing to Dockerhub.                           |
 | github-token            | true     | GitHub token for requesting changes from API.                   |
-| github-username         | true     | GitHub username for requesting changes from API.                |
 | ossrh-password          | true     | Password for signing into Sonatype repository.                  |
 | ossrh-username          | true     | Username for signing into Sonatype repository.                  |
 | signing-key-id          | true     | Key id for signing the Sonatype publication.                    |
