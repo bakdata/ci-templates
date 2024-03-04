@@ -14,6 +14,10 @@ inputs:
   github-token:
     description: "GitHub token for requesting changes from API."
     required: true
+  changelog-file:
+    description: Path to the changelog file in the GitHub repository
+    required: false
+    default: "CHANGELOG.md"
   gradle-cache:
     description: "Whether Gradle caching is enabled or not. (Default is true)"
     required: false
