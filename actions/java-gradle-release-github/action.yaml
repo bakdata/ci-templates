@@ -2,10 +2,6 @@ name: "Release Java artifacts"
 description: "Release Java Gradle artifacts on Github"
 
 inputs:
-  changelog-file:
-    description: Path to the changelog file in the GitHub repository
-    required: false
-    default: "CHANGELOG.md"
   github-token:
     description: "GitHub token for requesting changes from API."
     required: true
@@ -29,7 +25,6 @@ runs:
       with:
         github-token: ${{ inputs.github-token }}
         new-tag: ${{ github.ref_name }}
-        changelog-file: ${{ inputs.changelog-file }}
         fetch-release-information: "true"
 
     - name: Create Github release
