@@ -88,7 +88,6 @@ No outputs.
 | docker-password         | true     | Password for publishing to Dockerhub.                           |
 | docker-username         | true     | Username for publishing to Dockerhub.                           |
 | github-token            | true     | GitHub token for requesting changes from API.                   |
-| github-username         | true     | GitHub username for requesting changes from API.                |
 | ossrh-password          | true     | Password for signing into Sonatype repository.                  |
 | ossrh-username          | true     | Username for signing into Sonatype repository.                  |
 | signing-key-id          | true     | Key id for signing the Sonatype publication.                    |

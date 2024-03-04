@@ -68,9 +68,6 @@ on:
       gradle-publish-secret:
         description: "Secret for publishing to Gradle Plugin Portal."
         required: true
-      github-username:
-        description: "GitHub username for requesting changes from API."
-        required: true
       github-token:
         description: "GitHub token for requesting changes from API."
         required: true
@@ -153,7 +150,6 @@ jobs:
       - name: Release on Github
         uses: bakdata/ci-templates/actions/java-gradle-release-github@fix/changelog
         with:
-          github-username: ${{ secrets.github-username }}
           github-token: ${{ secrets.github-token }}
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}

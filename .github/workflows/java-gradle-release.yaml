@@ -79,5 +79,5 @@ jobs:
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
           gradle-cache-read-only: true
-          gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
+          gradle-refresh-dependencies: false
           working-directory: ${{ inputs.working-directory }}

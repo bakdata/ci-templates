@@ -84,7 +84,6 @@ No outputs.
 | SECRET                  | REQUIRED | DESCRIPTION                                                     |
 | ----------------------- | -------- | --------------------------------------------------------------- |
 | github-token            | true     | GitHub token for requesting changes from API.                   |
-| github-username         | true     | GitHub username for requesting changes from API.                |
 | gradle-publish-key      | true     | Key for publishing to Gradle Plugin Portal.                     |
 | gradle-publish-secret   | true     | Secret for publishing to Gradle Plugin Portal.                  |
 | ossrh-password          | true     | Password for signing into Sonatype repository.                  |
