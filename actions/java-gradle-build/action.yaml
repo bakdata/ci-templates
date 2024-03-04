@@ -50,7 +50,7 @@ runs:
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
 
     - name: Compile
-      run: ./gradlew --info --stacktrace build -x test ${{ inputs.gradle-refresh-dependencies && '--refresh-dependencies' || '' }}
+      run: ./gradlew --info --stacktrace build -x test ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
