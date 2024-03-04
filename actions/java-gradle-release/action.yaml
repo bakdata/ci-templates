@@ -117,5 +117,5 @@ runs:
       shell: bash
     - name: Debug
       run: |
-        echo ${{ steps.build-changelog.outputs.single-changelog }}
+        echo "${{ steps.build-changelog.outputs.single-changelog }}"
       shell: bash
