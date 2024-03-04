@@ -68,7 +68,7 @@ jobs:
     steps:
       - name: Release on Github
         id: release
-        uses: bakdata/ci-templates/actions/java-gradle-release@1.42.0
+        uses: bakdata/ci-templates/actions/java-gradle-release@feature/single-push
         with:
           release-type: ${{ inputs.release-type }}
           changelog-file: "${{ inputs.changelog-file }}"
