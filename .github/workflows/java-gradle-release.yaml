@@ -68,7 +68,7 @@ jobs:
     steps:
       - name: Release on Github
         id: release
-        uses: bakdata/ci-templates/actions/java-gradle-release@fix/refresh-dependencies
+        uses: bakdata/ci-templates/actions/java-gradle-release@feature/gradle-changelog-action
         with:
           release-type: ${{ inputs.release-type }}
           github-email: ${{ secrets.github-email }}
