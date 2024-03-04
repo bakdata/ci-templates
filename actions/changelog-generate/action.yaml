@@ -34,12 +34,12 @@ inputs:
     required: false
     default: ""
 outputs:
-  single-changelog:
-    description: "Changelog containing changes of the latest tag"
-    value: ${{ steps.output-generator.outputs.single-changelog }}
   merged-changelog:
     description: "Changelog containing listing of all single changelogs"
     value: ${{ steps.output-generator.outputs.merged-changelog }}
+  single-changelog:
+    description: "Changelog containing changes of the latest tag"
+    value: ${{ steps.output-generator.outputs.single-changelog }}
 runs:
   using: "composite"
 

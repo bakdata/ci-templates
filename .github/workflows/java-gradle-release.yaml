@@ -71,6 +71,7 @@ jobs:
         uses: bakdata/ci-templates/actions/java-gradle-release@feature/gradle-changelog-action
         with:
           release-type: ${{ inputs.release-type }}
+          changelog-file: "${{ inputs.changelog-file }}"
           github-email: ${{ secrets.github-email }}
           github-username: ${{ secrets.github-username }}
           github-token: ${{ secrets.github-token }}
