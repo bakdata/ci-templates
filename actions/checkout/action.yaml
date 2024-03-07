@@ -9,10 +9,6 @@ inputs:
     description: "The branch, tag or SHA to checkout"
     required: false
     default: ""
-  token:
-    description: "Personal access token (PAT) used to fetch the repository"
-    required: false
-    default: ${{ github.token }}
   persist-credentials:
     description: "Whether to configure the token or SSH key with the local git config"
     required: false
@@ -47,7 +43,6 @@ runs:
       with:
         repository: ${{ inputs.repository }}
         ref: ${{ inputs.ref }}
-        token: ${{ inputs.token }}
         persist-credentials: ${{ inputs.persist-credentials }}
         submodules: ${{ inputs.submodules }}
         fetch-depth: ${{ inputs.fetch-depth }}
