@@ -49,8 +49,8 @@ runs:
         ref: ${{ inputs.ref }}
         token: ${{ inputs.token }}
         persist-credentials: ${{ inputs.persist-credentials }}
-        fetch-depth: ${{ inputs.fetch-depth }}
         submodules: ${{ inputs.submodules }}
+        fetch-depth: ${{ inputs.fetch-depth }}
 
     - name: Create LFS file list
       if: ${{ inputs.lfs == 'true'}}
