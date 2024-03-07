@@ -30,7 +30,7 @@ runs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2.2.1
 
-    - name: Publish image
+    - name: Set image name and tag
       run: |
         fullImageName="${{ inputs.image-name }}"
         if [[ -n "${{ inputs.image-namespace }}" ]]; then

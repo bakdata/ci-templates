@@ -1,8 +1,20 @@
 name: "Checkout repository"
 description: "Composite action for checking out a repository"
 inputs:
-  cache:
-    description: "Describes if the repository is using any LFS files"
+  repository:
+    description: "The repository name with owner"
+    required: false
+    default: ${{ github.repository }}
+  ref:
+    description: "The branch, tag or SHA to checkout"
+    required: false
+    default: ""
+  token:
+    description: "Personal access token (PAT) used to fetch the repository"
+    required: false
+    default: ${{ github.token }}
+  persist-credentials:
+    description: "Whether to configure the token or SSH key with the local git config"
     required: false
     default: "true"
   fetch-depth:
@@ -13,22 +25,14 @@ inputs:
     description: "Describes if the repository is using any LFS files"
     required: false
     default: "false"
-  persist-credentials:
-    description: "Whether to configure the token or SSH key with the local git config"
+  cache:
+    description: "Describes if the repository is using any LFS files"
     required: false
     default: "true"
-  ref:
-    description: "The branch, tag or SHA to checkout"
+  submodules:
+    description: "Whether to checkout submodules: `true` to checkout submodules or `recursive` to recursively checkout submodules."
     required: false
-    default: ""
-  repository:
-    description: "The repository name with owner"
-    required: false
-    default: ${{ github.repository }}
-  token:
-    description: "Personal access token (PAT) used to fetch the repository"
-    required: false
-    default: ${{ github.token }}
+    default: "false"
 
 outputs:
   lfs-cache-hit:
@@ -41,11 +45,12 @@ runs:
     - name: Check out repository
       uses: actions/checkout@v4
       with:
-        fetch-depth: ${{ inputs.fetch-depth }}
-        persist-credentials: ${{ inputs.persist-credentials }}
-        ref: ${{ inputs.ref }}
         repository: ${{ inputs.repository }}
+        ref: ${{ inputs.ref }}
         token: ${{ inputs.token }}
+        persist-credentials: ${{ inputs.persist-credentials }}
+        fetch-depth: ${{ inputs.fetch-depth }}
+        submodules: ${{ inputs.submodules }}
 
     - name: Create LFS file list
       if: ${{ inputs.lfs == 'true'}}
