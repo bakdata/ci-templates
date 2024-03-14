@@ -41,7 +41,6 @@ steps:
 | ref                 | string | false    |                              | The branch, tag or SHA to checkout                                                                               |
 | repository          | string | false    | `"${{ github.repository }}"` | The repository name with owner                                                                                   |
 | submodules          | string | false    | `"false"`                    | Whether to checkout submodules: `true` to checkout submodules or `recursive` to recursively checkout submodules. |
-| token               | string | false    | `"${{ github.token }}"`      | Personal access token (PAT) used to fetch the repository                                                         |
 
 <!-- AUTO-DOC-INPUT:END -->
 

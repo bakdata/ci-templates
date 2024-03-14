@@ -80,6 +80,5 @@ No outputs.
 | --------------- | -------- | --------------------------------------- |
 | docker-password | true     | Password for the Docker registry login. |
 | docker-user     | true     | Username for the Docker registry login. |
-| github-token    | false    | GitHub token.                           |
 
 <!-- AUTO-DOC-SECRETS:END -->
