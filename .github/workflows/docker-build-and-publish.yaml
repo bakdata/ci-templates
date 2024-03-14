@@ -76,7 +76,6 @@ jobs:
         uses: bakdata/ci-templates/actions/checkout@feat/refactor-docker
         with:
           ref: ${{ inputs.ref }}
-          token: ${{ secrets.github-token }}
           lfs: ${{ inputs.checkout-lfs-files }}
           submodules: ${{ inputs.checkout-submodules }}
 
