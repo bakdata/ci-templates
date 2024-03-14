@@ -123,3 +123,5 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: ${{ env.IMAGE_NAME }}
+        env:
+          DOCKER_METADATA_PR_HEAD_SHA: true # set correct sha for PRs
