@@ -56,7 +56,7 @@ jobs:
 | docker-build-args   | string  | false    |                                                 | List of build-time variables (see https://github.com/docker/build-push-action?tab=readme-ov-file#inputs)         |
 | docker-context      | string  | false    | `"."`                                           | The docker context.                                                                                              |
 | docker-registry     | string  | false    | `"docker.io"`                                   | Host where the image should be pushed to.                                                                        |
-| dockerfile-path     | string  | false    | `"Dockerfile"`                                  | Path to the Dockerfile.                                                                                          |
+| dockerfile-path     | string  | false    | `"./Dockerfile"`                                | Path to the Dockerfile.                                                                                          |
 | image-name          | string  | false    | `"${{ github.event.repository.name }}"`         | Name of Docker image.                                                                                            |
 | image-namespace     | string  | false    | `"bakdata"`                                     | Namespace of Docker image.                                                                                       |
 | image-tag           | string  | false    | `"pipeline-${{ github.run_id }}-git-{{ sha }}"` | Tag of Docker image.                                                                                             |
