@@ -12,7 +12,7 @@ on:
       dockerfile-path:
         description: "Path to the Dockerfile."
         required: false
-        default: "Dockerfile"
+        default: "./Dockerfile"
         type: string
       docker-build-args:
         description: "List of build-time variables (see https://github.com/docker/build-push-action?tab=readme-ov-file#inputs)"
@@ -119,7 +119,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ${{ inputs.docker-context }}
-          file: ${{ inputs.docker-context }}/${{ inputs.dockerfile-path }}
+          file: ${{ inputs.dockerfile-path }}
           build-args: ${{ inputs.docker-build-args }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
