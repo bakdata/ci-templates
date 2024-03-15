@@ -51,7 +51,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Publish image
+    - name: Push image
       uses: bakdata/ci-templates/actions/docker-push@1.30.0
       with:
         docker-registry: ${{ inputs.docker-registry }}
