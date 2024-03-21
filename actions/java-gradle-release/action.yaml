@@ -14,6 +14,10 @@ inputs:
   github-token:
     description: "GitHub token for requesting changes from API."
     required: true
+  changelog-file:
+    description: Path to the changelog file in the GitHub repository
+    required: false
+    default: "CHANGELOG.md"
   gradle-cache:
     description: "Whether Gradle caching is enabled or not. (Default is true)"
     required: false
@@ -101,12 +105,12 @@ runs:
       shell: bash
 
     - name: Create changelog
-      run: ./gradlew -Pchangelog.githubRepository=${{ github.event.repository.name }} -Pchangelog.futureVersionTag=${{ steps.evaluate-version.outputs.release-version }} --stacktrace --info generateChangelog ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-      env:
-        GITHUB_USER: ${{ github.repository_owner }}
-        GITHUB_TOKEN: ${{ inputs.github-token }}
+      uses: bakdata/ci-templates/actions/changelog-generate@feature/gradle-changelog-action
+      with:
+        github-token: ${{ inputs.github-token }}
+        new-tag: ${{ steps.evaluate-version.outputs.release-version }}
+        changelog-file: ${{ inputs.changelog-file }}
+        fetch-release-information: "true"
 
     - name: Commit and push changes including the bump config file
       run: |
