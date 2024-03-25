@@ -25,6 +25,8 @@ runs:
     - name: Install pipx
       if: ${{ inputs.install-pipx == 'true' }}
       run: |
+        sudo apt update
+        sudo apt install python3-venv -y
         # Assumes Ubuntu 22.04 or below
         python3 -m pip install --user pipx
         python3 -m pipx ensurepath
