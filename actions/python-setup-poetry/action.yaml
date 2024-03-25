@@ -25,11 +25,9 @@ runs:
     - name: Install pipx
       if: ${{ inputs.install-pipx == 'true' }}
       run: |
-        sudo apt update
-        sudo apt install pipx -y
-        pipx ensurepath
-        # https://github.com/pypa/pipx/issues/853
-        virtualenv --clear /home/runner/.local/pipx/shared
+        # Assumes Ubuntu 22.04 or below
+        python3 -m pip install --user pipx
+        python3 -m pipx ensurepath
       shell: bash
 
     - name: Install Poetry ${{ inputs.poetry-version }}
