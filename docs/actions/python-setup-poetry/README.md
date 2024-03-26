@@ -24,11 +24,12 @@ steps:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT             | TYPE   | REQUIRED | DEFAULT   | DESCRIPTION                                            |
-| ----------------- | ------ | -------- | --------- | ------------------------------------------------------ |
-| poetry-version    | string | false    | `"1.2.2"` | The Poetry version to be installed.                    |
-| python-version    | string | false    | `"3.10"`  | The Python version for the Poetry virtual environment. |
-| working-directory | string | false    | `"."`     | The root directory of the Poetry project.              |
+| INPUT             | TYPE   | REQUIRED | DEFAULT   | DESCRIPTION                                                  |
+| ----------------- | ------ | -------- | --------- | ------------------------------------------------------------ |
+| install-pipx      | string | false    | `"false"` | Whether to ensure that pipx is installed before invoking it. |
+| poetry-version    | string | false    | `"1.2.2"` | The Poetry version to be installed.                          |
+| python-version    | string | false    | `"3.10"`  | The Python version for the Poetry virtual environment.       |
+| working-directory | string | false    | `"."`     | The root directory of the Poetry project.                    |
 
 <!-- AUTO-DOC-INPUT:END -->
 
