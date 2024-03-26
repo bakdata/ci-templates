@@ -14,10 +14,24 @@ inputs:
     description: "The root directory of the Poetry project."
     required: false
     default: "."
+  install-pipx:
+    description: "Whether to ensure that pipx is installed before invoking it."
+    required: false
+    default: "false"
 
 runs:
   using: "composite"
   steps:
+    - name: Install pipx
+      if: ${{ inputs.install-pipx == 'true' }}
+      run: |
+        sudo apt update
+        sudo apt install python3-venv -y
+        # Assumes Ubuntu 22.04 or below
+        python3 -m pip install --user pipx
+        python3 -m pipx ensurepath
+      shell: bash
+
     - name: Install Poetry ${{ inputs.poetry-version }}
       run: pipx install poetry==${{ inputs.poetry-version }}
       shell: bash
