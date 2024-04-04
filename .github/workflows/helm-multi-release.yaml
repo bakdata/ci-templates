@@ -32,6 +32,11 @@ on:
         required: false
         default: ".github/lint-config.yaml"
         type: string
+      version:
+        description: "Version for helm chart"
+        required: false
+        default: ${{ github.ref_name }}
+        type: string
 
     secrets:
       github-username:
@@ -56,27 +61,21 @@ jobs:
         uses: bakdata/ci-templates/actions/helm-lint@v1.10.0
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
-          ref: ${{ github.ref_name }}
 
   update-version:
     runs-on: ubuntu-22.04
     outputs:
       singlechart: ${{ steps.step2.outputs.singlechart }}
     needs: [helm-lint]
-    env:
-      current-ref: ${{ github.ref_name }}
-      CHARTS: ${{ inputs.subdirs }}
 
     steps:
       - name: Check out repository
         uses: bakdata/ci-templates/actions/checkout@1.32.0
-        with:
-          ref: ${{ env.current-ref }}
 
       - name: Verify if have a single or multiple chart(s)
         id: step2
         run: |
-          charts="${{ env.CHARTS }}"
+          charts="${{ inputs.subdirs }}"
           charts_without_brackets="${charts:1:-1}"
           charts_without_brackets_and_quotation="${charts_without_brackets//\'/}"
 
@@ -94,29 +93,24 @@ jobs:
         subdir: ${{ fromJson(inputs.subdirs) }}
     runs-on: ubuntu-22.04
     needs: [update-version]
-    env:
-      charts-subdir: "${{ matrix.subdir }}"
-      current-ref: ${{ github.ref_name }}
 
     steps:
       - name: Check out repository
         uses: bakdata/ci-templates/actions/checkout@1.32.0
-        with:
-          ref: ${{ env.current-ref }}
 
       - name: Bump Chart version
         run: |
           sudo add-apt-repository ppa:rmescandon/yq
           sudo apt update
           sudo apt install yq -y
-          yq e -i '.version = "${{ env.current-ref }}"' "./${{ env.charts-subdir }}/Chart.yaml"
+          yq e -i '.version = "${{ inputs.version }}"' "./${{ matrix.subdir }}/Chart.yaml"
         shell: bash
         working-directory: ${{ inputs.charts-path }}
 
       - name: Prepare artifacts
         run: |
-          mkdir -p ../${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
-          helm package ${{ env.charts-subdir }} -d ../${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
+          mkdir -p ../${{ inputs.artifact-dir }}/${{ matrix.subdir }}
+          helm package ${{ matrix.subdir }} -d ../${{ inputs.artifact-dir }}/${{ matrix.subdir }}
         shell: bash
         working-directory: ${{ inputs.charts-path }}
 
@@ -124,8 +118,8 @@ jobs:
         if: ${{ needs.update-version.outputs.singlechart == 'false' }}
         uses: actions/upload-artifact@v3.1.1
         with:
-          name: ${{ env.charts-subdir }}
-          path: ${{ inputs.artifact-dir }}/${{ env.charts-subdir }}
+          name: ${{ matrix.subdir }}
+          path: ${{ inputs.artifact-dir }}/${{ matrix.subdir }}
           retention-days: 1
 
       - name: Upload artifacts with action/upload as single chart
@@ -138,9 +132,6 @@ jobs:
   publish-artifacts:
     runs-on: ubuntu-22.04
     needs: [package-new-artifacts, update-version]
-    env:
-      artifact-dir: "${{ inputs.artifact-dir }}"
-      charts-path: "${{ inputs.artifact-dir }}"
 
     steps:
       - name: Check out branch containing the artifatcs and the index.yaml file
