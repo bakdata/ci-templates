@@ -67,7 +67,7 @@ runs:
 
     - name: Build Docker image
       run: |
-        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jibBuildTar \
+        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jibBuild \
           --info --stacktrace \
           --image=${{ inputs.image-name }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
