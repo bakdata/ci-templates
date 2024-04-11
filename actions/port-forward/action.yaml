@@ -18,6 +18,9 @@ inputs:
     description: Timeout for portfowrd
     default: "30"
     required: false
+  kubeconfig:
+    description: Path to kubeconfig file
+    required: false
 
 runs:
   using: composite
@@ -31,7 +34,7 @@ runs:
       env:
         TIMEOUT: "${{ inputs.timeout }}"
       run: |
-        kubectl port-forward "services/${{ inputs.service }}" "${{ inputs.port }}:${{ inputs.port }}" --namespace ${{ inputs.namespace }} --kubeconfig ~/.kube/config > port-forward.out &
+        kubectl port-forward "services/${{ inputs.service }}" "${{ inputs.port }}:${{ inputs.port }}" --namespace ${{ inputs.namespace }} ${{ (inputs.kubeconfig != '' && format('--kubeconfig {0}', inputs.kubeconfig)) || '' }} > port-forward.out &
         # wait up to 60 seconds for port forwarding
         for _ in {1..$TIMEOUT}; do if grep -q "Forwarding from 127.0.0.1:${{ inputs.port }} -> ${{ inputs.port }}" port-forward.out; then
           echo "Port forwarding done"
