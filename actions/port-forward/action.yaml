@@ -33,7 +33,7 @@ runs:
     - name: Establish port forward
       shell: bash
       run: |
-        nohup kubectl port-forward "services/${{ inputs.service }}" "${{ inputs.port }}:${{ inputs.port }}" --namespace ${{ inputs.namespace }} ${{ (inputs.kubeconfig != '' && format('--kubeconfig {0}', inputs.kubeconfig)) || '' }} >port-forward.out &
+        nohup kubectl port-forward "services/${{ inputs.service }}" "${{ inputs.port }}:${{ inputs.port }}" --namespace ${{ inputs.namespace }} ${{ (inputs.kubeconfig != '' && format('--kubeconfig {0}', inputs.kubeconfig)) || '' }} > port-forward.out &
         for ((i=1; i<=${{ inputs.timeout }}; i++));
           do
             if grep -q "Forwarding from 127.0.0.1:${{ inputs.port }} -> ${{ inputs.port }}" port-forward.out; then
