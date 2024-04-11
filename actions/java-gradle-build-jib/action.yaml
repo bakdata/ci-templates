@@ -81,8 +81,8 @@ runs:
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           -Djib.from.platforms=linux/arm64,linux/amd64 \
           -Djib.to.image=${{ inputs.registry-test }} \
-          -Djib.to.auth.username=AWS\
-          -Djib.to.auth.password=${{ inputs.registry-test-password }}
+          -Djib.to.auth.username=AWS \
+          -Djib.to.auth.password=${{ inputs.registry-test-password }} \
           -x test \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
