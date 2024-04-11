@@ -2,6 +2,10 @@ name: "Build tarball image"
 description: "Build tarball image using Gradle"
 
 inputs:
+  registry-test:
+    description: "Name of registry."
+    required: false
+    default: ""
   image-artifact-name:
     description: "Artifact name to upload tarball image, see https://github.com/actions/upload-artifact"
     required: false
@@ -67,11 +71,12 @@ runs:
 
     - name: Build Docker image
       run: |
-        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jibBuild \
+        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jibBuildTar \
           --info --stacktrace \
           --image=${{ inputs.image-name }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           -Djib.from.platforms=linux/arm64,linux/amd64 \
+          --to ${{ inputs.registry-test }}
           -x test \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
