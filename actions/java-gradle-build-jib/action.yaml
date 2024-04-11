@@ -71,7 +71,7 @@ runs:
           --info --stacktrace \
           --image=${{ inputs.image-name }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
-          -Djib.from.platforms=linux/arm64 \
+          -Djib.from.platforms=linux/arm64,linux/amd64 \
           -x test \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
