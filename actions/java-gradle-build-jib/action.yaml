@@ -3,9 +3,9 @@ description: "Build tarball image using Gradle"
 
 inputs:
   image-tag:
-    description: "Tag for jib output image."
+    description: "Tag of Jib Image."
     required: false
-    default: ""
+    default: "pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}"
   registry-password:
     description: "Password of registry."
     required: false
