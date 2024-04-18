@@ -2,6 +2,10 @@ name: "Build tarball image"
 description: "Build tarball image using Gradle"
 
 inputs:
+  image-tag:
+    description: "Tag for jib output image."
+    required: false
+    default: ""
   registry-password:
     description: "Password of registry."
     required: false
@@ -83,6 +87,7 @@ runs:
           -DsendCredentialsOverHttp \
           -Djib.allowInsecureRegistries=true \
           -Djib.to.image=${{ inputs.registry-name }} \
+          -Djib.to.tags=${{ inputs.image-tag }}
           -Djib.to.auth.username=AWS \
           -Djib.to.auth.password=${{ inputs.registry-password }} \
           -x test \
