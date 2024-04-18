@@ -80,6 +80,7 @@ runs:
           --image=${{ inputs.image-name }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           -Djib.from.platforms=linux/arm64,linux/amd64 \
+          -DsendCredentialsOverHttp \
           -Djib.allowInsecureRegistries=true \
           -Djib.to.image=${{ inputs.registry-name }} \
           -Djib.to.auth.username=AWS \
