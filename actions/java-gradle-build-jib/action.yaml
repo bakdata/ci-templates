@@ -2,6 +2,14 @@ name: "Build tarball image"
 description: "Build tarball image using Gradle"
 
 inputs:
+  registry-password:
+    description: "Password of registry."
+    required: false
+    default: ""
+  registry-name:
+    description: "Name of registry."
+    required: false
+    default: ""
   image-artifact-name:
     description: "Artifact name to upload tarball image, see https://github.com/actions/upload-artifact"
     required: false
@@ -73,6 +81,9 @@ runs:
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           -Djib.from.platforms=linux/arm64,linux/amd64 \
           -Djib.allowInsecureRegistries=true \
+          -Djib.to.image=${{ inputs.registry-name }} \
+          -Djib.to.auth.username=AWS \
+          -Djib.to.auth.password=${{ inputs.registry-password }} \
           -x test \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
