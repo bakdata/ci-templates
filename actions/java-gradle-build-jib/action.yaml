@@ -87,8 +87,7 @@ runs:
           -DsendCredentialsOverHttp \
           -Djib.allowInsecureRegistries=true \
           -Djib.EnablePlatformTags=true \
-          -Djib.to.image=${{ inputs.registry-name }} \
-          -Djib.to.tags=${{ inputs.image-tag }} \
+          -Djib.to.image=${{ inputs.registry-name }}:${{ inputs.image-tag }} \
           -Djib.to.auth.username=AWS \
           -Djib.to.auth.password=${{ inputs.registry-password }} \
           -x test \
