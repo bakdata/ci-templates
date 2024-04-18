@@ -82,7 +82,6 @@ runs:
           -Djib.from.platforms=linux/arm64,linux/amd64 \
           -DsendCredentialsOverHttp \
           -Djib.allowInsecureRegistries=true \
-          -Djib.to.enablePlatformTags=true \ 
           -Djib.to.image=${{ inputs.registry-name }} \
           -Djib.to.auth.username=AWS \
           -Djib.to.auth.password=${{ inputs.registry-password }} \
