@@ -5,7 +5,7 @@ inputs:
   image-tag:
     description: "Tag of Jib Image."
     required: false
-    default: "pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}"
+    default: ""
   registry-password:
     description: "Password of registry."
     required: false
