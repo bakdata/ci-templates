@@ -85,7 +85,8 @@ runs:
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           -Djib.from.platforms=linux/arm64,linux/amd64 \
           -DsendCredentialsOverHttp \
-          -Djib.allowInsecureRegistries=true \
+          -Djib.features.allowInsecureRegistries=true \
+          -Djib.features.architectureSuffixTags=true
           -Djib.to.EnablePlatformTags=true \
           -Djib.to.image=${{ inputs.registry-name }}:${{ inputs.image-tag }} \
           -Djib.to.tags=${{ inputs.image-tag }} \
