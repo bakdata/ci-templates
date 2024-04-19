@@ -10,8 +10,8 @@ inputs:
     description: "Password of registry."
     required: false
     default: ""
-  registry-name:
-    description: "Name of registry."
+  full-image-name:
+    description: "Full name of image."
     required: false
     default: ""
   image-artifact-name:
@@ -86,7 +86,7 @@ runs:
           -Djib.from.platforms=linux/arm64,linux/amd64 \
           -DsendCredentialsOverHttp \
           -Djib.allowInsecureRegistries=true \
-          -Djib.to.image=${{ inputs.registry-name }}:${{ inputs.image-tag }} \
+          -Djib.to.image=${{ inputs.full-image-name }}:${{ inputs.image-tag }} \
           -Djib.to.tags=${{ inputs.image-tag }} \
           -Djib.to.auth.username=AWS \
           -Djib.to.auth.password=${{ inputs.registry-password }} \
