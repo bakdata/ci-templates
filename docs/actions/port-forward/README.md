@@ -22,11 +22,12 @@ steps:
 
 | INPUT           | TYPE   | REQUIRED | DEFAULT    | DESCRIPTION                                 |
 | --------------- | ------ | -------- | ---------- | ------------------------------------------- |
+| kubeconfig      | string | false    |            | Path to kubeconfig file                     |
 | kubectl-version | string | false    | `"latest"` | kubectl version, e.g. `v1.23.0` or `latest` |
 | namespace       | string | true     |            | Kubernetes namespace                        |
 | port            | string | true     |            | Port to be forwarded                        |
 | service         | string | true     |            | Name of Kubernetes service                  |
-| timeout         | string | false    | `"30"`     | Timeout for portfowrd                       |
+| timeout         | string | false    | `"30"`     | Timeout in seconds for portfowrd            |
 
 <!-- AUTO-DOC-INPUT:END -->
 

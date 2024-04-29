@@ -15,8 +15,11 @@ inputs:
     default: latest
     required: false
   timeout:
-    description: Timeout for portfowrd
+    description: Timeout in seconds for portfowrd
     default: "30"
+    required: false
+  kubeconfig:
+    description: Path to kubeconfig file
     required: false
 
 runs:
@@ -28,17 +31,19 @@ runs:
         version: ${{ inputs.kubectl-version }}
 
     - name: Establish port forward
-      env:
-        TIMEOUT: "${{ inputs.timeout }}"
-      run: |
-        kubectl port-forward "services/${{ inputs.service }}" "${{ inputs.port }}:${{ inputs.port }}" --namespace ${{ inputs.namespace }} --kubeconfig ~/.kube/config > port-forward.out &
-        # wait up to 60 seconds for port forwarding
-        for _ in {1..$TIMEOUT}; do if grep -q "Forwarding from 127.0.0.1:${{ inputs.port }} -> ${{ inputs.port }}" port-forward.out; then
-          echo "Port forwarding done"
-          break
-        else
-          cat port-forward.out || true
-          echo "Portforwarding failed: Timeout reached"
-          exit 1
-        fi; done
       shell: bash
+      run: |
+        nohup kubectl port-forward "services/${{ inputs.service }}" "${{ inputs.port }}:${{ inputs.port }}" --namespace ${{ inputs.namespace }} ${{ (inputs.kubeconfig != '' && format('--kubeconfig {0}', inputs.kubeconfig)) || '' }} > port-forward.out &
+        for ((i=1; i<=${{ inputs.timeout }}; i++));
+          do
+            if grep -q "Forwarding from 127.0.0.1:${{ inputs.port }} -> ${{ inputs.port }}" port-forward.out; then
+              echo "Port forwarding done"
+              exit 0
+            else
+              cat port-forward.out || true
+              echo "Waiting for port forwarding..."
+              sleep 1
+            fi;
+          done
+        echo "Timeout of ${{ inputs.timeout}} seconds reached. Port-forwarding failed."
+        exit 1
