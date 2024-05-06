@@ -65,7 +65,7 @@ runs:
         GITHUB_TOKEN: ${{ inputs.github-token }}
 
     - name: Create Github release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2.0.4
       with:
         body_path: CHANGELOG.md
         files: "**/build/libs/*.jar"
