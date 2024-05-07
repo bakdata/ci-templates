@@ -54,7 +54,7 @@ runs:
       shell: bash
 
     - name: Push changes
-      uses: ad-m/github-push-action@v0.6.0
+      uses: ad-m/github-push-action@v0.8.0
       with:
         github_token: ${{ inputs.github-token }}
         branch: refs/heads/${{ inputs.ref }}
