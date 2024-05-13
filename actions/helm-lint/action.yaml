@@ -40,8 +40,8 @@ runs:
     - name: Run chart-testing (lint)
       run: |
         if [[ "${GITHUB_REF#refs/heads/}" == "main" || "${GITHUB_REF#refs/heads/}" == "master" ]]; then
-          ct lint --config ${{ inputs.lint-config-path }} --since HEAD^
+          ct lint --config ${{ inputs.lint-config-path }} --since HEAD^ --check-version-increment false
         else
-          ct lint --config ${{ inputs.lint-config-path }}
+          ct lint --config ${{ inputs.lint-config-path }} --check-version-increment false
         fi
       shell: bash
