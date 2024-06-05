@@ -107,12 +107,12 @@ jobs:
         with:
           images: ${{ env.IMAGE_NAME }}
           # on PR/push: dynamically set the CI run id and Git SHA as a custom tag
-          # on push: additionally tag with the branch name
+          # on branch push: additionally tag with the branch name
           # on tag: release as latest and semver tag
           tags: |
-            event=pr,type=raw,value=${{ inputs.image-tag }}
             event=push,type=raw,value=${{ inputs.image-tag }}
-            event=push,type=ref,enable=${{ github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main' }}
+            event=pr,type=raw,value=${{ inputs.image-tag }}
+            event=branch,type=ref,enable=${{ github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main' }}
             event=tag,type=semver,pattern={{ version }}
         env:
           DOCKER_METADATA_PR_HEAD_SHA: true # set correct sha for PRs
