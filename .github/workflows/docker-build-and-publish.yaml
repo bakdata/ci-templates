@@ -106,7 +106,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.IMAGE_NAME }}
-          # on PR/push: dynamically set the CI run id and Git SHA as a custom tag
+          # on push/PR: dynamically set the CI run id and Git SHA as a custom tag
           # on branch push: additionally tag with the branch name
           # on tag: release as latest and semver tag
           tags: |
