@@ -2,6 +2,18 @@ name: "Build tarball image"
 description: "Build tarball image using Gradle"
 
 inputs:
+  image-tag:
+    description: "Tag of Jib Image."
+    required: false
+    default: ""
+  registry-password:
+    description: "Password of registry."
+    required: false
+    default: ""
+  full-image-name:
+    description: "Full name of image."
+    required: false
+    default: ""
   image-artifact-name:
     description: "Artifact name to upload tarball image, see https://github.com/actions/upload-artifact"
     required: false
@@ -67,10 +79,17 @@ runs:
 
     - name: Build Docker image
       run: |
-        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jibBuildTar \
+        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jib \
           --info --stacktrace \
           --image=${{ inputs.image-name }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
+          -Djib.from.platforms=linux/arm64,linux/amd64 \
+          -DsendCredentialsOverHttp \
+          -Djib.allowInsecureRegistries=true \
+          -Djib.to.image=${{ inputs.full-image-name }}:${{ inputs.image-tag }} \
+          -Djib.to.tags=${{ inputs.image-tag }} \
+          -Djib.to.auth.username=AWS \
+          -Djib.to.auth.password=${{ inputs.registry-password }} \
           -x test \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
