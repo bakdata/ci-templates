@@ -1,5 +1,5 @@
-name: "Build tarball image"
-description: "Build tarball image using Gradle"
+name: "Build Multi-Platrofm image"
+description: "Build Multi-Platrofm image using Gradle"
 
 inputs:
   image-tag:
