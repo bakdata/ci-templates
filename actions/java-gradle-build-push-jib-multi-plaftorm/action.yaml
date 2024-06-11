@@ -94,10 +94,3 @@ runs:
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-
-    - name: Upload tarball image artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ inputs.image-artifact-name }}
-        path: ${{ inputs.subproject && format('{0}/', inputs.subproject) || '' }}build/jib-image.tar
-        retention-days: 1
