@@ -3,9 +3,8 @@ description: "Build Multi-Platrofm image using Gradle"
 
 inputs:
   additional-tags:
-    description: "Additional tags to be pushed to the registry."
+    description: "Additional tags to be pushed to the registry. Comma seperated list."
     required: false
-    default: []
   registry-username:
     description: "Username of registry."
     required: false
@@ -79,21 +78,30 @@ runs:
       with:
         # if there is no tag found, split will return the image name as the first element
         images: ${{ inputs.full-image-name.split(':')[0] }}
+        tags: |
+          type=sha
+          type=branch
 
-    - name: Build Docker image
+    - name: print output
       run: |
-        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }} jib \
-          --info --stacktrace \
-          --image=${{ github.event.repository.name }} \
-          -Djib.from.platforms=linux/arm64,linux/amd64 \
-          ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
-          ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
-          -DsendCredentialsOverHttp \
-          -Djib.allowInsecureRegistries=true \
-          -Djib.to.image=${{ inputs.full-image-name }}  \
-          -Djib.to.tags=${{ concat(steps.meta.outptus.tags , inputs.additional-tags).join(',')) }} \
-          ${{ inputs.registry-username && format('-Djib.to.auth.username={0}', inputs.registry-username) || '' }} \
-          ${{ inputs.registry-password && format('-Djib.to.auth.password={0}', inputs.registry-password) || '' }} \
-          ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
+        echo "I AM HERE"
+        cat "${{ steps.meta.outputs.bake-file }}" | jq .
+        cat "${{ steps.meta.outputs.bake-file }}" | jq '.target["docker-metadata-action"].tags'
+
+    # - name: Build Docker image
+    #   run: |
+    #     ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }} jib \
+    #       --info --stacktrace \
+    #       --image=${{ github.event.repository.name }} \
+    #       -Djib.from.platforms=linux/arm64,linux/amd64 \
+    #       ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
+    #       ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
+    #       -DsendCredentialsOverHttp \
+    #       -Djib.allowInsecureRegistries=true \
+    #       -Djib.to.image=${{ inputs.full-image-name }}  \
+    #       -Djib.to.tags=${{ join(concat(steps.meta.outptus.tags , inputs.additional-tags)), ',') }} \
+    #       ${{ inputs.registry-username && format('-Djib.to.auth.username={0}', inputs.registry-username) || '' }} \
+    #       ${{ inputs.registry-password && format('-Djib.to.auth.password={0}', inputs.registry-password) || '' }} \
+    #       ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
+    #   shell: bash
+    #   working-directory: ${{ inputs.working-directory }}
