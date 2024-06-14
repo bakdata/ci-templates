@@ -76,8 +76,7 @@ runs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        # if there is no tag found, split will return the image name as the first element
-        images: ${{ inputs.full-image-name.split(':')[0] }}
+        images: ${{ inputs.full-image-name }}
         tags: |
           type=ref,event=branch
           type=sha
