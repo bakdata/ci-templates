@@ -79,6 +79,7 @@ runs:
         # if there is no tag found, split will return the image name as the first element
         images: ${{ inputs.full-image-name.split(':')[0] }}
         tags: |
+          type=ref,event=branch
           type=sha
 
     - name: print output
