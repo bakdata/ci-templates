@@ -80,7 +80,6 @@ runs:
         images: ${{ inputs.full-image-name.split(':')[0] }}
         tags: |
           type=sha
-          type=branch
 
     - name: print output
       run: |
