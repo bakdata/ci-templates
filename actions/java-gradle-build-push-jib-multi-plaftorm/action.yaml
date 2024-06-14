@@ -2,26 +2,25 @@ name: "Build Multi-Platrofm image"
 description: "Build Multi-Platrofm image using Gradle"
 
 inputs:
-  image-tag:
-    description: "Tag of Jib Image."
+  additional-tags:
+    description: "Additional tags to be pushed to the registry."
     required: false
-    default: ""
+    default: []
+  registry-username:
+    description: "Username of registry."
+    required: false
   registry-password:
     description: "Password of registry."
     required: false
-    default: ""
   full-image-name:
-    description: "Full name of image."
+    description: "Full name of image (registry/image:tag) If an image name is provided without a tag, 'latest' will be used. Be careful with registries that dont allow overwriting tags."
+    required: true
+  jib-from-image:
+    description: "The Jib base image to use"
     required: false
-    default: ""
-  image-artifact-name:
-    description: "Artifact name to upload tarball image, see https://github.com/actions/upload-artifact"
+  class:
+    description: "The entrypoint class to be used for the image"
     required: false
-    default: "image-artifact"
-  image-name:
-    description: "Name of Docker image."
-    required: false
-    default: "${{ github.event.repository.name }}"
   java-distribution:
     description: "Java distribution to be installed. (Default is microsoft)"
     required: false
@@ -57,9 +56,6 @@ inputs:
   subproject:
     description: "The Gradle subproject for which the tarball image should be built (If not specified, a tarball image for the root project will be built)"
     required: false
-  jib-from-image:
-    description: "The Jib base image to use"
-    required: false
 runs:
   using: "composite"
   steps:
@@ -77,20 +73,27 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
 
+    - name: Docker metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        # if there is no tag found, split will return the image name as the first element
+        images: ${{ inputs.full-image-name.split(':')[0] }}
+
     - name: Build Docker image
       run: |
-        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jib \
+        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }} jib \
           --info --stacktrace \
-          --image=${{ inputs.image-name }} \
-          ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
+          --image=${{ github.event.repository.name }} \
           -Djib.from.platforms=linux/arm64,linux/amd64 \
+          ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
+          ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
           -DsendCredentialsOverHttp \
           -Djib.allowInsecureRegistries=true \
-          -Djib.to.image=${{ inputs.full-image-name }}:${{ inputs.image-tag }} \
-          -Djib.to.tags=${{ inputs.image-tag }} \
-          -Djib.to.auth.username=AWS \
-          -Djib.to.auth.password=${{ inputs.registry-password }} \
-          -x test \
+          -Djib.to.image=${{ inputs.full-image-name }}  \
+          -Djib.to.tags=${{ concat(steps.meta.outptus.tags , inputs.additional-tags).join(',')) }} \
+          ${{ inputs.registry-username && format('-Djib.to.auth.username={0}', inputs.registry-username) || '' }} \
+          ${{ inputs.registry-password && format('-Djib.to.auth.password={0}', inputs.registry-password) || '' }} \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
