@@ -72,12 +72,17 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
 
-    - name: process image name
+    - name: Process image name inputs
       id: process-image-name
       run: |
-        export IMAGE_NAME=$(echo ${{ inputs.full-image-name }} | cut -d ':' -f 1)
-        echo $IMAGE_NAME
-        echo "IMAGE_NAME=$IMAGE_NAME" >> "$GITHUB_OUTPUT"
+        # Extract the image name from the full image name
+        echo "IMAGE_NAME=$(echo ${{ inputs.full-image-name }} | cut -d ':' -f 1)" >> "$GITHUB_OUTPUT"
+        IFS=',' read -r -a tags <<< "a,b,c"
+        for element in "${tags[@]}"
+        do
+            echo "type=raw,$element" >> tags.txt
+        done
+        echo "IMAGE_TAGS=$(cat tags.txt)" >> "$GITHUB_OUTPUT"
       shell: bash
 
     - name: Docker metadata
@@ -88,27 +93,23 @@ runs:
         tags: |
           type=ref,event=branch
           type=sha
+          ${{ steps.process-image-name.outputs.IMAGE_TAGS }}
 
-    - name: print output
+    - name: Build Docker image
       run: |
-        echo "I AM HERE"
-        cat "${{ steps.meta.outputs.bake-file }}" | jq .
-        cat "${{ steps.meta.outputs.bake-file }}" | jq '.target["docker-metadata-action"].tags'
-
-    # - name: Build Docker image
-    #   run: |
-    #     ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }} jib \
-    #       --info --stacktrace \
-    #       --image=${{ github.event.repository.name }} \
-    #       -Djib.from.platforms=linux/arm64,linux/amd64 \
-    #       ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
-    #       ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
-    #       -DsendCredentialsOverHttp \
-    #       -Djib.allowInsecureRegistries=true \
-    #       -Djib.to.image=${{ inputs.full-image-name }}  \
-    #       -Djib.to.tags=${{ join(concat(steps.meta.outptus.tags , inputs.additional-tags)), ',') }} \
-    #       ${{ inputs.registry-username && format('-Djib.to.auth.username={0}', inputs.registry-username) || '' }} \
-    #       ${{ inputs.registry-password && format('-Djib.to.auth.password={0}', inputs.registry-password) || '' }} \
-    #       ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
-    #   shell: bash
-    #   working-directory: ${{ inputs.working-directory }}
+        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }} jib \
+          --info --stacktrace \
+          --image=${{ github.event.repository.name }} \
+          -Djib.from.platforms=linux/arm64,linux/amd64 \
+          ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
+          ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
+          -DsendCredentialsOverHttp \
+          -Djib.allowInsecureRegistries=true \
+          -Djib.to.image=${{ inputs.full-image-name }}  \
+          # The outer echo adds a newline
+          -Djib.to.tags=$(echo $(echo "${{ steps.meta.outputs.tags }}" | sed -z 's/\n/,/g')) \
+          ${{ inputs.registry-username && format('-Djib.to.auth.username={0}', inputs.registry-username) || '' }} \
+          ${{ inputs.registry-password && format('-Djib.to.auth.password={0}', inputs.registry-password) || '' }} \
+          ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
