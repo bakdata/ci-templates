@@ -76,6 +76,7 @@ runs:
       id: process-image-name
       run: |
         export IMAGE_NAME=$(${{ inputs.full-image-name }} | cut -d ':' -f 1)
+        echo $IMAGE_NAME
         echo "IMAGE_NAME=$IMAGE_NAME" >> "$GITHUB_OUTPUT"
       shell: bash
 
