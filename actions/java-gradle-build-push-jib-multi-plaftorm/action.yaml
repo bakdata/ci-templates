@@ -72,18 +72,19 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
 
-    - name: Process image name inputs
-      id: process-image-name
-      run: |
-        # Extract the image name from the full image name
-        echo "IMAGE_NAME=$(echo ${{ inputs.full-image-name }} | cut -d ':' -f 1)" >> "$GITHUB_OUTPUT"
-        IFS=',' read -r -a tags <<< "a,b,c"
-        for element in "${tags[@]}"
-        do
-            echo "type=raw,$element" >> tags.txt
-        done
-        echo "IMAGE_TAGS=$(cat tags.txt)" >> "$GITHUB_OUTPUT"
-      shell: bash
+      - name: Process inputs
+        id: process-inputs
+        run: |
+          # Extract the image name from the full image name
+          echo "IMAGE_NAME=$(echo "${{ inputs.full-image-name }}" | cut -d ':' -f 1)" >> "$GITHUB_OUTPUT"
+          IFS=',' read -r -a tags <<< ${{ inputs.additional-tags }}
+          echo "IMAGE_TAGS<<EOF" >> "$GITHUB_OUTPUT"
+          for element in "${tags[@]}"
+          do
+              echo "type=raw,$element" >> $GITHUB_OUTPUT
+          done
+          echo "EOF" >> "$GITHUB_OUTPUT"
+        shell: bash
 
     - name: Docker metadata
       id: meta
@@ -107,7 +108,7 @@ runs:
           -Djib.allowInsecureRegistries=true \
           -Djib.to.image=${{ inputs.full-image-name }}  \
           # The outer echo adds a newline
-          -Djib.to.tags=$(echo $(echo "${{ steps.meta.outputs.tags }}" | sed -z 's/\n/,/g')) \
+          -Djib.to.tags=$(echo $(echo "${{ steps.meta.outputs.tags }}" | sed -z -r 's/\n/,/g; s/(.*),/\1/g')) \
           ${{ inputs.registry-username && format('-Djib.to.auth.username={0}', inputs.registry-username) || '' }} \
           ${{ inputs.registry-password && format('-Djib.to.auth.password={0}', inputs.registry-password) || '' }} \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
