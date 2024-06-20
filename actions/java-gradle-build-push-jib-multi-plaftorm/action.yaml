@@ -21,7 +21,7 @@ inputs:
     description: "The entrypoint class to be used for the image"
     required: false
   java-distribution:
-    description: "Java distribution to be installed. (Default is microsoft)"
+    description: "Java distribution to be installed. (Default is temurin)"
     required: false
     default: "temurin"
   java-version:
@@ -90,11 +90,11 @@ runs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ steps.process-image-name.outputs.IMAGE_NAME }}
+        images: ${{ steps.process-inputs.outputs.IMAGE_NAME }}
         tags: |
           type=ref,event=branch
           type=sha
-          ${{ steps.process-image-name.outputs.IMAGE_TAGS }}
+          ${{ steps.process-inputs.outputs.IMAGE_TAGS }}
 
     - name: Build Docker image
       run: |
@@ -106,7 +106,7 @@ runs:
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
           -DsendCredentialsOverHttp \
           -Djib.allowInsecureRegistries=true \
-          -Djib.to.image=${{ inputs.full-image-name }}  \
+          -Djib.to.image=${{ inputs.full-image-name }} \
           # The outer echo adds a newline
           -Djib.to.tags=$(echo $(echo "${{ steps.meta.outputs.tags }}" | sed -z -r 's/\n/,/g; s/(.*),/\1/g')) \
           ${{ inputs.registry-username && format('-Djib.to.auth.username={0}', inputs.registry-username) || '' }} \
