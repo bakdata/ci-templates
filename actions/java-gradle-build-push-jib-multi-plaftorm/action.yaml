@@ -100,7 +100,7 @@ runs:
       run: |
         ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }} jib \
           --info --stacktrace \
-          --image=${{ github.event.repository.name }} \
+          --image=${{github.repository}}_${{ github.run_id }}_${{github.run_number}} \
           -Djib.from.platforms=linux/arm64,linux/amd64 \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
