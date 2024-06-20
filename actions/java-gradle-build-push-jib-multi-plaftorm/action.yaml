@@ -96,12 +96,6 @@ runs:
           type=sha
           ${{ steps.process-image-name.outputs.IMAGE_TAGS }}
 
-    - name: "test some shit"
-      run: |
-        ls -la
-        cat gradlew
-        ./gradlew
-      shell: bash
     - name: Build Docker image
       run: |
         ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }} jib \
