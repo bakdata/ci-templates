@@ -107,7 +107,7 @@ runs:
           -DsendCredentialsOverHttp \
           -Djib.allowInsecureRegistries=true \
           -Djib.to.image=${{ inputs.full-image-name }} \
-          -Djib.to.tags=$(echo $(echo "${{ steps.meta.outputs.tags }}" | sed -z -r 's/\n/,/g; s/(.*),/\1/g')) \
+          -Djib.to.tags=$(echo "${{ steps.meta.outputs.tags }}" | sed -zr 's/.*:(.*\n)/\1/gm; s/\n/,/g;  s/(.*),/\1\n/g') \
           ${{ inputs.registry-username && format('-Djib.to.auth.username={0}', inputs.registry-username) || '' }} \
           ${{ inputs.registry-password && format('-Djib.to.auth.password={0}', inputs.registry-password) || '' }} \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
