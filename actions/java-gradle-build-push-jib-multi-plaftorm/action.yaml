@@ -107,7 +107,6 @@ runs:
           -DsendCredentialsOverHttp \
           -Djib.allowInsecureRegistries=true \
           -Djib.to.image=${{ inputs.full-image-name }} \
-          # The outer echo adds a newline
           -Djib.to.tags=$(echo $(echo "${{ steps.meta.outputs.tags }}" | sed -z -r 's/\n/,/g; s/(.*),/\1/g')) \
           ${{ inputs.registry-username && format('-Djib.to.auth.username={0}', inputs.registry-username) || '' }} \
           ${{ inputs.registry-password && format('-Djib.to.auth.password={0}', inputs.registry-password) || '' }} \
