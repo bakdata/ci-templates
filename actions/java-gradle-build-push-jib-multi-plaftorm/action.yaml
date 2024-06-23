@@ -5,12 +5,6 @@ inputs:
   additional-tags:
     description: "Additional tags to be pushed to the registry. Comma seperated list."
     required: false
-  registry-username:
-    description: "Username of registry."
-    required: false
-  registry-password:
-    description: "Password of registry."
-    required: false
   full-image-name:
     description: "Full name of image (registry/image:tag) If an image name is provided without a tag, 'latest' will be used. Be careful with registries that dont allow overwriting tags."
     required: true
@@ -64,7 +58,7 @@ runs:
         lfs: ${{ inputs.download-lfs-files }}
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@d53c20d6d45f3000725a9bcc222f39d93cb0b5b9
+      uses: bakdata/ci-templates/actions/java-gradle-setup@tiedemann/adjust-with-metadata-action
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
@@ -104,12 +98,8 @@ runs:
           -Djib.from.platforms=linux/arm64,linux/amd64 \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
-          -DsendCredentialsOverHttp \
-          -Djib.allowInsecureRegistries=true \
           -Djib.to.image=${{ inputs.full-image-name }} \
           -Djib.to.tags=$(echo "${{ steps.meta.outputs.tags }}" | sed -zr 's/.*:(.*\n)/\1/gm; s/\n/,/g;  s/(.*),/\1\n/g') \
-          ${{ inputs.registry-username && format("-Djib.to.auth.username='{0}'", inputs.registry-username) || "" }} \
-          ${{ inputs.registry-password && format("-Djib.to.auth.password='{0}'", inputs.registry-password) || "" }} \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
