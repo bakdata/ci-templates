@@ -145,7 +145,7 @@ jobs:
 
     steps:
       - name: Publish tarball image
-        uses: bakdata/ci-templates/actions/docker-publish@v1.46.3
+        uses: bakdata/ci-templates/actions/docker-publish@1.46.3
         with:
           publisher: ${{ inputs.docker-publisher }}
           username: ${{ secrets.docker-username }}
