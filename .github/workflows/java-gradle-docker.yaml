@@ -8,6 +8,11 @@ on:
         description: "Publisher to prefix Docker image."
         required: true
         type: string
+      docker-registry:
+        description: "Host where the image should be pushed to."
+        required: false
+        type: string
+        default: "docker.io"
       java-distribution:
         description: "Java distribution to be installed. (Default is microsoft)"
         required: false
@@ -147,9 +152,8 @@ jobs:
       - name: Publish tarball image
         uses: bakdata/ci-templates/actions/docker-publish@1.46.3
         with:
-          publisher: ${{ inputs.docker-publisher }}
-          username: ${{ secrets.docker-username }}
-          password: ${{ secrets.docker-password }}
+          docker-registry: ${{ inputs.docker-registry }}
+          image-namespace: ${{ inputs.docker-publisher }}
 
   release:
     name: Create Github release
