@@ -96,7 +96,7 @@ runs:
 
     - name: Build Docker image
       run: |
-        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }} jib \
+        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jib \
           --info --stacktrace \
           --image=${{github.repository}}_${{ github.run_id }}_${{github.run_number}} \
           -Djib.from.platforms=linux/arm64,linux/amd64 \
