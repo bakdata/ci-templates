@@ -104,7 +104,7 @@ runs:
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
           -Djib.to.image=${{ inputs.full-image-name }} \
           -Djib.to.tags=$(echo "${{ steps.meta.outputs.tags }}" | sed -zr 's/.*:(.*\n)/\1/gm; s/\n/,/g;  s/(.*),/\1\n/g') \
-          ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
+          ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
