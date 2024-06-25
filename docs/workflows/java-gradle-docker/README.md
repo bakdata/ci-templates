@@ -61,6 +61,7 @@ jobs:
 | INPUT                       | TYPE    | REQUIRED | DEFAULT       | DESCRIPTION                                                                                       |
 | --------------------------- | ------- | -------- | ------------- | ------------------------------------------------------------------------------------------------- |
 | docker-publisher            | string  | true     |               | Publisher to prefix Docker image.                                                                 |
+| docker-registry             | string  | false    | `"docker.io"` | Host where the image should be pushed to.                                                         |
 | gradle-cache                | boolean | false    | `true`        | Whether Gradle caching is enabled or not. (Default is true)                                       |
 | gradle-cache-read-only      | boolean | false    | `false`       | Whether Gradle caching should be read-only. Only used for build and test jobs. (Default is false) |
 | gradle-refresh-dependencies | boolean | false    | `false`       | Whether Gradle should refresh dependencies. (Default is false)                                    |
