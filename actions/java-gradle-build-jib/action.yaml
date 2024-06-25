@@ -1,5 +1,5 @@
-name: "Build Multi-Platrofm image"
-description: "Build Multi-Platrofm image using Gradle"
+name: "Build Multi-Platform image"
+description: "Build Multi-Platform image using Gradle"
 
 inputs:
   additional-tags:
