@@ -2,6 +2,11 @@ name: "Build Multi-Platform image"
 description: "Build Multi-Platform image using Gradle"
 
 inputs:
+  platforms:
+    description: "Architectures for the created image (comma separated)"
+    required: false
+    default: "linux/amd64,linux/arm64"
+    type: string
   additional-tags:
     description: "Additional tags to be pushed to the registry. Comma seperated list."
     required: false
@@ -99,7 +104,7 @@ runs:
         ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jib \
           --info --stacktrace \
           --image=${{github.repository}}_${{ github.run_id }}_${{github.run_number}} \
-          -Djib.from.platforms=linux/arm64,linux/amd64 \
+          -Djib.from.platforms=${{ inputs.platforms }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
           -Djib.to.image=${{ inputs.full-image-name }} \
