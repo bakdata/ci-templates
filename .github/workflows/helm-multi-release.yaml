@@ -104,6 +104,8 @@ jobs:
           sudo apt update
           sudo apt install yq -y
           yq e -i '.version = "${{ inputs.version }}"' "./${{ matrix.subdir }}/Chart.yaml"
+          echo "Bumped version to ${{ inputs.version }}"
+          cat "./${{ matrix.subdir }}/Chart.yaml"
         shell: bash
         working-directory: ${{ inputs.charts-path }}
 
