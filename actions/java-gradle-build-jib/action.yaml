@@ -7,9 +7,14 @@ inputs:
     required: false
     default: "linux/amd64,linux/arm64"
     type: string
-  additional-tags:
-    description: "Additional tags to be pushed to the registry. Comma seperated list."
+  image-name:
+    description: "Name of Docker image."
     required: false
+    default: "${{ github.event.repository.name }}"
+  image-tag:
+    description: "Tag of Jib Image (comma separated list)"
+    required: false
+    default: "pipeline-${{ github.run_id }}-git-{{ sha }}"
   full-image-name:
     description: "Full name of image (registry/image:tag) If an image name is provided without a tag, 'latest' will be used. Be careful with registries that dont allow overwriting tags."
     required: true
@@ -75,40 +80,28 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
 
-    - name: Process inputs
-      id: process-inputs
-      run: |
-        # Extract the image name from the full image name
-        echo "IMAGE_NAME=$(echo "${{ inputs.full-image-name }}" | cut -d ':' -f 1)" >> "$GITHUB_OUTPUT"
-        IFS=',' read -r -a tags <<< "${{ inputs.additional-tags }}"
-        echo "IMAGE_TAGS<<EOF" >> "$GITHUB_OUTPUT"
-        for element in "${tags[@]}"
-        do
-            echo "type=raw,$element" >> $GITHUB_OUTPUT
-        done
-        echo "EOF" >> "$GITHUB_OUTPUT"
-      shell: bash
-
     - name: Docker metadata
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ steps.process-inputs.outputs.IMAGE_NAME }}
+        images: ${{ inputs.image-name }}
         tags: |
-          type=ref,event=branch
-          type=sha
-          ${{ steps.process-inputs.outputs.IMAGE_TAGS }}
+          event=push,type=raw,value=${{ inputs.image-tag }}
+          event=pr,type=raw,value=${{ inputs.image-tag }}
+          event=tag,type=semver,pattern={{ version }}
+        env:
+          DOCKER_METADATA_PR_HEAD_SHA: true # set correct sha for PRs
 
     - name: Build Docker image
       run: |
         ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jib \
           --info --stacktrace \
-          --image=${{github.repository}}_${{ github.run_id }}_${{github.run_number}} \
+          --image=${{ inputs.image-name }} \
           -Djib.from.platforms=${{ inputs.platforms }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
           -Djib.to.image=${{ inputs.full-image-name }} \
-          -Djib.to.tags=$(echo "${{ steps.meta.outputs.tags }}" | sed -zr 's/.*:(.*\n)/\1/gm; s/\n/,/g;  s/(.*),/\1\n/g') \
+          -Djib.to.tags=${{ steps.meta.outputs.tags }} \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
       shell: bash
