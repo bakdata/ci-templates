@@ -5,7 +5,7 @@ inputs:
   github-token:
     description: "The GitHub token for committing the changes."
     required: true
-  new-tag:
+  tag:
     description: Version after bump
     required: true
   # optional inputs
@@ -13,130 +13,39 @@ inputs:
     description: Path to the changelog file in the GitHub repository
     required: false
     default: "CHANGELOG.md"
-  commit-mode:
-    description: "Special configuration for projects which work without PRs."
-    required: false
-    default: "false"
-  config:
-    description: Path to the changelog config JSON file
-    required: false
-    default: ""
-  fetch-release-information:
-    description: "Will enable fetching additional release information from tags."
-    required: false
-    default: "false"
-  fetch-reviewers:
-    description: "Will enable fetching the users/reviewers who approved the PR"
-    required: false
-    default: "false"
-  old-tag:
-    description: Previous version. Let empty for releases
-    required: false
-    default: ""
+
 outputs:
-  merged-changelog:
-    description: "Changelog containing listing of all single changelogs"
-    value: ${{ steps.output-generator.outputs.merged-changelog }}
-  single-changelog:
-    description: "Changelog containing changes of the latest tag"
-    value: ${{ steps.output-generator.outputs.single-changelog }}
+  changelog:
+    description: "The generated changelog."
+    value: ${{ steps.git-cliff.outputs.content }}
+
 runs:
   using: "composite"
-
   steps:
-    - name: "Set tags"
-      id: set-tags
-      run: |
-        tag_list=$(git tag) || tag_list=""
-
-        # to-tag
-        if [[ "$tag_list" == *"${{ inputs.new-tag }}"* ]]; then
-          echo  "totag=${{ inputs.new-tag }}">> $GITHUB_OUTPUT
-        else
-          echo  "totag=$(git rev-parse HEAD)">> $GITHUB_OUTPUT
-        fi
-
-        #from-tag
-        setfrom=""
-
-        if [[ -n "${{ inputs.old-tag }}" ]] && [[ "$tag_list" == *"${{ inputs.old-tag }}"* ]]; then
-        # tag provided & provided tag exists
-            setfrom=${{ inputs.old-tag }}
-        else
-        # no tag provided or a non-existing tag was provided
-          if [ -n "$tag_list" ]; then
-            # if any tag exists then set from-tag to the latest tag
-            setfrom=$(git describe --tags `git rev-list --tags --max-count=1`)
-          else
-            # if no tag exists then use the frist commit as fromtag
-            setfrom=$(git rev-list --max-parents=0 HEAD)
-          fi
-        fi
-
-        echo "fromtag=$setfrom">> $GITHUB_OUTPUT
-        if [[ -z "${{ inputs.config }}" ]]; then
-          path="$GITHUB_ACTION_PATH/changelog-config.json"
-        else
-          path=${{ inputs.config }}
-        fi
-
-        if [ ! -f "$path" ]; then
-          echo "changelog config file $path doesn't exist"
-          exit 1
-        fi
-        echo "path=$path" >> "$GITHUB_OUTPUT"
-      shell: bash
-
-    - name: "Create changelog"
-      id: build_changelog
-      uses: mikepenz/release-changelog-builder-action@v4
+    - name: Check out repository
+      uses: bakdata/ci-templates/actions/checkout@1.46.4
       with:
-        token: "${{ inputs.github-token }}"
-        configuration: "${{ steps.set-tags.outputs.path }}"
-        fromTag: "${{ steps.set-tags.outputs.fromtag }}"
-        toTag: "${{ steps.set-tags.outputs.totag }}"
-        outputFile: ${{ runner.temp }}/changes.md
-        fetchReviewers: "${{ inputs.fetch-reviewers }}"
-        fetchReleaseInformation: "${{ inputs.fetch-release-information }}"
-        commitMode: "${{ inputs.commit-mode }}"
-
-    - name: Replace default branch with new Tag
-      if: ${{ steps.set-tags.outputs.totag != inputs.new-tag }}
+        fetch-depth: 0
+    - name: Get config path
+      id: get-config-path
       run: |
-        # Replace default branch with new tag
-        sed -i 's/\[${{ steps.set-tags.outputs.totag }}\]/\[${{ inputs.new-tag }}\]/g' ${{ runner.temp }}/changes.md
-        sed -i 's|releases/tag/${{ steps.set-tags.outputs.totag }}|releases/tag/${{ inputs.new-tag }}|g' ${{ runner.temp }}/changes.md
-
-        # Set Release date
-        tag_date=$(date '+%Y-%m-%d')
-        sed -i "s/Release Date: /Release Date: \[${tag_date}\]/g" ${{ runner.temp }}/changes.md
-      shell: bash
-
-    - name: Update GitHub Changelog
-      id: output-generator
-      run: |
-        # Reformat ${{ runner.temp }}/changes.md and add it to the existing changelog
-        {
-          echo 'single-changelog<<EOF'
-          cat ${{ runner.temp }}/changes.md
-          echo EOF
-        } >> $GITHUB_OUTPUT
-
-        # Create changelog.md in case of a first Release
-        if [ -n "${{ inputs.changelog-file }}" ]; then
-          sed -i 's/# /## /g' ${{ runner.temp }}/changes.md
-          echo -e "\n" >> ${{ runner.temp }}/changes.md
-          if [ ! -f "${{ inputs.changelog-file }}" ]; then
-            echo $'# Changelog\n' >> ${{ inputs.changelog-file }}
-          fi
-
-          # Update global changelog and pass it to the ouput
-          sed -i "2i $(sed ':a;N;$!ba;s/\n/\\n/g' ${{ runner.temp }}/changes.md)" ${{ inputs.changelog-file }}
-
-          {
-            echo 'merged-changelog<<EOF'
-            cat ${{ inputs.changelog-file }}
-            echo EOF
-          } >> $GITHUB_OUTPUT
+        DEFAULT_PATH=$GITHUB_ACTION_PATH/default-cliff.toml
+        if [-f cliff.toml ]; then
+          cp cliff.toml tmp_cliff.toml
+        else
+          cp $DEFAULT_PATH tmp_cliff.toml
         fi
+      shell: bash
+    - name: Generate a changelog
+      uses: orhun/git-cliff-action@v3
+      id: git-cliff
+      with:
+        config: tmp_cliff.toml
+        args: "--tag ${{ inputs.tag }} --verbose"
+      env:
+        OUTPUT: ${{ inputs.changelog-file }}
+        GITHUB_REPO: ${{ github.repository }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+    - name: remove tmp config file
+      run: rm tmp_cliff.toml
       shell: bash
