@@ -1,15 +1,33 @@
-name: "Build tarball image"
-description: "Build tarball image using Gradle"
+name: "Build Multi-Platform image"
+description: "Build Multi-Platform image using Gradle"
 
 inputs:
-  image-artifact-name:
-    description: "Artifact name to upload tarball image, see https://github.com/actions/upload-artifact"
+  platforms:
+    description: "Architectures for the created image (comma separated)"
     required: false
-    default: "image-artifact"
+    default: "linux/amd64,linux/arm64"
+    type: string
   image-name:
     description: "Name of Docker image."
     required: false
     default: "${{ github.event.repository.name }}"
+  image-tags:
+    description: "Tag of Jib Image (comma separated list)"
+    required: false
+    default: "pipeline-${{ github.run_id }}-git-{{ sha }}"
+  full-image-name:
+    description: "Full name of image (registry/image:tag) If an image name is provided without a tag, 'latest' will be used. Be careful with registries that dont allow overwriting tags."
+    required: true
+  allow-insecure-registries:
+    description: "Whether to allow insecure registries or not. (Default is false)"
+    required: false
+    default: "false"
+  jib-from-image:
+    description: "The Jib base image to use"
+    required: false
+  class:
+    description: "The entrypoint class to be used for the image"
+    required: false
   java-distribution:
     description: "Java distribution to be installed. (Default is microsoft)"
     required: false
@@ -43,10 +61,7 @@ inputs:
     required: false
     default: "false"
   subproject:
-    description: "The Gradle subproject for which the tarball image should be built (If not specified, a tarball image for the root project will be built)"
-    required: false
-  jib-from-image:
-    description: "The Jib base image to use"
+    description: "The Gradle subproject for which the image should be built (If not specified, an image for the root project will be built)"
     required: false
 runs:
   using: "composite"
@@ -65,20 +80,27 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
 
+    - name: Docker metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ inputs.image-name }}
+        tags: |
+          event=push,type=raw,value=${{ inputs.image-tags }}
+          event=pr,type=raw,value=${{ inputs.image-tags }}
+          event=tag,type=semver,pattern={{ version }}
+
     - name: Build Docker image
       run: |
-        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jibBuildTar \
+        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jib \
           --info --stacktrace \
           --image=${{ inputs.image-name }} \
+          -Djib.from.platforms=${{ inputs.platforms }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
-          -x test \
-          ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
+          ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
+          -Djib.to.image=${{ inputs.full-image-name }} \
+          -Djib.to.tags=$(echo "${{ steps.meta.outputs.tags }}" | tr ',' '\n' | sed 's/.*://') \
+          ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
+          ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-
-    - name: Upload tarball image artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: ${{ inputs.image-artifact-name }}
-        path: ${{ inputs.subproject && format('{0}/', inputs.subproject) || '' }}build/jib-image.tar
-        retention-days: 1
