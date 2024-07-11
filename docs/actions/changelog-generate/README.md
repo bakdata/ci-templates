@@ -98,9 +98,10 @@ steps:
 
 <!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
 
-| OUTPUT    | TYPE   | DESCRIPTION              |
-| --------- | ------ | ------------------------ |
-| changelog | string | The generated changelog. |
+| OUTPUT           | TYPE   | DESCRIPTION                |
+| ---------------- | ------ | -------------------------- |
+| merged-changelog | string | All changelogs combinded.  |
+| single-changelog | string | Only the latest changelog. |
 
 <!-- AUTO-DOC-OUTPUT:END -->
 
