@@ -106,7 +106,6 @@ runs:
         github-token: ${{ inputs.github-token }}
         tag: ${{ steps.evaluate-version.outputs.release-version }}
         changelog-file: CHANGELOG.md
-      working-directory: ${{ inputs.working-directory }}
 
     - name: Commit and push changes including the bump config file
       run: |
