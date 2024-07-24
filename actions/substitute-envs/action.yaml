@@ -12,9 +12,23 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: Get branch name
+      id: branch-name
+      shell: bash
+      run: |
+        if [[ "$BRANCH_NAME" == "main" ]] || [[ "$BRANCH_NAME" == "master" ]]; then
+          echo "branch=HEAD" >> "$GITHUB_OUTPUT"
+        else
+          echo "branch=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
+        fi
+      env:
+        BRANCH_NAME: "${{ github.ref_name }}"
+        
     - name: Substitute envs
       id: substitute
       shell: bash
+      env:
+        TARGET_REVISION: "${{ steps.branch-name.outputs.branch }}"
       run: |
         function substitute() {
           # create (sub-)directories
