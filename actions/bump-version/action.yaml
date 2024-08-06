@@ -1,9 +1,25 @@
 name: "Bump version"
-description: "Bump version with python bump2version using .bumpversion.cfg"
+description: "Bump version with python bump-my-version using .bumpversion.cfg"
+# config example .bumpversion.cfg:
+# [bumpversion]
+# current_version = 1.0.0
+# search = version: {current_version}
+# replace = version: {new_version}
+# parse = (?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)(-(?P<release>snapshot))?
+# serialize =
+# 	{major}.{minor}.{patch}-{release}
+# 	{major}.{minor}.{patch}
+
+# [bumpversion:part:release]
+# first_value = snapshot
+# optional_value = release
+# values =
+# 	snapshot
+# 	release
 
 inputs:
   release-type:
-    description: "The type of the release (major, minor or patch)."
+    description: "The type of the release (release, major, minor or patch). Release is a special case, where the snapshot suffix is removed."
     required: true
   working-directory:
     description: "The directory containing the `.bumpversion.cfg` file."
@@ -25,26 +41,28 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Set up bump2version
+    - name: Set up bump-my-version
       run: |
-        pipx install bump2version
+        pipx install bump-my-version
       shell: bash
 
     - name: Bump version
       id: bump-version
       run: |
-        parameters=(--no-commit --allow-dirty --no-tag ${{ inputs.release-type }})
-        echo "old-version=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
-        if [[ ${{ inputs.release-type }} == patch ]]; then
-          parameters+=(--new-version ${{ inputs.new-version }})
-          bump2version --allow-dirty release
+        parameters=(--no-commit --allow-dirty --no-tag)
+        echo "old-version=$(bump-my-version show current_version | tail -1)" >> "$GITHUB_OUTPUT"
+
+        if [[ ${{ inputs.new-version }} != "" ]]; then
+          bump-my-version --new-version ${{ inputs.new-version }}
         else
-          bump2version --allow-dirty "${parameters[@]}"
-          bump2version --allow-dirty release
+          bump-my-version "${parameters[@]}" ${{ inputs.release-type }}
         fi
-        echo "new-version=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
-      # We use the case for release-type "patch", because if we do not we get inproper results. For example : 0.0.1-snapshot -> 0.0.3
-      # If release-type == patch , we use "bump2version release". This command basically removes the suffix. For example :  0.0.1-snapshot -> 0.0.1
-      # In the other case we bump the version (major or minor), then we remove the snapshot suffix
+        echo "bump-my-version show current_version | tail -1)" >> "$GITHUB_OUTPUT"
+      # release: a.b.c-snapshot -> a.b.c
+      # release a.b.c -> crash
+      # major: a.b.c(-snapshot)? -> a+1.0.0-snapshot
+      # minor: a.b.c(-snapshot)? -> a.b+1.0-snapshot
+      # patch: a.b.c(-snapshot)? -> a.b.c+1-snapshot
+      # TLDR: release removes the snapshot suffix
       shell: bash
       working-directory: ${{ inputs.working-directory }}

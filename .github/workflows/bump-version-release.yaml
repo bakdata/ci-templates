@@ -59,11 +59,11 @@ jobs:
           ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false # required for pushing to protected branch later
 
-      - name: Bump version
+      - name: Remove snapshot suffix
         id: bump-version
         uses: bakdata/ci-templates/actions/bump-version@feat/new-bumpversion
         with:
-          release-type: ${{ inputs.release-type }}
+          release-type: "release"
           working-directory: ${{ inputs.working-directory }}
 
       - name: Commit and push changes including .bumpversion.cfg file
@@ -96,12 +96,12 @@ jobs:
           release-title: "${{ steps.bump-version.outputs.release-version }}"
           release-body: "${{ steps.build-changelog.outputs.single-changelog }}"
 
-      - name: Bump version
-        id: bump-version-snapshot
-        uses: bakdata/ci-templates/actions/bump-version-snapshot@feat/new-bumpversion
+      - name: Bump to next snapshot version
+        id: bump-version
+        uses: bakdata/ci-templates/actions/bump-version@feat/new-bumpversion
         with:
+          release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.working-directory }}
-          test-version: ${{ steps.bump-version.outputs.release-version }}
 
       - name: Commit and push changes including .bumpversion.cfg file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
