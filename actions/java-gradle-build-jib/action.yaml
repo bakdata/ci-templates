@@ -11,8 +11,12 @@ inputs:
     description: "Name of Docker image."
     required: false
     default: "${{ github.event.repository.name }}"
-  image-tags:
-    description: "Tag of Jib Image (comma separated list)"
+  additional-tags:
+    description: "Addiitional Tags of Jib Image (comma separated list)"
+    required: false
+    default: ""
+  image-tag:
+    description: "Tag of Jib Image"
     required: false
     default: "pipeline-${{ github.run_id }}-git-{{ sha }}"
   full-image-name:
@@ -86,8 +90,8 @@ runs:
       with:
         images: ${{ inputs.image-name }}
         tags: |
-          event=push,type=raw,value=${{ inputs.image-tags }}
-          event=pr,type=raw,value=${{ inputs.image-tags }}
+          event=push,type=raw,value=${{ inputs.additional-tags }}
+          event=pr,type=raw,value=${{ inputs.additional-tags }}
           event=tag,type=semver,pattern={{ version }}
 
     - name: Build Docker image
@@ -98,8 +102,7 @@ runs:
           -Djib.from.platforms=${{ inputs.platforms }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
-          -Djib.to.image=${{ inputs.full-image-name }} \
-          -Djib.to.tags=$(echo "${{ steps.meta.outputs.tags }}" | tr ',' '\n' | sed 's/.*://') \
+          -Djib.to.image=${{ inputs.full-image-name }}:${{ inputs.image-tag }} \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
       shell: bash
