@@ -18,7 +18,7 @@ inputs:
   image-tag:
     description: "Tag of Jib Image"
     required: false
-    default: "pipeline-${{ github.run_id }}-git-{{ sha }}"
+    default: "pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}}"
   full-image-name:
     description: "Full name of image (registry/image:tag) If an image name is provided without a tag, 'latest' will be used. Be careful with registries that dont allow overwriting tags."
     required: true
