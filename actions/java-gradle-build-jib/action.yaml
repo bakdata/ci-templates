@@ -94,7 +94,7 @@ runs:
           event=tag,type=ref,pattern=latest
         flavor: |
           latest=true
-          
+
     - name: Docker metadata additional tags
       id: meta
       uses: docker/metadata-action@v5
@@ -114,9 +114,8 @@ runs:
           -Djib.from.platforms=${{ inputs.platforms }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
-          -Djib.to.image=${{ inputs.full-image-name }}:${{ inputs.image-tag }} \
+          -Djib.to.image=${{ inputs.full-image-name }}:${{ steps.meta-default.outputs.version }} \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
-          -Djib.to.tags=$(echo "${{ steps.meta-default.outputs.tags }}" | tr ',' '\n' | sed 's/.*://') \
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
