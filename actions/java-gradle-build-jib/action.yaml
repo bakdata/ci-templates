@@ -89,8 +89,6 @@ runs:
       with:
         images: ${{ inputs.image-name }}
         tags: |
-          event=push,type=raw,value=${{ inputs.image-tag }}
-          event=pr,type=raw,value=${{ inputs.image-tag }}
           event=tag,type=semver,pattern={{ version }}
           event=push,branch=main,type=raw,value=latest
 
@@ -100,6 +98,8 @@ runs:
       with:
         images: ${{ inputs.image-name }}
         tags: |
+          event=push,type=raw,value=${{ inputs.additional-tags }}
+          event=pr,type=raw,value=${{ inputs.additional-tags }}
           event=tag,type=semver,pattern={{ version }}
           event=push,branch=main,type=raw,value=latest
 
