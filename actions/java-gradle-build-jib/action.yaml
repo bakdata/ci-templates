@@ -14,7 +14,7 @@ inputs:
   image-tag:
     description: "Tag of Jib Image"
     required: false
-    default: "pipeline-${{ github.run_id }}-git-${{ github.sha }}"
+    default: "pipeline-${{ github.run_id }}-git-${{ env.GITHUB_SHA::8 }}"
   additional-tags:
     description: " Additional Tags of Jib Image (comma separated)"
     required: false
