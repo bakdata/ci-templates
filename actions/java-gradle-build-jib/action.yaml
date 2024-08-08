@@ -90,7 +90,6 @@ runs:
         images: ${{ inputs.image-name }}
         tags: |
           event=tag,type=semver,pattern={{ version }}
-          event=push,branch=main,type=raw,value=latest
 
     - name: Docker metadata additional tags
       id: meta
@@ -101,7 +100,6 @@ runs:
           event=push,type=raw,value=${{ inputs.additional-tags }}
           event=pr,type=raw,value=${{ inputs.additional-tags }}
           event=tag,type=semver,pattern={{ version }}
-          event=push,branch=main,type=raw,value=latest
 
     - name: Build Docker image without additional tags
       if: ${{ github.event.inputs.additional-tags == '' }}
