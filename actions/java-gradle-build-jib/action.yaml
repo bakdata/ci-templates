@@ -11,10 +11,13 @@ inputs:
     description: "Name of Docker image."
     required: false
     default: "${{ github.event.repository.name }}"
-  image-tags:
-    description: "Tag of Jib Image (comma separated list)"
+  image-tag:
+    description: "Tag of Jib Image"
     required: false
-    default: "pipeline-${{ github.run_id }}-git-{{ sha }}"
+    default: "pipeline-${{ github.run_id }}-git-${GITHUB_SHA::8}"
+  additional-tags:
+    description: " Additional Tags of Jib Image (comma separated)"
+    required: false
   full-image-name:
     description: "Full name of image (registry/image:tag) If an image name is provided without a tag, 'latest' will be used. Be careful with registries that dont allow overwriting tags."
     required: true
@@ -80,17 +83,30 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
 
-    - name: Docker metadata
+    - name: Docker metadata default tag
+      id: meta-default
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ inputs.image-name }}
+        tags: |
+          event=tag,type=semver,pattern={{version}}
+          event=tag,type=sha
+          event=tag,type=ref,pattern=latest
+        flavor: |
+          latest=true
+
+    - name: Docker metadata additional tags
       id: meta
       uses: docker/metadata-action@v5
       with:
         images: ${{ inputs.image-name }}
         tags: |
-          event=push,type=raw,value=${{ inputs.image-tags }}
-          event=pr,type=raw,value=${{ inputs.image-tags }}
+          event=push,type=raw,value=${{ inputs.additional-tags }}
+          event=pr,type=raw,value=${{ inputs.additional-tags }}
           event=tag,type=semver,pattern={{ version }}
 
-    - name: Build Docker image
+    - name: Build Docker image without additional tags
+      if: ${{ github.event.inputs.additional-tags == '' }}
       run: |
         ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jib \
           --info --stacktrace \
@@ -98,7 +114,22 @@ runs:
           -Djib.from.platforms=${{ inputs.platforms }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
-          -Djib.to.image=${{ inputs.full-image-name }} \
+          -Djib.to.image=${{ inputs.full-image-name }}:${{ steps.meta-default.outputs.version }} \
+          ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
+          ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: Build Docker image with additional tags
+      if: ${{ github.event.inputs.additional-tags != '' }}
+      run: |
+        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jib \
+          --info --stacktrace \
+          --image=${{ inputs.image-name }} \
+          -Djib.from.platforms=${{ inputs.platforms }} \
+          ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
+          ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
+          -Djib.to.image=${{ inputs.full-image-name }}:${{ inputs.image-tag }} \
           -Djib.to.tags=$(echo "${{ steps.meta.outputs.tags }}" | tr ',' '\n' | sed 's/.*://') \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
