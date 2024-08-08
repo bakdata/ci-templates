@@ -83,7 +83,18 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
 
-    - name: Docker metadata
+    - name: Docker metadata default tag
+      id: meta-default
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ inputs.image-name }}
+        tags: |
+          event=push,type=raw,value=${{ inputs.image-tag }}
+          event=pr,type=raw,value=${{ inputs.image-tag }}
+          event=tag,type=semver,pattern={{ version }}
+          event=push,branch=main,type=raw,value=latest
+
+    - name: Docker metadata additional tags
       id: meta
       uses: docker/metadata-action@v5
       with:
@@ -92,6 +103,7 @@ runs:
           event=push,type=raw,value=${{ inputs.additional-tags }}
           event=pr,type=raw,value=${{ inputs.additional-tags }}
           event=tag,type=semver,pattern={{ version }}
+          event=push,branch=main,type=raw,value=latest
 
     - name: Build Docker image without additional tags
       if: ${{ github.event.inputs.additional-tags == '' }}
@@ -104,6 +116,7 @@ runs:
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
           -Djib.to.image=${{ inputs.full-image-name }}:${{ inputs.image-tag }} \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
+          -Djib.to.tags=$(echo "${{ steps.meta-default.outputs.tags }}" | tr ',' '\n' | sed 's/.*://') \
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
@@ -118,7 +131,7 @@ runs:
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
           -Djib.to.image=${{ inputs.full-image-name }}:${{ inputs.image-tag }} \
-          -Djib.to.tags=$(echo "${{ inputs.additional-tags }}" | tr ',' '\n' | sed 's/.*://') \
+          -Djib.to.tags=$(echo "${{ steps.meta.outputs.tags }}" | tr ',' '\n' | sed 's/.*://') \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
       shell: bash
