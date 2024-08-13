@@ -108,7 +108,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
 
     - name: Build Docker image
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == '${{ steps.meta.outputs.version }}'
       run: |
         ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jib \
           --info --stacktrace \
