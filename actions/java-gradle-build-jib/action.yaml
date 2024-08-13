@@ -91,9 +91,7 @@ runs:
         tags: |
           event=tag,type=semver,pattern={{version}}
           event=tag,type=sha
-          event=tag,type=ref,pattern=latest
-        flavor: |
-          latest=true
+          event=branch,type=ref,pattern=main,latest=true
 
     - name: Docker metadata additional tags
       id: meta
