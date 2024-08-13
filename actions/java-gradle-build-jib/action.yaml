@@ -106,14 +106,9 @@ runs:
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-    
-    - name: Set version output
-      id: set_version
-      shell: bash
-      run: echo "version=${{ steps.meta.outputs.version }}" >> $GITHUB_ENV
 
     - name: Build Docker image
-      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref_name == env.version
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref_type == tag
       run: |
         ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jib \
           --info --stacktrace \
