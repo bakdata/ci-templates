@@ -90,8 +90,8 @@ runs:
           event=push,type=raw,value=pipeline-${{ github.run_id }}-git-{{sha}}
           event=pr,type=ref
           event=branch,type=ref,enable=${{ github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main' }}
-        flavor: |
-          latest=auto
+          type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'master') }}
+          type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
 
     - name: Build Docker image
       run: |
