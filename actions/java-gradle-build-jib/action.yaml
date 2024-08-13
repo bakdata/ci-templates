@@ -88,7 +88,8 @@ runs:
         tags: |
           event=tag,type=semver,pattern={{version}}
           event=push,type=raw,value=pipeline-${{ github.run_id }}-git-{{sha}}
-          type=raw,value=latest,enable={{is_default_branch}}
+          event=pr,type=ref
+          event=branch,type=ref,enable=${{ github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main' }}
         flavor: |
           latest=false
 
