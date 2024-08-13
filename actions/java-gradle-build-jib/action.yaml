@@ -91,6 +91,10 @@ runs:
           event=pr,type=ref
           event=branch,type=ref,enable=${{ github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main' }}
 
+    - name: Debug Tags
+      run: echo "${{ steps.meta.outputs.tags }}"
+      shell: bash
+
     - name: Build Docker image
       run: |
         ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jib \
