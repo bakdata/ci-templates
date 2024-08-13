@@ -91,6 +91,9 @@ runs:
           event=pr,type=ref
           event=branch,type=ref,enable=${{ github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main' }}
           event=tag,type=raw,value=latest
+    
+    - name: Debug Tags
+      run: echo "${{ steps.meta.outputs.tags }}"
 
     - name: Build Docker image
       run: |
