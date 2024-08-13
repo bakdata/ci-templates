@@ -89,9 +89,7 @@ runs:
       with:
         images: ${{ inputs.image-name }}
         tags: |
-          event=tag,type=semver,pattern={{version}}
-          event=tag,type=sha
-          event=branch,type=ref,pattern=main,latest=true
+          event=branch,type=ref,pattern=main,value=latest
 
     - name: Docker metadata additional tags
       id: meta
