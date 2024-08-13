@@ -90,8 +90,7 @@ runs:
         images: ${{ inputs.image-name }}
         tags: |
           event=tag,type=semver,pattern={{version}}
-        flavor: |
-          latest=auto
+          event=push,type=raw,value=pipeline-${{ github.run_id }}-git-{{sha}}
 
     - name: Docker metadata additional tags
       id: meta
