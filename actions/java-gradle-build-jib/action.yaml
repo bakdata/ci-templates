@@ -109,6 +109,7 @@ runs:
     
     - name: Set version output
       id: set_version
+      shell: bash
       run: echo "version=${{ steps.meta.outputs.version }}" >> $GITHUB_ENV
 
     - name: Build Docker image
