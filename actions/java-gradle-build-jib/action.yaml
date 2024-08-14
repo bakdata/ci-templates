@@ -95,11 +95,8 @@ runs:
           -Djib.from.platforms=${{ inputs.platforms }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
-          $(if [ "${{ github.ref_type }}" != "tag" ]; then \
-            echo "-Djib.to.image=${{ inputs.full-image-name }}$(echo ${{ steps.meta.outputs.tags }} | grep 'pipeline' | sed 's/.*\(:.*\)/\1/')"; \
-          else \
-            echo "-Djib.to.image=${{ inputs.full-image-name }} -Djib.to.tags=${{ steps.meta.outputs.version }}"; \
-          fi) \
+          -Djib.to.image=${{ inputs.full-image-name }}$(echo ${{ steps.meta.outputs.tags }} | sed 's/.*\(:.*\)/\1/') \
+          $([[ "${{ github.ref_type }}" == "tag" ]] && echo "-Djib.to.tags=latest") \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
       shell: bash
