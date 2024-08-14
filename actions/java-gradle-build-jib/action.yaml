@@ -92,7 +92,7 @@ runs:
         flavor: |
           latest=false
     - name: echo
-      run: echo ${{ steps.meta.outputs.tags }} | tr ',' '\n' | grep '^pipeline' | sed 's/.*://'
+      run: echo ${{ steps.meta.outputs.tags }} | grep 'pipeline' | sed 's/.*://'
       shell: bash
     - name: Build Docker image
       #if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' && github.ref_type != 'tag'
