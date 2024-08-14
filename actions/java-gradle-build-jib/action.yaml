@@ -91,11 +91,7 @@ runs:
           type=raw,value=latest,enable=${{ github.ref == 'refs/heads/master' && github.ref_type != 'tag'  || github.ref == 'refs/heads/main' && github.ref_type != 'tag' }}
         flavor: |
           latest=false
-    # - name: echo
-    #   run: |
-    #     TAG=$(echo ${{ steps.meta.outputs.tags }} | grep 'pipeline' | sed 's/.*\(:.*\)/\1/')
-    #     echo $TAG
-    #   shell: bash
+
     - name: Build Docker image
       #if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' && github.ref_type != 'tag'
       run: |
@@ -106,7 +102,7 @@ runs:
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
           -Djib.to.image=${{ inputs.full-image-name }}$(echo ${{ steps.meta.outputs.tags }} | grep 'pipeline' | sed 's/.*\(:.*\)/\1/') \
-          -Djib.to.tags=$(echo "${{ steps.meta.outputs.tags }}" | grep 'pipeline' | sed 's/.*://') \
+          -Djib.to.tags=$(echo "${{ steps.meta.outputs.tags }}" | tr ',' '\n' | sed 's/.*://') \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
       shell: bash
