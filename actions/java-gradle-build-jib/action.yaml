@@ -91,11 +91,11 @@ runs:
           type=raw,value=latest,enable=${{ github.ref == 'refs/heads/master' && github.ref_type != 'tag'  || github.ref == 'refs/heads/main' && github.ref_type != 'tag' }}
         flavor: |
           latest=false
-    - name: echo
-      run: |
-        TAG=$(echo ${{ steps.meta.outputs.tags }} | grep 'pipeline' | sed 's/.*\(:.*\)/\1/')
-        echo $TAG
-      shell: bash
+    # - name: echo
+    #   run: |
+    #     TAG=$(echo ${{ steps.meta.outputs.tags }} | grep 'pipeline' | sed 's/.*\(:.*\)/\1/')
+    #     echo $TAG
+    #   shell: bash
     - name: Build Docker image
       #if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' && github.ref_type != 'tag'
       run: |
