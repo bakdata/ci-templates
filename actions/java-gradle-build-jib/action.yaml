@@ -11,10 +11,6 @@ inputs:
     description: "Name of Docker image."
     required: false
     default: "${{ github.event.repository.name }}"
-  image-tag:
-    description: "Tag of Jib Image"
-    required: false
-    default: "pipeline-${{ github.run_id }}-git-${GITHUB_SHA::7}"
   full-image-name:
     description: "Full name of image (registry/image:tag) If an image name is provided without a tag, 'latest' will be used. Be careful with registries that dont allow overwriting tags."
     required: true
@@ -93,7 +89,6 @@ runs:
           latest=false
 
     - name: Build Docker image
-      #if: github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' && github.ref_type != 'tag'
       run: |
         ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jib \
           --info --stacktrace \
@@ -107,19 +102,3 @@ runs:
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-
-    # - name: Build Docker image
-    #   if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref_type == 'tag'
-    #   run: |
-    #     ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jib \
-    #       --info --stacktrace \
-    #       --image=${{ inputs.image-name }} \
-    #       -Djib.from.platforms=${{ inputs.platforms }} \
-    #       ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
-    #       ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
-    #       -Djib.to.image=${{ inputs.full-image-name }} \
-    #       -Djib.to.tags=$(echo "${{ steps.meta.outputs.tags }}" | tr ',' '\n' | sed 's/.*://') \
-    #       ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
-    #       ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
-    #   shell: bash
-    #   working-directory: ${{ inputs.working-directory }}
