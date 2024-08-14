@@ -104,7 +104,7 @@ runs:
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
           -Djib.to.image=${{ inputs.full-image-name }}:$(echo ${{ steps.meta.outputs.tags }} | tr ',' '\n' | grep '^pipeline' | sed 's/.*://') \
-          -Djib.to.tags=$(echo "${{ steps.meta.outputs.tags }}" | tr ',' '\n' | sed 's/.*://') \
+          -Djib.to.tags=$(echo "${{ steps.meta.outputs.tags }}" | grep 'pipeline' | sed 's/.*://') \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
       shell: bash
