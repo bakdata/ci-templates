@@ -12,7 +12,7 @@ inputs:
     required: false
     default: "${{ github.event.repository.name }}"
   full-image-name:
-    description: "Full name of image (registry/image). The image should be provided without a tag.
+    description: "Full name of image (registry/image). The image should be provided without a tag."
     required: true
   allow-insecure-registries:
     description: "Whether to allow insecure registries or not. (Default is false)"
