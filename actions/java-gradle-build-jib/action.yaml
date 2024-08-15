@@ -11,12 +11,8 @@ inputs:
     description: "Name of Docker image."
     required: false
     default: "${{ github.event.repository.name }}"
-  image-tags:
-    description: "Tag of Jib Image (comma separated list)"
-    required: false
-    default: "pipeline-${{ github.run_id }}-git-{{ sha }}"
   full-image-name:
-    description: "Full name of image (registry/image:tag) If an image name is provided without a tag, 'latest' will be used. Be careful with registries that dont allow overwriting tags."
+    description: "Full name of image (registry/image). The image should be provided without a tag."
     required: true
   allow-insecure-registries:
     description: "Whether to allow insecure registries or not. (Default is false)"
@@ -86,9 +82,10 @@ runs:
       with:
         images: ${{ inputs.image-name }}
         tags: |
-          event=push,type=raw,value=${{ inputs.image-tags }}
-          event=pr,type=raw,value=${{ inputs.image-tags }}
-          event=tag,type=semver,pattern={{ version }}
+          event=tag,type=semver,pattern={{version}}
+          event=push,type=raw,value=pipeline-${{ github.run_id }}-git-{{sha}},enable=${{ github.ref_type != 'tag' }}
+        flavor: |
+          latest=false
 
     - name: Build Docker image
       run: |
@@ -98,8 +95,8 @@ runs:
           -Djib.from.platforms=${{ inputs.platforms }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
-          -Djib.to.image=${{ inputs.full-image-name }} \
-          -Djib.to.tags=$(echo "${{ steps.meta.outputs.tags }}" | tr ',' '\n' | sed 's/.*://') \
+          -Djib.to.image=${{ inputs.full-image-name }}$(echo ${{ steps.meta.outputs.tags }} | sed 's/.*\(:.*\)/\1/') \
+          $([[ "${{ github.ref_type }}" == "tag" ]] && echo "-Djib.to.tags=latest") \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
       shell: bash
