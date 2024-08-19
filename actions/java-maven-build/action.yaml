@@ -28,7 +28,7 @@ runs:
       uses: bakdata/ci-templates/actions/checkout@1.32.0
 
     - name: Set up Maven with version ${{ inputs.maven-version }}
-      uses: bakdata/ci-templates/actions/java-maven-setup@fix/setup-maven # TODO
+      uses: bakdata/ci-templates/actions/java-maven-setup@1.46.8
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
