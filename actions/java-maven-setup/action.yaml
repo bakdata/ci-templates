@@ -22,6 +22,6 @@ runs:
         java-version: ${{ inputs.java-version }}
 
     - name: Set up Maven
-      uses: yuzhiyongcn/setup-maven@v1.0.0
+      uses: stCarolas/setup-maven@v5
       with:
         maven-version: ${{ inputs.maven-version }}
