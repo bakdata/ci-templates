@@ -28,7 +28,9 @@
 
 <!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
 
-No outputs.
+| OUTPUT    | TYPE   | DESCRIPTION                  |
+| --------- | ------ | ---------------------------- |
+| image-tag | string | The tag of the docker image. |
 
 <!-- AUTO-DOC-OUTPUT:END -->
 

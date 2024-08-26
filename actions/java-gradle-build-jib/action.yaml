@@ -1,6 +1,11 @@
 name: "Build Multi-Platform image"
 description: "Build Multi-Platform image using Gradle"
 
+outputs:
+  image-tag: 
+    description: "The tag of the docker image."
+    value: ${{ steps.meta.outputs.tags }}
+
 inputs:
   platforms:
     description: "Architectures for the created image (comma separated)"
