@@ -61,7 +61,7 @@ jobs:
 
       - name: Remove snapshot suffix
         id: bump-version
-        uses: bakdata/ci-templates/actions/bump-version@feat/new-bumpversion
+        uses: bakdata/ci-templates/actions/bump-version@1.46.10
         with:
           release-type: "release"
           working-directory: ${{ inputs.working-directory }}
@@ -98,7 +98,7 @@ jobs:
 
       - name: Bump to next snapshot version
         id: bump-version-snapshot
-        uses: bakdata/ci-templates/actions/bump-version@feat/new-bumpversion
+        uses: bakdata/ci-templates/actions/bump-version@1.46.10
         with:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.working-directory }}
