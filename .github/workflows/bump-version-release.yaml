@@ -62,6 +62,8 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
       - name: Commit Suffix removal
         run: |
+          git config user.email ${{ secrets.github-email }}
+          git config user.name ${{ secrets.github-username }}
           git add .bumpversion.cfg
           git commit -m "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
 
