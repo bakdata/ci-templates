@@ -54,6 +54,11 @@ jobs:
           ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false # required for pushing to protected branch later
 
+      - name: Setup Git
+        run: |
+          git config --global user.name "${{ secrets.github-username }}"
+          git config --global user.email "${{ secrets.github-email }}"
+
       - name: Remove snapshot suffix
         id: bump-version
         uses: bakdata/ci-templates/actions/bump-version@feat/new-bumpversion
@@ -61,20 +66,13 @@ jobs:
           release-type: "release"
           working-directory: ${{ inputs.working-directory }}
 
-      - name: Commit and push changes including .bumpversion.cfg file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
-        with:
-          ref: ${{ github.event.repository.default_branch }}
-          commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
-          github-username: ${{ secrets.github-username }}
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
-
-      - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@1.32.0
-        with:
-          ref: ${{ github.event.repository.default_branch }}
-          persist-credentials: false # required for pushing to protected branch later
+      - name: Commit .bumpversion.cfg file without snapshot
+        run: |
+          git add .bumpversion.cfg
+          git commit -m "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
+          git fetch origin
+          git rebase --strategy-option=theirs origin/main
+          git push --verbose
 
       - name: Create changelog
         id: build-changelog
@@ -101,11 +99,10 @@ jobs:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.working-directory }}
 
-      - name: Commit and push changes including .bumpversion.cfg file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
-        with:
-          ref: ${{ github.event.repository.default_branch }}
-          commit-message: "Bump version ${{ steps.bump-version-snapshot.outputs.release-version }} → SNAPSHOT"
-          github-username: ${{ secrets.github-username }}
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
+      - name: Commit .bumpversion.cfg file new version and snapshot
+        run: |
+          git add .bumpversion.cfg
+          git commit -m "Bump version ${{ steps.bump-version-snapshot.outputs.old-version }} → ${{ steps.bump-version-snapshot.outputs.release-version }}"
+          git fetch origin
+          git rebase --strategy-option=theirs origin/main
+          git push --verbose
