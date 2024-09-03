@@ -102,7 +102,7 @@ jobs:
       - name: Commit .bumpversion.cfg file new version and snapshot
         run: |
           git add .bumpversion.cfg
-          git commit -m "Bump version ${{ steps.bump-version-snapshot.outputs.old-version }} → ${{ steps.bump-version-snapshot.outputs.release-version }}"
+          git commit -m "Bump version ${{ steps.bump-version.outputs.release-version }} → ${{ steps.bump-version-snapshot.outputs.release-version }}"
           git fetch origin
           git rebase --strategy-option=theirs origin/main
           git push --verbose
