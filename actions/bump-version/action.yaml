@@ -49,7 +49,7 @@ runs:
     - name: Bump version
       id: bump-version
       run: |
-        parameters=(--no-commit --allow-dirty --no-tag)
+        parameters=(--allow-dirty)
         echo "old-version=$(bump-my-version show current_version | tail -1)" >> "$GITHUB_OUTPUT"
 
         if [[ "${{ inputs.new-version }}" != "" ]]; then
