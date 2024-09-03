@@ -69,9 +69,14 @@ jobs:
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
+
       - name: Pull latest changes
-        run: git pull
+        run: |
+          git config user.email ${{ secrets.github-email }}
+          git config user.name ${{ secrets.github-username }}
+          git pull
         shell: bash
+
       - name: Create changelog
         id: build-changelog
         uses: bakdata/ci-templates/actions/changelog-generate@tiedemann/changelog-action
