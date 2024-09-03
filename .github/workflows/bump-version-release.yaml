@@ -13,11 +13,6 @@ on:
         required: false
         default: true
         type: boolean
-      changelog-config:
-        description: "Changelog config path."
-        required: false
-        default: ""
-        type: string
       working-directory:
         description: "Working directory containing `.bumpversion.cfg`. (Default is .)"
         required: false
@@ -77,14 +72,11 @@ jobs:
 
       - name: Create changelog
         id: build-changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@1.35.0
+        uses: bakdata/ci-templates/actions/changelog-generate@tiedemann/changelog-action
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}
-          config: ${{ inputs.changelog-config }}
-          new-tag: ${{ steps.bump-version.outputs.release-version }}
-          fetch-reviewers: "true"
-          fetch-release-information: "true"
+          tag: ${{ steps.bump-version.outputs.release-version }}
 
       - name: Tag and release
         uses: bakdata/ci-templates/actions/tag-and-release@v1.22.0
