@@ -66,6 +66,7 @@ jobs:
           git config user.name ${{ secrets.github-username }}
           git add .bumpversion.cfg
           git commit -m "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
+          git push
 
       - name: Create changelog
         id: build-changelog
