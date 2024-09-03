@@ -52,7 +52,7 @@ runs:
         parameters=(--no-commit --allow-dirty --no-tag)
         echo "old-version=$(bump-my-version show current_version | tail -1)" >> "$GITHUB_OUTPUT"
 
-        if [[ ${{ inputs.new-version }} != "" ]]; then
+        if [[ "${{ inputs.new-version }}" != "" ]]; then
           bump-my-version --new-version ${{ inputs.new-version }}
         else
           bump-my-version "${parameters[@]}" ${{ inputs.release-type }}
