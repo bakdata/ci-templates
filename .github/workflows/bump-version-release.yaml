@@ -13,11 +13,6 @@ on:
         required: false
         default: true
         type: boolean
-      changelog-config:
-        description: "Changelog config path."
-        required: false
-        default: ""
-        type: string
       working-directory:
         description: "Working directory containing `.bumpversion.cfg`. (Default is .)"
         required: false
@@ -57,34 +52,35 @@ jobs:
         uses: bakdata/ci-templates/actions/checkout@1.32.0
         with:
           ref: ${{ github.event.repository.default_branch }}
-          persist-credentials: false # required for pushing to protected branch later
+          persist-credentials: true # required for pushing to protected branch later
 
-      - name: Bump version
+      - name: Setup Git
+        run: |
+          git config --global user.name "${{ secrets.github-username }}"
+          git config --global user.email "${{ secrets.github-email }}"
+
+      - name: Remove snapshot suffix
         id: bump-version
-        uses: bakdata/ci-templates/actions/bump-version@v1.21.2
+        uses: bakdata/ci-templates/actions/bump-version@feat/new-bumpversion
         with:
-          release-type: ${{ inputs.release-type }}
+          release-type: "release"
           working-directory: ${{ inputs.working-directory }}
+
+      - name: Commit .bumpversion.cfg file without snapshot
+        run: |
+          git add .bumpversion.cfg
+          git commit -m "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
+          git fetch origin
+          git rebase --strategy-option=theirs origin/main
+          git push --verbose
 
       - name: Create changelog
         id: build-changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@1.35.0
+        uses: bakdata/ci-templates/actions/changelog-generate@tiedemann/changelog-action
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}
-          config: ${{ inputs.changelog-config }}
-          new-tag: ${{ steps.bump-version.outputs.release-version }}
-          fetch-reviewers: "true"
-          fetch-release-information: "true"
-
-      - name: Commit and push changes including .bumpversion.cfg file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
-        with:
-          ref: ${{ github.event.repository.default_branch }}
-          commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
-          github-username: ${{ secrets.github-username }}
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
+          tag: ${{ steps.bump-version.outputs.release-version }}
 
       - name: Tag and release
         uses: bakdata/ci-templates/actions/tag-and-release@v1.22.0
@@ -95,3 +91,18 @@ jobs:
           github-token: ${{ secrets.github-token }}
           release-title: "${{ steps.bump-version.outputs.release-version }}"
           release-body: "${{ steps.build-changelog.outputs.single-changelog }}"
+
+      - name: Bump to next snapshot version
+        id: bump-version-snapshot
+        uses: bakdata/ci-templates/actions/bump-version@feat/new-bumpversion
+        with:
+          release-type: ${{ inputs.release-type }}
+          working-directory: ${{ inputs.working-directory }}
+
+      - name: Commit .bumpversion.cfg file new version and snapshot
+        run: |
+          git add .bumpversion.cfg
+          git commit -m "Bump version ${{ steps.bump-version.outputs.release-version }} → ${{ steps.bump-version-snapshot.outputs.release-version }}"
+          git fetch origin
+          git rebase --strategy-option=theirs origin/main
+          git push --verbose

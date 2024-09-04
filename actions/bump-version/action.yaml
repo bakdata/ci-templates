@@ -1,9 +1,25 @@
 name: "Bump version"
-description: "Bump version with python bump2version using .bumpversion.cfg"
+description: "Bump version with python bump-my-version using .bumpversion.cfg"
+# config example .bumpversion.cfg:
+# [bumpversion]
+# current_version = 1.0.0
+# search = version: {current_version}
+# replace = version: {new_version}
+# parse = (?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)(-(?P<release>snapshot))?
+# serialize =
+# 	{major}.{minor}.{patch}-{release}
+# 	{major}.{minor}.{patch}
+
+# [bumpversion:part:release]
+# first_value = snapshot
+# optional_value = release
+# values =
+# 	snapshot
+# 	release
 
 inputs:
   release-type:
-    description: "The type of the release (major, minor or patch)."
+    description: "The type of the release (release, major, minor or patch). Release is a special case, where the snapshot suffix is removed."
     required: true
   working-directory:
     description: "The directory containing the `.bumpversion.cfg` file."
@@ -25,20 +41,27 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Set up bump2version
+    - name: Set up bump-my-version
       run: |
-        pipx install bump2version
+        pipx install bump-my-version
       shell: bash
 
     - name: Bump version
       id: bump-version
       run: |
-        parameters=(--no-commit --no-tag ${{ inputs.release-type }})
-        echo "old-version=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
-        if [ -n "${{ inputs.new-version }}" ]; then
-          parameters+=(--new-version ${{ inputs.new-version }})
+        echo "old-version=$(bump-my-version show current_version | tail -1)" >> "$GITHUB_OUTPUT"
+
+        if [[ "${{ inputs.new-version }}" != "" ]]; then
+          bump-my-version --new-version ${{ inputs.new-version }}
+        else
+          bump-my-version bump ${{ inputs.release-type }}
         fi
-        bump2version "${parameters[@]}"
-        echo "new-version=$(python -c "from configparser import ConfigParser; cfg = ConfigParser(); cfg.read('.bumpversion.cfg'); print(cfg['bumpversion']['current_version'])")" >> "$GITHUB_OUTPUT"
+        echo "new-version=$(bump-my-version show current_version | tail -1)" >> "$GITHUB_OUTPUT"
+      # release: a.b.c-snapshot -> a.b.c
+      # release a.b.c -> crash
+      # major: a.b.c(-snapshot)? -> a+1.0.0-snapshot
+      # minor: a.b.c(-snapshot)? -> a.b+1.0-snapshot
+      # patch: a.b.c(-snapshot)? -> a.b.c+1-snapshot
+      # TLDR: release removes the snapshot suffix
       shell: bash
       working-directory: ${{ inputs.working-directory }}

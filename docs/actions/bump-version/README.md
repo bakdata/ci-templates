@@ -38,11 +38,11 @@ steps:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT             | TYPE   | REQUIRED | DEFAULT | DESCRIPTION                                           |
-| ----------------- | ------ | -------- | ------- | ----------------------------------------------------- |
-| new-version       | string | false    |         |                                                       |
-| release-type      | string | true     |         | The type of the release (major, minor or patch).      |
-| working-directory | string | false    | `"."`   | The directory containing the `.bumpversion.cfg` file. |
+| INPUT             | TYPE   | REQUIRED | DEFAULT | DESCRIPTION                                                                                                                |
+| ----------------- | ------ | -------- | ------- | -------------------------------------------------------------------------------------------------------------------------- |
+| new-version       | string | false    |         |                                                                                                                            |
+| release-type      | string | true     |         | The type of the release (release, major, minor or patch). Release is a special case, where the snapshot suffix is removed. |
+| working-directory | string | false    | `"."`   | The directory containing the `.bumpversion.cfg` file.                                                                      |
 
 <!-- AUTO-DOC-INPUT:END -->
 
