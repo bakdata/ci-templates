@@ -54,6 +54,11 @@ on:
         required: false
         type: boolean
         default: false
+      runs-on:
+        description: "Runner config as JSON object string. Each key is one of the input `platforms` and each value is the list of runner tags on which the Docker image for that platform should be natively built on. Defaults to a mapping from expected possible `platforms` to GitHub runners native to that architecture."
+        required: false
+        default: "{ 'linux/amd64': ['ubuntu-22.04'], 'linux/arm64': ['linux-arm-latest'] }"
+        type: string
 
     secrets:
       docker-user:
