@@ -28,7 +28,7 @@ runs:
     - name: Authenticate at GCloud
       uses: "google-github-actions/auth@v2"
       with:
-        project-id: ${{ inputs.gke-project-name }}
+        project_id: ${{ inputs.gke-project-name }}
         workload_identity_provider: "projects/${{ inputs.gke-project-id }}/locations/global/workloadIdentityPools/github-pool/"
         service_account: ${{ inputs.gke-service-account }}
     - id: "secrets"
