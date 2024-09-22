@@ -24,9 +24,6 @@ outputs:
     value: ${{ steps.secrets.outputs.secrets }}
 runs:
   using: "composite"
-  permissions:
-    contents: "read"
-    id-token: "write"
   steps:
     - name: Authenticate at GCloud
       uses: "google-github-actions/auth@v2"
