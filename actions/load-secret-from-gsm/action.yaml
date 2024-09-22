@@ -1,0 +1,41 @@
+name: "Setup credentials"
+description: "Setup credentials for GCloud and GKE"
+inputs:
+  gke-service-account:
+    description: "GKE service account key for authentication"
+    default: "wid-dummy-test-account@gcp-bakdata-cluster.iam.gserviceaccount.com"
+    required: true
+  gke-project-name:
+    description: "GKE project name for authentication"
+    required: true
+  gke-project-id:
+    description: "GKE project ID for authentication"
+    required: true
+  secrets-to-inject:
+    description: "Secrets to inject into the environment"
+    required: true
+  export-to-environment:
+    description: "Export secrets to environment"
+    required: false
+    default: true
+outputs:
+  secrets:
+    description: "Secrets loaded from Secret Manager"
+    value: ${{ steps.secrets.outputs.secrets }}
+runs:
+  using: "composite"
+  permissions:
+    contents: "read"
+    id-token: "write"
+  steps:
+    - name: Authenticate at GCloud
+      uses: "google-github-actions/auth@v2"
+      with:
+        project-id: ${{ inputs.gke-project-name }}
+        workload_identity_provider: "projects/${{ inputs.gke-project-id }}/locations/global/workloadIdentityPools/github-pool/"
+        service_account: ${{ inputs.gke-service-account }}
+    - id: "secrets"
+      uses: "google-github-actions/get-secretmanager-secrets@v2"
+      with:
+        secrets: ${{ inputs.secrets-to-inject }}
+        export-to-environment: ${{ inputs.export-to-environment }}
