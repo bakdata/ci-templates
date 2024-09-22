@@ -29,7 +29,7 @@ runs:
       uses: "google-github-actions/auth@v2"
       with:
         project_id: ${{ inputs.gke-project-name }}
-        workload_identity_provider: "projects/${{ inputs.gke-project-id }}/locations/global/workloadIdentityPools/github-pool/"
+        workload_identity_provider: "projects/${{ inputs.gke-project-id }}/locations/global/workloadIdentityPools/github-pool/providers/github"
         service_account: ${{ inputs.gke-service-account }}
     - id: "secrets"
       uses: "google-github-actions/get-secretmanager-secrets@v2"
