@@ -31,8 +31,13 @@ runs:
         project_id: ${{ inputs.gke-project-name }}
         workload_identity_provider: "projects/${{ inputs.gke-project-id }}/locations/global/workloadIdentityPools/github-pool/providers/github"
         service_account: ${{ inputs.gke-service-account }}
+    - id: "parse_secrets"
+      uses: "bakdata/ci-templates/actions/parse-secrets-definitions@tiedemann/gsm-secrets"
+      with:
+        project-name: ${{ inputs.gke-project-name }}
+        secrets-list: ${{ inputs.secrets-to-inject }}
     - id: "secrets"
       uses: "google-github-actions/get-secretmanager-secrets@v2"
       with:
-        secrets: ${{ inputs.secrets-to-inject }}
+        secrets: ${{ steps.parse_secrets.outputs.secrets-list }}
         export_to_environment: ${{ inputs.export-to-environment }}

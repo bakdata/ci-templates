@@ -4,6 +4,8 @@ import re
 # CAVEAT: will only work for one project at a time
 # might be problematic if we want to inject secrets from multiple projects
 
+# CAVEAT: this script can produce lists of secrets that are not valid, e.g. if the secret name is empty or the same secret is referenced multiple times
+
 # Set the output value by writing to the outputs in the Environment File, mimicking the behavior defined here:
 #  https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
 def set_github_action_output(output_name, output_value, delim=''):
