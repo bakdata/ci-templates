@@ -10,7 +10,7 @@ import re
 #  https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
 def set_github_action_output(output_name, output_value, delim=''):
     f = open(os.path.abspath(os.environ["GITHUB_OUTPUT"]), "a")
-    f.write(f'{output_name}<<EOF{output_value}EOF\n') # ATTENTION: this might lead to problems if the output value contains the delimiter, which will not happen in this program but dont just copy this and expect it to work
+    f.write(f'{output_name}<<!!!\n{output_value}!!!\n') # ATTENTION: this might lead to problems if the output value contains the delimiter, which will not happen in this program but dont just copy this and expect it to work
     f.close()    
 
 
@@ -19,8 +19,8 @@ def set_github_action_output(output_name, output_value, delim=''):
 # if the secret would end in an underscore, remove it
 # format: SECRET_NAME:PROJECT_NAME/SECRET_NAME/VERSION
 def parse_secret(secret, project_name):
-    if "EOF" in secret: 
-        raise ValueError("Invalid secret definition: EOF is a reserved keyword FIXME")
+    if "!!!" in secret: 
+        raise ValueError("Invalid secret definition: !!! is a reserved keyword")
     components = secret.split("/")
 
     if len(components) > 2:
