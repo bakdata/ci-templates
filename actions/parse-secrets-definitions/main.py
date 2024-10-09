@@ -1,6 +1,8 @@
 import os
 import re
 
+DELIMITER = "!!!"
+
 # CAVEAT: will only work for one project at a time
 # might be problematic if we want to inject secrets from multiple projects
 
@@ -10,7 +12,7 @@ import re
 #  https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
 def set_github_action_output(output_name, output_value, delim=''):
     f = open(os.path.abspath(os.environ["GITHUB_OUTPUT"]), "a")
-    f.write(f'{output_name}<<!!!\n{output_value}!!!\n') # ATTENTION: this might lead to problems if the output value contains the delimiter, which will not happen in this program but dont just copy this and expect it to work
+    f.write(f'{output_name}<<{DELIMITER}\n{output_value}{DELIMITER}\n') # ATTENTION: this might lead to problems if the output value contains the delimiter, which will not happen in this program but dont just copy this and expect it to work
     f.close()    
 
 
@@ -19,7 +21,7 @@ def set_github_action_output(output_name, output_value, delim=''):
 # if the secret would end in an underscore, remove it
 # format: SECRET_NAME:PROJECT_NAME/SECRET_NAME/VERSION
 def parse_secret(secret, project_name):
-    if "!!!" in secret: 
+    if DELIMITER in secret: 
         raise ValueError("Invalid secret definition: !!! is a reserved keyword")
     components = secret.split("/")
 
@@ -46,4 +48,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # print(parse_secret("alksdjoioe4j####@!@#!1123asdlolw!!asd!!print(/1", "project"))
