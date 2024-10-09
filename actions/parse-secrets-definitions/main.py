@@ -19,7 +19,7 @@ def set_github_action_output(output_name, output_value, delim=''):
 # if the secret would end in an underscore, remove it
 # format: SECRET_NAME:PROJECT_NAME/SECRET_NAME/VERSION
 def parse_secret(secret, project_name):
-    if secret.contains("EOF"): 
+    if "EOF" in secret: 
         raise ValueError("Invalid secret definition: EOF is a reserved keyword FIXME")
     components = secret.split("/")
 
