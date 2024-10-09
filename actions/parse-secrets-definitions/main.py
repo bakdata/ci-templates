@@ -30,8 +30,8 @@ def parse_secret(secret, project_name):
 
 def main():
     print(os.environ)
-    input_secrets = os.environ["INPUT_SECRETS_TO_INJECT"].splitlines()
-    gcp_project = os.environ["INPUT_PROJECT_NAME"]
+    input_secrets = os.environ["INPUT_SECRETS-LIST"].splitlines()
+    gcp_project = os.environ["INPUT_PROJECT-NAME"]
 
     output = ""
     for secret in input_secrets:
