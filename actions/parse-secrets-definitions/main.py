@@ -25,16 +25,16 @@ def set_github_action_output(output_name, output_value, delim):
 # convert to uppercase
 # if the secret would end in an underscore, remove it
 # format: SECRET_NAME:PROJECT_NAME/SECRET_NAME/VERSION
-def parse_secret(secret, project_name, delim):
+def parse_secret(secret, project_name, delim=DEFAULT_DELIMITER):
     if delim in secret: 
-        raise ValueError(f"Invalid secret definition: {DELIMITER} is a reserved keyword")
+        raise ValueError(f"Invalid secret definition: {delim} is a reserved keyword")
     components = secret.split("/")
 
     if len(components) > 2:
         raise ValueError(f"Invalid secret definition: {secret}, not in the format 'secret_name/<version>'")
     secret_name = re.sub('[^0-9a-zA-Z]+', '_', components[0]).upper().rstrip("_")
     out = f"{secret_name}:{project_name}/{components[0]}"
-    if len(components) == 2:
+    if len(components) == 2 and len(components[1]) != 0:
         out += f"/{components[1]}"
     return out
 
