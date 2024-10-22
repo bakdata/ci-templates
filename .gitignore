@@ -8,3 +8,5 @@
 tmp*
 auto-doc*
 ./test*
+**/__pycache__/
+**/venv/

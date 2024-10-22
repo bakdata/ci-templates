@@ -1,0 +1,15 @@
+name: "Setup credentials"
+description: "Setup credentials for GCloud and GKE"
+inputs:
+  secrets-list:
+    description: "Secrets to inject into the environment"
+    required: true
+  project-name:
+    description: "GKE project name where the secrets are stored"
+    required: true
+outputs:
+  secrets-list:
+    description: "secret list with correct format"
+runs:
+  using: "docker"
+  image: "Dockerfile"
