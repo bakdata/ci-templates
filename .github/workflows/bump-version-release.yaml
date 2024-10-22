@@ -53,12 +53,11 @@ jobs:
       old-version: ${{ steps.bump-version.outputs.old-version }}
 
     steps:
-      # assume that the repository is already checked out
-      # - name: Check out repository
-      #   uses: bakdata/ci-templates/actions/checkout@1.32.0
-      #   with:
-      #     ref: ${{ github.event.repository.default_branch }}
-      #     persist-credentials: false # required for pushing to protected branch later
+      - name: Check out repository
+        uses: bakdata/ci-templates/actions/checkout@1.32.0
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false # required for pushing to protected branch later
 
       - name: Bump version
         id: bump-version
