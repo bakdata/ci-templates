@@ -44,7 +44,7 @@ runs:
       id: git-cliff-latest
       with:
         config: tmp_cliff.toml
-        args: "--latest --tag ${{ inputs.tag }} --verbose"
+        args: "--unreleased --tag ${{ inputs.tag }} --verbose"
       env:
         GITHUB_REPO: ${{ github.repository }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
