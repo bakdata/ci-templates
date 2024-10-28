@@ -68,14 +68,12 @@ jobs:
 
       - name: Create changelog
         id: build-changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@1.35.0
+        uses: bakdata/ci-templates/actions/changelog-generate@tiedemann/changelog-action
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}
-          config: ${{ inputs.changelog-config }}
-          new-tag: ${{ steps.bump-version.outputs.release-version }}
-          fetch-reviewers: "true"
-          fetch-release-information: "true"
+          tag: ${{ steps.bump-version.outputs.release-version }}
+          changelog-file: CHANGELOG.md
 
       - name: Commit and push changes including .bumpversion.cfg file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
