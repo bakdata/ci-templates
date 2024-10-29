@@ -4,7 +4,7 @@ This action is set to replace github actions integrated secret management.
 
 ## How to use
 To load a secret from GSM figure out the following:
-- check if the repository has access to the secert
+- check if the repository has access to the secret
   - repository is owned by bakdata
   - repository is pivate
   - even if the lables are correctly set, you will need to run terraform to set the proper roles
