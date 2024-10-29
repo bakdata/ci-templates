@@ -1,4 +1,4 @@
-# load-secret-from-gsm
+# gcp-gsm-load-secrets 
 
 This action is set to replace GitHub actions integrated secret management.
 
@@ -13,7 +13,7 @@ To load a secret from GSM figure out the following:
 ```yaml
 - name: Load secrets
   id: load-secrets
-  uses: bakdata/ci-templates/actions/load-secret-from-gsm
+  uses: bakdata/ci-templates/actions/gcp-gsm-load-secrets
   with:
     gke-project-name: <can be found from gcp console>
     gke-project-id: <can be found from gcp console>

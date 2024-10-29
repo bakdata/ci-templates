@@ -1,15 +1,14 @@
-name: "Setup credentials"
-description: "Setup credentials for GCloud and GKE"
+name: "Load secrets from Google Secret Manager"
+description: "Load secrets from Google Secret Manager and inject them into the environment"
 inputs:
   gke-service-account:
-    description: "GKE service account key for authentication"
-    default: "wid-dummy-test-account@gcp-bakdata-cluster.iam.gserviceaccount.com"
+    description: "GKE service account for authentication"
     required: true
   gke-project-name:
     description: "GKE project name for authentication"
     required: true
-  gke-project-id:
-    description: "GKE project ID for authentication"
+  workload-identity-provider:
+    description: "Workload identity provider for authentication"
     required: true
   secrets-to-inject:
     description: "Secrets to inject into the environment"
@@ -29,7 +28,7 @@ runs:
       uses: "google-github-actions/auth@v2"
       with:
         project_id: ${{ inputs.gke-project-name }}
-        workload_identity_provider: "projects/${{ inputs.gke-project-id }}/locations/global/workloadIdentityPools/github-pool/providers/github-backup"
+        workload_identity_provider: ${{ inputs.workload-identity-provider }}
         service_account: ${{ inputs.gke-service-account }}
     - id: "parse_secrets"
       uses: "bakdata/ci-templates/actions/parse-secrets-definitions@tiedemann/gsm-secrets"
