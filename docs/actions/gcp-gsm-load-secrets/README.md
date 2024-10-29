@@ -10,7 +10,7 @@ To load a secret from GSM figure out the following:
   - repository is owned by bakdata
   - repository is private
   - even if the labels are correctly set, you will need to run Terraform to set the proper roles
-  - *TBD*
+  - _TBD_
 - use this template:
 
 ```yaml
@@ -26,7 +26,7 @@ To load a secret from GSM figure out the following:
 ```
 
 - it is possible to load multiple secrets in the same call
-- loaded secrets  will be injected as environment variables and the name will be cannonicalized to SCREAMING_SNAKE_CASE. Example: `i-like_trains__why_this?` -> `I_LIKE_TRAINS_WHY_THIS`
+- loaded secrets will be injected as environment variables and the name will be cannonicalized to SCREAMING_SNAKE_CASE. Example: `i-like_trains__why_this?` -> `I_LIKE_TRAINS_WHY_THIS`
 
 ## References
 
