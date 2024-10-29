@@ -19,4 +19,4 @@ jobs:
           python-version: "3.12"
       - name: Run all tests
         run: |
-          find . -name "tests.py" -print0 | xargs -0 python -m unittest
+          find . -name "tests.py" -print0 | xargs -0i python -m unittest
