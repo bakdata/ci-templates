@@ -1,6 +1,6 @@
 # load-secret-from-gsm
 
-This action is set to replace github actions integrated secret management.
+This action is set to replace GitHub actions integrated secret management.
 
 ## How to use
 To load a secret from GSM figure out the following:
