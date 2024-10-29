@@ -21,7 +21,7 @@ def set_github_action_output(output_name, output_value, delim):
     else:
         print("would have set output", output_name, "to", output_value)
 
-# removee special characters and replace with underscores, succevive special characters are replaced with a single underscore
+# removes special characters and replace with underscores, successive special characters are replaced with a single underscore
 # convert to uppercase
 # if the secret would end in an underscore, remove it
 # format: SECRET_NAME:PROJECT_NAME/SECRET_NAME/VERSION
