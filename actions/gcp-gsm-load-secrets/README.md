@@ -2,7 +2,7 @@
 
 This action is set to replace GitHub actions integrated secret management.
 
-## How to use
+## Usage
 
 To load a secret from GSM figure out the following:
 
@@ -27,3 +27,31 @@ To load a secret from GSM figure out the following:
 
 - it is possible to load multiple secrets in the same call
 - loaded secrets will be injected as environment variables and the name will be cannonicalized to SCREAMING_SNAKE_CASE. Example: `i-like_trains__why_this?` -> `I_LIKE_TRAINS_WHY_THIS`
+
+## References
+
+### Inputs
+
+<!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
+
+| INPUT                      | TYPE   | REQUIRED | DEFAULT  | DESCRIPTION                                   |
+| -------------------------- | ------ | -------- | -------- | --------------------------------------------- |
+| export-to-environment      | string | false    | `"true"` | Export secrets to environment                 |
+| gke-project-name           | string | true     |          | GKE project name for authentication           |
+| gke-service-account        | string | true     |          | GKE service account for authentication        |
+| secrets-to-inject          | string | true     |          | Secrets to inject into the environment        |
+| workload-identity-provider | string | true     |          | Workload identity provider for authentication |
+
+<!-- AUTO-DOC-INPUT:END -->
+
+### Outputs
+
+<!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
+
+| OUTPUT  | TYPE   | DESCRIPTION                        |
+| ------- | ------ | ---------------------------------- |
+| secrets | string | Secrets loaded from Secret Manager |
+
+<!-- AUTO-DOC-OUTPUT:END -->
+
+### Secrets
