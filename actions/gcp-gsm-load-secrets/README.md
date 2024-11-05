@@ -10,7 +10,6 @@ To load a secret from GSM figure out the following:
   - repository is owned by bakdata
   - repository is private
   - even if the labels are correctly set, you will need to run Terraform to set the proper roles
-  - _TBD_
 - use this template:
 
 ```yaml
