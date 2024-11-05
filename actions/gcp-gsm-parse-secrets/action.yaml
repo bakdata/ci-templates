@@ -1,5 +1,5 @@
-name: "Setup credentials"
-description: "Setup credentials for GCloud and GKE"
+name: "Parse secrets from GSM"
+description: "Transform secrets into a common format"
 inputs:
   secrets-list:
     description: "Secrets to inject into the environment"
