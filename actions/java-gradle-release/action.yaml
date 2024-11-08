@@ -52,7 +52,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@1.32.0
+      uses: bakdata/ci-templates/actions/checkout@ft/nodejs-action-update
       with:
         fetch-depth: 0
         token: ${{ inputs.github-token }}
@@ -101,7 +101,7 @@ runs:
       shell: bash
 
     - name: Create changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@1.48.0
+      uses: bakdata/ci-templates/actions/changelog-generate@ft/nodejs-action-update
       with:
         github-token: ${{ inputs.github-token }}
         tag: ${{ steps.evaluate-version.outputs.release-version }}

@@ -54,7 +54,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@1.32.0
+      uses: bakdata/ci-templates/actions/checkout@ft/nodejs-action-update
       with:
         lfs: ${{ inputs.download-lfs-files }}
 

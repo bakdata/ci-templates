@@ -38,7 +38,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@1.32.0
+      uses: bakdata/ci-templates/actions/checkout@ft/nodejs-action-update
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@1.42.0
@@ -60,7 +60,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
 
     - name: Upload build artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.build-artifact-name }}
         path: ${{ inputs.working-directory }}/**/build/libs/*.jar

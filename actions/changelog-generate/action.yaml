@@ -16,7 +16,7 @@ inputs:
 
 outputs:
   merged-changelog:
-    description: "All changelogs combinded."
+    description: "All changelogs combined."
     value: ${{ steps.git-cliff.outputs.content }}
   single-changelog:
     description: "Only the latest changelog."
@@ -26,7 +26,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@1.46.4
+      uses: bakdata/ci-templates/actions/checkout@ft/nodejs-action-update
       with:
         fetch-depth: 0
     - name: Get config path
