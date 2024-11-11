@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "gcp-gsm-parse-secrets"
+version = "0.1.0"
+description = ""
+authors = ["Jan Max Tiedemann <jan.max.tiedemann@bakdata.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+typer = "^0.12.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

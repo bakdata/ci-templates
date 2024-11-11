@@ -1,0 +1,1 @@
+docs/actions/gcp-gsm-load-secrets/README.md
