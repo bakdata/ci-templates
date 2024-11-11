@@ -1,6 +1,6 @@
 # Description java-gradle-release composite action
 
-This action releases Java Gradle artifacts by createing a tag on GitHub.
+This action releases Java Gradle artifacts by creating a tag on GitHub.
 
 ## Usage
 

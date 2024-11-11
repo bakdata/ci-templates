@@ -55,7 +55,7 @@ runs:
     - name: LFS Cache
       if: ${{ inputs.lfs == 'true' && inputs.cache == 'true' }}
       id: cache-lfs
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: .git/lfs/objects
         key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}

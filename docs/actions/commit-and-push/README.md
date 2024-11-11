@@ -10,7 +10,7 @@ This composite action commits the changes of your repository with an arbitrary c
 ```yaml
 steps:
   - name: Check out repository
-    uses: bakdata/ci-templates/actions/checkout@1.32.0
+    uses: bakdata/ci-templates/actions/checkout@main
     with:
       persist-credentials: false # required for pushing to protected branch later
 

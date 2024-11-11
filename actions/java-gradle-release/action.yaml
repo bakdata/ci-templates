@@ -52,7 +52,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@1.32.0
+      uses: bakdata/ci-templates/actions/checkout@1.49.0
       with:
         fetch-depth: 0
         token: ${{ inputs.github-token }}
@@ -70,7 +70,7 @@ runs:
       shell: bash
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@1.42.0
+      uses: bakdata/ci-templates/actions/java-gradle-setup@1.49.0
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
@@ -101,7 +101,7 @@ runs:
       shell: bash
 
     - name: Create changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@1.48.0
+      uses: bakdata/ci-templates/actions/changelog-generate@1.49.0
       with:
         github-token: ${{ inputs.github-token }}
         tag: ${{ steps.evaluate-version.outputs.release-version }}
