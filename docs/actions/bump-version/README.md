@@ -21,7 +21,7 @@ Add the following steps to your workflow:
 ```yaml
 steps:
   # check out current repository
-  - uses: bakdata/ci-templates/actions/checkout@1.32.0
+  - uses: bakdata/ci-templates/actions/checkout@main
 
   # bump the version of your project
   - name: Bump version

@@ -60,7 +60,7 @@ Without it, the changelog action will be unable to track down previous tags.
 
 ```yaml
 steps:
-  - uses: bakdata/ci-templates/actions/checkout@1.32.0
+  - uses: bakdata/ci-templates/actions/checkout@main
     with:
       persist-credentials: false
       fetch-depth: 0
@@ -100,7 +100,7 @@ steps:
 
 | OUTPUT           | TYPE   | DESCRIPTION                |
 | ---------------- | ------ | -------------------------- |
-| merged-changelog | string | All changelogs combinded.  |
+| merged-changelog | string | All changelogs combined.   |
 | single-changelog | string | Only the latest changelog. |
 
 <!-- AUTO-DOC-OUTPUT:END -->

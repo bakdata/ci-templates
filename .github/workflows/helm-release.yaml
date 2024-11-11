@@ -71,7 +71,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Lint Helm chart
-        uses: bakdata/ci-templates/actions/helm-lint@1.46.3
+        uses: bakdata/ci-templates/actions/helm-lint@1.49.0
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
 
@@ -86,7 +86,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@1.32.0
+        uses: bakdata/ci-templates/actions/checkout@1.49.0
         with:
           ref: ${{ inputs.ref }}
           persist-credentials: false # required for pushing to protected branch later

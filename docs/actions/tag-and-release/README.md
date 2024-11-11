@@ -13,7 +13,7 @@ This action uses another composite action listed below:
 ```yaml
 steps:
   - name: Check out repository
-    uses: bakdata/ci-templates/actions/checkout@1.32.0
+    uses: bakdata/ci-templates/actions/checkout@main
 
   - name: Tag and release project
     uses: bakdata/ci-templates/actions/tag-and-release@main
