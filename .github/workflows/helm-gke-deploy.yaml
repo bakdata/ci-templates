@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repository
-        uses: bakdata/ci-templates/actions/checkout@ft/nodejs-action-update
+        uses: bakdata/ci-templates/actions/checkout@1.49.0
 
       - name: Setup credentials
         uses: bakdata/ci-templates/actions/setup-credentials@1.40.0

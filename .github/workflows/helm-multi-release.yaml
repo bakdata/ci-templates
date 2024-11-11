@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Lint Helm chart
-        uses: bakdata/ci-templates/actions/helm-lint@ft/nodejs-action-update
+        uses: bakdata/ci-templates/actions/helm-lint@1.49.0
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
 
@@ -70,7 +70,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@ft/nodejs-action-update
+        uses: bakdata/ci-templates/actions/checkout@1.49.0
 
       - name: Verify if have a single or multiple chart(s)
         id: step2
@@ -96,7 +96,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@ft/nodejs-action-update
+        uses: bakdata/ci-templates/actions/checkout@1.49.0
 
       - name: Bump Chart version
         run: |
@@ -135,7 +135,7 @@ jobs:
 
     steps:
       - name: Check out branch containing the artifatcs and the index.yaml file
-        uses: bakdata/ci-templates/actions/checkout@ft/nodejs-action-update
+        uses: bakdata/ci-templates/actions/checkout@1.49.0
         with:
           ref: ${{ inputs.gh-pages-branch }}
 

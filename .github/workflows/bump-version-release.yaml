@@ -54,7 +54,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@ft/nodejs-action-update
+        uses: bakdata/ci-templates/actions/checkout@1.49.0
         with:
           ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false # required for pushing to protected branch later
@@ -68,7 +68,7 @@ jobs:
 
       - name: Create changelog
         id: build-changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@ft/nodejs-action-update
+        uses: bakdata/ci-templates/actions/changelog-generate@1.49.0
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}

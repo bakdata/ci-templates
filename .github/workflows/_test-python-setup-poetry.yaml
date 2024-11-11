@@ -24,7 +24,7 @@ jobs:
         os: [Ubuntu, macOS, Windows]
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
     steps:
-      - uses: bakdata/ci-templates/actions/checkout@ft/nodejs-action-update
+      - uses: bakdata/ci-templates/actions/checkout@1.49.0
 
       - name: Set up Poetry
         uses: ./actions/python-setup-poetry
