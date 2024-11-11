@@ -100,7 +100,7 @@ steps:
 
 | OUTPUT           | TYPE   | DESCRIPTION                |
 | ---------------- | ------ | -------------------------- |
-| merged-changelog | string | All changelogs combinded.  |
+| merged-changelog | string | All changelogs combined.   |
 | single-changelog | string | Only the latest changelog. |
 
 <!-- AUTO-DOC-OUTPUT:END -->
