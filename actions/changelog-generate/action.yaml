@@ -30,7 +30,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@1.49.0
+      uses: bakdata/ci-templates/actions/checkout@tiedemann/changelog-action-dont-clean
       with:
         fetch-depth: 0
         clean: ${{ inputs.clean }}
