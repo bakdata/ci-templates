@@ -29,6 +29,7 @@ runs:
       uses: bakdata/ci-templates/actions/checkout@1.49.0
       with:
         fetch-depth: 0
+        clean: false
     - name: Get config path
       id: get-config-path
       run: |
