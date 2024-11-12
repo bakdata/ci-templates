@@ -89,6 +89,7 @@ steps:
 | INPUT          | TYPE   | REQUIRED | DEFAULT          | DESCRIPTION                                         |
 | -------------- | ------ | -------- | ---------------- | --------------------------------------------------- |
 | changelog-file | string | false    | `"CHANGELOG.md"` | Path to the changelog file in the GitHub repository |
+| clean          | string | false    | `"false"`        | Clean the repository before running the action.     |
 | github-token   | string | true     |                  | The GitHub token for committing the changes.        |
 | tag            | string | true     |                  | Version after bump                                  |
 
