@@ -13,6 +13,10 @@ inputs:
     description: Path to the changelog file in the GitHub repository
     required: false
     default: "CHANGELOG.md"
+  checkout:
+    description: "Whether to checkout the repository or not."
+    required: false
+    default: "false"
   clean:
     description: "Clean the repository before running the action."
     required: false
@@ -30,6 +34,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
+      if: ${{ inputs.checkout }}
       uses: bakdata/ci-templates/actions/checkout@tiedemann/changelog-action-dont-clean
       with:
         fetch-depth: 0
