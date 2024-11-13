@@ -33,6 +33,10 @@ inputs:
     description: "Clean the repository before running the action."
     required: false
     default: "true"
+  checkout:
+    description: "wheter to checkout the repository or not"
+    required: false
+    default: "true"
 
 outputs:
   lfs-cache-hit:
@@ -43,6 +47,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
+      if: ${{ inputs.checkout }}
       uses: actions/checkout@v4
       with:
         repository: ${{ inputs.repository }}
