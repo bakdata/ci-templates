@@ -29,6 +29,10 @@ inputs:
     description: "Whether to checkout submodules: `true` to checkout submodules or `recursive` to recursively checkout submodules."
     required: false
     default: "false"
+  clean:
+    description: "Clean the repository before running the action."
+    required: false
+    default: "true"
 
 outputs:
   lfs-cache-hit:
@@ -46,6 +50,7 @@ runs:
         persist-credentials: ${{ inputs.persist-credentials }}
         submodules: ${{ inputs.submodules }}
         fetch-depth: ${{ inputs.fetch-depth }}
+        clean: ${{ inputs.clean }}
 
     - name: Create LFS file list
       if: ${{ inputs.lfs == 'true'}}
