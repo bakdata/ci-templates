@@ -47,6 +47,7 @@ inputs:
     default: "."
 runs:
   using: "composite"
+  if: "!contains(github.repository, 'playground')"
   steps:
     - name: Check out repository
       uses: bakdata/ci-templates/actions/checkout@1.49.0
@@ -76,7 +77,7 @@ runs:
         CI: "true"
 
     - name: Publish releases to Nexus
-      if: ${{ startsWith(github.ref, 'refs/tags/') }}
+      if: ${{ startsWith(github.ref, 'refs/tags/')}}
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
