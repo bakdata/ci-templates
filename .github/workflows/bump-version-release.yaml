@@ -11,7 +11,7 @@ on:
       changelog:
         description: "Create changelog for release."
         required: false
-        default: true
+        default: "true"
         type: boolean
       changelog-config:
         description: "Changelog config path."
