@@ -92,7 +92,7 @@ jobs:
       - name: Create changelog
         id: build-changelog
         uses: bakdata/ci-templates/actions/changelog-generate@1.49.0
-        if: ${{ inputs.changelog == 'true' }}
+        if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}
           tag: ${{ steps.bump-version.outputs.release-version }}
