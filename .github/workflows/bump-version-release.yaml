@@ -66,14 +66,24 @@ jobs:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.working-directory }}
 
+      - name: Debug
+        shell: bash
+        run: |
+          git status
+
       - name: Create changelog
         id: build-changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@1.49.0
+        uses: bakdata/ci-templates/actions/changelog-generate@tiedemann/changelog-action-fix
         if: ${{ inputs.changelog == 'true' }}
         with:
           github-token: ${{ secrets.github-token }}
           tag: ${{ steps.bump-version.outputs.release-version }}
           changelog-file: CHANGELOG.md
+
+      - name: Debug
+        shell: bash
+        run: |
+          git status
 
       - name: Commit and push changes including .bumpversion.cfg file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
