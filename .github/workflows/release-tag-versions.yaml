@@ -42,7 +42,7 @@ jobs:
           persist-credentials: false
 
       - name: Verify current version
-        if: ${{ inputs.release-type == 'patch'}}
+        if: ${{ inputs.release-type == 'patch' }}
         id: suffixstep
         run: |
           VERSION_VAR=$(sed -n 's/^current_version = \(.*\)/\1/p' < .bumpversion.cfg)
