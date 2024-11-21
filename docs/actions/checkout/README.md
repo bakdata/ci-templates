@@ -34,9 +34,9 @@ steps:
 
 | INPUT               | TYPE   | REQUIRED | DEFAULT                      | DESCRIPTION                                                                                                      |
 | ------------------- | ------ | -------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| cache               | string | false    | `"true"`                     | Describes if the repository is using any LFS files                                                               |
+| cache               | string | false    | `"true"`                     | Whether LFS files should be cached. Only has an effect if lfs=true.                                              |
 | fetch-depth         | string | false    | `"1"`                        | Number of commits to fetch. 0 indicates all history for all branches and tags                                    |
-| lfs                 | string | false    | `"false"`                    | Describes if the repository is using any LFS files                                                               |
+| lfs                 | string | false    | `"false"`                    | Whether LFS files of the repository should be checked out                                                        |
 | persist-credentials | string | false    | `"true"`                     | Whether to configure the token or SSH key with the local git config                                              |
 | ref                 | string | false    |                              | The branch, tag or SHA to checkout                                                                               |
 | repository          | string | false    | `"${{ github.repository }}"` | The repository name with owner                                                                                   |
@@ -48,9 +48,9 @@ steps:
 
 <!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
 
-| OUTPUT        | TYPE   | DESCRIPTION                                                      |
-| ------------- | ------ | ---------------------------------------------------------------- |
-| lfs-cache-hit | string | A boolean value to indicate an exact match was found for the key |
+| OUTPUT        | TYPE   | DESCRIPTION                                  |
+| ------------- | ------ | -------------------------------------------- |
+| lfs-cache-hit | string | Whether LFS files were retrieved from cache. |
 
 <!-- AUTO-DOC-OUTPUT:END -->
 
