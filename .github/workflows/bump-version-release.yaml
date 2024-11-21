@@ -11,7 +11,7 @@ on:
       changelog:
         description: "Create changelog for release."
         required: false
-        default: "true"
+        default: true
         type: boolean
       changelog-config:
         description: "Changelog config path."
@@ -74,7 +74,7 @@ jobs:
       - name: Create changelog
         id: build-changelog
         uses: bakdata/ci-templates/actions/changelog-generate@tiedemann/changelog-action-fix
-        if: ${{ inputs.changelog == 'true' }}
+        if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}
           tag: ${{ steps.bump-version.outputs.release-version }}
