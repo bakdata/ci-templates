@@ -12,5 +12,5 @@ COPY pyproject.toml poetry.lock /action/workspace/
 COPY main.py /action/workspace/
 RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
 
-CMD ["poetry","run","python", "/action/workspace/main.py"]
-# CMD ["bash", "-c", "pwd && ls -la"]
+# CMD ["poetry","run","python", "/action/workspace/main.py"]
+CMD ["bash", "-c", "pwd && ls -la /action/workspace && poetry run python /action/workspace/main.py"]
