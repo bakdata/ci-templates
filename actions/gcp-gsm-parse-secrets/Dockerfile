@@ -6,9 +6,10 @@ ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_CREATE=1 \
     POETRY_CACHE_DIR=/tmp/poetry_cache
 
-WORKDIR /app
+WORKDIR /github/workspace
 COPY pyproject.toml poetry.lock ./
 COPY main.py ./
 RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
 
-CMD ["poetry","run","python", "/app/main.py"]
+CMD ["poetry","run","python", "main.py"]
+# CMD ["pwd"]
