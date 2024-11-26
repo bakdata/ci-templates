@@ -1,4 +1,6 @@
 FROM python:3-slim AS builder
+WORKDIR /github/workspace
+
 RUN pip install poetry==1.8.2
 
 ENV POETRY_NO_INTERACTION=1 \
