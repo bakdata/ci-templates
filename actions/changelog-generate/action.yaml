@@ -34,7 +34,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@tiedemann/changelog-action-fix
+      uses: bakdata/ci-templates/actions/checkout@1.49.0
       if: ${{ inputs.checkout == 'true' }}
       with:
         fetch-depth: 0
