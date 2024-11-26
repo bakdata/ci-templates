@@ -1,5 +1,5 @@
 FROM python:3-slim AS builder
-WORKDIR /github/workspace
+WORKDIR /action/workspace/
 
 RUN pip install poetry==1.8.2
 
@@ -8,9 +8,9 @@ ENV POETRY_NO_INTERACTION=1 \
     POETRY_VIRTUALENVS_CREATE=1 \
     POETRY_CACHE_DIR=/tmp/poetry_cache
 
-COPY pyproject.toml poetry.lock ./
-COPY main.py ./
+COPY pyproject.toml poetry.lock /action/workspace/
+COPY main.py /action/workspace/
 RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
 
-# CMD ["poetry","run","python", "main.py"]
-CMD ["bash", "-c", "pwd && ls -la"]
+CMD ["poetry","run","python", "/action/workspace/main.py"]
+# CMD ["bash", "-c", "pwd && ls -la"]
