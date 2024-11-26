@@ -11,4 +11,4 @@ COPY main.py ./
 RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
 
 # CMD ["poetry","run","python", "main.py"]
-CMD ["pwd", "&&", "ls", "-la"]
+CMD ["pwd"]
