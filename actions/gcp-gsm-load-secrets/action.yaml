@@ -31,7 +31,7 @@ runs:
         workload_identity_provider: ${{ inputs.workload-identity-provider }}
         service_account: ${{ inputs.gke-service-account }}
     - id: "parse_secrets"
-      uses: "bakdata/ci-templates/actions/parse-secrets-definitions@1.49.0"
+      uses: "bakdata/ci-templates/actions/gcp-gsm-parse-secerts@1.49.0"
       with:
         project_name: ${{ inputs.gke-project-name }}
         secrets_list: ${{ inputs.secrets-to-inject }}
