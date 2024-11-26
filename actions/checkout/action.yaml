@@ -18,11 +18,11 @@ inputs:
     required: false
     default: "1"
   lfs:
-    description: "Describes if the repository is using any LFS files"
+    description: "Whether LFS files of the repository should be checked out"
     required: false
     default: "false"
   cache:
-    description: "Describes if the repository is using any LFS files"
+    description: "Whether LFS files should be cached. Only has an effect if lfs=true."
     required: false
     default: "true"
   clean:
@@ -36,7 +36,7 @@ inputs:
 
 outputs:
   lfs-cache-hit:
-    description: "A boolean value to indicate an exact match was found for the key"
+    description: "Whether LFS files were retrieved from cache."
     value: ${{ steps.cache-lfs.outputs.cache-hit }}
 
 runs:
