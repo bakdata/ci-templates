@@ -20,7 +20,7 @@ inputs:
 outputs:
   secrets:
     description: "Secrets loaded from Secret Manager"
-    value: ${{ steps.secrets.outputs }}
+    value: ${{ toJSON(steps.secrets.outputs)}}
 runs:
   using: "composite"
   steps:
