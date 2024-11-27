@@ -17,10 +17,10 @@ inputs:
     description: "Export secrets to environment"
     required: false
     default: true
-# outputs:
-#   secret-names:
-#     description: "Comma-separated list of secret names"
-#     value: ${{ steps.parse_secrets.outputs.secret-names }}
+outputs:
+  secret-json-string:
+    description: "JSON string with all secrets"
+    value: ${{ toJSON(steps.secrets.outputs) }}
 runs:
   using: "composite"
   steps:
@@ -40,18 +40,3 @@ runs:
       with:
         secrets: ${{ steps.parse_secrets.outputs.secrets-list }}
         export_to_environment: ${{ inputs.export-to-environment }}
-    - name: "test"
-      shell: bash
-      run: |
-        echo '${{ toJSON(steps.secrets.outputs) }}'
-        echo "console.log('${{ toJSON(steps.secrets.outputs) }}')"
-        echo "TEST=SOMEHTHING" >> "$GITHUB_OUTPUT"
-    # - name: "Set outputs"
-    #   uses: "actions/github-script@v7"
-    #   with:
-    #     script: |
-    #       let secrets = ${{ toJSON(steps.secrets.outputs) }}
-    #       for (const [key, value] of Object.entries(secrets)) {
-    #         core.setOutput(key, value);
-    #         console.log(`Set output ${key}`);
-    #       }
