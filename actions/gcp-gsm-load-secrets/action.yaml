@@ -17,10 +17,10 @@ inputs:
     description: "Export secrets to environment"
     required: false
     default: true
-outputs:
-  secret-names:
-    description: "Comma-separated list of secret names"
-    value: ${{ steps.parse_secrets.outputs.secret-names }}
+# outputs:
+#   secret-names:
+#     description: "Comma-separated list of secret names"
+#     value: ${{ steps.parse_secrets.outputs.secret-names }}
 runs:
   using: "composite"
   steps:
