@@ -40,6 +40,9 @@ runs:
       with:
         secrets: ${{ steps.parse_secrets.outputs.secrets-list }}
         export_to_environment: ${{ inputs.export-to-environment }}
+    - name: "test"
+      run: |
+        echo '${{ toJSON(steps.secrets.outputs) }}'
     - name: "Set outputs"
       uses: "actions/github-script@v7"
       with:

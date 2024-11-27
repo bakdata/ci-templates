@@ -67,9 +67,9 @@ def main(
     set_github_action_output(
         "secrets-list", "\n".join(output) + "\n", github_output_delimter
     )
-    # set_github_action_output(
-    #     "secret-names", ",".join(parsed_secret_names), github_output_delimter
-    # )
+    set_github_action_output(
+        "secret-names", ",".join(parsed_secret_names), github_output_delimter
+    )
 
 
 if __name__ == "__main__":
