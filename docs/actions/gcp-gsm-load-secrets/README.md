@@ -47,9 +47,9 @@ To load a secret from GSM figure out the following:
 
 <!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
 
-| OUTPUT  | TYPE   | DESCRIPTION                        |
-| ------- | ------ | ---------------------------------- |
-| secrets | string | Secrets loaded from Secret Manager |
+| OUTPUT       | TYPE   | DESCRIPTION                          |
+| ------------ | ------ | ------------------------------------ |
+| secret-names | string | Comma-separated list of secret names |
 
 <!-- AUTO-DOC-OUTPUT:END -->
 

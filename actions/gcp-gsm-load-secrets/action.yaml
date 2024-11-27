@@ -18,9 +18,9 @@ inputs:
     required: false
     default: true
 outputs:
-  secrets:
-    description: "Secrets loaded from Secret Manager"
-    value: ${{ toJSON(steps.secrets.outputs)}}
+  secret-names:
+    description: "Comma-separated list of secret names"
+    value: ${{ steps.parse_secrets.outputs.secret-names }}
 runs:
   using: "composite"
   steps:
@@ -40,3 +40,8 @@ runs:
       with:
         secrets: ${{ steps.parse_secrets.outputs.secrets-list }}
         export_to_environment: ${{ inputs.export-to-environment }}
+    - name: "Set outputs"
+      run: |
+        for secret in $(echo "${{ steps.parse_secrets.outputs.secret-names }}" | sed "s/,/ /g"); do
+          echo "${secret}=${{ steps.secrets.outputs.${secret} }}" >> $GITHUB_OUTPUT
+        done

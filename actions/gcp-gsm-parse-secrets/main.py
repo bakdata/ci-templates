@@ -44,7 +44,7 @@ def parse_secret(secret, project_name, delim=DEFAULT_DELIMITER):
     out = f"{secret_name}:{project_name}/{components[0]}"
     if len(components) == 2 and len(components[1]) != 0:
         out += f"/{components[1]}"
-    return out
+    return out, secret_name
 
 
 def main(
@@ -56,10 +56,18 @@ def main(
     input_secrets = set(input_secrets.splitlines())
 
     output = ""
+    parsed_secret_names = []
     for secret in input_secrets:
-        output += parse_secret(secret, gcp_project, github_output_delimter) + "\n"
+        parsed_secret, parsed_secret_name = (
+            parse_secret(secret, gcp_project, github_output_delimter) + "\n"
+        )
+        output += parsed_secret
+        parsed_secret_names.append(parsed_secret_name)
 
     set_github_action_output("secrets-list", output, github_output_delimter)
+    set_github_action_output(
+        "secret-names", ",".join(parsed_secret_names), github_output_delimter
+    )
 
 
 if __name__ == "__main__":
