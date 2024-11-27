@@ -50,4 +50,5 @@ runs:
       with:
         script: |
           console.log('test')
-          console.log('${{ toJSON(steps.secrets.outputs) }}')
+          let a = ${{ toJSON(steps.secrets.outputs) }}
+          console.log(a)
