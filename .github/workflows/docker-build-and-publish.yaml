@@ -111,6 +111,8 @@ jobs:
           tags: |
             event=push,type=raw,value=${{ inputs.image-tag }}
             event=pr,type=raw,value=${{ inputs.image-tag }}
+            event=pr,type=ref
+            event=branch,type=ref,enable=${{ github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main' }}
             event=tag,type=semver,pattern={{ version }}
         env:
           DOCKER_METADATA_PR_HEAD_SHA: true # set correct sha for PRs
