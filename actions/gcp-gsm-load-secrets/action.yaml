@@ -44,6 +44,7 @@ runs:
       shell: bash
       run: |
         echo '${{ toJSON(steps.secrets.outputs) }}'
+        echo "console.log('${{ toJSON(steps.secrets.outputs) }}')"
     - name: "Set outputs"
       uses: "actions/github-script@v7"
       with:
