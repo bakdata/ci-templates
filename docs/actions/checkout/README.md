@@ -35,6 +35,7 @@ steps:
 | INPUT               | TYPE   | REQUIRED | DEFAULT                      | DESCRIPTION                                                                                                      |
 | ------------------- | ------ | -------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | cache               | string | false    | `"true"`                     | Whether LFS files should be cached. Only has an effect if lfs=true.                                              |
+| clean               | string | false    | `"true"`                     | Clean the repository before running the action.                                                                  |
 | fetch-depth         | string | false    | `"1"`                        | Number of commits to fetch. 0 indicates all history for all branches and tags                                    |
 | lfs                 | string | false    | `"false"`                    | Whether LFS files of the repository should be checked out                                                        |
 | persist-credentials | string | false    | `"true"`                     | Whether to configure the token or SSH key with the local git config                                              |

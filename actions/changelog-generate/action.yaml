@@ -13,6 +13,14 @@ inputs:
     description: Path to the changelog file in the GitHub repository
     required: false
     default: "CHANGELOG.md"
+  checkout:
+    description: "Whether to checkout the repository or not."
+    required: false
+    default: "false"
+  clean:
+    description: "Clean the repository before running the action."
+    required: false
+    default: "false"
 
 outputs:
   merged-changelog:
@@ -27,8 +35,10 @@ runs:
   steps:
     - name: Check out repository
       uses: bakdata/ci-templates/actions/checkout@1.49.0
+      if: ${{ inputs.checkout == 'true' }}
       with:
         fetch-depth: 0
+        clean: ${{ inputs.clean }}
     - name: Get config path
       id: get-config-path
       run: |
