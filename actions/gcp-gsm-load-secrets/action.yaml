@@ -41,6 +41,7 @@ runs:
         secrets: ${{ steps.parse_secrets.outputs.secrets-list }}
         export_to_environment: ${{ inputs.export-to-environment }}
     - name: "test"
+      shell: bash
       run: |
         echo '${{ toJSON(steps.secrets.outputs) }}'
     - name: "Set outputs"
