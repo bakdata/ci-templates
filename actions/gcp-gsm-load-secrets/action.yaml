@@ -52,4 +52,5 @@ runs:
           let secrets = ${{ toJSON(steps.secrets.outputs) }}
           for (const [key, value] of Object.entries(secrets)) {
             core.setOutput(key, value);
+            console.log(`Set output ${key}`);
           }
