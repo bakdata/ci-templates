@@ -48,7 +48,7 @@ runs:
       uses: "actions/github-script@v7"
       with:
         script: |
-          console.log('${{ toJSON(steps.secrets.outputs) }}');
+          console.log('test');
           // const secrets = JSON.parse('${{ toJSON(steps.secrets.outputs) }}');
           // for (const [key, value] of Object.entries(secrets)) {
           //    core.setOutput(key, value);
