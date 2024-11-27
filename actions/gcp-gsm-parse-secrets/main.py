@@ -55,16 +55,16 @@ def main(
     # Deduplicate the input secrets
     input_secrets = set(input_secrets.splitlines())
 
-    output = ""
+    output = []
     parsed_secret_names = []
     for secret in input_secrets:
-        parsed_secret, parsed_secret_name = (
-            parse_secret(secret, gcp_project, github_output_delimter) + "\n"
+        parsed_secret, parsed_secret_name = parse_secret(
+            secret, gcp_project, github_output_delimter
         )
-        output += parsed_secret
+        output.append(parsed_secret)
         parsed_secret_names.append(parsed_secret_name)
 
-    set_github_action_output("secrets-list", output, github_output_delimter)
+    set_github_action_output("secrets-list", "\n".join(output), github_output_delimter)
     set_github_action_output(
         "secret-names", ",".join(parsed_secret_names), github_output_delimter
     )
