@@ -68,7 +68,7 @@ def main(
         "secrets-list", "\n".join(output) + "\n", github_output_delimter
     )
     set_github_action_output(
-        "secret-names", ",".join(parsed_secret_names), github_output_delimter
+        "secret-names", ",".join(parsed_secret_names) + "\n", github_output_delimter
     )
 
 
