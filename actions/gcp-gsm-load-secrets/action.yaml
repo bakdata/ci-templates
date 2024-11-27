@@ -45,12 +45,13 @@ runs:
       run: |
         echo '${{ toJSON(steps.secrets.outputs) }}'
         echo "console.log('${{ toJSON(steps.secrets.outputs) }}')"
-    - name: "Set outputs"
-      uses: "actions/github-script@v7"
-      with:
-        script: |
-          let secrets = ${{ toJSON(steps.secrets.outputs) }}
-          for (const [key, value] of Object.entries(secrets)) {
-            core.setOutput(key, value);
-            console.log(`Set output ${key}`);
-          }
+        echo "TEST=SOMEHTHING" >> "$GITHUB_OUTPUT"
+    # - name: "Set outputs"
+    #   uses: "actions/github-script@v7"
+    #   with:
+    #     script: |
+    #       let secrets = ${{ toJSON(steps.secrets.outputs) }}
+    #       for (const [key, value] of Object.entries(secrets)) {
+    #         core.setOutput(key, value);
+    #         console.log(`Set output ${key}`);
+    #       }
