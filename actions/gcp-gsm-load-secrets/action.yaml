@@ -49,3 +49,4 @@ runs:
       with:
         script: |
           console.log('test')
+          console.log('${{ toJSON(steps.secrets.outputs) }')
