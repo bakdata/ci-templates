@@ -101,7 +101,7 @@ runs:
       shell: bash
 
     - name: Create changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@1.49.0
+      uses: bakdata/ci-templates/actions/changelog-generate@1.50.0
       with:
         github-token: ${{ inputs.github-token }}
         tag: ${{ steps.evaluate-version.outputs.release-version }}
