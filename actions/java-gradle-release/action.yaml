@@ -92,15 +92,15 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    # - name: Create release
-    #   run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -Prelease.disablePushToRemote=true -Prelease.requireBranch=${{ github.event.repository.default_branch }} ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
-    #   shell: bash
-    #   working-directory: ${{ inputs.working-directory }}
+    - name: Create release
+      run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -Prelease.disablePushToRemote=true -Prelease.requireBranch=${{ github.event.repository.default_branch }} ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
 
-    # - name: Push release tag
-    #   run: |
-    #     git push --tags origin
-    #   shell: bash
+    - name: Push release tag
+      run: |
+        git push --tags origin
+      shell: bash
 
     - name: Create changelog
       uses: bakdata/ci-templates/actions/changelog-generate@1.50.2
