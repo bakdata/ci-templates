@@ -97,10 +97,11 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Push release tag
-      run: |
-        git push --tags origin
-      shell: bash
+    - name: Push changes
+      uses: ad-m/github-push-action@v0.8.0
+      with:
+        github_token: ${{ inputs.github-token }}
+        tags: true
 
     - name: Create changelog
       uses: bakdata/ci-templates/actions/changelog-generate@1.50.3
