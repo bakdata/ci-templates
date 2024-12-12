@@ -52,7 +52,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@1.49.0
+      uses: bakdata/ci-templates/actions/checkout@1.50.2
       with:
         fetch-depth: 0
         token: ${{ inputs.github-token }}
@@ -68,9 +68,10 @@ runs:
         sudo wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
         sudo chmod +x /usr/local/bin/semver
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@1.49.0
+      uses: bakdata/ci-templates/actions/java-gradle-setup@1.50.2
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
@@ -89,6 +90,7 @@ runs:
         fi
         echo "release-version=$release_version" >> "$GITHUB_OUTPUT"
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
 
     - name: Create release
       run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -Prelease.disablePushToRemote=true -Prelease.requireBranch=${{ github.event.repository.default_branch }} ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
@@ -101,7 +103,7 @@ runs:
       shell: bash
 
     - name: Create changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@1.50.0
+      uses: bakdata/ci-templates/actions/changelog-generate@1.50.2
       with:
         github-token: ${{ inputs.github-token }}
         tag: ${{ steps.evaluate-version.outputs.release-version }}
