@@ -63,6 +63,11 @@ runs:
         git config user.name ${{ inputs.github-username }}
       shell: bash
 
+    - name: Configure git credentials
+      uses: de-vri-es/setup-git-credentials@v2.0.10
+      with:
+        credentials: https://github-token:${{ inputs.github-token }}@github.com
+
     - name: Setup semver
       run: |
         sudo wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
@@ -97,11 +102,10 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Push changes
-      uses: ad-m/github-push-action@v0.8.0
-      with:
-        github_token: ${{ inputs.github-token }}
-        tags: true
+    - name: Push release tag
+      run: |
+        git push --tags origin
+      shell: bash
 
     - name: Create changelog
       uses: bakdata/ci-templates/actions/changelog-generate@1.50.3
