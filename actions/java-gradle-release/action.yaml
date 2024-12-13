@@ -64,7 +64,7 @@ runs:
       shell: bash
 
     - name: Configure git credentials
-      uses: de-vri-es/setup-git-credentials@v2.0.10
+      uses: de-vri-es/setup-git-credentials@v2.1.2
       with:
         credentials: https://github-token:${{ inputs.github-token }}@github.com
 
