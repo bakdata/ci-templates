@@ -52,7 +52,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@1.50.3
+      uses: bakdata/ci-templates/actions/checkout@1.50.4
       with:
         fetch-depth: 0 # required for changelog generation
         persist-credentials: false # required for pushing to protected branch later
@@ -76,7 +76,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@1.50.3
+      uses: bakdata/ci-templates/actions/java-gradle-setup@1.50.4
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
@@ -108,14 +108,14 @@ runs:
       shell: bash
 
     - name: Create changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@1.50.3
+      uses: bakdata/ci-templates/actions/changelog-generate@1.50.4
       with:
         github-token: ${{ inputs.github-token }}
         tag: ${{ steps.evaluate-version.outputs.release-version }}
         changelog-file: CHANGELOG.md
 
     - name: Commit and push CHANGELOG.md file
-      uses: bakdata/ci-templates/actions/commit-and-push@1.50.3
+      uses: bakdata/ci-templates/actions/commit-and-push@1.50.4
       with:
         commit-message: "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}"
         github-username: ${{ inputs.github-username }}
