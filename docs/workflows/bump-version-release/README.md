@@ -61,12 +61,13 @@ jobs:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT             | TYPE    | REQUIRED | DEFAULT | DESCRIPTION                                                     |
-| ----------------- | ------- | -------- | ------- | --------------------------------------------------------------- |
-| changelog         | boolean | false    | `true`  | Create changelog for release.                                   |
-| changelog-config  | string  | false    |         | Changelog config path.                                          |
-| release-type      | string  | true     |         | Scope of the release (major, minor or patch).                   |
-| working-directory | string  | false    | `"."`   | Working directory containing `.bumpversion.cfg`. (Default is .) |
+| INPUT             | TYPE    | REQUIRED | DEFAULT          | DESCRIPTION                                                     |
+| ----------------- | ------- | -------- | ---------------- | --------------------------------------------------------------- |
+| changelog         | boolean | false    | `true`           | Create changelog for release.                                   |
+| changelog-config  | string  | false    |                  | Changelog config path.                                          |
+| changelog-file    | string  | false    | `"CHANGELOG.md"` | Path to the changelog file in the GitHub repository             |
+| release-type      | string  | true     |                  | Scope of the release (major, minor or patch).                   |
+| working-directory | string  | false    | `"."`            | Working directory containing `.bumpversion.cfg`. (Default is .) |
 
 <!-- AUTO-DOC-INPUT:END -->
 
