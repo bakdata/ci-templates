@@ -104,7 +104,7 @@ jobs:
     needs: test
     steps:
       - name: Assess code quality
-        uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@1.49.0
+        uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@feature/sonar-host
         with:
           download-lfs-files: ${{ inputs.download-lfs-files }}
           gradle-cache: ${{ inputs.gradle-cache }}
