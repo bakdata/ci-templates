@@ -56,7 +56,6 @@ inputs:
 
 runs:
   using: "composite"
-  if: "!contains(github.repository, 'playground')"
   steps:
     - name: Check out repository
       uses: bakdata/ci-templates/actions/checkout@1.49.0
