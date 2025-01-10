@@ -80,7 +80,14 @@ runs:
     # sonar.branch.autoconfig.disabled is necessary for autocreation of projects on Sonarcloud to work
     - name: Assess code quality
       if: ${{ inputs.sonar-token != '' }}
-      run: ./gradlew -Dsonar.branch.autoconfig.disabled=true -Dsonar.host.url=${{ inputs.sonar-host }} ${{ (inputs.sonar-organization != '' && format('-Dsonar.organization={0}', inputs.sonar-organization)) || '' }} ${{ (inputs.sonar-project-key != '' && format('-Dsonar.projectKey={0}', inputs.sonar-project-key)) || '' }} ${{ (inputs.sonar-project-name != '' && format('-Dsonar.projectName={0}', inputs.sonar-project-name)) || '' }} --info --stacktrace sonarqube ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
+      run: |
+        ./gradlew -Dsonar.branch.autoconfig.disabled=true \
+          -Dsonar.host.url=${{ inputs.sonar-host }} \
+          ${{ (inputs.sonar-organization != '' && format('-Dsonar.organization={0}', inputs.sonar-organization)) || '' }} \
+          ${{ (inputs.sonar-project-key != '' && format('-Dsonar.projectKey={0}', inputs.sonar-project-key)) || '' }} \
+          ${{ (inputs.sonar-project-name != '' && format('-Dsonar.projectName={0}', inputs.sonar-project-name)) || '' }} \
+          --info --stacktrace sonarqube \
+          ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
