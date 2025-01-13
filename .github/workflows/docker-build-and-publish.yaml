@@ -124,7 +124,7 @@ jobs:
           file: ${{ inputs.dockerfile-path }}
           # TODO: test that build arg concat works
           build-args: |
-            IMAGE_TAGS=${{ join(steps.meta.outputs.tags) }}
+            IMAGE_TAGS=${{ join(fromJSON(steps.meta.outputs.json).tags) }}
             ${{ inputs.docker-build-args }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
