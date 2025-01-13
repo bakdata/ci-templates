@@ -122,7 +122,9 @@ jobs:
         with:
           context: ${{ inputs.docker-context }}
           file: ${{ inputs.dockerfile-path }}
-          build-args: ${{ inputs.docker-build-args }}
+          build-args: |
+            IMAGE_TAGS=${{ steps.meta.outputs.tags }}
+            ${{ inputs.docker-build-args }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
