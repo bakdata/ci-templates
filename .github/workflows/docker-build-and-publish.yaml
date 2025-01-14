@@ -117,15 +117,22 @@ jobs:
         env:
           DOCKER_METADATA_PR_HEAD_SHA: true # set correct sha for PRs
 
+      - name: Prepare build args
+        id: args
+        run: |
+          {
+            echo "build-args<<EOF"
+            echo "IMAGE_TAGS=${{ join(fromJSON(steps.meta.outputs.json).tags) }}"
+            echo "${{ inputs.docker-build-args }}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: ${{ inputs.docker-context }}
           file: ${{ inputs.dockerfile-path }}
-          # TODO: test that build arg concat works
-          build-args: |
-            IMAGE_TAGS=${{ join(fromJSON(steps.meta.outputs.json).tags) }}
-            ${{ inputs.docker-build-args }}
+          build-args: ${{ steps.args.outputs.build-args }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
