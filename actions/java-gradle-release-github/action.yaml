@@ -56,16 +56,15 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
 
-    - name: Generate changelog
-      run: ./gradlew -Pchangelog.githubRepository=${{ github.event.repository.name }} -Pchangelog.futureVersionTag=${{ github.ref_name }} -Pchangelog.sinceTag=${{ github.ref_name }} --stacktrace --info generateChangelog ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-      env:
-        GITHUB_USER: ${{ github.repository_owner }}
-        GITHUB_TOKEN: ${{ inputs.github-token }}
+    - name: Generate Changelog
+      id: changelog
+      uses: bakdata/ci-templates/actions/changelog-generate@1.52.0
+      with:
+        github-token: ${{ inputs.github-token }}
+        tag: ${{ github.ref }}
 
     - name: Create Github release
       uses: softprops/action-gh-release@v2.0.4
       with:
-        body_path: CHANGELOG.md
+        body: ${{ steps.changelog.outputs.single }}
         files: "**/build/libs/*.jar"
