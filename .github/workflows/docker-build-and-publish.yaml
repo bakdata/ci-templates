@@ -54,6 +54,16 @@ on:
         required: false
         type: boolean
         default: false
+      runs-on:
+        description: "Runner config as JSON object string. Each key is one of the input `platforms` and each value is the list of runner tags on which the Docker image for that platform should be natively built on. Defaults to a mapping from expected possible `platforms` to GitHub runners native to that architecture."
+        required: false
+        default: "{ 'linux/amd64': ['ubuntu-22.04'], 'linux/arm64': ['linux-arm-latest'] }"
+        type: string
+      platforms:
+        description: "Architectures for the created image (comma separated)"
+        required: false
+        default: "['linux/amd64']"
+        type: string
 
     secrets:
       docker-user:
@@ -68,9 +78,13 @@ concurrency:
   cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
 
 jobs:
-  build-and-publish:
-    name: Build and Publish
-    runs-on: ubuntu-22.04
+  build-and-push:
+    strategy:
+      matrix:
+        platform: ${{ fromJson(inputs.platforms) }}
+
+    name: Build for ${{ matrix.platform }}
+    runs-on: ${{ fromJson(inputs.runs-on)[matrix.platform] }}
     steps:
       - name: Check out repository
         uses: bakdata/ci-templates/actions/checkout@1.49.0
@@ -116,15 +130,113 @@ jobs:
             event=tag,type=semver,pattern={{ version }}
         env:
           DOCKER_METADATA_PR_HEAD_SHA: true # set correct sha for PRs
+      
+      - name: Prepare build args
+        id: args
+        run: |
+          {
+            echo "build-args<<EOF"
+            echo "IMAGE_VERSION=${{ steps.meta.outputs.version }}"
+            echo "${{ inputs.docker-build-args }}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
-      - name: Build and push
-        uses: docker/build-push-action@v5
+      - name: Build and push by digest
+        uses: docker/build-push-action@v6
+        id: build
         with:
           context: ${{ inputs.docker-context }}
-          file: ${{ inputs.dockerfile-path }}
-          build-args: ${{ inputs.docker-build-args }}
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          file: ${{ inputs.docker-context }}/${{ inputs.dockerfile-path }}
+          platforms: ${{ matrix.platform }}
+          build-args: ${{ steps.args.outputs.build-args }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          # don't specify 'tags' here (error "get can't push tagged ref by digest")
+          labels: ${{ steps.meta.outputs.labels }}
+          outputs: type=image,name=${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=true
+
+      - name: Export digest
+        run: |
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"
+  
+      # HACK We upload the digest so the other jobs can reference the files properly, because there are no proper matrix job outputs
+      # https://github.com/orgs/community/discussions/26639#discussioncomment-3838014
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ matrix.platform == 'linux/amd64' && 'linux-amd64' || 'linux-arm64' }}
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  # publish merged manifest list of all previously build and pushed images
+  publish:
+    name: Publish Manifest List
+    needs:
+      - build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      # We download the digest,because there are no proper outputs from the previous matrix job
+      # https://github.com/orgs/community/discussions/26639#discussioncomment-3838014
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/digests
+          pattern: digests-*
+          merge-multiple: true
+
+      - name: Login to the Registry
+        uses: "docker/login-action@v3"
+        with:
+          registry: "${{ inputs.docker-registry }}"
+          username: "${{ secrets.docker-user }}"
+          password: "${{ secrets.docker-password }}"
+
+      - name: Set image name
+        run: |
+          fullImageName="${{ inputs.image-name }}"
+          if [[ -n "${{ inputs.image-namespace }}" ]]; then
+            fullImageName="${{ inputs.image-namespace }}/${fullImageName}"
+          fi
+          if [[ -n "${{ inputs.docker-registry }}" ]]; then
+            fullImageName="${{ inputs.docker-registry }}/${fullImageName}"
+          fi
+
+          echo "IMAGE_NAME=${fullImageName}" >> "$GITHUB_ENV"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Collect Docker metadata
+        id: metadata
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          tags: |
+            event=push,type=raw,value=${{ inputs.image-tag }}
+            event=pr,type=raw,value=${{ inputs.image-tag }}
+            event=tag,type=semver,pattern={{ version }}
+        env:
+          DOCKER_METADATA_PR_HEAD_SHA: true # set correct sha for PRs
+
+      - name: Create and push merged manifest list
+        working-directory: /tmp/digests
+        run: |
+          # HACK that reads file names from downloaded artifacts as digest outputs from matrix jobs:
+          # https://github.com/orgs/community/discussions/26639#discussioncomment-3838014
+          images=()
+          for file in *; do
+            images+=("${{ env.IMAGE_NAME }}@sha256:${file}")
+          done
+
+          # read tags from metadata step output and create CLI params by adding -t for each tag
+          readarray -t tags < <(jq -cr '.tags | .[]' <<< "${DOCKER_METADATA_OUTPUT_JSON}")
+          tag_params=()
+          for tag in "${tags[@]}"; do
+            tag_params+=("-t")
+            tag_params+=("${tag}")
+          done
+
+          docker buildx imagetools create "${tag_params[@]}" "${images[@]}"
