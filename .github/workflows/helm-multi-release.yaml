@@ -55,7 +55,7 @@ concurrency:
 
 jobs:
   helm-lint:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Lint Helm chart
         uses: bakdata/ci-templates/actions/helm-lint@1.49.0
@@ -63,7 +63,7 @@ jobs:
           lint-config-path: "${{ inputs.lint-config-path }}"
 
   update-version:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
       singlechart: ${{ steps.step2.outputs.singlechart }}
     needs: [helm-lint]
@@ -87,11 +87,11 @@ jobs:
         shell: bash
         working-directory: ${{ inputs.charts-path }}
 
-  package-new-artifacts:
+  package-artifacts:
     strategy:
       matrix:
         subdir: ${{ fromJson(inputs.subdirs) }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [update-version]
 
     steps:
@@ -126,11 +126,22 @@ jobs:
         if: ${{ needs.update-version.outputs.singlechart == 'true' }}
         uses: actions/upload-artifact@v4
         with:
+          name: helm-chart-${{ matrix.subdir }}
           path: ${{ inputs.artifact-dir }}
           retention-days: 1
 
-  publish-artifacts:
-    runs-on: ubuntu-22.04
+  merge-artifacts:
+    runs-on: ubuntu-24.04
+    needs: upload
+    steps:
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: helm-charts
+          pattern: helm-chart-*
+
+  publish:
+    runs-on: ubuntu-24.04
     needs: [package-new-artifacts, update-version]
 
     steps:
@@ -142,6 +153,7 @@ jobs:
       - name: Download new artifacts
         uses: actions/download-artifact@v4
         with:
+          name: helm-charts
           path: ${{ inputs.artifact-dir }}
 
       - name: Move artifacts to root dir in case  of multiple  charts
