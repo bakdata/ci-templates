@@ -62,37 +62,11 @@ jobs:
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
 
-  update-version:
-    runs-on: ubuntu-22.04
-    outputs:
-      singlechart: ${{ steps.step2.outputs.singlechart }}
-    needs: [helm-lint]
-
-    steps:
-      - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@1.49.0
-
-      - name: Verify if have a single or multiple chart(s)
-        id: step2
-        run: |
-          charts="${{ inputs.subdirs }}"
-          charts_without_brackets="${charts:1:-1}"
-          charts_without_brackets_and_quotation="${charts_without_brackets//\'/}"
-
-          if [ "${#charts_without_brackets_and_quotation[@]}" = "1" ]; then
-            echo "singlechart=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "singlechart=false" >> "$GITHUB_OUTPUT"
-          fi
-        shell: bash
-        working-directory: ${{ inputs.charts-path }}
-
   package-artifacts:
     strategy:
       matrix:
         subdir: ${{ fromJson(inputs.subdirs) }}
     runs-on: ubuntu-22.04
-    needs: [update-version]
 
     steps:
       - name: Check out repository
@@ -114,16 +88,7 @@ jobs:
         shell: bash
         working-directory: ${{ inputs.charts-path }}
 
-      - name: Upload artifacts with action/upload as multi chart
-        if: ${{ needs.update-version.outputs.singlechart == 'false' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.subdir }}
-          path: ${{ inputs.artifact-dir }}/${{ matrix.subdir }}
-          retention-days: 1
-
       - name: Upload artifacts with action/upload as single chart
-        if: ${{ needs.update-version.outputs.singlechart == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: helm-chart-${{ matrix.subdir }}
@@ -142,7 +107,7 @@ jobs:
 
   publish:
     runs-on: ubuntu-22.04
-    needs: [merge-artifacts, update-version]
+    needs: merge-artifacts
 
     steps:
       - name: Check out branch containing the artifatcs and the index.yaml file
@@ -163,9 +128,11 @@ jobs:
           echo "---"
           cd artifacts
           ls -l
+          echo "---"
+          cd producer-app
+          ls -l
 
-      - name: Move artifacts to root dir in case  of multiple  charts
-        if: ${{ needs.update-version.outputs.singlechart == 'false' }}
+      - name: Move artifacts to root dir
         run: |
           for subdir in */; do
             if [ ! -d "../$subdir" ]; then
@@ -177,28 +144,6 @@ jobs:
           rm -rf ${{ inputs.artifact-dir }}
         shell: bash
         working-directory: ${{ inputs.artifact-dir }}
-
-      - name: Move artifacts to root dir in case  of a single  chart
-        if: ${{ needs.update-version.outputs.singlechart == 'true' }}
-        run: |
-          subdircount=$(find . -maxdepth 1 -type d | wc -l)
-
-          if [[ "$subdircount" -eq 1 ]]
-          then
-              mv ./* ../../
-          else
-            for subdir in ./*; do
-              if [ ! -d ../../"$subdir" ]; then
-                mkdir ../../"$subdir"
-              fi
-              mv "$subdir"/* ../../"$subdir"
-            done
-          fi
-
-          cd ../..
-          rm -rf ${{ inputs.artifact-dir }}
-        shell: bash
-        working-directory: "${{ inputs.artifact-dir }}/artifact"
 
       - name: Generate index.yaml file
         run: |
