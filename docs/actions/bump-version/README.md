@@ -38,11 +38,12 @@ steps:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT             | TYPE   | REQUIRED | DEFAULT | DESCRIPTION                                           |
-| ----------------- | ------ | -------- | ------- | ----------------------------------------------------- |
-| new-version       | string | false    |         |                                                       |
-| release-type      | string | true     |         | The type of the release (major, minor or patch).      |
-| working-directory | string | false    | `"."`   | The directory containing the `.bumpversion.cfg` file. |
+| INPUT             | TYPE   | REQUIRED | DEFAULT  | DESCRIPTION                                           |
+| ----------------- | ------ | -------- | -------- | ----------------------------------------------------- |
+| allow-dirty       | string | false    | `"true"` | Allow unclean Git status in the working directory.    |
+| new-version       | string | false    |          |                                                       |
+| release-type      | string | true     |          | The type of the release (major, minor or patch).      |
+| working-directory | string | false    | `"."`    | The directory containing the `.bumpversion.cfg` file. |
 
 <!-- AUTO-DOC-INPUT:END -->
 
