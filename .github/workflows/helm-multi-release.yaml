@@ -156,6 +156,14 @@ jobs:
           name: helm-charts
           path: ${{ inputs.artifact-dir }}
 
+      - name: Debug
+        shell: bash
+        run: |
+          ls -l
+          echo "---"
+          cd artifacts
+          ls -l
+
       - name: Move artifacts to root dir in case  of multiple  charts
         if: ${{ needs.update-version.outputs.singlechart == 'false' }}
         run: |
