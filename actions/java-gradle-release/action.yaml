@@ -108,11 +108,12 @@ runs:
       shell: bash
 
     - name: Create changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@1.50.4
-      with:
-        github-token: ${{ inputs.github-token }}
-        tag: ${{ steps.evaluate-version.outputs.release-version }}
-        changelog-file: CHANGELOG.md
+      run: ./gradlew -Pchangelog.githubRepository=${{ github.event.repository.name }} -Pchangelog.futureVersionTag=${{ steps.evaluate-version.outputs.release-version }} --stacktrace --info generateChangelog ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        GITHUB_USER: ${{ github.repository_owner }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
 
     - name: Commit and push CHANGELOG.md file
       uses: bakdata/ci-templates/actions/commit-and-push@1.50.4
