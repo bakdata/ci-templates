@@ -13,6 +13,11 @@ on:
         required: false
         default: true
         type: boolean
+      changelog-file:
+        description: Path to the changelog file in the GitHub repository
+        required: false
+        default: "CHANGELOG.md"
+        type: string
       changelog-config:
         description: "Changelog config path."
         required: false
@@ -69,12 +74,12 @@ jobs:
 
       - name: Create changelog
         id: build-changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@1.50.0
+        uses: bakdata/ci-templates/actions/changelog-generate@1.52.1
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}
           tag: ${{ steps.bump-version.outputs.release-version }}
-          changelog-file: CHANGELOG.md
+          changelog-file: ${{ inputs.changelog-file }}
 
       - name: Commit and push changes including .bumpversion.cfg file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
