@@ -132,7 +132,7 @@ jobs:
 
   merge-artifacts:
     runs-on: ubuntu-24.04
-    needs: upload
+    needs: package-artifacts
     steps:
       - name: Merge Artifacts
         uses: actions/upload-artifact/merge@v4
@@ -142,7 +142,7 @@ jobs:
 
   publish:
     runs-on: ubuntu-24.04
-    needs: [package-new-artifacts, update-version]
+    needs: [merge-artifacts, update-version]
 
     steps:
       - name: Check out branch containing the artifatcs and the index.yaml file
