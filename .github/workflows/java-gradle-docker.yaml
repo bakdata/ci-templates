@@ -105,13 +105,21 @@ jobs:
       sonar-token: ${{ secrets.sonar-token }}
 
   build-jib:
-    name: Build tarball image
+    name: Build Docker image
     runs-on: ubuntu-22.04
     needs: build-and-test
 
     steps:
-      - name: Build tarball image
-        uses: bakdata/ci-templates/actions/java-gradle-build-jib@1.49.0
+      - name: Login into docker
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ inputs.docker-registry }}
+          username: ${{ secrets.docker-username }}
+          password: ${{ secrets.docker-password }}
+
+      - name: Jib build
+        id: build-image
+        uses: bakdata/ci-templates/actions/java-gradle-build-jib@feature/jib-plugin
         with:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
@@ -120,6 +128,7 @@ jobs:
           gradle-cache-read-only: true
           gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
           working-directory: ${{ inputs.working-directory }}
+          repository: ${{ inputs.docker-registry }}/${{ inputs.docker-publisher }}
 
   publish:
     name: Publish
@@ -142,24 +151,6 @@ jobs:
           gradle-cache-read-only: true
           gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
           working-directory: ${{ inputs.working-directory }}
-
-  publish-jib-image:
-    name: Publish tarball image
-    runs-on: ubuntu-22.04
-    needs: build-jib
-
-    steps:
-      - name: Login into docker
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ inputs.docker-registry }}
-          username: ${{ secrets.docker-username }}
-          password: ${{ secrets.docker-password }}
-      - name: Publish tarball image
-        uses: bakdata/ci-templates/actions/docker-publish@1.49.0
-        with:
-          docker-registry: ${{ inputs.docker-registry }}
-          image-namespace: ${{ inputs.docker-publisher }}
 
   release:
     name: Create Github release
