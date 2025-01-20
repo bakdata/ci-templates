@@ -96,7 +96,7 @@ runs:
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
           ${{ inputs.repository && format('-Djib.to.image.repository={0}', inputs.repository) || '' }} \
-          -Djib.to.image.tag=$(echo ${{ steps.meta.outputs.tags }} | sed 's/.*\(:.*\)/\1/') \
+          -Djib.to.image.tag=$(echo ${{ steps.meta.outputs.tags }} | sed 's/.*:\(.*\)/\1/') \
           $([[ "${{ github.ref_type }}" == "tag" ]] && echo "-Djib.to.tags=latest") \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
