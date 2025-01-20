@@ -4,7 +4,7 @@ description: "Build Multi-Platform image using Gradle"
 outputs:
   image-tag: 
     description: "The tag of the docker image."
-    value: ${{ steps.meta.outputs.tags }}  # FIXME output contains wrong image name
+    value: ${{ steps.tag.outputs.name }}
 
 inputs:
   platforms:
@@ -88,6 +88,12 @@ runs:
         flavor: |
           latest=false
 
+    - name: Create tag output
+      id: tag
+      run: echo "name=$(echo ${{ steps.meta.outputs.tags }} | sed 's/.*:\(.*\)/\1/')" >> "$GITHUB_OUTPUT"
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+
     - name: Build Docker image
       run: |
         ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jib \
@@ -96,7 +102,7 @@ runs:
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
           ${{ inputs.repository && format('-Djib.to.image.repository={0}', inputs.repository) || '' }} \
-          -Djib.to.image.tag=$(echo ${{ steps.meta.outputs.tags }} | sed 's/.*:\(.*\)/\1/') \
+          -Djib.to.image.tag=${{ steps.tag.outputs.name }} \
           $([[ "${{ github.ref_type }}" == "tag" ]] && echo "-Djib.to.tags=latest") \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
