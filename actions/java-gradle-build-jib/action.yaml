@@ -57,9 +57,6 @@ inputs:
     description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
     required: false
     default: "false"
-  subproject:
-    description: "The Gradle subproject for which the image should be built (If not specified, an image for the root project will be built)"
-    required: false
 runs:
   using: "composite"
   steps:
@@ -96,7 +93,7 @@ runs:
 
     - name: Build Docker image
       run: |
-        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jib \
+        ./gradlew jib \
           --info --stacktrace \
           -Djib.from.platforms=${{ inputs.platforms }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
