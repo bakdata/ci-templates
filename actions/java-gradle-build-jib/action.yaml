@@ -4,7 +4,7 @@ description: "Build Multi-Platform image using Gradle"
 outputs:
   image-tag: 
     description: "The tag of the docker image."
-    value: ${{ steps.meta.outputs.tags }}
+    value: ${{ steps.meta.outputs.tags }}  # FIXME output contains wrong image name
 
 inputs:
   platforms:
