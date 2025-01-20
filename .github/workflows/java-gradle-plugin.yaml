@@ -79,7 +79,7 @@ concurrency:
 jobs:
   build-and-test:
     name: Build, Test and Assess code quality
-    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@1.52.0
+    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@feature/gradle-publish-2
     with:
       java-distribution: ${{ inputs.java-distribution }}
       java-version: ${{ inputs.java-version }}
@@ -102,7 +102,7 @@ jobs:
 
     steps:
       - name: Publish
-        uses: bakdata/ci-templates/actions/java-gradle-publish@1.49.0
+        uses: bakdata/ci-templates/actions/java-gradle-publish@feature/gradle-publish-2
         with:
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
