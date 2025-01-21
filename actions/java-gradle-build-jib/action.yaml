@@ -98,7 +98,7 @@ runs:
           -Djib.from.platforms=${{ inputs.platforms }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
-          ${{ inputs.repository && format('-DDjibImage.repository={0}', inputs.repository) || '' }} \
+          ${{ inputs.repository && format('-DjibImage.repository={0}', inputs.repository) || '' }} \
           -DjibImage.tag=${{ steps.tag.outputs.name }} \
           $([[ "${{ github.ref_type }}" == "tag" ]] && echo "-Djib.to.tags=latest") \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
