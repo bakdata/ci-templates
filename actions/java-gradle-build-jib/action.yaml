@@ -4,7 +4,7 @@ description: "Build Multi-Platform image using Gradle"
 outputs:
   image-tag: 
     description: "The tag of the docker image."
-    value: ${{ steps.meta.outputs.tags }}
+    value: ${{ steps.tag.outputs.name }}
 
 inputs:
   platforms:
@@ -12,13 +12,9 @@ inputs:
     required: false
     default: "linux/amd64,linux/arm64"
     type: string
-  image-name:
-    description: "Name of Docker image."
+  repository:
+    description: "The repository to push the image to"
     required: false
-    default: "${{ github.event.repository.name }}"
-  full-image-name:
-    description: "Full name of image (registry/image). The image should be provided without a tag."
-    required: true
   allow-insecure-registries:
     description: "Whether to allow insecure registries or not. (Default is false)"
     required: false
@@ -61,9 +57,6 @@ inputs:
     description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
     required: false
     default: "false"
-  subproject:
-    description: "The Gradle subproject for which the image should be built (If not specified, an image for the root project will be built)"
-    required: false
 runs:
   using: "composite"
   steps:
@@ -85,22 +78,28 @@ runs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ inputs.image-name }}
+        images: ${{ github.event.repository.name }}
         tags: |
           event=tag,type=semver,pattern={{version}}
           event=push,type=raw,value=pipeline-${{ github.run_id }}-git-{{sha}},enable=${{ github.ref_type != 'tag' }}
         flavor: |
           latest=false
 
+    - name: Create tag output
+      id: tag
+      run: echo "name=$(echo ${{ steps.meta.outputs.tags }} | sed 's/.*:\(.*\)/\1/')" >> "$GITHUB_OUTPUT"
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+
     - name: Build Docker image
       run: |
-        ./gradlew ${{ inputs.subproject && format('{0}:', inputs.subproject) || '' }}jib \
+        ./gradlew jib \
           --info --stacktrace \
-          --image=${{ inputs.image-name }} \
           -Djib.from.platforms=${{ inputs.platforms }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
-          -Djib.to.image=${{ inputs.full-image-name }}$(echo ${{ steps.meta.outputs.tags }} | sed 's/.*\(:.*\)/\1/') \
+          ${{ inputs.repository && format('-DjibImage.repository={0}', inputs.repository) || '' }} \
+          -DjibImage.tag=${{ steps.tag.outputs.name }} \
           $([[ "${{ github.ref_type }}" == "tag" ]] && echo "-Djib.to.tags=latest") \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
