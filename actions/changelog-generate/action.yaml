@@ -9,6 +9,10 @@ inputs:
     description: Version after bump
     required: true
   # optional inputs
+  range:
+    description: "The range of commits to include in the changelog. (by default from last tagged commit that is not HEAD to HEAD) accepts any git revision range."
+    required: false
+    default: ""
   changelog-file:
     description: Path to the changelog file in the GitHub repository
     required: false
@@ -29,6 +33,9 @@ outputs:
   single-changelog:
     description: "Only the latest changelog."
     value: ${{ steps.git-cliff-latest.outputs.content }}
+  ranged-changelog:
+    description: "Only the changelog for the specified range. (by default from last tagged commit that is not HEAD to HEAD)"
+    value: ${{ steps.git-cliff-latest.outputs.content }}
 
 runs:
   using: "composite"
@@ -48,13 +55,23 @@ runs:
         else
           cp $DEFAULT_PATH tmp_cliff.toml
         fi
+        echo "default_commit_range=$(git describe --tags --exclude=$(git tag --points-at HEAD) --abbrev=0)..HEAD" >> $GITHUB_OUTPUT
       shell: bash
+    - name: Generate range only changelog
+      uses: orhun/git-cliff-action@v3
+      id: git-cliff-range
+      with:
+        config: tmp_cliff.toml
+        args: ${{ inputs.range == '' && steps.get-config-path.outputs.default_commit_range || inputs.range }}
+      env:
+        GITHUB_REPO: ${{ github.repository }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
     - name: Generate latest only changelog
       uses: orhun/git-cliff-action@v3
       id: git-cliff-latest
       with:
         config: tmp_cliff.toml
-        args: "--unreleased --tag ${{ inputs.tag }} --verbose"
+        args: "--unreleased --tag ${{ inputs.tag }}"
       env:
         GITHUB_REPO: ${{ github.repository }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
@@ -63,7 +80,7 @@ runs:
       id: git-cliff
       with:
         config: tmp_cliff.toml
-        args: "--tag ${{ inputs.tag }} --verbose"
+        args: "--tag ${{ inputs.tag }}"
       env:
         OUTPUT: ${{ inputs.changelog-file }}
         GITHUB_REPO: ${{ github.repository }}
