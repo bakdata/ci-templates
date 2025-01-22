@@ -47,7 +47,6 @@ inputs:
     default: "."
 runs:
   using: "composite"
-  if: "!contains(github.repository, 'playground')"
   steps:
     - name: Check out repository
       uses: bakdata/ci-templates/actions/checkout@1.49.0
@@ -81,7 +80,7 @@ runs:
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
-        ./gradlew --info --stacktrace publishToNexus closeAndReleaseStagingRepository -x test
+        ./gradlew --info --stacktrace publishToNexus closeAndReleaseStagingRepositories -x test
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
