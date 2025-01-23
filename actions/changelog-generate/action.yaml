@@ -35,7 +35,7 @@ outputs:
     value: ${{ steps.git-cliff-latest.outputs.content }}
   ranged-changelog:
     description: "Only the changelog for the specified range. (by default from last tagged commit that is not HEAD to HEAD)"
-    value: ${{ steps.git-cliff-latest.outputs.content }}
+    value: ${{ steps.git-cliff-range.outputs.content }}
 
 runs:
   using: "composite"
