@@ -85,8 +85,10 @@ runs:
 
     - name: Build Docker image
       run: |
-        VAR=$(tr ' ' ',' <<< ${{ steps.meta.outputs.tags }})
+        VAR="${{ steps.meta.outputs.tags }}"
         echo $VAR
+        tags=$(echo $VAR | tr ' ' ',')
+        echo $tags
 #        ./gradlew jib \
 #          --info --stacktrace \
 #          -Djib.from.platforms=${{ inputs.platforms }} \
