@@ -4,7 +4,7 @@ description: "Build Multi-Platform image using Gradle"
 outputs:
   image-tag: 
     description: "The tag of the docker image."
-    value: ${{ steps.tag.outputs.name }}
+    value: ${{ steps.meta.outputs.tags }}
 
 inputs:
   platforms:
@@ -78,18 +78,11 @@ runs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ github.event.repository.name }}
         tags: |
           event=tag,type=semver,pattern={{version}}
+          event=pr,type=ref
           event=push,type=raw,value=pipeline-${{ github.run_id }}-git-{{sha}},enable=${{ github.ref_type != 'tag' }}
-        flavor: |
-          latest=false
-
-    - name: Create tag output
-      id: tag
-      run: echo "name=$(echo ${{ steps.meta.outputs.tags }} | sed 's/.*:\(.*\)/\1/')" >> "$GITHUB_OUTPUT"
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
+        sep-tags: ','
 
     - name: Build Docker image
       run: |
@@ -99,8 +92,7 @@ runs:
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
           ${{ inputs.repository && format('-DjibImage.repository={0}', inputs.repository) || '' }} \
-          -DjibImage.tag=${{ steps.tag.outputs.name }} \
-          $([[ "${{ github.ref_type }}" == "tag" ]] && echo "-Djib.to.tags=latest") \
+          -DjibImage.tags=${{ steps.meta.outputs.tags }} \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
           ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
       shell: bash
