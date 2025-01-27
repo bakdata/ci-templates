@@ -83,22 +83,17 @@ runs:
           event=pr,type=ref
           event=push,type=raw,value=pipeline-${{ github.run_id }}-git-{{sha}},enable=${{ github.ref_type != 'tag' }}
 
-    - name: Create tag output
-      id: tag
-      run: echo ${{ steps.meta.outputs.tags }}
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-
     - name: Build Docker image
       run: |
-        ./gradlew jib \
-          --info --stacktrace \
-          -Djib.from.platforms=${{ inputs.platforms }} \
-          ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
-          ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
-          ${{ inputs.repository && format('-DjibImage.repository={0}', inputs.repository) || '' }} \
-          -DjibImage.tags=${{ steps.meta.outputs.tags }} \
-          ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
-          ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
+         echo ${{ steps.meta.outputs.tags }}
+#        ./gradlew jib \
+#          --info --stacktrace \
+#          -Djib.from.platforms=${{ inputs.platforms }} \
+#          ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
+#          ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
+#          ${{ inputs.repository && format('-DjibImage.repository={0}', inputs.repository) || '' }} \
+#          -DjibImage.tags=${{ steps.meta.outputs.tags }} \
+#          ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} \
+#          ${{ inputs.allow-insecure-registries == 'true' && '-Djib.allowInsecureRegistries=true' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
