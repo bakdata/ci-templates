@@ -72,6 +72,16 @@ jobs:
     name: Build and Publish
     runs-on: ubuntu-22.04
     steps:
+      - name: Increase available runner disk space
+        run: |
+          df -h
+          # https://github.com/actions/runner-images/issues/2840#issuecomment-790492173
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf "/usr/local/share/boost"
+          sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+          df -h
+    
       - name: Check out repository
         uses: bakdata/ci-templates/actions/checkout@1.49.0
         with:
