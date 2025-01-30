@@ -24,7 +24,7 @@ steps:
 
 | INPUT               | TYPE   | REQUIRED | DEFAULT     | DESCRIPTION                                |
 | ------------------- | ------ | -------- | ----------- | ------------------------------------------ |
-| gcloud-sdk-version  | string | false    | `"376.0.0"` | GCloud SDK version                         |
+| gcloud-sdk-version  | string | false    | `"508.0.0"` | GCloud SDK version                         |
 | gke-cluster         | string | true     |             | GKE cluster for authentication             |
 | gke-project         | string | true     |             | GKE project id for authentication          |
 | gke-region          | string | true     |             | GKE region for authentication              |
