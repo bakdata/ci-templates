@@ -39,7 +39,7 @@ runs:
         path: |
           /opt/pipx/venvs/poetry
           /opt/pipx_bin/poetry
-        key: poetry-${{ inputs.poetry-versions }}-${{ runner.os }}
+        key: poetry-${{ inputs.poetry-version }}-${{ runner.os }}
 
     - name: Install Poetry ${{ inputs.poetry-version }}
       if: steps.cache-poetry.outputs.cache-hit != 'true'
