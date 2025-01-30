@@ -86,13 +86,14 @@ steps:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT          | TYPE   | REQUIRED | DEFAULT          | DESCRIPTION                                         |
-| -------------- | ------ | -------- | ---------------- | --------------------------------------------------- |
-| changelog-file | string | false    | `"CHANGELOG.md"` | Path to the changelog file in the GitHub repository |
-| checkout       | string | false    | `"false"`        | Whether to checkout the repository or not.          |
-| clean          | string | false    | `"false"`        | Clean the repository before running the action.     |
-| github-token   | string | true     |                  | The GitHub token for committing the changes.        |
-| tag            | string | true     |                  | Version after bump                                  |
+| INPUT          | TYPE   | REQUIRED | DEFAULT          | DESCRIPTION                                                                                                                                     |
+| -------------- | ------ | -------- | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| changelog-file | string | false    | `"CHANGELOG.md"` | Path to the changelog file in the GitHub repository                                                                                             |
+| checkout       | string | false    | `"false"`        | Whether to checkout the repository or not.                                                                                                      |
+| clean          | string | false    | `"false"`        | Clean the repository before running the action.                                                                                                 |
+| github-token   | string | true     |                  | The GitHub token for committing the changes.                                                                                                    |
+| range          | string | false    |                  | The range of commits to include in the changelog. (by default from last tagged commit that is not HEAD to HEAD) accepts any git revision range. |
+| tag            | string | true     |                  | Version after bump                                                                                                                              |
 
 <!-- AUTO-DOC-INPUT:END -->
 
@@ -100,10 +101,11 @@ steps:
 
 <!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
 
-| OUTPUT           | TYPE   | DESCRIPTION                |
-| ---------------- | ------ | -------------------------- |
-| merged-changelog | string | All changelogs combined.   |
-| single-changelog | string | Only the latest changelog. |
+| OUTPUT           | TYPE   | DESCRIPTION                                                                                               |
+| ---------------- | ------ | --------------------------------------------------------------------------------------------------------- |
+| merged-changelog | string | All changelogs combined.                                                                                  |
+| ranged-changelog | string | Only the changelog for the specified range. (by default from last tagged commit that is not HEAD to HEAD) |
+| single-changelog | string | Only the latest changelog.                                                                                |
 
 <!-- AUTO-DOC-OUTPUT:END -->
 
