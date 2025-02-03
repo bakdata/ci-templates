@@ -86,10 +86,10 @@ jobs:
           username: "${{ secrets.docker-user }}"
           password: "${{ secrets.docker-password }}"
 
-      - uses: ./.github/actions/docker-build-and-publish-extra-step
-        # Add your extra step in your repo under .github/actions/docker-build-and-publish-extra-step/action.yaml ,
+      - uses: ./.github/actions/extra-step/docker-build-and-publish
+        # Add your extra step in your repo under .github/actions/extra-step/docker-build-and-publish/action.yaml ,
         # e.g. to free up runner disk space or to install system packages
-        if: ${{ hashFiles('.github/actions/docker-build-and-publish-extra-step/action.yaml') != '' }}
+        if: ${{ hashFiles('.github/actions/extra-step/docker-build-and-publish/action.yaml') != '' }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
