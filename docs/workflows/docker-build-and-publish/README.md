@@ -49,18 +49,19 @@ jobs:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT               | TYPE    | REQUIRED | DEFAULT                                         | DESCRIPTION                                                                                                      |
-| ------------------- | ------- | -------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| checkout-lfs-files  | boolean | false    | `false`                                         | Whether the Git checkout action should resolve LFS files or not. (Default is false)                              |
-| checkout-submodules | string  | false    | `"false"`                                       | Whether to checkout submodules: `true` to checkout submodules or `recursive` to recursively checkout submodules. |
-| docker-build-args   | string  | false    |                                                 | List of build-time variables (see https://github.com/docker/build-push-action?tab=readme-ov-file#inputs)         |
-| docker-context      | string  | false    | `"."`                                           | The docker context.                                                                                              |
-| docker-registry     | string  | false    | `"docker.io"`                                   | Host where the image should be pushed to.                                                                        |
-| dockerfile-path     | string  | false    | `"./Dockerfile"`                                | Path to the Dockerfile.                                                                                          |
-| image-name          | string  | false    | `"${{ github.event.repository.name }}"`         | Name of Docker image.                                                                                            |
-| image-namespace     | string  | false    | `"bakdata"`                                     | Namespace of Docker image.                                                                                       |
-| image-tag           | string  | false    | `"pipeline-${{ github.run_id }}-git-{{ sha }}"` | Tag of Docker image.                                                                                             |
-| ref                 | string  | false    |                                                 | Ref name to checkout                                                                                             |
+| INPUT               | TYPE    | REQUIRED | DEFAULT                                         | DESCRIPTION                                                                                                                              |
+| ------------------- | ------- | -------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| checkout-lfs-files  | boolean | false    | `false`                                         | Whether the Git checkout action should resolve LFS files or not. (Default is false)                                                      |
+| checkout-submodules | string  | false    | `"false"`                                       | Whether to checkout submodules: `true` to checkout submodules or `recursive` to recursively checkout submodules.                         |
+| docker-build-args   | string  | false    |                                                 | List of build-time variables (see https://github.com/docker/build-push-action?tab=readme-ov-file#inputs)                                 |
+| docker-context      | string  | false    | `"."`                                           | The docker context.                                                                                                                      |
+| docker-registry     | string  | false    | `"docker.io"`                                   | Host where the image should be pushed to.                                                                                                |
+| dockerfile-path     | string  | false    | `"./Dockerfile"`                                | Path to the Dockerfile.                                                                                                                  |
+| image-name          | string  | false    | `"${{ github.event.repository.name }}"`         | Name of Docker image.                                                                                                                    |
+| image-namespace     | string  | false    | `"bakdata"`                                     | Namespace of Docker image.                                                                                                               |
+| image-tag           | string  | false    | `"pipeline-${{ github.run_id }}-git-{{ sha }}"` | Tag of Docker image.                                                                                                                     |
+| image-tag-flavor    | string  | false    |                                                 | Flavor of Docker image tags. See [docs of metadata-action](https://github.com/docker/metadata-action/blob/v5.6.1/README.md#flavor-input) |
+| ref                 | string  | false    |                                                 | Ref name to checkout                                                                                                                     |
 
 <!-- AUTO-DOC-INPUT:END -->
 

@@ -39,6 +39,11 @@ on:
         required: false
         default: "pipeline-${{ github.run_id }}-git-{{ sha }}"
         type: string
+      image-tag-flavor:
+        description: "Flavor of Docker image tags. See [docs of metadata-action](https://github.com/docker/metadata-action/blob/v5.6.1/README.md#flavor-input)"
+        required: false
+        default: ""
+        type: string
       ref:
         description: "Ref name to checkout"
         required: false
@@ -64,7 +69,7 @@ on:
         required: true
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-docker-${{ inputs.image-name }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-docker-${{ inputs.image-name }}-${{ inputs.image-tag-flavor }}
   cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
 
 jobs:
@@ -119,6 +124,7 @@ jobs:
             event=pr,type=ref
             event=branch,type=ref,enable=${{ github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main' }}
             event=tag,type=semver,pattern={{ version }}
+          flavor: ${{ inputs.image-tag-flavor }}
         env:
           DOCKER_METADATA_PR_HEAD_SHA: true # set correct sha for PRs
 
