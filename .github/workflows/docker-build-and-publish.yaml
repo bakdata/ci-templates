@@ -69,7 +69,7 @@ on:
         required: true
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-docker-${{ inputs.image-name }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-docker-${{ inputs.image-name }}-${{ inputs.image-tag-flavor }}
   cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
 
 jobs:
