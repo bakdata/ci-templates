@@ -148,7 +148,7 @@ jobs:
 
     steps:
       - name: Release on Github
-        uses: bakdata/ci-templates/actions/java-gradle-release-github@1.49.0
+        uses: bakdata/ci-templates/actions/java-gradle-release-github@tiedemann/fix-java-changelog
         with:
           github-token: ${{ secrets.github-token }}
           java-distribution: ${{ inputs.java-distribution }}
@@ -156,5 +156,3 @@ jobs:
           gradle-version: ${{ inputs.gradle-version }}
           gradle-cache: ${{ inputs.gradle-cache }}
           gradle-cache-read-only: true
-          gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
-          working-directory: ${{ inputs.working-directory }}
