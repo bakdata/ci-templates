@@ -7,7 +7,7 @@ This action assesses code quality and tests signing for Sonatype.
 ```yaml
 steps:
   - name: Test
-    uses: bakdata/ci-templates/actions/java-gradle-test@main
+    uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@main
     with:
       sonar-token: ${{ secrets.sonar-token }} # (Optional) If not set, code quality tests are skipped
       sonar-organization: ${{ secrets.sonar-organization }} # (Optional) If not set, code quality tests are skipped
