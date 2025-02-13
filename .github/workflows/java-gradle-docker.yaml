@@ -93,7 +93,7 @@ concurrency:
 jobs:
   build-and-test:
     name: Build, Test and Assess code quality
-    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@1.61.0
+    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@1.62.0
     with:
       java-distribution: ${{ inputs.java-distribution }}
       java-version: ${{ inputs.java-version }}
