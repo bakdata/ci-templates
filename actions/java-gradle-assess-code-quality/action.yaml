@@ -88,7 +88,7 @@ runs:
           ${{ (inputs.sonar-project-name != '' && format('-Dsonar.projectName={0}', inputs.sonar-project-name)) || '' }} \
           ${{ (github.event_name == 'push' && format('-Dsonar.branch.name={0}', github.ref_name)) || '' }} \
           ${{ (github.event_name == 'pull_request' && format('-Dsonar.pullrequest.key={0}', github.event.pull_request.number)) || '' }} \
-          ${{ (github.event_name == 'pull_request' && format('-Dsonar.pullrequest.branch={0}', github.ref_name)) || '' }} \
+          ${{ (github.event_name == 'pull_request' && format('-Dsonar.pullrequest.branch={0}', github.head_ref)) || '' }} \
           ${{ (github.event_name == 'pull_request' && format('-Dsonar.pullrequest.base={0}', github.base_ref)) || '' }} \
           --info --stacktrace sonar \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
