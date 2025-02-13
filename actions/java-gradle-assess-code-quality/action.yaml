@@ -86,6 +86,7 @@ runs:
           ${{ (inputs.sonar-organization != '' && format('-Dsonar.organization={0}', inputs.sonar-organization)) || '' }} \
           ${{ (inputs.sonar-project-key != '' && format('-Dsonar.projectKey={0}', inputs.sonar-project-key)) || '' }} \
           ${{ (inputs.sonar-project-name != '' && format('-Dsonar.projectName={0}', inputs.sonar-project-name)) || '' }} \
+          -Dsonar.branch.name=${{ github.ref_name }} \
           --info --stacktrace sonar \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
