@@ -120,7 +120,7 @@ jobs:
 
     steps:
       - name: Release on Github
-        uses: bakdata/ci-templates/actions/java-gradle-release-github@tiedemann/fix-java-changelog
+        uses: bakdata/ci-templates/actions/java-gradle-release-github@1.61.0
         with:
           github-token: ${{ secrets.github-token }}
           java-distribution: ${{ inputs.java-distribution }}
