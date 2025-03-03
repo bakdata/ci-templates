@@ -18,6 +18,10 @@ inputs:
     description: "Whether Gradle should refresh dependencies. (Default is false)"
     required: false
     default: "false"
+  gradle-dependency-graph:
+    description: "Configure GitHub dependency graph for Gradle. See https://github.com/gradle/actions/blob/main/docs/setup-gradle.md#github-dependency-graph-support. (Default is disabled)"
+    required: false
+    default: "disabled"
   gradle-version:
     description: "Gradle version to be installed. (Default is wrapper)"
     required: false
@@ -44,13 +48,14 @@ runs:
         lfs: ${{ inputs.download-lfs-files }}
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@1.61.0
+      uses: bakdata/ci-templates/actions/java-gradle-setup@feature/gradle-dependency-graph
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
         gradle-version: ${{ inputs.gradle-version }}
         gradle-cache: ${{ inputs.gradle-cache }}
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
+        gradle-dependency-graph: ${{ inputs.gradle-dependency-graph }}
 
     - name: Run tests
       run: ./gradlew check --info --stacktrace ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
