@@ -68,7 +68,7 @@ jobs:
     steps:
       - name: Release on Github
         id: release
-        uses: bakdata/ci-templates/actions/java-gradle-release@feature/gradle-dependency-graph
+        uses: bakdata/ci-templates/actions/java-gradle-release@1.63.0
         with:
           release-type: ${{ inputs.release-type }}
           github-email: ${{ secrets.github-email }}

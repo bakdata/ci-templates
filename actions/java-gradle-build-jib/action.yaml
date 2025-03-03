@@ -66,7 +66,7 @@ runs:
         lfs: ${{ inputs.download-lfs-files }}
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@feature/gradle-dependency-graph
+      uses: bakdata/ci-templates/actions/java-gradle-setup@1.63.0
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
