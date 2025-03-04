@@ -79,7 +79,7 @@ concurrency:
 jobs:
   build-and-test:
     name: Build, Test and Assess code quality
-    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@1.63.0
+    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@feature/sign
     with:
       java-distribution: ${{ inputs.java-distribution }}
       java-version: ${{ inputs.java-version }}
@@ -88,6 +88,7 @@ jobs:
       gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
       gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
       working-directory: ${{ inputs.working-directory }}
+      publication-name: pluginMaven
     secrets:
       signing-key-id: ${{ secrets.signing-key-id }}
       signing-password: ${{ secrets.signing-password }}

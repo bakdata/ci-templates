@@ -44,6 +44,11 @@ on:
         required: false
         type: string
         default: "."
+      publication-name:
+        description: "Name of publication for signing. (Default is sonatype)"
+        required: false
+        type: string
+        default: "sonatype"
 
     secrets:
       signing-key-id:
@@ -106,7 +111,7 @@ jobs:
     needs: test
     steps:
       - name: Assess code quality
-        uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@1.63.0
+        uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@feature/sign
         with:
           download-lfs-files: ${{ inputs.download-lfs-files }}
           gradle-cache: ${{ inputs.gradle-cache }}
@@ -121,3 +126,4 @@ jobs:
           sonar-organization: ${{ secrets.sonar-organization }}
           sonar-token: ${{ secrets.sonar-token }}
           working-directory: ${{ inputs.working-directory }}
+          publication-name: ${{ inputs.publication-name }}
