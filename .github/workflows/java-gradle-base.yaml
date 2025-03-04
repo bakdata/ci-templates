@@ -44,11 +44,6 @@ on:
         required: false
         type: string
         default: "."
-      publication-name:
-        description: "Name of publication for signing. (Default is sonatype)"
-        required: false
-        type: string
-        default: "sonatype"
 
     secrets:
       signing-key-id:
@@ -126,4 +121,3 @@ jobs:
           sonar-organization: ${{ secrets.sonar-organization }}
           sonar-token: ${{ secrets.sonar-token }}
           working-directory: ${{ inputs.working-directory }}
-          publication-name: ${{ inputs.publication-name }}
