@@ -67,6 +67,7 @@ runs:
       uses: bakdata/ci-templates/actions/checkout@1.49.0
       with:
         lfs: ${{ inputs.download-lfs-files }}
+        fetch-depth: 0
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@1.63.0
