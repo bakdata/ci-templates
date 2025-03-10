@@ -106,7 +106,7 @@ jobs:
     needs: test
     steps:
       - name: Assess code quality
-        uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@feature/sign
+        uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@1.64.0
         with:
           download-lfs-files: ${{ inputs.download-lfs-files }}
           gradle-cache: ${{ inputs.gradle-cache }}
