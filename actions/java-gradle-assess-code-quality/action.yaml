@@ -80,7 +80,7 @@ runs:
         gradle-dependency-graph: disabled
 
     - name: Assess code quality
-      if: ${{ inputs.sonar-token != '' }}
+      if: ${{ inputs.sonar-token == '' }}
       run: |
         ./gradlew \
           -Dsonar.host.url=${{ inputs.sonar-host }} \
