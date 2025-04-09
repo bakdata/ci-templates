@@ -75,7 +75,7 @@ jobs:
           version: ${{ inputs.uv-version }}
 
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@1.49.0
+        uses: bakdata/ci-templates/actions/checkout@1.64.0
         with:
           ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false # required for pushing to protected branch later
@@ -83,14 +83,14 @@ jobs:
 
       - name: Bump version
         id: bump-version-dev
-        uses: bakdata/ci-templates/actions/bump-version@v1.21.2
+        uses: bakdata/ci-templates/actions/bump-version@1.64.0
         with:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.working-directory }}
 
       - name: Bump version release
         id: bump-version-release
-        uses: bakdata/ci-templates/actions/bump-version@v1.21.2
+        uses: bakdata/ci-templates/actions/bump-version@1.64.0
         with:
           release-type: release --allow-dirty
           working-directory: ${{ inputs.working-directory }}
@@ -100,7 +100,7 @@ jobs:
 
       - name: Create changelog
         id: build-changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@1.50.0
+        uses: bakdata/ci-templates/actions/changelog-generate@1.64.0
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}
@@ -108,7 +108,7 @@ jobs:
           changelog-file: ${{ inputs.changelog-file }}
 
       - name: Commit and push changes including .bumpversion.cfg file
-        uses: bakdata/ci-templates/actions/commit-and-push@1.25.2
+        uses: bakdata/ci-templates/actions/commit-and-push@1.64.0
         with:
           ref: ${{ github.event.repository.default_branch }}
           commit-message: "Bump version ${{ steps.bump-version-dev.outputs.old-version }} → ${{ steps.bump-version-release.outputs.release-version }}"
@@ -118,7 +118,7 @@ jobs:
           add-untracked: "true"
 
       - name: Tag and release
-        uses: bakdata/ci-templates/actions/tag-and-release@v1.22.0
+        uses: bakdata/ci-templates/actions/tag-and-release@1.64.0
         with:
           tag: "${{ steps.bump-version-release.outputs.release-version }}"
           github-username: ${{ secrets.github-username }}
