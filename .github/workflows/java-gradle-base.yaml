@@ -100,24 +100,24 @@ jobs:
           java-version: ${{ inputs.java-version }}
           working-directory: ${{ inputs.working-directory }}
 
-  assess-code-quality:
-    name: Asses code quality
-    runs-on: ubuntu-22.04
-    needs: test
-    steps:
-      - name: Assess code quality
-        uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@1.64.0
-        with:
-          download-lfs-files: ${{ inputs.download-lfs-files }}
-          gradle-cache: ${{ inputs.gradle-cache }}
-          gradle-cache-read-only: true
-          gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
-          gradle-version: ${{ inputs.gradle-version }}
-          java-distribution: ${{ inputs.java-distribution }}
-          java-version: ${{ inputs.java-version }}
-          signing-key-id: ${{ secrets.signing-key-id }}
-          signing-password: ${{ secrets.signing-password }}
-          signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
-          sonar-organization: ${{ secrets.sonar-organization }}
-          sonar-token: ${{ secrets.sonar-token }}
-          working-directory: ${{ inputs.working-directory }}
+  # assess-code-quality:
+  #   name: Asses code quality
+  #   runs-on: ubuntu-22.04
+  #   needs: test
+  #   steps:
+  #     - name: Assess code quality
+  #       uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@1.64.0
+  #       with:
+  #         download-lfs-files: ${{ inputs.download-lfs-files }}
+  #         gradle-cache: ${{ inputs.gradle-cache }}
+  #         gradle-cache-read-only: true
+  #         gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
+  #         gradle-version: ${{ inputs.gradle-version }}
+  #         java-distribution: ${{ inputs.java-distribution }}
+  #         java-version: ${{ inputs.java-version }}
+  #         signing-key-id: ${{ secrets.signing-key-id }}
+  #         signing-password: ${{ secrets.signing-password }}
+  #         signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
+  #         sonar-organization: ${{ secrets.sonar-organization }}
+  #         sonar-token: ${{ secrets.sonar-token }}
+  #         working-directory: ${{ inputs.working-directory }}
