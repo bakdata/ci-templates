@@ -138,6 +138,7 @@ jobs:
 
   publish:
     name: Publish
+    if: ${{ !github.event.repository.private }}
     runs-on: ubuntu-22.04
     needs: build-jib
 
