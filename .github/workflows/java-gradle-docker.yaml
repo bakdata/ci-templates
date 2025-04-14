@@ -93,7 +93,8 @@ concurrency:
 jobs:
   build-and-test:
     name: Build, Test and Assess code quality
-    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@tmp/no-sonar
+    # TODO: prebump version
+    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@feat/skip-sona-private-repos
     with:
       java-distribution: ${{ inputs.java-distribution }}
       java-version: ${{ inputs.java-version }}
