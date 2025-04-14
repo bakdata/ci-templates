@@ -57,25 +57,25 @@ on:
     secrets:
       sonar-token:
         description: "Token for Sonarcloud."
-        required: true
+        required: false
       sonar-organization:
         description: "Organization for Sonarcloud"
-        required: true
+        required: false
       signing-secret-key-ring:
         description: "Key ring (base64 encoded) for signing the Sonatype publication."
-        required: true
+        required: false
       signing-key-id:
         description: "Key id for signing the Sonatype publication."
-        required: true
+        required: false
       signing-password:
         description: "Password for signing the Sonatype publication."
-        required: true
+        required: false
       ossrh-username:
         description: "Username for signing into Sonatype repository."
-        required: true
+        required: false
       ossrh-password:
         description: "Password for signing into Sonatype repository."
-        required: true
+        required: false
       docker-username:
         description: "Username for publishing to Dockerhub."
         required: true
