@@ -86,12 +86,12 @@ No outputs.
 | github-token            | true     | GitHub token for requesting changes from API.                   |
 | gradle-publish-key      | true     | Key for publishing to Gradle Plugin Portal.                     |
 | gradle-publish-secret   | true     | Secret for publishing to Gradle Plugin Portal.                  |
-| ossrh-password          | true     | Password for signing into Sonatype repository.                  |
-| ossrh-username          | true     | Username for signing into Sonatype repository.                  |
-| signing-key-id          | true     | Key id for signing the Sonatype publication.                    |
-| signing-password        | true     | Password for signing the Sonatype publication.                  |
-| signing-secret-key-ring | true     | Key ring (base64 encoded) for signing the Sonatype publication. |
-| sonar-organization      | true     | Organization for Sonarcloud                                     |
-| sonar-token             | true     | Token for Sonarcloud.                                           |
+| ossrh-password          | false    | Password for signing into Sonatype repository.                  |
+| ossrh-username          | false    | Username for signing into Sonatype repository.                  |
+| signing-key-id          | false    | Key id for signing the Sonatype publication.                    |
+| signing-password        | false    | Password for signing the Sonatype publication.                  |
+| signing-secret-key-ring | false    | Key ring (base64 encoded) for signing the Sonatype publication. |
+| sonar-organization      | false    | Organization for Sonarcloud                                     |
+| sonar-token             | false    | Token for Sonarcloud.                                           |
 
 <!-- AUTO-DOC-SECRETS:END -->
