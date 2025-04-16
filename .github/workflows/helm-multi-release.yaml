@@ -115,6 +115,7 @@ jobs:
         uses: bakdata/ci-templates/actions/checkout@1.49.0
         with:
           ref: ${{ inputs.gh-pages-branch }}
+          persist-credentials: false # required for pushing to protected branch or pushing with Dependabot
 
       - name: Download new artifacts
         uses: actions/download-artifact@v4
