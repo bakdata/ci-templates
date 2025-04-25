@@ -1,119 +1,126 @@
 name: Reusable workflow for building and releasing Python packages
-
 on:
-  workflow_call:
-    inputs:
-      release-type:
-        description: "Scope of the release; See: https://python-poetry.org/docs/cli/#version"
-        required: true
-        type: string
-      changelog:
-        description: "Create changelog for release."
-        required: false
-        default: true
-        type: boolean
-      changelog-file:
-        description: Path to the changelog file in the GitHub repository
-        required: false
-        default: "CHANGELOG.md"
-        type: string
-      changelog-config:
-        description: "Changelog config path."
-        required: false
-        default: ""
-        type: string
-      poetry-version:
-        description: "The Poetry version to be installed. (Default is 1.5.1)"
-        required: false
-        default: "1.5.1"
-        type: string
-      python-version:
-        description: "The Python version for setting up Poetry. (Default is 3.10)"
-        required: false
-        default: "3.10"
-        type: string
-      ref:
-        description: "The ref name to checkout the repository."
-        required: false
-        default: ${{ github.event.repository.default_branch }}
-        type: string
-      working-directory:
-        description: "The working directory of your Python package. (Default is root directory)"
-        required: false
-        default: "./"
-        type: string
-
-    secrets:
-      github-username:
-        description: "The GitHub username for committing the changes."
-        required: true
-      github-email:
-        description: "The GitHub email for committing the changes."
-        required: true
-      github-token:
-        description: "The GitHub token for committing the changes."
-        required: true
-
-    # Map the workflow outputs to job outputs
-    outputs:
-      release-version:
-        description: "The bumped version of the package."
-        value: ${{ jobs.create-release.outputs.release-version }}
-      old-version:
-        description: "The old version of the package."
-        value: ${{ jobs.create-release.outputs.old-version }}
-
+    workflow_call:
+        inputs:
+            release-type:
+                description: 'Scope of the release; See: https://python-poetry.org/docs/cli/#version'
+                required: true
+                type: string
+            changelog:
+                description: Create changelog for release.
+                required: false
+                default: true
+                type: boolean
+            changelog-file:
+                description: Path to the changelog file in the GitHub repository
+                required: false
+                default: CHANGELOG.md
+                type: string
+            changelog-config:
+                description: Changelog config path.
+                required: false
+                default: ''
+                type: string
+            poetry-version:
+                description: The Poetry version to be installed. (Default is 1.5.1)
+                required: false
+                default: 1.5.1
+                type: string
+            python-version:
+                description: The Python version for setting up Poetry. (Default is 3.10)
+                required: false
+                default: '3.10'
+                type: string
+            ref:
+                description: The ref name to checkout the repository.
+                required: false
+                default: ${{ github.event.repository.default_branch }}
+                type: string
+            working-directory:
+                description: The working directory of your Python package. (Default is root directory)
+                required: false
+                default: ./
+                type: string
+        secrets:
+            GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
+                description: The workload identity provider to use for fetching secrets
+                required: true
+            GOOGLE_SERVICE_ACCOUNT:
+                description: The service account to use to fetch the secrets
+                required: true
+            GOOGLE_PROJECT_ID:
+                description: The id of the project which contains the secrets
+                required: true
+        outputs:
+            release-version:
+                description: The bumped version of the package.
+                value: ${{ jobs.create-release.outputs.release-version }}
+            old-version:
+                description: The old version of the package.
+                value: ${{ jobs.create-release.outputs.old-version }}
 jobs:
-  create-release:
-    name: Release
-    runs-on: ubuntu-22.04
-    # Map the job outputs to step outputs
-    outputs:
-      release-version: ${{ steps.bump-version.outputs.release-version }}
-      old-version: ${{ steps.bump-version.outputs.old-version }}
-
-    steps:
-      - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@1.49.0
-        with:
-          ref: ${{ inputs.ref }}
-          persist-credentials: false # required for pushing to protected branch later
-          fetch-depth: 0 # required to build the changelog
-
-      - name: Bump version with Poetry
-        id: bump-version
-        uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.21.0
-        with:
-          release-type: ${{ inputs.release-type }}
-          python-version: ${{ inputs.python-version }}
-          poetry-version: ${{ inputs.poetry-version }}
-          working-directory: ${{ inputs.working-directory }}
-
-      - name: Create changelog
-        id: build-changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@1.52.1
-        if: ${{ inputs.changelog }}
-        with:
-          github-token: ${{ secrets.github-token }}
-          tag: ${{ steps.bump-version.outputs.release-version }}
-          changelog-file: ${{ inputs.changelog-file }}
-
-      - name: Commit and push pyproject.toml file
-        uses: bakdata/ci-templates/actions/commit-and-push@1.25.2
-        with:
-          ref: ${{ inputs.ref }}
-          commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
-          github-username: ${{ secrets.github-username }}s
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
-          add-untracked: "true"
-
-      - name: Tag and release
-        uses: bakdata/ci-templates/actions/tag-and-release@v1.22.0
-        with:
-          tag: "${{ steps.bump-version.outputs.release-version }}"
-          release-title: "${{ steps.bump-version.outputs.release-version }}"
-          release-body: "${{ steps.build-changelog.outputs.single-changelog }}"
-          github-username: ${{ secrets.github-username }}
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
+    create-release:
+        name: Release
+        runs-on: ubuntu-22.04
+        outputs:
+            release-version: ${{ steps.bump-version.outputs.release-version }}
+            old-version: ${{ steps.bump-version.outputs.old-version }}
+        steps:
+        -   name: Authenticate with GCloud
+            uses: google-github-actions/auth@v2
+            id: auth
+            with:
+                workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+                service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+        -   name: Fetch secrets from GSM
+            id: fetch-secrets
+            uses: google-github-actions/get-secretmanager-secrets@v2
+            with:
+                secrets: |-
+                    github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
+                    github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
+                    github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
+                export_to_environment: 'true'
+        -   name: Check out repository
+            uses: bakdata/ci-templates/actions/checkout@1.49.0
+            with:
+                ref: ${{ inputs.ref }}
+                persist-credentials: false
+                fetch-depth: 0
+        -   name: Bump version with Poetry
+            id: bump-version
+            uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.21.0
+            with:
+                release-type: ${{ inputs.release-type }}
+                python-version: ${{ inputs.python-version }}
+                poetry-version: ${{ inputs.poetry-version }}
+                working-directory: ${{ inputs.working-directory }}
+        -   name: Create changelog
+            id: build-changelog
+            uses: bakdata/ci-templates/actions/changelog-generate@1.52.1
+            if: ${{ inputs.changelog }}
+            with:
+                github-token: ${{ env.github-token }}
+                tag: ${{ steps.bump-version.outputs.release-version }}
+                changelog-file: ${{ inputs.changelog-file }}
+        -   name: Commit and push pyproject.toml file
+            uses: bakdata/ci-templates/actions/commit-and-push@1.25.2
+            with:
+                ref: ${{ inputs.ref }}
+                commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} \u2192 ${{ steps.bump-version.outputs.release-version }}"
+                github-username: ${{ env.github-username }}s
+                github-email: ${{ env.github-email }}
+                github-token: ${{ env.github-token }}
+                add-untracked: 'true'
+        -   name: Tag and release
+            uses: bakdata/ci-templates/actions/tag-and-release@v1.22.0
+            with:
+                tag: ${{ steps.bump-version.outputs.release-version }}
+                release-title: ${{ steps.bump-version.outputs.release-version }}
+                release-body: ${{ steps.build-changelog.outputs.single-changelog }}
+                github-username: ${{ env.github-username }}
+                github-email: ${{ env.github-email }}
+                github-token: ${{ env.github-token }}
+permissions:
+    contents: read
+    id-token: write

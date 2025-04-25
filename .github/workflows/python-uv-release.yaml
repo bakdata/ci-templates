@@ -1,128 +1,131 @@
 name: Python uv release
-# Reusable workflow for building and releasing Python uv packages
-
 on:
-  workflow_call:
-    inputs:
-      release-type:
-        description: "Scope of the release (major, minor or patch)."
-        required: true
-        type: string
-      uv-version:
-        description: "The uv version to be installed. (Default is 0.6.13)"
-        required: false
-        default: "0.6.13"
-        type: string
-      python-version:
-        description: "The Python version for setting up uv. (Default is 3.13)"
-        required: false
-        default: "3.13"
-        type: string
-      changelog:
-        description: "Create changelog for release."
-        required: false
-        default: true
-        type: boolean
-      changelog-file:
-        description: Path to the changelog file in the GitHub repository
-        required: false
-        default: "CHANGELOG.md"
-        type: string
-      changelog-config:
-        description: "Changelog config path."
-        required: false
-        default: ""
-        type: string
-      working-directory:
-        description: "Working directory containing `.bumpversion.cfg`. (Default is .)"
-        required: false
-        default: "."
-        type: string
-
-    secrets:
-      github-username:
-        description: "The GitHub username for committing the changes."
-        required: true
-      github-email:
-        description: "The GitHub email for committing the changes."
-        required: true
-      github-token:
-        description: "The GitHub token for committing the changes."
-        required: true
-
-    # Map the workflow outputs to job outputs
-    outputs:
-      release-version:
-        description: "The bumped version."
-        value: ${{ jobs.release.outputs.release-version }}
-      old-version:
-        description: "The old version in your `.bumpversion.cfg` file."
-        value: ${{ jobs.release.outputs.old-version }}
-
+    workflow_call:
+        inputs:
+            release-type:
+                description: Scope of the release (major, minor or patch).
+                required: true
+                type: string
+            uv-version:
+                description: The uv version to be installed. (Default is 0.6.13)
+                required: false
+                default: 0.6.13
+                type: string
+            python-version:
+                description: The Python version for setting up uv. (Default is 3.13)
+                required: false
+                default: '3.13'
+                type: string
+            changelog:
+                description: Create changelog for release.
+                required: false
+                default: true
+                type: boolean
+            changelog-file:
+                description: Path to the changelog file in the GitHub repository
+                required: false
+                default: CHANGELOG.md
+                type: string
+            changelog-config:
+                description: Changelog config path.
+                required: false
+                default: ''
+                type: string
+            working-directory:
+                description: Working directory containing `.bumpversion.cfg`. (Default is .)
+                required: false
+                default: .
+                type: string
+        secrets:
+            GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
+                description: The workload identity provider to use for fetching secrets
+                required: true
+            GOOGLE_SERVICE_ACCOUNT:
+                description: The service account to use to fetch the secrets
+                required: true
+            GOOGLE_PROJECT_ID:
+                description: The id of the project which contains the secrets
+                required: true
+        outputs:
+            release-version:
+                description: The bumped version.
+                value: ${{ jobs.release.outputs.release-version }}
+            old-version:
+                description: The old version in your `.bumpversion.cfg` file.
+                value: ${{ jobs.release.outputs.old-version }}
 jobs:
-  release:
-    runs-on: ubuntu-22.04
-    # Map the job outputs to step outputs
-    outputs:
-      release-version: ${{ steps.bump-version-release.outputs.release-version }}
-      old-version: ${{ steps.bump-version-dev.outputs.old-version }}
-
-    steps:
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
-        with:
-          python-version: ${{ inputs.python-version }}
-          version: ${{ inputs.uv-version }}
-
-      - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@1.64.0
-        with:
-          ref: ${{ github.event.repository.default_branch }}
-          persist-credentials: false # required for pushing to protected branch later
-          fetch-depth: 0 # required for changelog generation
-
-      - name: Bump version
-        id: bump-version-dev
-        uses: bakdata/ci-templates/actions/bump-version@1.64.0
-        with:
-          release-type: ${{ inputs.release-type }}
-          working-directory: ${{ inputs.working-directory }}
-
-      - name: Bump version release
-        id: bump-version-release
-        uses: bakdata/ci-templates/actions/bump-version@1.64.0
-        with:
-          release-type: release --allow-dirty
-          working-directory: ${{ inputs.working-directory }}
-
-      - name: Apply version bump to uv lock
-        run: uv lock --no-refresh
-
-      - name: Create changelog
-        id: build-changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@1.64.0
-        if: ${{ inputs.changelog }}
-        with:
-          github-token: ${{ secrets.github-token }}
-          tag: ${{ steps.bump-version-release.outputs.release-version }}
-          changelog-file: ${{ inputs.changelog-file }}
-
-      - name: Commit and push changes including .bumpversion.cfg file
-        uses: bakdata/ci-templates/actions/commit-and-push@1.64.0
-        with:
-          ref: ${{ github.event.repository.default_branch }}
-          commit-message: "Bump version ${{ steps.bump-version-dev.outputs.old-version }} → ${{ steps.bump-version-release.outputs.release-version }}"
-          github-username: ${{ secrets.github-username }}
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
-          add-untracked: "true"
-
-      - name: Tag and release
-        uses: bakdata/ci-templates/actions/tag-and-release@1.64.0
-        with:
-          tag: "${{ steps.bump-version-release.outputs.release-version }}"
-          github-username: ${{ secrets.github-username }}
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
-          release-title: "${{ steps.bump-version-release.outputs.release-version }}"
-          release-body: "${{ steps.build-changelog.outputs.single-changelog }}"
+    release:
+        runs-on: ubuntu-22.04
+        outputs:
+            release-version: ${{ steps.bump-version-release.outputs.release-version }}
+            old-version: ${{ steps.bump-version-dev.outputs.old-version }}
+        steps:
+        -   name: Authenticate with GCloud
+            uses: google-github-actions/auth@v2
+            id: auth
+            with:
+                workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+                service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+        -   name: Fetch secrets from GSM
+            id: fetch-secrets
+            uses: google-github-actions/get-secretmanager-secrets@v2
+            with:
+                secrets: |-
+                    github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
+                    github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
+                    github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
+                export_to_environment: 'true'
+        -   name: Install uv
+            uses: astral-sh/setup-uv@v5
+            with:
+                python-version: ${{ inputs.python-version }}
+                version: ${{ inputs.uv-version }}
+        -   name: Check out repository
+            uses: bakdata/ci-templates/actions/checkout@1.64.0
+            with:
+                ref: ${{ github.event.repository.default_branch }}
+                persist-credentials: false
+                fetch-depth: 0
+        -   name: Bump version
+            id: bump-version-dev
+            uses: bakdata/ci-templates/actions/bump-version@1.64.0
+            with:
+                release-type: ${{ inputs.release-type }}
+                working-directory: ${{ inputs.working-directory }}
+        -   name: Bump version release
+            id: bump-version-release
+            uses: bakdata/ci-templates/actions/bump-version@1.64.0
+            with:
+                release-type: release --allow-dirty
+                working-directory: ${{ inputs.working-directory }}
+        -   name: Apply version bump to uv lock
+            run: uv lock --no-refresh
+        -   name: Create changelog
+            id: build-changelog
+            uses: bakdata/ci-templates/actions/changelog-generate@1.64.0
+            if: ${{ inputs.changelog }}
+            with:
+                github-token: ${{ env.github-token }}
+                tag: ${{ steps.bump-version-release.outputs.release-version }}
+                changelog-file: ${{ inputs.changelog-file }}
+        -   name: Commit and push changes including .bumpversion.cfg file
+            uses: bakdata/ci-templates/actions/commit-and-push@1.64.0
+            with:
+                ref: ${{ github.event.repository.default_branch }}
+                commit-message: "Bump version ${{ steps.bump-version-dev.outputs.old-version }} \u2192 ${{ steps.bump-version-release.outputs.release-version }}"
+                github-username: ${{ env.github-username }}
+                github-email: ${{ env.github-email }}
+                github-token: ${{ env.github-token }}
+                add-untracked: 'true'
+        -   name: Tag and release
+            uses: bakdata/ci-templates/actions/tag-and-release@1.64.0
+            with:
+                tag: ${{ steps.bump-version-release.outputs.release-version }}
+                github-username: ${{ env.github-username }}
+                github-email: ${{ env.github-email }}
+                github-token: ${{ env.github-token }}
+                release-title: ${{ steps.bump-version-release.outputs.release-version }}
+                release-body: ${{ steps.build-changelog.outputs.single-changelog }}
+permissions:
+    contents: read
+    id-token: write

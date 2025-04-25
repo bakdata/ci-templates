@@ -1,61 +1,75 @@
 name: Reusable workflow for publishing to PyPI
-
 on:
-  workflow_call:
-    inputs:
-      publish-to-test:
-        description: "If set to false, the packages are published to PyPI. (Default is true)"
-        required: false
-        default: true
-        type: boolean
-      python-version:
-        description: "The Python version for the Poetry virtual environment. (Default is 3.10)"
-        required: false
-        default: "3.10"
-        type: string
-      poetry-version:
-        description: "The Poetry version to be installed. (Default is 1.5.1)"
-        required: false
-        default: "1.5.1"
-        type: string
-      working-directory:
-        description: "The working directory of your Python packages. (Default is root directory)"
-        required: false
-        default: "./"
-        type: string
-
-    secrets:
-      pypi-token:
-        description: "PyPI token"
-        required: true
-
+    workflow_call:
+        inputs:
+            publish-to-test:
+                description: If set to false, the packages are published to PyPI. (Default is true)
+                required: false
+                default: true
+                type: boolean
+            python-version:
+                description: The Python version for the Poetry virtual environment. (Default is 3.10)
+                required: false
+                default: '3.10'
+                type: string
+            poetry-version:
+                description: The Poetry version to be installed. (Default is 1.5.1)
+                required: false
+                default: 1.5.1
+                type: string
+            working-directory:
+                description: The working directory of your Python packages. (Default is root directory)
+                required: false
+                default: ./
+                type: string
+        secrets:
+            GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
+                description: The workload identity provider to use for fetching secrets
+                required: true
+            GOOGLE_SERVICE_ACCOUNT:
+                description: The service account to use to fetch the secrets
+                required: true
+            GOOGLE_PROJECT_ID:
+                description: The id of the project which contains the secrets
+                required: true
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-pypi
-  cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
-
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-pypi
+    cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
 jobs:
-  publish:
-    name: Publish
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@1.49.0
-
-      - name: Set up Poetry ${{ inputs.poetry-version }}
-        uses: bakdata/ci-templates/actions/python-setup-poetry@v1.5.3
-        with:
-          python-version: ${{ inputs.python-version }}
-          poetry-version: ${{ inputs.poetry-version }}
-          working-directory: ${{ inputs.working-directory }}
-
-      - name: Install dependencies
-        run: poetry install --only main --no-interaction
-        shell: bash
-        working-directory: ${{ inputs.working-directory }}
-
-      - name: Publish to ${{ inputs.publish-to-test && 'TestPyPI' || 'PyPI' }}
-        uses: bakdata/ci-templates/actions/python-poetry-publish-pypi@1.25.2
-        with:
-          pypi-token: ${{ secrets.pypi-token }}
-          publish-to-test: ${{ inputs.publish-to-test }}
-          working-directory: ${{ inputs.working-directory }}
+    publish:
+        name: Publish
+        runs-on: ubuntu-22.04
+        steps:
+        -   name: Authenticate with GCloud
+            uses: google-github-actions/auth@v2
+            id: auth
+            with:
+                workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+                service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+        -   name: Fetch secrets from GSM
+            id: fetch-secrets
+            uses: google-github-actions/get-secretmanager-secrets@v2
+            with:
+                secrets: pypi-token:${{ secrets.GOOGLE_PROJECT_ID }}/PYPI_TOKEN
+                export_to_environment: 'true'
+        -   name: Check out repository
+            uses: bakdata/ci-templates/actions/checkout@1.49.0
+        -   name: Set up Poetry ${{ inputs.poetry-version }}
+            uses: bakdata/ci-templates/actions/python-setup-poetry@v1.5.3
+            with:
+                python-version: ${{ inputs.python-version }}
+                poetry-version: ${{ inputs.poetry-version }}
+                working-directory: ${{ inputs.working-directory }}
+        -   name: Install dependencies
+            run: poetry install --only main --no-interaction
+            shell: bash
+            working-directory: ${{ inputs.working-directory }}
+        -   name: Publish to ${{ inputs.publish-to-test && 'TestPyPI' || 'PyPI' }}
+            uses: bakdata/ci-templates/actions/python-poetry-publish-pypi@1.25.2
+            with:
+                pypi-token: ${{ env.pypi-token }}
+                publish-to-test: ${{ inputs.publish-to-test }}
+                working-directory: ${{ inputs.working-directory }}
+permissions:
+    contents: read
+    id-token: write

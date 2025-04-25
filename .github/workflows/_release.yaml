@@ -1,25 +1,26 @@
 name: Release
-
 on:
-  workflow_dispatch:
-    inputs:
-      release-type:
-        description: "Scope of the release."
-        type: choice
-        required: true
-        default: patch
-        options:
-          - patch
-          - minor
-          - major
-
+    workflow_dispatch:
+        inputs:
+            release-type:
+                description: Scope of the release.
+                type: choice
+                required: true
+                default: patch
+                options:
+                - patch
+                - minor
+                - major
 jobs:
-  release:
-    name: Release
-    uses: bakdata/ci-templates/.github/workflows/bump-version-release.yaml@1.35.1
-    with:
-      release-type: "${{ github.event.inputs.release-type }}"
-    secrets:
-      github-username: "${{ secrets.GH_USERNAME }}"
-      github-email: "${{ secrets.GH_EMAIL }}"
-      github-token: "${{ secrets.GH_TOKEN }}"
+    release:
+        name: Release
+        uses: bakdata/ci-templates/.github/workflows/bump-version-release.yaml@tiedemann/use-gsm-secerts-in-workflow-calls
+        with:
+            release-type: ${{ github.event.inputs.release-type }}
+        secrets:
+            GOOGLE_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+            GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+            GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+permissions:
+    contents: read
+    id-token: write

@@ -1,162 +1,188 @@
 name: Reusable workflow for packaging and publishing Helm charts on GitHub pages
-
 on:
-  workflow_call:
-    inputs:
-      page-url:
-        description: "URL to the GitHub pages website of the repository."
-        required: true
-        type: string
-      release-type:
-        description: "Scope of the release (major, minor or patch)."
-        required: true
-        type: string
-      ref:
-        description: "The ref name to checkout the repository."
-        required: false
-        default: ${{ github.event.repository.default_branch }}
-        type: string
-      lint-config-path:
-        description: "The path to the lint configuration file (See https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml)."
-        required: false
-        default: ".github/lint-config.yaml"
-        type: string
-      helm-version:
-        description: "The Helm version."
-        required: false
-        default: "v3.10.1"
-        type: string
-      charts-dir:
-        description: "The directory containing the Helm chart and `.bumpversion.cfg` file."
-        required: false
-        default: "."
-        type: string
-      skip-download:
-        description: "Skip downloading index.yaml and previous Chart versions from GitHub pages. (To be used during setup of this workflow)"
-        required: false
-        default: false
-        type: boolean
-      artifact-dir:
-        description: "Directory inside `charts-dir` for preparation of the GitHub pages artifact."
-        required: false
-        default: "artifact"
-        type: string
-
-    secrets:
-      github-username:
-        description: "The GitHub username for committing the changes."
-        required: true
-      github-email:
-        description: "The GitHub email for committing the changes."
-        required: true
-      github-token:
-        description: "The GitHub token for committing the changes."
-        required: true
-
-    # Map the workflow outputs to job outputs
-    outputs:
-      release-version:
-        description: "The bumped version."
-        value: ${{ jobs.helm-release.outputs.release-version }}
-      old-version:
-        description: "The old version in your `.bumpversion.cfg` file."
-        value: ${{ jobs.helm-release.outputs.old-version }}
-
+    workflow_call:
+        inputs:
+            page-url:
+                description: URL to the GitHub pages website of the repository.
+                required: true
+                type: string
+            release-type:
+                description: Scope of the release (major, minor or patch).
+                required: true
+                type: string
+            ref:
+                description: The ref name to checkout the repository.
+                required: false
+                default: ${{ github.event.repository.default_branch }}
+                type: string
+            lint-config-path:
+                description: The path to the lint configuration file (See https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml).
+                required: false
+                default: .github/lint-config.yaml
+                type: string
+            helm-version:
+                description: The Helm version.
+                required: false
+                default: v3.10.1
+                type: string
+            charts-dir:
+                description: The directory containing the Helm chart and `.bumpversion.cfg` file.
+                required: false
+                default: .
+                type: string
+            skip-download:
+                description: Skip downloading index.yaml and previous Chart versions from GitHub pages. (To be used during setup of this workflow)
+                required: false
+                default: false
+                type: boolean
+            artifact-dir:
+                description: Directory inside `charts-dir` for preparation of the GitHub pages artifact.
+                required: false
+                default: artifact
+                type: string
+        secrets:
+            GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
+                description: The workload identity provider to use for fetching secrets
+                required: true
+            GOOGLE_SERVICE_ACCOUNT:
+                description: The service account to use to fetch the secrets
+                required: true
+            GOOGLE_PROJECT_ID:
+                description: The id of the project which contains the secrets
+                required: true
+        outputs:
+            release-version:
+                description: The bumped version.
+                value: ${{ jobs.helm-release.outputs.release-version }}
+            old-version:
+                description: The old version in your `.bumpversion.cfg` file.
+                value: ${{ jobs.helm-release.outputs.old-version }}
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-release
-  cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
-
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-release
+    cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
 jobs:
-  helm-lint:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Lint Helm chart
-        uses: bakdata/ci-templates/actions/helm-lint@1.49.0
-        with:
-          lint-config-path: "${{ inputs.lint-config-path }}"
-
-  helm-release:
-    runs-on: ubuntu-22.04
-    needs: helm-lint
-
-    # Map the job outputs to step outputs
-    outputs:
-      release-version: ${{ steps.bump-version.outputs.release-version }}
-      old-version: ${{ steps.bump-version.outputs.old-version }}
-
-    steps:
-      - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@1.49.0
-        with:
-          ref: ${{ inputs.ref }}
-          persist-credentials: false # required for pushing to protected branch later
-
-      - name: Bump version
-        id: bump-version
-        uses: bakdata/ci-templates/actions/bump-version@v1.21.0
-        with:
-          release-type: ${{ inputs.release-type }}
-          working-directory: ${{ inputs.charts-dir }}
-
-      - name: Download previous Helm index
-        run: curl -O -L -f ${{ inputs.page-url }}/index.yaml
-        if: ${{ ! inputs.skip-download }}
-        shell: bash
-        working-directory: ${{ inputs.charts-dir }}
-
-      - name: Find previous package versions
-        id: packages
-        uses: mikefarah/yq@v4.28.1
-        if: ${{ ! inputs.skip-download }}
-        with:
-          cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ inputs.charts-dir }}/index.yaml
-
-      - name: Create Helm package & update index
-        uses: bakdata/ci-templates/actions/helm-package@v1.6.0
-        with:
-          charts-dir: ${{ inputs.charts-dir }}
-
-      - name: Commit and push Chart.yaml & .bumpversion.cfg file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
-        with:
-          ref: ${{ inputs.ref }}
-          commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
-          github-username: ${{ secrets.github-username }}
-          github-email: ${{ secrets.github-email }}
-          github-token: ${{ secrets.github-token }}
-
-      - name: Prepare artifact
-        run: |
-          mkdir ${{ inputs.artifact-dir }}
-          cp index.yaml ${{ inputs.artifact-dir }}/
-          mv ./*.tgz ${{ inputs.artifact-dir }}/
-        shell: bash
-        working-directory: ${{ inputs.charts-dir }}
-
-      - name: Download packages
-        run: curl -O -L -f "${{ inputs.page-url }}/{${{ steps.packages.outputs.result }}}"
-        if: ${{ ! inputs.skip-download }}
-        shell: bash
-        working-directory: ${{ inputs.charts-dir }}/${{ inputs.artifact-dir }}
-
-      - name: Create artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: ${{ inputs.charts-dir }}/${{ inputs.artifact-dir }}
-
-  publish-gh-pages:
-    runs-on: ubuntu-22.04
-    needs: helm-release
-    permissions:
-      pages: write # to deploy to Pages
-      id-token: write # to verify the deployment originates from an appropriate source
-
-    # Deploy to the github-pages environment
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1
+    helm-lint:
+        runs-on: ubuntu-22.04
+        steps:
+        -   name: Authenticate with GCloud
+            uses: google-github-actions/auth@v2
+            id: auth
+            with:
+                workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+                service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+        -   name: Fetch secrets from GSM
+            id: fetch-secrets
+            uses: google-github-actions/get-secretmanager-secrets@v2
+            with:
+                secrets: |-
+                    github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
+                    github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
+                    github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
+                export_to_environment: 'true'
+        -   name: Lint Helm chart
+            uses: bakdata/ci-templates/actions/helm-lint@1.49.0
+            with:
+                lint-config-path: ${{ inputs.lint-config-path }}
+    helm-release:
+        runs-on: ubuntu-22.04
+        needs: helm-lint
+        outputs:
+            release-version: ${{ steps.bump-version.outputs.release-version }}
+            old-version: ${{ steps.bump-version.outputs.old-version }}
+        steps:
+        -   name: Authenticate with GCloud
+            uses: google-github-actions/auth@v2
+            id: auth
+            with:
+                workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+                service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+        -   name: Fetch secrets from GSM
+            id: fetch-secrets
+            uses: google-github-actions/get-secretmanager-secrets@v2
+            with:
+                secrets: |-
+                    github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
+                    github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
+                    github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
+                export_to_environment: 'true'
+        -   name: Check out repository
+            uses: bakdata/ci-templates/actions/checkout@1.49.0
+            with:
+                ref: ${{ inputs.ref }}
+                persist-credentials: false
+        -   name: Bump version
+            id: bump-version
+            uses: bakdata/ci-templates/actions/bump-version@v1.21.0
+            with:
+                release-type: ${{ inputs.release-type }}
+                working-directory: ${{ inputs.charts-dir }}
+        -   name: Download previous Helm index
+            run: curl -O -L -f ${{ inputs.page-url }}/index.yaml
+            if: ${{ ! inputs.skip-download }}
+            shell: bash
+            working-directory: ${{ inputs.charts-dir }}
+        -   name: Find previous package versions
+            id: packages
+            uses: mikefarah/yq@v4.28.1
+            if: ${{ ! inputs.skip-download }}
+            with:
+                cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ inputs.charts-dir }}/index.yaml
+        -   name: Create Helm package & update index
+            uses: bakdata/ci-templates/actions/helm-package@v1.6.0
+            with:
+                charts-dir: ${{ inputs.charts-dir }}
+        -   name: Commit and push Chart.yaml & .bumpversion.cfg file
+            uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+            with:
+                ref: ${{ inputs.ref }}
+                commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} \u2192 ${{ steps.bump-version.outputs.release-version }}"
+                github-username: ${{ env.github-username }}
+                github-email: ${{ env.github-email }}
+                github-token: ${{ env.github-token }}
+        -   name: Prepare artifact
+            run: |
+                mkdir ${{ inputs.artifact-dir }}
+                cp index.yaml ${{ inputs.artifact-dir }}/
+                mv ./*.tgz ${{ inputs.artifact-dir }}/
+            shell: bash
+            working-directory: ${{ inputs.charts-dir }}
+        -   name: Download packages
+            run: curl -O -L -f "${{ inputs.page-url }}/{${{ steps.packages.outputs.result }}}"
+            if: ${{ ! inputs.skip-download }}
+            shell: bash
+            working-directory: ${{ inputs.charts-dir }}/${{ inputs.artifact-dir }}
+        -   name: Create artifact
+            uses: actions/upload-pages-artifact@v1
+            with:
+                path: ${{ inputs.charts-dir }}/${{ inputs.artifact-dir }}
+    publish-gh-pages:
+        runs-on: ubuntu-22.04
+        needs: helm-release
+        permissions:
+            pages: write
+            id-token: write
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+        steps:
+        -   name: Authenticate with GCloud
+            uses: google-github-actions/auth@v2
+            id: auth
+            with:
+                workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+                service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+        -   name: Fetch secrets from GSM
+            id: fetch-secrets
+            uses: google-github-actions/get-secretmanager-secrets@v2
+            with:
+                secrets: |-
+                    github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
+                    github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
+                    github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
+                export_to_environment: 'true'
+        -   name: Deploy to GitHub Pages
+            id: deployment
+            uses: actions/deploy-pages@v1
+permissions:
+    contents: read
+    id-token: write

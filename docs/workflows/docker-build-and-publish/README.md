@@ -77,9 +77,10 @@ No outputs.
 
 <!-- AUTO-DOC-SECRETS:START - Do not remove or modify this section -->
 
-| SECRET          | REQUIRED | DESCRIPTION                             |
-| --------------- | -------- | --------------------------------------- |
-| docker-password | true     | Password for the Docker registry login. |
-| docker-user     | true     | Username for the Docker registry login. |
+| SECRET                            | REQUIRED | DESCRIPTION                                                |
+| --------------------------------- | -------- | ---------------------------------------------------------- |
+| GOOGLE_PROJECT_ID                 | true     | The id of the project which contains the secrets           |
+| GOOGLE_SERVICE_ACCOUNT            | true     | The service account to use to fetch the secrets            |
+| GOOGLE_WORKLOAD_IDENTITY_PROVIDER | true     | The workload identity provider to use for fetching secrets |
 
 <!-- AUTO-DOC-SECRETS:END -->
