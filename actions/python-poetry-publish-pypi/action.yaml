@@ -1,6 +1,5 @@
 name: "Publish Python package PyPI"
 description: "Publish Python packages using Poetry to TestPyPI or PyPI"
-
 inputs:
   pypi-token:
     description: "The PyPI token for publishing packages."
@@ -13,7 +12,6 @@ inputs:
     description: "The working directory of your Python packages. (Default is root directory)"
     required: false
     default: "./"
-
 runs:
   using: "composite"
   steps:
@@ -28,7 +26,6 @@ runs:
           echo "index-url=https://upload.pypi.org/legacy/" >> "$GITHUB_OUTPUT"
         fi
       shell: bash
-
     - name: Publish package to ${{ steps.index.outputs.index-name }}
       uses: bakdata/ci-templates/actions/python-poetry-publish@1.40.4
       with:

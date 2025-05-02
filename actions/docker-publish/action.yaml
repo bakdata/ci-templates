@@ -1,6 +1,5 @@
 name: "Publish Docker image"
 description: "Publish Docker image from downloaded artifact to any host"
-
 inputs:
   docker-registry:
     description: "Host where the image should be pushed to."
@@ -34,12 +33,10 @@ runs:
       with:
         name: ${{ inputs.image-artifact-name }}
         path: ${{ runner.temp }}/docker-build
-
     # setup-buildx action will create and boot a builder using by default the docker-container driver.
     # This is not required but recommended using it to be able to build multi-platform images, export cache, etc.
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2.2.1
-
     - name: Load image
       run: |
         if [[ $(ls -1 ${{ runner.temp }}/docker-build/*.tar 2>/dev/null | wc -l) != 1 ]]; then
@@ -50,7 +47,6 @@ runs:
         docker load --input ${{ runner.temp }}/docker-build/*.tar
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-
     - name: Push image
       uses: bakdata/ci-templates/actions/docker-push@1.30.0
       with:

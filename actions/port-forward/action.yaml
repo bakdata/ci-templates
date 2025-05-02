@@ -21,7 +21,6 @@ inputs:
   kubeconfig:
     description: Path to kubeconfig file
     required: false
-
 runs:
   using: composite
   steps:
@@ -29,7 +28,6 @@ runs:
       uses: azure/setup-kubectl@v3
       with:
         version: ${{ inputs.kubectl-version }}
-
     - name: Establish port forward
       shell: bash
       run: |

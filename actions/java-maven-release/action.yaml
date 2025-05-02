@@ -1,6 +1,5 @@
 name: "Release Java artifacts"
 description: "Release Java Maven artifacts on Github"
-
 inputs:
   maven-version:
     description: "Maven version to be installed."
@@ -29,12 +28,10 @@ inputs:
     description: "Working directory of your Maven artifacts. (Default is .)"
     required: false
     default: "."
-
 outputs:
   release-version:
     description: "The bumped version of your release."
     value: ${{ steps.evaluate-version.outputs.release-version }}
-
 runs:
   using: "composite"
   steps:
@@ -43,26 +40,22 @@ runs:
       with:
         fetch-depth: 0
         token: ${{ inputs.github-token }}
-
     - name: Setup git
       run: |
         git config user.email ${{ inputs.github-email }}
         git config user.name ${{ inputs.github-username }}
       shell: bash
-
     - name: Setup semver
       run: |
         sudo wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
         sudo chmod +x /usr/local/bin/semver
       shell: bash
-
     - name: Set up Maven with version ${{ inputs.maven-version }}
       uses: bakdata/ci-templates/actions/java-maven-setup@1.49.0
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
         maven-version: ${{ inputs.maven-version }}
-
     - name: Bump version
       id: evaluate-version
       run: |
@@ -74,7 +67,6 @@ runs:
         fi
         echo "release-version=$release_version" >> "$GITHUB_OUTPUT"
       shell: bash
-
     - name: Create release
       run: mvn release:prepare -B -DreleaseVersion=${{ steps.evaluate-version.outputs.release-version }} -Darguments=-DskipTests -Dscm.developer.connection="scm:git:${{ github.server_url }}/${{ github.repository }}.git"
       shell: bash

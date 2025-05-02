@@ -1,6 +1,5 @@
 name: "Release Java artifacts"
 description: "Release Java Gradle artifacts on Github"
-
 inputs:
   release-type:
     description: "Scope of the release"
@@ -42,12 +41,10 @@ inputs:
     description: "Working directory of your Gradle artifacts. (Default is .)"
     required: false
     default: "."
-
 outputs:
   release-version:
     description: "The bumped version of your release."
     value: ${{ steps.evaluate-version.outputs.release-version }}
-
 runs:
   using: "composite"
   steps:
@@ -56,25 +53,21 @@ runs:
       with:
         fetch-depth: 0 # required for changelog generation
         persist-credentials: false # required for pushing to protected branch later
-
     - name: Setup git
       run: |
         git config user.email ${{ inputs.github-email }}
         git config user.name ${{ inputs.github-username }}
       shell: bash
-
     - name: Configure git credentials
       uses: de-vri-es/setup-git-credentials@v2.1.2
       with:
         credentials: https://github-token:${{ inputs.github-token }}@github.com
-
     - name: Setup semver
       run: |
         sudo wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
         sudo chmod +x /usr/local/bin/semver
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@1.63.0
       with:
@@ -84,7 +77,6 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
         gradle-dependency-graph: disabled
-
     - name: Bump version
       id: evaluate-version
       run: |
@@ -97,17 +89,14 @@ runs:
         echo "release-version=$release_version" >> "$GITHUB_OUTPUT"
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-
     - name: Create release
       run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -Prelease.disablePushToRemote=true -Prelease.requireBranch=${{ github.event.repository.default_branch }} ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-
     - name: Push release tag
       run: |
         git push --tags origin
       shell: bash
-
     - name: Create changelog
       run: ./gradlew -Pchangelog.githubRepository=${{ github.event.repository.name }} -Pchangelog.futureVersionTag=${{ steps.evaluate-version.outputs.release-version }} --stacktrace --info generateChangelog ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
@@ -115,7 +104,6 @@ runs:
       env:
         GITHUB_USER: ${{ github.repository_owner }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
-
     - name: Commit and push CHANGELOG.md file
       uses: bakdata/ci-templates/actions/commit-and-push@1.50.4
       with:

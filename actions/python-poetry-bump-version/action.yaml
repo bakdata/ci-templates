@@ -1,6 +1,5 @@
 name: "Bump Python project version using Poetry"
 description: "The version defined in the pyproject.toml file gets bump with the respect to the release-type using Poetry"
-
 inputs:
   release-type:
     description: "Scope of the release: patch, minor, major, or snapshot. See https://python-poetry.org/docs/cli/#version for reference."
@@ -17,7 +16,6 @@ inputs:
     description: "The root directory of the Poetry project."
     required: false
     default: "."
-
 outputs:
   release-version:
     description: "The bumped version of your package."
@@ -25,7 +23,6 @@ outputs:
   old-version:
     description: "The old version of your package."
     value: ${{ steps.bump-version.outputs.old-version }}
-
 runs:
   using: "composite"
   steps:
@@ -35,12 +32,10 @@ runs:
         python-version: ${{ inputs.python-version }}
         poetry-version: ${{ inputs.poetry-version }}
         working-directory: ${{ inputs.working-directory }}
-
     # for updating __init__.py etc.
     - name: Install Poetry bumpversion plugin
       run: poetry self add poetry-bumpversion
       shell: bash
-
     # Update the pyproject.toml version. Versioning format for dev packages: X.Y.Z
     # For more information visit: https://www.python.org/dev/peps/pep-0440/#semantic-versioning
     # https://python-poetry.org/docs/cli/#version

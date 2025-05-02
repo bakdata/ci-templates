@@ -8,7 +8,6 @@ outputs:
   path:
     description: "Path to the temporary directory after substitution"
     value: ${{ steps.substitute.outputs.path }}
-
 runs:
   using: "composite"
   steps:
@@ -23,7 +22,6 @@ runs:
         fi
       env:
         BRANCH_NAME: "${{ github.ref_name }}"
-        
     - name: Substitute envs
       id: substitute
       shell: bash

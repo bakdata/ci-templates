@@ -1,6 +1,5 @@
 name: "Assess code quality"
 description: "Assess code quality and optionally test signing for Sonatype"
-
 inputs:
   download-lfs-files:
     description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
@@ -59,7 +58,6 @@ inputs:
     description: "Working directory of your Gradle artifacts. (Default is .)"
     required: false
     default: "."
-
 runs:
   using: "composite"
   steps:
@@ -68,7 +66,6 @@ runs:
       with:
         lfs: ${{ inputs.download-lfs-files }}
         fetch-depth: 0
-
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@1.63.0
       with:
@@ -78,7 +75,6 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
         gradle-dependency-graph: disabled
-
     - name: Assess code quality
       if: ${{ inputs.sonar-token != '' }}
       run: |
@@ -97,7 +93,6 @@ runs:
       working-directory: ${{ inputs.working-directory }}
       env:
         SONAR_TOKEN: ${{ inputs.sonar-token }}
-
     - name: Check if everything builds (incl. javadoc) for snapshot/release and signing works
       if: ${{ inputs.signing-secret-key-ring != '' && inputs.signing-key-id != '' && inputs.signing-password != '' }}
       run: |

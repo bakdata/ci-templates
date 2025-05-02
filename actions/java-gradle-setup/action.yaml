@@ -1,6 +1,5 @@
 name: "Setup Gradle"
 description: "Setup Java and Gradle"
-
 inputs:
   java-distribution:
     description: "Java distribution to be installed. (Default is microsoft)"
@@ -33,7 +32,6 @@ runs:
       with:
         distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
-
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v4
       with:

@@ -1,6 +1,5 @@
 name: "Bump version"
 description: "Bump version with python bump2version using .bumpversion.cfg"
-
 inputs:
   release-type:
     description: "The type of the release (major, minor or patch)."
@@ -17,7 +16,6 @@ inputs:
     description: "Allow unclean Git status in the working directory."
     required: false
     default: "true"
-
 outputs:
   release-version:
     description: "The bumped version of your project."
@@ -25,7 +23,6 @@ outputs:
   old-version:
     description: "The old version in your `.bumpversion.cfg` file."
     value: ${{ steps.bump-version.outputs.old-version }}
-
 runs:
   using: "composite"
   steps:
@@ -33,7 +30,6 @@ runs:
       run: |
         pipx install bump2version
       shell: bash
-
     - name: Bump version
       id: bump-version
       run: |

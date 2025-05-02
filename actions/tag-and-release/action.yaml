@@ -1,6 +1,5 @@
 name: "Tag and release"
 description: "Tag and release with target tag."
-
 inputs:
   tag:
     description: "The version of the tag to be released, e.g. 1.0.0."
@@ -21,7 +20,6 @@ inputs:
     description: "Description for the GitHub release."
     default: ""
     required: false
-
 runs:
   using: "composite"
   steps:
@@ -31,7 +29,6 @@ runs:
         git config --local user.email ${{ inputs.github-email }}
         git tag ${{ inputs.tag }}
       shell: bash
-
     - name: Create Release
       uses: softprops/action-gh-release@v2.0.4
       env:

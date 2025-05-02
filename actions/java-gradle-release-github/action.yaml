@@ -1,6 +1,5 @@
 name: "Release Java artifacts"
 description: "Release Java Gradle artifacts on Github"
-
 inputs:
   github-token:
     description: "GitHub token for requesting changes from API."
@@ -40,13 +39,11 @@ runs:
       uses: bakdata/ci-templates/actions/checkout@1.49.0
       with:
         fetch-depth: 0
-
     - name: Download build artifact
       uses: actions/download-artifact@v4
       with:
         name: build-artifact
         path: build
-
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@1.63.0
       with:
@@ -56,7 +53,6 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
         gradle-dependency-graph: disabled
-
     - name: Generate changelog
       run: ./gradlew -Pchangelog.githubRepository=${{ github.event.repository.name }} -Pchangelog.futureVersionTag=${{ github.ref_name }} -Pchangelog.sinceTag=${{ github.ref_name }} --stacktrace --info generateChangelog ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
@@ -64,7 +60,6 @@ runs:
       env:
         GITHUB_USER: ${{ github.repository_owner }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
-
     - name: Create Github release
       uses: softprops/action-gh-release@v2.0.4
       with:

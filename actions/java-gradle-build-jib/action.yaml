@@ -1,11 +1,9 @@
 name: "Build Multi-Platform image"
 description: "Build Multi-Platform image using Gradle"
-
 outputs:
-  image-tag: 
+  image-tag:
     description: "The tag of the docker image."
     value: ${{ steps.meta.outputs.tags }}
-
 inputs:
   platforms:
     description: "Architectures for the created image (comma separated)"
@@ -64,7 +62,6 @@ runs:
       uses: bakdata/ci-templates/actions/checkout@1.49.0
       with:
         lfs: ${{ inputs.download-lfs-files }}
-
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@1.63.0
       with:
@@ -74,7 +71,6 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
         gradle-dependency-graph: disabled
-
     - name: Docker metadata
       id: meta
       uses: docker/metadata-action@v5
@@ -84,7 +80,6 @@ runs:
           event=pr,type=ref
           event=push,type=raw,value=pipeline-${{ github.run_id }}-git-{{sha}},enable=${{ github.ref_type != 'tag' }}
         sep-tags: ','
-
     - name: Build Docker image
       run: |
         ./gradlew jib \

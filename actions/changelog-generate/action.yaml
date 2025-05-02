@@ -21,7 +21,6 @@ inputs:
     description: "Clean the repository before running the action."
     required: false
     default: "false"
-
 outputs:
   merged-changelog:
     description: "All changelogs combined."
@@ -29,7 +28,6 @@ outputs:
   single-changelog:
     description: "Only the latest changelog."
     value: ${{ steps.git-cliff-latest.outputs.content }}
-
 runs:
   using: "composite"
   steps:

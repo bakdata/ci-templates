@@ -1,6 +1,5 @@
 name: "Publish Java plugin"
 description: "Publish Java plugin using Gradle"
-
 inputs:
   signing-secret-key-ring:
     description: "Key ring (base64 encoded) for signing the Sonatype publication."
@@ -50,7 +49,6 @@ runs:
   steps:
     - name: Check out repository
       uses: bakdata/ci-templates/actions/checkout@1.49.0
-
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@1.63.0
       with:
@@ -60,7 +58,6 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
         gradle-dependency-graph: disabled
-
     - name: Publish plugin
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"

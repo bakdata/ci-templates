@@ -1,6 +1,5 @@
 name: "Setup Maven"
 description: "Setup Java and Maven"
-
 inputs:
   maven-version:
     description: "Maven version to be installed."
@@ -20,7 +19,6 @@ runs:
       with:
         distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
-
     - name: Set up Maven
       uses: stCarolas/setup-maven@v5
       with:

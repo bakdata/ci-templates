@@ -1,6 +1,5 @@
 name: "Test Java artiacts"
 description: "Run Junit test and publish test results"
-
 inputs:
   download-lfs-files:
     description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
@@ -38,7 +37,6 @@ inputs:
     description: "Working directory of your Gradle artifacts. (Default is .)"
     required: false
     default: "."
-
 runs:
   using: "composite"
   steps:
@@ -46,7 +44,6 @@ runs:
       uses: bakdata/ci-templates/actions/checkout@1.49.0
       with:
         lfs: ${{ inputs.download-lfs-files }}
-
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
       uses: bakdata/ci-templates/actions/java-gradle-setup@1.63.0
       with:
@@ -56,12 +53,10 @@ runs:
         gradle-cache: ${{ inputs.gradle-cache }}
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
         gradle-dependency-graph: ${{ inputs.gradle-dependency-graph }}
-
     - name: Run tests
       run: ./gradlew check --info --stacktrace ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-
     - name: Report test results
       uses: mikepenz/action-junit-report@v5
       if: always() # always run even if the previous step fails

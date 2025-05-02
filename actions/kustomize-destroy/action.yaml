@@ -4,7 +4,6 @@ inputs:
   kustomization-path:
     description: "Path to the root directory of the kustomization"
     required: true
-
 runs:
   using: "composite"
   steps:

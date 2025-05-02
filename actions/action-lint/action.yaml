@@ -20,13 +20,11 @@ runs:
       uses: bakdata/ci-templates/actions/checkout@1.49.0
       with:
         ref: "${{ inputs.ref }}"
-
     - name: Download "actionlint-matcher.json"
       run: |
         wget https://raw.githubusercontent.com/rhysd/actionlint/${{ inputs.action-lint-version }}/.github/actionlint-matcher.json
         echo "::add-matcher::actionlint-matcher.json"
       shell: bash
-
     - name: Check workflow files
       run: |
         bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/${{ inputs.action-lint-version }}/scripts/download-actionlint.bash)

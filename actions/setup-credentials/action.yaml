@@ -24,13 +24,11 @@ runs:
       uses: "google-github-actions/auth@v2"
       with:
         credentials_json: ${{ inputs.gke-service-account }}
-
     - name: Setup GCloud SDK
       uses: google-github-actions/setup-gcloud@v2
       with:
         version: ${{ inputs.gcloud-sdk-version }}
         project_id: ${{ inputs.gke-project }}
-
     - name: Setup authentication
       shell: bash
       run: |

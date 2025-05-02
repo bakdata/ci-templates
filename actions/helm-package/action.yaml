@@ -9,7 +9,6 @@ inputs:
     description: "The directory containing the Helm chart."
     required: false
     default: "."
-
 runs:
   using: "composite"
   steps:
@@ -17,7 +16,6 @@ runs:
       uses: azure/setup-helm@v3
       with:
         version: "${{ inputs.helm-version }}"
-
     - name: Helm package
       run: |
         helm package .

@@ -1,6 +1,5 @@
 name: "Publish Python package"
 description: "Publish Python package using Poetry to a package index"
-
 inputs:
   index-name:
     description: "The package index name for publishing packages."
@@ -22,7 +21,6 @@ inputs:
     description: "Poetry's HTTP request timeout in seconds. (Default is 120 seconds)"
     required: false
     default: "120"
-
 runs:
   using: "composite"
   steps:
@@ -30,7 +28,6 @@ runs:
       run: poetry build
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-
     - name: Publish package to index
       run: |
         # set poetry time out
