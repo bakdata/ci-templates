@@ -14,7 +14,7 @@ on:
 jobs:
   release:
     name: Release
-    uses: bakdata/ci-templates/.github/workflows/bump-version-release.yaml@tiedemann/use-gsm-secerts-in-workflow-calls
+    uses: bakdata/ci-templates/.github/workflows/bump-version-release.yaml@1.67.0
     with:
       release-type: ${{ github.event.inputs.release-type }}
     secrets:

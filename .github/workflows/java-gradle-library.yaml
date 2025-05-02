@@ -53,7 +53,7 @@ concurrency:
 jobs:
   build-and-test:
     name: Build, Test and Assess code quality
-    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@tiedemann/use-gsm-secerts-in-workflow-calls
+    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@1.67.0
     with:
       java-distribution: ${{ inputs.java-distribution }}
       java-version: ${{ inputs.java-version }}
