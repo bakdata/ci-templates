@@ -1,39 +1,36 @@
 name: "Publish Python package PyPI"
 description: "Publish Python packages using Poetry to TestPyPI or PyPI"
-
 inputs:
-  pypi-token:
-    description: "The PyPI token for publishing packages."
-    required: true
-  publish-to-test:
-    description: "If set to false, the packages are published to PyPI. (Default is true)"
-    required: false
-    default: "true"
-  working-directory:
-    description: "The working directory of your Python packages. (Default is root directory)"
-    required: false
-    default: "./"
-
+    pypi-token:
+        description: "The PyPI token for publishing packages."
+        required: true
+    publish-to-test:
+        description: "If set to false, the packages are published to PyPI. (Default is true)"
+        required: false
+        default: "true"
+    working-directory:
+        description: "The working directory of your Python packages. (Default is root directory)"
+        required: false
+        default: "./"
 runs:
-  using: "composite"
-  steps:
-    - name: Set index
-      id: index
-      run: |
-        if [[ ${{ inputs.publish-to-test }} == "true" ]]; then
-          echo "index-name=TestPyPI" >> "$GITHUB_OUTPUT"
-          echo "index-url=https://test.pypi.org/legacy/" >> "$GITHUB_OUTPUT"
-        else
-          echo "index-name=PyPI" >> "$GITHUB_OUTPUT"
-          echo "index-url=https://upload.pypi.org/legacy/" >> "$GITHUB_OUTPUT"
-        fi
-      shell: bash
-
-    - name: Publish package to ${{ steps.index.outputs.index-name }}
-      uses: bakdata/ci-templates/actions/python-poetry-publish@1.40.4
-      with:
-        index-name: ${{ steps.index.outputs.index-name }}
-        index-url: ${{ steps.index.outputs.index-url }}
-        index-username: __token__
-        index-password: ${{ inputs.pypi-token }}
-        working-directory: ${{ inputs.working-directory }}
+    using: "composite"
+    steps:
+        - name: Set index
+          id: index
+          run: |
+            if [[ ${{ inputs.publish-to-test }} == "true" ]]; then
+              echo "index-name=TestPyPI" >> "$GITHUB_OUTPUT"
+              echo "index-url=https://test.pypi.org/legacy/" >> "$GITHUB_OUTPUT"
+            else
+              echo "index-name=PyPI" >> "$GITHUB_OUTPUT"
+              echo "index-url=https://upload.pypi.org/legacy/" >> "$GITHUB_OUTPUT"
+            fi
+          shell: bash
+        - name: Publish package to ${{ steps.index.outputs.index-name }}
+          uses: bakdata/ci-templates/actions/python-poetry-publish@1.40.4
+          with:
+            index-name: ${{ steps.index.outputs.index-name }}
+            index-url: ${{ steps.index.outputs.index-url }}
+            index-username: __token__
+            index-password: ${{ inputs.pypi-token }}
+            working-directory: ${{ inputs.working-directory }}

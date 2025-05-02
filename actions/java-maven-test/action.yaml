@@ -1,47 +1,43 @@
 name: "Test Java artifacts"
 description: "Run Junit test and publish test results"
-
 inputs:
-  maven-version:
-    description: "Maven version to be installed."
-    required: true
-  java-distribution:
-    description: "Java distribution to be installed. (Default is microsoft)"
-    required: false
-    default: "microsoft"
-  java-version:
-    description: "Java version to be installed. (Default is 11)"
-    required: false
-    default: "11"
-  working-directory:
-    description: "Working directory of your Maven artifacts. (Default is .)"
-    required: false
-    default: "."
-  download-lfs-files:
-    description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
-    required: false
-    default: "false"
-  command:
-    description: "Command to run tests with. (Default is test)"
-    required: false
-    default: "test"
-
+    maven-version:
+        description: "Maven version to be installed."
+        required: true
+    java-distribution:
+        description: "Java distribution to be installed. (Default is microsoft)"
+        required: false
+        default: "microsoft"
+    java-version:
+        description: "Java version to be installed. (Default is 11)"
+        required: false
+        default: "11"
+    working-directory:
+        description: "Working directory of your Maven artifacts. (Default is .)"
+        required: false
+        default: "."
+    download-lfs-files:
+        description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
+        required: false
+        default: "false"
+    command:
+        description: "Command to run tests with. (Default is test)"
+        required: false
+        default: "test"
 runs:
-  using: "composite"
-  steps:
-    - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@1.49.0
-      with:
-        lfs: ${{ inputs.download-lfs-files }}
-
-    - name: Set up Maven with version ${{ inputs.maven-version }}
-      uses: bakdata/ci-templates/actions/java-maven-setup@1.49.0
-      with:
-        java-distribution: ${{ inputs.java-distribution }}
-        java-version: ${{ inputs.java-version }}
-        maven-version: ${{ inputs.maven-version }}
-
-    - name: Run tests
-      run: mvn ${{ inputs.command }}
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
+    using: "composite"
+    steps:
+        - name: Check out repository
+          uses: bakdata/ci-templates/actions/checkout@1.49.0
+          with:
+            lfs: ${{ inputs.download-lfs-files }}
+        - name: Set up Maven with version ${{ inputs.maven-version }}
+          uses: bakdata/ci-templates/actions/java-maven-setup@1.49.0
+          with:
+            java-distribution: ${{ inputs.java-distribution }}
+            java-version: ${{ inputs.java-version }}
+            maven-version: ${{ inputs.maven-version }}
+        - name: Run tests
+          run: mvn ${{ inputs.command }}
+          shell: bash
+          working-directory: ${{ inputs.working-directory }}

@@ -1,198 +1,198 @@
 name: Java Gradle plugin
 on:
-    workflow_call:
-        inputs:
-            java-distribution:
-                description: Java distribution to be installed. (Default is microsoft)
-                required: false
-                type: string
-                default: microsoft
-            java-version:
-                description: Java version to be installed. (Default is 11)
-                required: false
-                type: string
-                default: '11'
-            gradle-version:
-                description: Gradle version to be installed. (Default is wrapper)
-                required: false
-                type: string
-                default: wrapper
-            gradle-cache:
-                description: Whether Gradle caching is enabled or not. (Default is true)
-                required: false
-                type: boolean
-                default: true
-            gradle-cache-read-only:
-                description: Whether Gradle caching should be read-only. Only used for build and test jobs. (Default is false)
-                required: false
-                type: boolean
-                default: false
-            gradle-refresh-dependencies:
-                description: Whether Gradle should refresh dependencies. (Default is false)
-                required: false
-                type: boolean
-                default: false
-            working-directory:
-                description: Working directory of your Gradle artifacts. (Default is .)
-                required: false
-                type: string
-                default: .
-        secrets:
-            GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
-                description: The workload identity provider to use for fetching secrets
-                required: true
-            GOOGLE_SERVICE_ACCOUNT:
-                description: The service account to use to fetch the secrets
-                required: true
-            GOOGLE_PROJECT_ID:
-                description: The id of the project which contains the secrets
-                required: true
+  workflow_call:
+    inputs:
+      java-distribution:
+        description: Java distribution to be installed. (Default is microsoft)
+        required: false
+        type: string
+        default: microsoft
+      java-version:
+        description: Java version to be installed. (Default is 11)
+        required: false
+        type: string
+        default: "11"
+      gradle-version:
+        description: Gradle version to be installed. (Default is wrapper)
+        required: false
+        type: string
+        default: wrapper
+      gradle-cache:
+        description: Whether Gradle caching is enabled or not. (Default is true)
+        required: false
+        type: boolean
+        default: true
+      gradle-cache-read-only:
+        description: Whether Gradle caching should be read-only. Only used for build and test jobs. (Default is false)
+        required: false
+        type: boolean
+        default: false
+      gradle-refresh-dependencies:
+        description: Whether Gradle should refresh dependencies. (Default is false)
+        required: false
+        type: boolean
+        default: false
+      working-directory:
+        description: Working directory of your Gradle artifacts. (Default is .)
+        required: false
+        type: string
+        default: .
+    secrets:
+      GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
+        description: The workload identity provider to use for fetching secrets
+        required: true
+      GOOGLE_SERVICE_ACCOUNT:
+        description: The service account to use to fetch the secrets
+        required: true
+      GOOGLE_PROJECT_ID:
+        description: The id of the project which contains the secrets
+        required: true
 concurrency:
-    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-plugin
-    cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-plugin
+  cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
 jobs:
-    build-and-test:
-        name: Build, Test and Assess code quality
-        uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@tiedemann/use-gsm-secerts-in-workflow-calls
+  build-and-test:
+    name: Build, Test and Assess code quality
+    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@tiedemann/use-gsm-secerts-in-workflow-calls
+    with:
+      java-distribution: ${{ inputs.java-distribution }}
+      java-version: ${{ inputs.java-version }}
+      gradle-version: ${{ inputs.gradle-version }}
+      gradle-cache: ${{ inputs.gradle-cache }}
+      gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
+      gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
+      working-directory: ${{ inputs.working-directory }}
+    secrets:
+      GOOGLE_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+      GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+      GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+  publish:
+    name: Publish
+    if: ${{ !github.event.repository.private }}
+    runs-on: ubuntu-22.04
+    needs: build-and-test
+    steps:
+      - name: Authenticate with GCloud
+        uses: google-github-actions/auth@v2
+        id: auth
         with:
-            java-distribution: ${{ inputs.java-distribution }}
-            java-version: ${{ inputs.java-version }}
-            gradle-version: ${{ inputs.gradle-version }}
-            gradle-cache: ${{ inputs.gradle-cache }}
-            gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
-            gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
-            working-directory: ${{ inputs.working-directory }}
-        secrets:
-            GOOGLE_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
-            GOOGLE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-            GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
-    publish:
-        name: Publish
-        if: ${{ !github.event.repository.private }}
-        runs-on: ubuntu-22.04
-        needs: build-and-test
-        steps:
-        -   name: Authenticate with GCloud
-            uses: google-github-actions/auth@v2
-            id: auth
-            with:
-                workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
-                service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-        -   name: Fetch secrets from GSM
-            id: fetch-secrets
-            uses: google-github-actions/get-secretmanager-secrets@v2
-            with:
-                secrets: |-
-                    github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
-                    gradle-publish-key:${{ secrets.GOOGLE_PROJECT_ID }}/GRADLE_PUBLISH_KEY
-                    gradle-publish-secret:${{ secrets.GOOGLE_PROJECT_ID }}/GRADLE_PUBLISH_SECRET
-                    ossrh-password:${{ secrets.GOOGLE_PROJECT_ID }}/OSSRH_PASSWORD
-                    ossrh-username:${{ secrets.GOOGLE_PROJECT_ID }}/OSSRH_USERNAME
-                    signing-key-id:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_KEY_ID
-                    signing-password:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_PASSWORD
-                    signing-secret-key-ring:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_SECRET_KEY_RING
-                    sonar-organization:${{ secrets.GOOGLE_PROJECT_ID }}/SONARCLOUD_ORGANIZATION
-                    sonar-token:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_SECRET_KEY_RING
-                export_to_environment: 'true'
-        -   name: Publish
-            uses: bakdata/ci-templates/actions/java-gradle-publish@1.63.0
-            with:
-                signing-secret-key-ring: ${{ env.signing-secret-key-ring }}
-                signing-key-id: ${{ env.signing-key-id }}
-                signing-password: ${{ env.signing-password }}
-                ossrh-username: ${{ env.ossrh-username }}
-                ossrh-password: ${{ env.ossrh-password }}
-                java-distribution: ${{ inputs.java-distribution }}
-                java-version: ${{ inputs.java-version }}
-                gradle-version: ${{ inputs.gradle-version }}
-                gradle-cache: ${{ inputs.gradle-cache }}
-                gradle-cache-read-only: true
-                gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
-                working-directory: ${{ inputs.working-directory }}
-    publish-plugin:
-        name: Publish plugin
-        if: ${{ startsWith(github.ref, 'refs/tags/') && !github.event.repository.private }}
-        runs-on: ubuntu-22.04
-        needs: build-and-test
-        steps:
-        -   name: Authenticate with GCloud
-            uses: google-github-actions/auth@v2
-            id: auth
-            with:
-                workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
-                service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-        -   name: Fetch secrets from GSM
-            id: fetch-secrets
-            uses: google-github-actions/get-secretmanager-secrets@v2
-            with:
-                secrets: |-
-                    github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
-                    gradle-publish-key:${{ secrets.GOOGLE_PROJECT_ID }}/GRADLE_PUBLISH_KEY
-                    gradle-publish-secret:${{ secrets.GOOGLE_PROJECT_ID }}/GRADLE_PUBLISH_SECRET
-                    ossrh-password:${{ secrets.GOOGLE_PROJECT_ID }}/OSSRH_PASSWORD
-                    ossrh-username:${{ secrets.GOOGLE_PROJECT_ID }}/OSSRH_USERNAME
-                    signing-key-id:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_KEY_ID
-                    signing-password:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_PASSWORD
-                    signing-secret-key-ring:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_SECRET_KEY_RING
-                    sonar-organization:${{ secrets.GOOGLE_PROJECT_ID }}/SONARCLOUD_ORGANIZATION
-                    sonar-token:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_SECRET_KEY_RING
-                export_to_environment: 'true'
-        -   name: Publish plugin
-            uses: bakdata/ci-templates/actions/java-gradle-publish-plugin@1.63.1
-            with:
-                signing-secret-key-ring: ${{ env.signing-secret-key-ring }}
-                signing-key-id: ${{ env.signing-key-id }}
-                signing-password: ${{ env.signing-password }}
-                gradle-publish-key: ${{ env.gradle-publish-key }}
-                gradle-publish-secret: ${{ env.gradle-publish-secret }}
-                java-distribution: ${{ inputs.java-distribution }}
-                java-version: ${{ inputs.java-version }}
-                gradle-version: ${{ inputs.gradle-version }}
-                gradle-cache: ${{ inputs.gradle-cache }}
-                gradle-cache-read-only: true
-                gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
-                working-directory: ${{ inputs.working-directory }}
-    release:
-        name: Create Github release
-        if: startsWith(github.ref, 'refs/tags/')
-        runs-on: ubuntu-22.04
-        needs:
-        - publish
-        - publish-plugin
-        steps:
-        -   name: Authenticate with GCloud
-            uses: google-github-actions/auth@v2
-            id: auth
-            with:
-                workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
-                service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-        -   name: Fetch secrets from GSM
-            id: fetch-secrets
-            uses: google-github-actions/get-secretmanager-secrets@v2
-            with:
-                secrets: |-
-                    github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
-                    gradle-publish-key:${{ secrets.GOOGLE_PROJECT_ID }}/GRADLE_PUBLISH_KEY
-                    gradle-publish-secret:${{ secrets.GOOGLE_PROJECT_ID }}/GRADLE_PUBLISH_SECRET
-                    ossrh-password:${{ secrets.GOOGLE_PROJECT_ID }}/OSSRH_PASSWORD
-                    ossrh-username:${{ secrets.GOOGLE_PROJECT_ID }}/OSSRH_USERNAME
-                    signing-key-id:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_KEY_ID
-                    signing-password:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_PASSWORD
-                    signing-secret-key-ring:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_SECRET_KEY_RING
-                    sonar-organization:${{ secrets.GOOGLE_PROJECT_ID }}/SONARCLOUD_ORGANIZATION
-                    sonar-token:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_SECRET_KEY_RING
-                export_to_environment: 'true'
-        -   name: Release on Github
-            uses: bakdata/ci-templates/actions/java-gradle-release-github@1.63.0
-            with:
-                github-token: ${{ env.github-token }}
-                java-distribution: ${{ inputs.java-distribution }}
-                java-version: ${{ inputs.java-version }}
-                gradle-version: ${{ inputs.gradle-version }}
-                gradle-cache: ${{ inputs.gradle-cache }}
-                gradle-cache-read-only: true
-                gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
-                working-directory: ${{ inputs.working-directory }}
+          workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+      - name: Fetch secrets from GSM
+        id: fetch-secrets
+        uses: google-github-actions/get-secretmanager-secrets@v2
+        with:
+          secrets: |-
+            github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
+            gradle-publish-key:${{ secrets.GOOGLE_PROJECT_ID }}/GRADLE_PUBLISH_KEY
+            gradle-publish-secret:${{ secrets.GOOGLE_PROJECT_ID }}/GRADLE_PUBLISH_SECRET
+            ossrh-password:${{ secrets.GOOGLE_PROJECT_ID }}/OSSRH_PASSWORD
+            ossrh-username:${{ secrets.GOOGLE_PROJECT_ID }}/OSSRH_USERNAME
+            signing-key-id:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_KEY_ID
+            signing-password:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_PASSWORD
+            signing-secret-key-ring:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_SECRET_KEY_RING
+            sonar-organization:${{ secrets.GOOGLE_PROJECT_ID }}/SONARCLOUD_ORGANIZATION
+            sonar-token:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_SECRET_KEY_RING
+          export_to_environment: "true"
+      - name: Publish
+        uses: bakdata/ci-templates/actions/java-gradle-publish@1.63.0
+        with:
+          signing-secret-key-ring: ${{ env.signing-secret-key-ring }}
+          signing-key-id: ${{ env.signing-key-id }}
+          signing-password: ${{ env.signing-password }}
+          ossrh-username: ${{ env.ossrh-username }}
+          ossrh-password: ${{ env.ossrh-password }}
+          java-distribution: ${{ inputs.java-distribution }}
+          java-version: ${{ inputs.java-version }}
+          gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
+          gradle-cache-read-only: true
+          gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
+          working-directory: ${{ inputs.working-directory }}
+  publish-plugin:
+    name: Publish plugin
+    if: ${{ startsWith(github.ref, 'refs/tags/') && !github.event.repository.private }}
+    runs-on: ubuntu-22.04
+    needs: build-and-test
+    steps:
+      - name: Authenticate with GCloud
+        uses: google-github-actions/auth@v2
+        id: auth
+        with:
+          workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+      - name: Fetch secrets from GSM
+        id: fetch-secrets
+        uses: google-github-actions/get-secretmanager-secrets@v2
+        with:
+          secrets: |-
+            github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
+            gradle-publish-key:${{ secrets.GOOGLE_PROJECT_ID }}/GRADLE_PUBLISH_KEY
+            gradle-publish-secret:${{ secrets.GOOGLE_PROJECT_ID }}/GRADLE_PUBLISH_SECRET
+            ossrh-password:${{ secrets.GOOGLE_PROJECT_ID }}/OSSRH_PASSWORD
+            ossrh-username:${{ secrets.GOOGLE_PROJECT_ID }}/OSSRH_USERNAME
+            signing-key-id:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_KEY_ID
+            signing-password:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_PASSWORD
+            signing-secret-key-ring:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_SECRET_KEY_RING
+            sonar-organization:${{ secrets.GOOGLE_PROJECT_ID }}/SONARCLOUD_ORGANIZATION
+            sonar-token:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_SECRET_KEY_RING
+          export_to_environment: "true"
+      - name: Publish plugin
+        uses: bakdata/ci-templates/actions/java-gradle-publish-plugin@1.63.1
+        with:
+          signing-secret-key-ring: ${{ env.signing-secret-key-ring }}
+          signing-key-id: ${{ env.signing-key-id }}
+          signing-password: ${{ env.signing-password }}
+          gradle-publish-key: ${{ env.gradle-publish-key }}
+          gradle-publish-secret: ${{ env.gradle-publish-secret }}
+          java-distribution: ${{ inputs.java-distribution }}
+          java-version: ${{ inputs.java-version }}
+          gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
+          gradle-cache-read-only: true
+          gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
+          working-directory: ${{ inputs.working-directory }}
+  release:
+    name: Create Github release
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-22.04
+    needs:
+      - publish
+      - publish-plugin
+    steps:
+      - name: Authenticate with GCloud
+        uses: google-github-actions/auth@v2
+        id: auth
+        with:
+          workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+      - name: Fetch secrets from GSM
+        id: fetch-secrets
+        uses: google-github-actions/get-secretmanager-secrets@v2
+        with:
+          secrets: |-
+            github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
+            gradle-publish-key:${{ secrets.GOOGLE_PROJECT_ID }}/GRADLE_PUBLISH_KEY
+            gradle-publish-secret:${{ secrets.GOOGLE_PROJECT_ID }}/GRADLE_PUBLISH_SECRET
+            ossrh-password:${{ secrets.GOOGLE_PROJECT_ID }}/OSSRH_PASSWORD
+            ossrh-username:${{ secrets.GOOGLE_PROJECT_ID }}/OSSRH_USERNAME
+            signing-key-id:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_KEY_ID
+            signing-password:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_PASSWORD
+            signing-secret-key-ring:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_SECRET_KEY_RING
+            sonar-organization:${{ secrets.GOOGLE_PROJECT_ID }}/SONARCLOUD_ORGANIZATION
+            sonar-token:${{ secrets.GOOGLE_PROJECT_ID }}/SONATYPE_SIGNING_SECRET_KEY_RING
+          export_to_environment: "true"
+      - name: Release on Github
+        uses: bakdata/ci-templates/actions/java-gradle-release-github@1.63.0
+        with:
+          github-token: ${{ env.github-token }}
+          java-distribution: ${{ inputs.java-distribution }}
+          java-version: ${{ inputs.java-version }}
+          gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
+          gradle-cache-read-only: true
+          gradle-refresh-dependencies: ${{ inputs.gradle-refresh-dependencies }}
+          working-directory: ${{ inputs.working-directory }}
 permissions:
-    contents: read
-    id-token: write
+  contents: read
+  id-token: write

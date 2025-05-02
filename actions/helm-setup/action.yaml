@@ -1,30 +1,28 @@
 name: "Setup Helm"
 description: "Setup everything necessary to deploy or destroy Helm charts"
 inputs:
-  kubectl-version:
-    description: "Kubectl version"
-    default: "v1.23.0"
-    required: false
-  helm-version:
-    description: "Helm version"
-    default: "v3.10.1"
-    required: false
+    kubectl-version:
+        description: "Kubectl version"
+        default: "v1.23.0"
+        required: false
+    helm-version:
+        description: "Helm version"
+        default: "v3.10.1"
+        required: false
 runs:
-  using: "composite"
-  steps:
-    # TODO: replace by ci runner image
-    - name: Install Kubectl
-      uses: azure/setup-kubectl@v3
-      with:
-        version: ${{ inputs.kubectl-version }}
-
-    - name: Install Kfilt
-      shell: bash
-      run: |
-        curl -L "https://github.com/ryane/kfilt/releases/download/v0.0.7/kfilt_0.0.7_linux_amd64" -o /usr/local/bin/kfilt
-        chmod +x /usr/local/bin/kfilt
-
-    - name: Install Helm
-      uses: azure/setup-helm@v3
-      with:
-        version: ${{ inputs.helm-version }}
+    using: "composite"
+    steps:
+        # TODO: replace by ci runner image
+        - name: Install Kubectl
+          uses: azure/setup-kubectl@v3
+          with:
+            version: ${{ inputs.kubectl-version }}
+        - name: Install Kfilt
+          shell: bash
+          run: |
+            curl -L "https://github.com/ryane/kfilt/releases/download/v0.0.7/kfilt_0.0.7_linux_amd64" -o /usr/local/bin/kfilt
+            chmod +x /usr/local/bin/kfilt
+        - name: Install Helm
+          uses: azure/setup-helm@v3
+          with:
+            version: ${{ inputs.helm-version }}

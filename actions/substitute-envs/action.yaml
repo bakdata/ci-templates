@@ -1,49 +1,47 @@
 name: "Substitute envs"
 description: "Recursively substitute environment variables in a given directory"
 inputs:
-  path:
-    description: "Path to the directory to substitute environment variables in"
-    required: true
+    path:
+        description: "Path to the directory to substitute environment variables in"
+        required: true
 outputs:
-  path:
-    description: "Path to the temporary directory after substitution"
-    value: ${{ steps.substitute.outputs.path }}
-
+    path:
+        description: "Path to the temporary directory after substitution"
+        value: ${{ steps.substitute.outputs.path }}
 runs:
-  using: "composite"
-  steps:
-    - name: Get branch name
-      id: branch-name
-      shell: bash
-      run: |
-        if [[ "$BRANCH_NAME" == "main" ]] || [[ "$BRANCH_NAME" == "master" ]]; then
-          echo "branch=HEAD" >> "$GITHUB_OUTPUT"
-        else
-          echo "branch=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
-        fi
-      env:
-        BRANCH_NAME: "${{ github.ref_name }}"
-        
-    - name: Substitute envs
-      id: substitute
-      shell: bash
-      env:
-        TARGET_REVISION: "${{ steps.branch-name.outputs.branch }}"
-      run: |
-        function substitute() {
-          # create (sub-)directories
-          mkdir -p "${{ runner.temp }}/$(dirname "$1")"
+    using: "composite"
+    steps:
+        - name: Get branch name
+          id: branch-name
+          shell: bash
+          run: |
+            if [[ "$BRANCH_NAME" == "main" ]] || [[ "$BRANCH_NAME" == "master" ]]; then
+              echo "branch=HEAD" >> "$GITHUB_OUTPUT"
+            else
+              echo "branch=$BRANCH_NAME" >> "$GITHUB_OUTPUT"
+            fi
+          env:
+            BRANCH_NAME: "${{ github.ref_name }}"
+        - name: Substitute envs
+          id: substitute
+          shell: bash
+          env:
+            TARGET_REVISION: "${{ steps.branch-name.outputs.branch }}"
+          run: |
+            function substitute() {
+              # create (sub-)directories
+              mkdir -p "${{ runner.temp }}/$(dirname "$1")"
 
-          # substitute only set env variables
-          envsubst "$(compgen -e | xargs printf '$%s ')" < "$1" > "${{ runner.temp }}/$1"
+              # substitute only set env variables
+              envsubst "$(compgen -e | xargs printf '$%s ')" < "$1" > "${{ runner.temp }}/$1"
 
-          # copy file permissions
-          chmod --reference="$1" "${{ runner.temp }}/$1"
-        }
-        export -f substitute
+              # copy file permissions
+              chmod --reference="$1" "${{ runner.temp }}/$1"
+            }
+            export -f substitute
 
-        # recursively substitute env variables in all files inside the directory
-        find "${{ inputs.path }}" -type f -exec bash -c 'substitute "$1"' bash {} \;
+            # recursively substitute env variables in all files inside the directory
+            find "${{ inputs.path }}" -type f -exec bash -c 'substitute "$1"' bash {} \;
 
-        # output path to temporary directory after substitution
-        echo "path=${{ runner.temp }}/${{ inputs.path }}" >> "$GITHUB_OUTPUT"
+            # output path to temporary directory after substitution
+            echo "path=${{ runner.temp }}/${{ inputs.path }}" >> "$GITHUB_OUTPUT"

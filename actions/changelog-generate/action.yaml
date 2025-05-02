@@ -1,73 +1,71 @@
 name: "Generate changelog"
 description: "Generate changelog after release"
 inputs:
-  # required inputs
-  github-token:
-    description: "The GitHub token for committing the changes."
-    required: true
-  tag:
-    description: Version after bump
-    required: true
-  # optional inputs
-  changelog-file:
-    description: Path to the changelog file in the GitHub repository
-    required: false
-    default: "CHANGELOG.md"
-  checkout:
-    description: "Whether to checkout the repository or not."
-    required: false
-    default: "false"
-  clean:
-    description: "Clean the repository before running the action."
-    required: false
-    default: "false"
-
+    # required inputs
+    github-token:
+        description: "The GitHub token for committing the changes."
+        required: true
+    tag:
+        description: Version after bump
+        required: true
+    # optional inputs
+    changelog-file:
+        description: Path to the changelog file in the GitHub repository
+        required: false
+        default: "CHANGELOG.md"
+    checkout:
+        description: "Whether to checkout the repository or not."
+        required: false
+        default: "false"
+    clean:
+        description: "Clean the repository before running the action."
+        required: false
+        default: "false"
 outputs:
-  merged-changelog:
-    description: "All changelogs combined."
-    value: ${{ steps.git-cliff.outputs.content }}
-  single-changelog:
-    description: "Only the latest changelog."
-    value: ${{ steps.git-cliff-latest.outputs.content }}
-
+    merged-changelog:
+        description: "All changelogs combined."
+        value: ${{ steps.git-cliff.outputs.content }}
+    single-changelog:
+        description: "Only the latest changelog."
+        value: ${{ steps.git-cliff-latest.outputs.content }}
 runs:
-  using: "composite"
-  steps:
-    - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@1.49.0
-      if: ${{ inputs.checkout == 'true' }}
-      with:
-        fetch-depth: 0
-        clean: ${{ inputs.clean }}
-    - name: Get config path
-      id: get-config-path
-      run: |
-        DEFAULT_PATH=$GITHUB_ACTION_PATH/default-cliff.toml
-        if [ -f cliff.toml ]; then
-          cp cliff.toml tmp_cliff.toml
-        else
-          cp $DEFAULT_PATH tmp_cliff.toml
-        fi
-      shell: bash
-    - name: Generate latest only changelog
-      uses: orhun/git-cliff-action@v3
-      id: git-cliff-latest
-      with:
-        config: tmp_cliff.toml
-        args: "--unreleased --tag ${{ inputs.tag }} --verbose"
-      env:
-        GITHUB_REPO: ${{ github.repository }}
-        GITHUB_TOKEN: ${{ inputs.github-token }}
-    - name: Generate a changelog
-      uses: orhun/git-cliff-action@v3
-      id: git-cliff
-      with:
-        config: tmp_cliff.toml
-        args: "--tag ${{ inputs.tag }} --verbose"
-      env:
-        OUTPUT: ${{ inputs.changelog-file }}
-        GITHUB_REPO: ${{ github.repository }}
-        GITHUB_TOKEN: ${{ inputs.github-token }}
-    - name: remove tmp config file
-      run: rm tmp_cliff.toml && rm -rf git-cliff/
-      shell: bash
+    using: "composite"
+    steps:
+        - name: Check out repository
+          uses: bakdata/ci-templates/actions/checkout@1.49.0
+          if: ${{ inputs.checkout == 'true' }}
+          with:
+            fetch-depth: 0
+            clean: ${{ inputs.clean }}
+        - name: Get config path
+          id: get-config-path
+          run: |
+            DEFAULT_PATH=$GITHUB_ACTION_PATH/default-cliff.toml
+            if [ -f cliff.toml ]; then
+              cp cliff.toml tmp_cliff.toml
+            else
+              cp $DEFAULT_PATH tmp_cliff.toml
+            fi
+          shell: bash
+        - name: Generate latest only changelog
+          uses: orhun/git-cliff-action@v3
+          id: git-cliff-latest
+          with:
+            config: tmp_cliff.toml
+            args: "--unreleased --tag ${{ inputs.tag }} --verbose"
+          env:
+            GITHUB_REPO: ${{ github.repository }}
+            GITHUB_TOKEN: ${{ inputs.github-token }}
+        - name: Generate a changelog
+          uses: orhun/git-cliff-action@v3
+          id: git-cliff
+          with:
+            config: tmp_cliff.toml
+            args: "--tag ${{ inputs.tag }} --verbose"
+          env:
+            OUTPUT: ${{ inputs.changelog-file }}
+            GITHUB_REPO: ${{ github.repository }}
+            GITHUB_TOKEN: ${{ inputs.github-token }}
+        - name: remove tmp config file
+          run: rm tmp_cliff.toml && rm -rf git-cliff/
+          shell: bash

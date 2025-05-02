@@ -1,15 +1,15 @@
 name: "Destroy Helm chart"
 description: "Destroy a helm chart from the Kubernetes cluster"
 inputs:
-  release-name:
-    description: "Helm release name"
-    required: true
-  namespace:
-    description: "K8s namespace to destroy in"
-    required: true
+    release-name:
+        description: "Helm release name"
+        required: true
+    namespace:
+        description: "K8s namespace to destroy in"
+        required: true
 runs:
-  using: "composite"
-  steps:
-    - name: Destroy Helm chart
-      shell: bash
-      run: helm uninstall --namespace ${{ inputs.namespace }} ${{ inputs.release-name }}
+    using: "composite"
+    steps:
+        - name: Destroy Helm chart
+          shell: bash
+          run: helm uninstall --namespace ${{ inputs.namespace }} ${{ inputs.release-name }}

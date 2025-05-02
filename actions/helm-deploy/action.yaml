@@ -1,74 +1,72 @@
 name: "Deploy Helm chart"
 description: "Deploy a Helm chart to the Kubernetes cluster"
 inputs:
-  release-name:
-    description: "Helm release name"
-    required: true
-  namespace:
-    description: "K8s namespace to deploy in"
-    required: true
-  chart:
-    description: "Helm chart to deploy"
-    required: true
-  values-yaml:
-    description: "File path as string for a single Helm value file or as json array for multiple Helm value files"
-    required: true
-  chart-version:
-    description: "Chart Version"
-    required: false
-  post-renderer:
-    description: "File path as string for a Helm post renderer"
-    required: false
-  timeout:
-    description: "Timeout for the Helm command in seconds"
-    default: "1200"
-    required: false
-  repository-name:
-    description: "Helm repository name"
-    required: false
-  repository-url:
-    description: "Url of the repository"
-    required: false
-  repository-username:
-    description: "User for the login to the repository"
-    required: false
-  repository-password:
-    description: "Password for the login to the repository"
-    required: false
-
+    release-name:
+        description: "Helm release name"
+        required: true
+    namespace:
+        description: "K8s namespace to deploy in"
+        required: true
+    chart:
+        description: "Helm chart to deploy"
+        required: true
+    values-yaml:
+        description: "File path as string for a single Helm value file or as json array for multiple Helm value files"
+        required: true
+    chart-version:
+        description: "Chart Version"
+        required: false
+    post-renderer:
+        description: "File path as string for a Helm post renderer"
+        required: false
+    timeout:
+        description: "Timeout for the Helm command in seconds"
+        default: "1200"
+        required: false
+    repository-name:
+        description: "Helm repository name"
+        required: false
+    repository-url:
+        description: "Url of the repository"
+        required: false
+    repository-username:
+        description: "User for the login to the repository"
+        required: false
+    repository-password:
+        description: "Password for the login to the repository"
+        required: false
 runs:
-  using: "composite"
-  steps:
-    - name: Add Helm repository
-      shell: bash
-      run: |
-        if [[ -n "${{ inputs.repository-name }}" && -n "${{ inputs.repository-url }}" ]]; then
-          parameters=(${{ inputs.repository-name }} ${{ inputs.repository-url }})
+    using: "composite"
+    steps:
+        - name: Add Helm repository
+          shell: bash
+          run: |
+            if [[ -n "${{ inputs.repository-name }}" && -n "${{ inputs.repository-url }}" ]]; then
+              parameters=(${{ inputs.repository-name }} ${{ inputs.repository-url }})
 
-          if [[ -n "${{ inputs.repository-username }}" ]]; then parameters+=(--username ${{ inputs.repository-username }}); fi
-          if [[ -n "${{ inputs.repository-password }}" ]]; then parameters+=(--password ${{ inputs.repository-password }}); fi
+              if [[ -n "${{ inputs.repository-username }}" ]]; then parameters+=(--username ${{ inputs.repository-username }}); fi
+              if [[ -n "${{ inputs.repository-password }}" ]]; then parameters+=(--password ${{ inputs.repository-password }}); fi
 
-          helm repo add "${parameters[@]}"
-          helm repo update
-        else
-          echo "No repository specified; Skipping step"
-        fi
+              helm repo add "${parameters[@]}"
+              helm repo update
+            else
+              echo "No repository specified; Skipping step"
+            fi
+        - name: Deploy Helm chart
+          shell: bash
+          run: |
+            parameters=(--debug --install --wait --timeout ${{ inputs.timeout }}s --force --namespace ${{ inputs.namespace }})
 
-    - name: Deploy Helm chart
-      shell: bash
-      run: |
-        parameters=(--debug --install --wait --timeout ${{ inputs.timeout }}s --force --namespace ${{ inputs.namespace }})
+            if $(echo '${{ inputs.values-yaml }}' | jq -e > /dev/null 2>&1); then
+              echo "Deploying with multiple value files"
+              parameters+=($(echo '${{ inputs.values-yaml }}' | jq -r '[ .[] | . = "--values \(.)"] | join(" ")'))
+            else
+              echo "Deploying with single value file"
+              parameters+=(--values ${{ inputs.values-yaml }})
+            fi
 
-        if $(echo '${{ inputs.values-yaml }}' | jq -e > /dev/null 2>&1); then
-          echo "Deploying with multiple value files"
-          parameters+=($(echo '${{ inputs.values-yaml }}' | jq -r '[ .[] | . = "--values \(.)"] | join(" ")'))
-        else
-          echo "Deploying with single value file"
-          parameters+=(--values ${{ inputs.values-yaml }})
-        fi
+            if [[ -n "${{ inputs.chart-version }}" ]]; then parameters+=(--version ${{ inputs.chart-version }}); fi
+            if [[ -n "${{ inputs.post-renderer }}" ]]; then parameters+=(--post-renderer ${{ inputs.post-renderer }}); fi
 
-        if [[ -n "${{ inputs.chart-version }}" ]]; then parameters+=(--version ${{ inputs.chart-version }}); fi
-        if [[ -n "${{ inputs.post-renderer }}" ]]; then parameters+=(--post-renderer ${{ inputs.post-renderer }}); fi
-
-        echo "Deploying with command: helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} ${parameters[@]}"
-        helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} "${parameters[@]}"
+            echo "Deploying with command: helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} ${parameters[@]}"
+            helm upgrade ${{ inputs.release-name }} ${{ inputs.chart }} "${parameters[@]}"

@@ -1,44 +1,41 @@
 name: "Tag and release"
 description: "Tag and release with target tag."
-
 inputs:
-  tag:
-    description: "The version of the tag to be released, e.g. 1.0.0."
-    required: true
-  github-username:
-    description: "The GitHub username for committing the changes."
-    required: true
-  github-email:
-    description: "The GitHub email for committing the changes."
-    required: true
-  github-token:
-    description: "The GitHub token for committing the changes."
-    required: true
-  release-title:
-    description: "Title for the GitHub release."
-    required: true
-  release-body:
-    description: "Description for the GitHub release."
-    default: ""
-    required: false
-
+    tag:
+        description: "The version of the tag to be released, e.g. 1.0.0."
+        required: true
+    github-username:
+        description: "The GitHub username for committing the changes."
+        required: true
+    github-email:
+        description: "The GitHub email for committing the changes."
+        required: true
+    github-token:
+        description: "The GitHub token for committing the changes."
+        required: true
+    release-title:
+        description: "Title for the GitHub release."
+        required: true
+    release-body:
+        description: "Description for the GitHub release."
+        default: ""
+        required: false
 runs:
-  using: "composite"
-  steps:
-    - name: Create tag
-      run: |
-        git config --local user.name ${{ inputs.github-username }}
-        git config --local user.email ${{ inputs.github-email }}
-        git tag ${{ inputs.tag }}
-      shell: bash
-
-    - name: Create Release
-      uses: softprops/action-gh-release@v2.0.4
-      env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
-      with:
-        tag_name: "${{ inputs.tag }}"
-        name: ${{ inputs.release-title }}
-        body: ${{ inputs.release-body }}
-        draft: false
-        prerelease: false
+    using: "composite"
+    steps:
+        - name: Create tag
+          run: |
+            git config --local user.name ${{ inputs.github-username }}
+            git config --local user.email ${{ inputs.github-email }}
+            git tag ${{ inputs.tag }}
+          shell: bash
+        - name: Create Release
+          uses: softprops/action-gh-release@v2.0.4
+          env:
+            GITHUB_TOKEN: ${{ inputs.github-token }}
+          with:
+            tag_name: "${{ inputs.tag }}"
+            name: ${{ inputs.release-title }}
+            body: ${{ inputs.release-body }}
+            draft: false
+            prerelease: false

@@ -1,65 +1,58 @@
 name: "Setup Poetry"
 description: "Set up Poetry with virtualenv caching"
-
 inputs:
-  python-version:
-    description: "The Python version for the Poetry virtual environment."
-    required: false
-    default: "3.10"
-  poetry-version:
-    description: "The Poetry version to be installed."
-    required: false
-    default: "1.2.2"
-  working-directory:
-    description: "The root directory of the Poetry project."
-    required: false
-    default: "."
-  install-pipx:
-    description: "Whether to ensure that pipx is installed before invoking it."
-    required: false
-    default: "false"
-
+    python-version:
+        description: "The Python version for the Poetry virtual environment."
+        required: false
+        default: "3.10"
+    poetry-version:
+        description: "The Poetry version to be installed."
+        required: false
+        default: "1.2.2"
+    working-directory:
+        description: "The root directory of the Poetry project."
+        required: false
+        default: "."
+    install-pipx:
+        description: "Whether to ensure that pipx is installed before invoking it."
+        required: false
+        default: "false"
 runs:
-  using: "composite"
-  steps:
-    - name: Install pipx
-      if: ${{ inputs.install-pipx == 'true' }}
-      run: |
-        sudo apt update
-        sudo apt install python3-venv -y
-        # Assumes Ubuntu 22.04 or below
-        python3 -m pip install --user pipx
-        python3 -m pipx ensurepath
-      shell: bash
-
-    - name: Cache poetry
-      id: cache-poetry
-      uses: actions/cache@v4
-      with:
-        path: |
-          /opt/pipx/venvs/poetry
-          /opt/pipx_bin/poetry
-        key: poetry${{ inputs.poetry-version }}-python${{ inputs.python-version }}-${{ runner.os }}
-
-    - name: Install Poetry ${{ inputs.poetry-version }}
-      if: steps.cache-poetry.outputs.cache-hit != 'true'
-      run: pipx install poetry==${{ inputs.poetry-version }}
-      shell: bash
-
-    - name: Configure Poetry
-      run: |
-        poetry config virtualenvs.in-project true
-        poetry config virtualenvs.path ${{ inputs.working-directory }}/.venv
-      shell: bash
-
-    - name: Set up Python ${{ inputs.python-version }}
-      uses: actions/setup-python@v4
-      id: setup-python
-      with:
-        python-version: ${{ inputs.python-version }}
-        cache: poetry
-        cache-dependency-path: ${{ inputs.working-directory }}/poetry.lock
-
-    - run: poetry env use "${{ steps.setup-python.outputs.python-path }}"
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
+    using: "composite"
+    steps:
+        - name: Install pipx
+          if: ${{ inputs.install-pipx == 'true' }}
+          run: |
+            sudo apt update
+            sudo apt install python3-venv -y
+            # Assumes Ubuntu 22.04 or below
+            python3 -m pip install --user pipx
+            python3 -m pipx ensurepath
+          shell: bash
+        - name: Cache poetry
+          id: cache-poetry
+          uses: actions/cache@v4
+          with:
+            path: |
+                /opt/pipx/venvs/poetry
+                /opt/pipx_bin/poetry
+            key: poetry${{ inputs.poetry-version }}-python${{ inputs.python-version }}-${{ runner.os }}
+        - name: Install Poetry ${{ inputs.poetry-version }}
+          if: steps.cache-poetry.outputs.cache-hit != 'true'
+          run: pipx install poetry==${{ inputs.poetry-version }}
+          shell: bash
+        - name: Configure Poetry
+          run: |
+            poetry config virtualenvs.in-project true
+            poetry config virtualenvs.path ${{ inputs.working-directory }}/.venv
+          shell: bash
+        - name: Set up Python ${{ inputs.python-version }}
+          uses: actions/setup-python@v4
+          id: setup-python
+          with:
+            python-version: ${{ inputs.python-version }}
+            cache: poetry
+            cache-dependency-path: ${{ inputs.working-directory }}/poetry.lock
+        - run: poetry env use "${{ steps.setup-python.outputs.python-path }}"
+          shell: bash
+          working-directory: ${{ inputs.working-directory }}
