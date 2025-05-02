@@ -1,24 +1,24 @@
 name: "Deploy Kustomize app"
 description: "Deploy kustomized crds and app to the cluster"
 inputs:
-    kustomization-path:
-        description: "Path to the root directory of the kustomization"
-        required: true
-    timeout:
-        description: "Time out(in seconds) for CustomResourceDefinitions"
-        default: "60"
-        required: false
+  kustomization-path:
+    description: "Path to the root directory of the kustomization"
+    required: true
+  timeout:
+    description: "Time out(in seconds) for CustomResourceDefinitions"
+    default: "60"
+    required: false
 runs:
-    using: "composite"
-    steps:
-        - name: Deploy Kustomize CRDs
-          shell: bash
-          run: |
-            customResourceDefinitions="$(kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -i kind=CustomResourceDefinition)"
-            if [[ ! -z "$customResourceDefinitions" ]]; then
-              echo "$customResourceDefinitions" | kubectl apply -f - --server-side --force-conflicts
-              echo "$customResourceDefinitions" | kubectl wait --for condition=established --timeout=${{ inputs.timeout }}s -f -
-            fi
-        - name: Deploy Kustomize app
-          shell: bash
-          run: kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -x kind=CustomResourceDefinition | kubectl apply -f - --server-side --force-conflicts
+  using: "composite"
+  steps:
+    - name: Deploy Kustomize CRDs
+      shell: bash
+      run: |
+        customResourceDefinitions="$(kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -i kind=CustomResourceDefinition)"
+        if [[ ! -z "$customResourceDefinitions" ]]; then
+          echo "$customResourceDefinitions" | kubectl apply -f - --server-side --force-conflicts
+          echo "$customResourceDefinitions" | kubectl wait --for condition=established --timeout=${{ inputs.timeout }}s -f -
+        fi
+    - name: Deploy Kustomize app
+      shell: bash
+      run: kubectl kustomize ${{ inputs.kustomization-path }} | kfilt -x kind=CustomResourceDefinition | kubectl apply -f - --server-side --force-conflicts

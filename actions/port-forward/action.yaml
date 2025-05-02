@@ -1,47 +1,47 @@
 name: Port forward Kubernetes service
 description: Creates a port forward for a Kubernetes service and keep it open in the background
 inputs:
-    namespace:
-        description: Kubernetes namespace
-        required: true
-    port:
-        description: Port to be forwarded
-        required: true
-    service:
-        description: Name of Kubernetes service
-        required: true
-    kubectl-version:
-        description: kubectl version, e.g. `v1.23.0` or `latest`
-        default: latest
-        required: false
-    timeout:
-        description: Timeout in seconds for portfowrd
-        default: "30"
-        required: false
-    kubeconfig:
-        description: Path to kubeconfig file
-        required: false
+  namespace:
+    description: Kubernetes namespace
+    required: true
+  port:
+    description: Port to be forwarded
+    required: true
+  service:
+    description: Name of Kubernetes service
+    required: true
+  kubectl-version:
+    description: kubectl version, e.g. `v1.23.0` or `latest`
+    default: latest
+    required: false
+  timeout:
+    description: Timeout in seconds for portfowrd
+    default: "30"
+    required: false
+  kubeconfig:
+    description: Path to kubeconfig file
+    required: false
 runs:
-    using: composite
-    steps:
-        - name: Install kubectl
-          uses: azure/setup-kubectl@v3
-          with:
-            version: ${{ inputs.kubectl-version }}
-        - name: Establish port forward
-          shell: bash
-          run: |
-            nohup kubectl port-forward "services/${{ inputs.service }}" "${{ inputs.port }}:${{ inputs.port }}" --namespace ${{ inputs.namespace }} ${{ (inputs.kubeconfig != '' && format('--kubeconfig {0}', inputs.kubeconfig)) || '' }} > port-forward.out &
-            for ((i=1; i<=${{ inputs.timeout }}; i++));
-              do
-                if grep -q "Forwarding from 127.0.0.1:${{ inputs.port }} -> ${{ inputs.port }}" port-forward.out; then
-                  echo "Port forwarding done"
-                  exit 0
-                else
-                  cat port-forward.out || true
-                  echo "Waiting for port forwarding..."
-                  sleep 1
-                fi;
-              done
-            echo "Timeout of ${{ inputs.timeout}} seconds reached. Port-forwarding failed."
-            exit 1
+  using: composite
+  steps:
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: ${{ inputs.kubectl-version }}
+    - name: Establish port forward
+      shell: bash
+      run: |
+        nohup kubectl port-forward "services/${{ inputs.service }}" "${{ inputs.port }}:${{ inputs.port }}" --namespace ${{ inputs.namespace }} ${{ (inputs.kubeconfig != '' && format('--kubeconfig {0}', inputs.kubeconfig)) || '' }} > port-forward.out &
+        for ((i=1; i<=${{ inputs.timeout }}; i++));
+          do
+            if grep -q "Forwarding from 127.0.0.1:${{ inputs.port }} -> ${{ inputs.port }}" port-forward.out; then
+              echo "Port forwarding done"
+              exit 0
+            else
+              cat port-forward.out || true
+              echo "Waiting for port forwarding..."
+              sleep 1
+            fi;
+          done
+        echo "Timeout of ${{ inputs.timeout}} seconds reached. Port-forwarding failed."
+        exit 1

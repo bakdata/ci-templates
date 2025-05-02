@@ -1,25 +1,25 @@
 name: "Setup Maven"
 description: "Setup Java and Maven"
 inputs:
-    maven-version:
-        description: "Maven version to be installed."
-        required: true
-    java-distribution:
-        description: "Java distribution to be installed. (Default is microsoft)"
-        required: false
-        default: "microsoft"
-    java-version:
-        description: "Java version to be installed. (Default is 11)"
-        required: false
-        default: "11"
+  maven-version:
+    description: "Maven version to be installed."
+    required: true
+  java-distribution:
+    description: "Java distribution to be installed. (Default is microsoft)"
+    required: false
+    default: "microsoft"
+  java-version:
+    description: "Java version to be installed. (Default is 11)"
+    required: false
+    default: "11"
 runs:
-    using: "composite"
-    steps:
-        - uses: actions/setup-java@v4
-          with:
-            distribution: ${{ inputs.java-distribution }}
-            java-version: ${{ inputs.java-version }}
-        - name: Set up Maven
-          uses: stCarolas/setup-maven@v5
-          with:
-            maven-version: ${{ inputs.maven-version }}
+  using: "composite"
+  steps:
+    - uses: actions/setup-java@v4
+      with:
+        distribution: ${{ inputs.java-distribution }}
+        java-version: ${{ inputs.java-version }}
+    - name: Set up Maven
+      uses: stCarolas/setup-maven@v5
+      with:
+        maven-version: ${{ inputs.maven-version }}

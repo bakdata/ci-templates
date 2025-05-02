@@ -1,54 +1,54 @@
 name: "Commit and push"
 description: "Commits all the changed files and pushes them to the repository"
 inputs:
-    github-username:
-        description: "The GitHub username for committing the changes."
-        required: true
-    github-email:
-        description: "The GitHub email for committing the changes."
-        required: true
-    github-token:
-        description: "The GitHub token for committing the changes."
-        required: true
-    commit-message:
-        description: "The commit message."
-        required: true
-    ref:
-        description: "The ref name to commit and push the files on."
-        required: false
-        default: ${{ github.event.repository.default_branch }}
-    add-untracked:
-        description: "Whether to add untracked files to commit."
-        required: false
-        default: "false"
-    pass-empty-commit:
-        description: "Whether to exit with code 0 when nothing to commit."
-        required: false
-        default: "false"
+  github-username:
+    description: "The GitHub username for committing the changes."
+    required: true
+  github-email:
+    description: "The GitHub email for committing the changes."
+    required: true
+  github-token:
+    description: "The GitHub token for committing the changes."
+    required: true
+  commit-message:
+    description: "The commit message."
+    required: true
+  ref:
+    description: "The ref name to commit and push the files on."
+    required: false
+    default: ${{ github.event.repository.default_branch }}
+  add-untracked:
+    description: "Whether to add untracked files to commit."
+    required: false
+    default: "false"
+  pass-empty-commit:
+    description: "Whether to exit with code 0 when nothing to commit."
+    required: false
+    default: "false"
 runs:
-    using: "composite"
-    steps:
-        # For more information to create a commit with a valid GitHub user go to:
-        # https://github.com/ad-m/github-push-action
-        - name: Configure git
-          run: |
-            git config user.email ${{ inputs.github-email }}
-            git config user.name ${{ inputs.github-username }}
-          shell: bash
-        - name: Add untracked files
-          run: git add .
-          if: ${{ inputs.add-untracked == 'true' }}
-          shell: bash
-        - name: Commit files, exit 1 if nothing to commit
-          if: ${{ inputs.pass-empty-commit == 'false' }}
-          run: git commit -m "${{ inputs.commit-message }}" -a
-          shell: bash
-        - name: Commit files, exit 0 if nothing to commit and no uncommitted changes
-          if: ${{ inputs.pass-empty-commit == 'true' }}
-          run: '( [ -z "$(git status --porcelain=v1 2>/dev/null)" ] && echo "No uncommitted changes." ) || git commit -m "${{ inputs.commit-message }}" -a'
-          shell: bash
-        - name: Push changes
-          uses: ad-m/github-push-action@v0.8.0
-          with:
-            github_token: ${{ inputs.github-token }}
-            branch: refs/heads/${{ inputs.ref }}
+  using: "composite"
+  steps:
+    # For more information to create a commit with a valid GitHub user go to:
+    # https://github.com/ad-m/github-push-action
+    - name: Configure git
+      run: |
+        git config user.email ${{ inputs.github-email }}
+        git config user.name ${{ inputs.github-username }}
+      shell: bash
+    - name: Add untracked files
+      run: git add .
+      if: ${{ inputs.add-untracked == 'true' }}
+      shell: bash
+    - name: Commit files, exit 1 if nothing to commit
+      if: ${{ inputs.pass-empty-commit == 'false' }}
+      run: git commit -m "${{ inputs.commit-message }}" -a
+      shell: bash
+    - name: Commit files, exit 0 if nothing to commit and no uncommitted changes
+      if: ${{ inputs.pass-empty-commit == 'true' }}
+      run: '( [ -z "$(git status --porcelain=v1 2>/dev/null)" ] && echo "No uncommitted changes." ) || git commit -m "${{ inputs.commit-message }}" -a'
+      shell: bash
+    - name: Push changes
+      uses: ad-m/github-push-action@v0.8.0
+      with:
+        github_token: ${{ inputs.github-token }}
+        branch: refs/heads/${{ inputs.ref }}

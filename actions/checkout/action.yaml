@@ -1,68 +1,68 @@
 name: "Checkout repository"
 description: "Composite action for checking out a repository"
 inputs:
-    repository:
-        description: "The repository name with owner"
-        required: false
-        default: ${{ github.repository }}
-    ref:
-        description: "The branch, tag or SHA to checkout"
-        required: false
-        default: ""
-    persist-credentials:
-        description: "Whether to configure the token or SSH key with the local git config"
-        required: false
-        default: "true"
-    fetch-depth:
-        description: "Number of commits to fetch. 0 indicates all history for all branches and tags"
-        required: false
-        default: "1"
-    lfs:
-        description: "Whether LFS files of the repository should be checked out"
-        required: false
-        default: "false"
-    cache:
-        description: "Whether LFS files should be cached. Only has an effect if lfs=true."
-        required: false
-        default: "true"
-    clean:
-        description: "Clean the repository before running the action."
-        required: false
-        default: "true"
-    submodules:
-        description: "Whether to checkout submodules: `true` to checkout submodules or `recursive` to recursively checkout submodules."
-        required: false
-        default: "false"
+  repository:
+    description: "The repository name with owner"
+    required: false
+    default: ${{ github.repository }}
+  ref:
+    description: "The branch, tag or SHA to checkout"
+    required: false
+    default: ""
+  persist-credentials:
+    description: "Whether to configure the token or SSH key with the local git config"
+    required: false
+    default: "true"
+  fetch-depth:
+    description: "Number of commits to fetch. 0 indicates all history for all branches and tags"
+    required: false
+    default: "1"
+  lfs:
+    description: "Whether LFS files of the repository should be checked out"
+    required: false
+    default: "false"
+  cache:
+    description: "Whether LFS files should be cached. Only has an effect if lfs=true."
+    required: false
+    default: "true"
+  clean:
+    description: "Clean the repository before running the action."
+    required: false
+    default: "true"
+  submodules:
+    description: "Whether to checkout submodules: `true` to checkout submodules or `recursive` to recursively checkout submodules."
+    required: false
+    default: "false"
 outputs:
-    lfs-cache-hit:
-        description: "Whether LFS files were retrieved from cache."
-        value: ${{ steps.cache-lfs.outputs.cache-hit }}
+  lfs-cache-hit:
+    description: "Whether LFS files were retrieved from cache."
+    value: ${{ steps.cache-lfs.outputs.cache-hit }}
 runs:
-    using: "composite"
-    steps:
-        - name: Check out repository
-          uses: actions/checkout@v4
-          with:
-            repository: ${{ inputs.repository }}
-            ref: ${{ inputs.ref }}
-            persist-credentials: ${{ inputs.persist-credentials }}
-            submodules: ${{ inputs.submodules }}
-            fetch-depth: ${{ inputs.fetch-depth }}
-            clean: ${{ inputs.clean }}
-        - name: Create LFS file list
-          if: ${{ inputs.lfs == 'true'}}
-          run: git lfs ls-files --long | cut -d ' ' -f1 | sort > .lfs-assets-id
-          shell: bash
-        - name: LFS Cache
-          if: ${{ inputs.lfs == 'true' && inputs.cache == 'true' }}
-          id: cache-lfs
-          uses: actions/cache@v4
-          with:
-            path: .git/lfs/objects
-            key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
-            restore-keys: |
-                ${{ runner.os }}-lfs-
-        - name: Git LFS Pull
-          if: ${{ inputs.lfs == 'true'}}
-          run: git lfs pull
-          shell: bash
+  using: "composite"
+  steps:
+    - name: Check out repository
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ inputs.repository }}
+        ref: ${{ inputs.ref }}
+        persist-credentials: ${{ inputs.persist-credentials }}
+        submodules: ${{ inputs.submodules }}
+        fetch-depth: ${{ inputs.fetch-depth }}
+        clean: ${{ inputs.clean }}
+    - name: Create LFS file list
+      if: ${{ inputs.lfs == 'true'}}
+      run: git lfs ls-files --long | cut -d ' ' -f1 | sort > .lfs-assets-id
+      shell: bash
+    - name: LFS Cache
+      if: ${{ inputs.lfs == 'true' && inputs.cache == 'true' }}
+      id: cache-lfs
+      uses: actions/cache@v4
+      with:
+        path: .git/lfs/objects
+        key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+        restore-keys: |
+          ${{ runner.os }}-lfs-
+    - name: Git LFS Pull
+      if: ${{ inputs.lfs == 'true'}}
+      run: git lfs pull
+      shell: bash

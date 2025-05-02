@@ -1,73 +1,73 @@
 name: "Release Java artifacts"
 description: "Release Java Maven artifacts on Github"
 inputs:
-    maven-version:
-        description: "Maven version to be installed."
-        required: true
-    release-type:
-        description: "Scope of the release"
-        required: true
-    github-email:
-        description: "GitHub email for requesting changes from API."
-        required: true
-    github-username:
-        description: "GitHub username for requesting changes from API."
-        required: true
-    github-token:
-        description: "GitHub token for requesting changes from API."
-        required: true
-    java-distribution:
-        description: "Java distribution to be installed. (Default is microsoft)"
-        required: false
-        default: "microsoft"
-    java-version:
-        description: "Java version to be installed. (Default is 11)"
-        required: false
-        default: "11"
-    working-directory:
-        description: "Working directory of your Maven artifacts. (Default is .)"
-        required: false
-        default: "."
+  maven-version:
+    description: "Maven version to be installed."
+    required: true
+  release-type:
+    description: "Scope of the release"
+    required: true
+  github-email:
+    description: "GitHub email for requesting changes from API."
+    required: true
+  github-username:
+    description: "GitHub username for requesting changes from API."
+    required: true
+  github-token:
+    description: "GitHub token for requesting changes from API."
+    required: true
+  java-distribution:
+    description: "Java distribution to be installed. (Default is microsoft)"
+    required: false
+    default: "microsoft"
+  java-version:
+    description: "Java version to be installed. (Default is 11)"
+    required: false
+    default: "11"
+  working-directory:
+    description: "Working directory of your Maven artifacts. (Default is .)"
+    required: false
+    default: "."
 outputs:
-    release-version:
-        description: "The bumped version of your release."
-        value: ${{ steps.evaluate-version.outputs.release-version }}
+  release-version:
+    description: "The bumped version of your release."
+    value: ${{ steps.evaluate-version.outputs.release-version }}
 runs:
-    using: "composite"
-    steps:
-        - name: Check out repository
-          uses: bakdata/ci-templates/actions/checkout@1.49.0
-          with:
-            fetch-depth: 0
-            token: ${{ inputs.github-token }}
-        - name: Setup git
-          run: |
-            git config user.email ${{ inputs.github-email }}
-            git config user.name ${{ inputs.github-username }}
-          shell: bash
-        - name: Setup semver
-          run: |
-            sudo wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
-            sudo chmod +x /usr/local/bin/semver
-          shell: bash
-        - name: Set up Maven with version ${{ inputs.maven-version }}
-          uses: bakdata/ci-templates/actions/java-maven-setup@1.49.0
-          with:
-            java-distribution: ${{ inputs.java-distribution }}
-            java-version: ${{ inputs.java-version }}
-            maven-version: ${{ inputs.maven-version }}
-        - name: Bump version
-          id: evaluate-version
-          run: |
-            old_version=$(mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q)
-            if [[ "${{ inputs.release-type }}" == "patch" ]]; then
-                release_version="${old_version%-*}"
-            else
-                release_version=$(semver bump "${{ inputs.release-type }}" "${old_version}")
-            fi
-            echo "release-version=$release_version" >> "$GITHUB_OUTPUT"
-          shell: bash
-        - name: Create release
-          run: mvn release:prepare -B -DreleaseVersion=${{ steps.evaluate-version.outputs.release-version }} -Darguments=-DskipTests -Dscm.developer.connection="scm:git:${{ github.server_url }}/${{ github.repository }}.git"
-          shell: bash
-          working-directory: ${{ inputs.working-directory }}
+  using: "composite"
+  steps:
+    - name: Check out repository
+      uses: bakdata/ci-templates/actions/checkout@1.49.0
+      with:
+        fetch-depth: 0
+        token: ${{ inputs.github-token }}
+    - name: Setup git
+      run: |
+        git config user.email ${{ inputs.github-email }}
+        git config user.name ${{ inputs.github-username }}
+      shell: bash
+    - name: Setup semver
+      run: |
+        sudo wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.3.0/src/semver
+        sudo chmod +x /usr/local/bin/semver
+      shell: bash
+    - name: Set up Maven with version ${{ inputs.maven-version }}
+      uses: bakdata/ci-templates/actions/java-maven-setup@1.49.0
+      with:
+        java-distribution: ${{ inputs.java-distribution }}
+        java-version: ${{ inputs.java-version }}
+        maven-version: ${{ inputs.maven-version }}
+    - name: Bump version
+      id: evaluate-version
+      run: |
+        old_version=$(mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q)
+        if [[ "${{ inputs.release-type }}" == "patch" ]]; then
+            release_version="${old_version%-*}"
+        else
+            release_version=$(semver bump "${{ inputs.release-type }}" "${old_version}")
+        fi
+        echo "release-version=$release_version" >> "$GITHUB_OUTPUT"
+      shell: bash
+    - name: Create release
+      run: mvn release:prepare -B -DreleaseVersion=${{ steps.evaluate-version.outputs.release-version }} -Darguments=-DskipTests -Dscm.developer.connection="scm:git:${{ github.server_url }}/${{ github.repository }}.git"
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}

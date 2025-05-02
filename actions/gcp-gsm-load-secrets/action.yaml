@@ -1,42 +1,42 @@
 name: "Load secrets from Google Secret Manager"
 description: "Load secrets from Google Secret Manager and inject them into the environment"
 inputs:
-    gke-service-account:
-        description: "GKE service account for authentication"
-        required: true
-    gke-project-name:
-        description: "GKE project name for authentication"
-        required: true
-    workload-identity-provider:
-        description: "Workload identity provider for authentication"
-        required: true
-    secrets-to-inject:
-        description: "Secrets to inject into the environment"
-        required: true
-    export-to-environment:
-        description: "Export secrets to environment"
-        required: false
-        default: true
+  gke-service-account:
+    description: "GKE service account for authentication"
+    required: true
+  gke-project-name:
+    description: "GKE project name for authentication"
+    required: true
+  workload-identity-provider:
+    description: "Workload identity provider for authentication"
+    required: true
+  secrets-to-inject:
+    description: "Secrets to inject into the environment"
+    required: true
+  export-to-environment:
+    description: "Export secrets to environment"
+    required: false
+    default: true
 outputs:
-    secrets:
-        description: "Secrets loaded from Secret Manager"
-        value: ${{ steps.secrets.outputs.secrets }}
+  secrets:
+    description: "Secrets loaded from Secret Manager"
+    value: ${{ steps.secrets.outputs.secrets }}
 runs:
-    using: "composite"
-    steps:
-        - name: Authenticate at GCloud
-          uses: "google-github-actions/auth@v2"
-          with:
-            project_id: ${{ inputs.gke-project-name }}
-            workload_identity_provider: ${{ inputs.workload-identity-provider }}
-            service_account: ${{ inputs.gke-service-account }}
-        - id: "parse_secrets"
-          uses: "bakdata/ci-templates/actions/parse-secrets-definitions@1.48.0"
-          with:
-            project_name: ${{ inputs.gke-project-name }}
-            secrets_list: ${{ inputs.secrets-to-inject }}
-        - id: "secrets"
-          uses: "google-github-actions/get-secretmanager-secrets@v2"
-          with:
-            secrets: ${{ steps.parse_secrets.outputs.secrets-list }}
-            export_to_environment: ${{ inputs.export-to-environment }}
+  using: "composite"
+  steps:
+    - name: Authenticate at GCloud
+      uses: "google-github-actions/auth@v2"
+      with:
+        project_id: ${{ inputs.gke-project-name }}
+        workload_identity_provider: ${{ inputs.workload-identity-provider }}
+        service_account: ${{ inputs.gke-service-account }}
+    - id: "parse_secrets"
+      uses: "bakdata/ci-templates/actions/parse-secrets-definitions@1.48.0"
+      with:
+        project_name: ${{ inputs.gke-project-name }}
+        secrets_list: ${{ inputs.secrets-to-inject }}
+    - id: "secrets"
+      uses: "google-github-actions/get-secretmanager-secrets@v2"
+      with:
+        secrets: ${{ steps.parse_secrets.outputs.secrets-list }}
+        export_to_environment: ${{ inputs.export-to-environment }}

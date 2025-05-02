@@ -1,15 +1,15 @@
 name: "Parse secrets from GSM"
 description: "Transform secrets into a common format"
 inputs:
-    secrets-list:
-        description: "Secrets to inject into the environment"
-        required: true
-    project-name:
-        description: "GKE project name where the secrets are stored"
-        required: true
+  secrets-list:
+    description: "Secrets to inject into the environment"
+    required: true
+  project-name:
+    description: "GKE project name where the secrets are stored"
+    required: true
 outputs:
-    secrets-list:
-        description: "secret list with correct format"
+  secrets-list:
+    description: "secret list with correct format"
 runs:
-    using: "docker"
-    image: "Dockerfile"
+  using: "docker"
+  image: "Dockerfile"

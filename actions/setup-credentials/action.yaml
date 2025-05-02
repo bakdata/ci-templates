@@ -1,40 +1,40 @@
 name: "Setup credentials"
 description: "Setup credentials for GCloud and GKE"
 inputs:
-    gke-service-account:
-        description: "GKE service account key for authentication"
-        required: true
-    gke-project:
-        description: "GKE project id for authentication"
-        required: true
-    gke-region:
-        description: "GKE region for authentication"
-        required: true
-    gke-cluster:
-        description: "GKE cluster for authentication"
-        required: true
-    gcloud-sdk-version:
-        description: "GCloud SDK version"
-        default: "508.0.0"
-        required: false
+  gke-service-account:
+    description: "GKE service account key for authentication"
+    required: true
+  gke-project:
+    description: "GKE project id for authentication"
+    required: true
+  gke-region:
+    description: "GKE region for authentication"
+    required: true
+  gke-cluster:
+    description: "GKE cluster for authentication"
+    required: true
+  gcloud-sdk-version:
+    description: "GCloud SDK version"
+    default: "508.0.0"
+    required: false
 runs:
-    using: "composite"
-    steps:
-        - name: Authenticate at GCloud
-          uses: "google-github-actions/auth@v2"
-          with:
-            credentials_json: ${{ inputs.gke-service-account }}
-        - name: Setup GCloud SDK
-          uses: google-github-actions/setup-gcloud@v2
-          with:
-            version: ${{ inputs.gcloud-sdk-version }}
-            project_id: ${{ inputs.gke-project }}
-        - name: Setup authentication
-          shell: bash
-          run: |
-            gcloud components install gke-gcloud-auth-plugin
-            gcloud container clusters get-credentials "$GKE_CLUSTER" --region "$GKE_REGION" --project "$GKE_PROJECT"
-          env:
-            GKE_REGION: ${{ inputs.gke-region }}
-            GKE_CLUSTER: ${{ inputs.gke-cluster }}
-            GKE_PROJECT: ${{ inputs.gke-project }}
+  using: "composite"
+  steps:
+    - name: Authenticate at GCloud
+      uses: "google-github-actions/auth@v2"
+      with:
+        credentials_json: ${{ inputs.gke-service-account }}
+    - name: Setup GCloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        version: ${{ inputs.gcloud-sdk-version }}
+        project_id: ${{ inputs.gke-project }}
+    - name: Setup authentication
+      shell: bash
+      run: |
+        gcloud components install gke-gcloud-auth-plugin
+        gcloud container clusters get-credentials "$GKE_CLUSTER" --region "$GKE_REGION" --project "$GKE_PROJECT"
+      env:
+        GKE_REGION: ${{ inputs.gke-region }}
+        GKE_CLUSTER: ${{ inputs.gke-cluster }}
+        GKE_PROJECT: ${{ inputs.gke-project }}

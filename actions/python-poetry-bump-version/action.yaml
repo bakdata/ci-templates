@@ -1,55 +1,55 @@
 name: "Bump Python project version using Poetry"
 description: "The version defined in the pyproject.toml file gets bump with the respect to the release-type using Poetry"
 inputs:
-    release-type:
-        description: "Scope of the release: patch, minor, major, or snapshot. See https://python-poetry.org/docs/cli/#version for reference."
-        required: true
-    python-version:
-        description: "The Python version for the Poetry virtual environment."
-        required: false
-        default: "3.10"
-    poetry-version:
-        description: "The Poetry version to be installed."
-        required: false
-        default: "1.2.2"
-    working-directory:
-        description: "The root directory of the Poetry project."
-        required: false
-        default: "."
+  release-type:
+    description: "Scope of the release: patch, minor, major, or snapshot. See https://python-poetry.org/docs/cli/#version for reference."
+    required: true
+  python-version:
+    description: "The Python version for the Poetry virtual environment."
+    required: false
+    default: "3.10"
+  poetry-version:
+    description: "The Poetry version to be installed."
+    required: false
+    default: "1.2.2"
+  working-directory:
+    description: "The root directory of the Poetry project."
+    required: false
+    default: "."
 outputs:
-    release-version:
-        description: "The bumped version of your package."
-        value: ${{ steps.bump-version.outputs.new-version }}
-    old-version:
-        description: "The old version of your package."
-        value: ${{ steps.bump-version.outputs.old-version }}
+  release-version:
+    description: "The bumped version of your package."
+    value: ${{ steps.bump-version.outputs.new-version }}
+  old-version:
+    description: "The old version of your package."
+    value: ${{ steps.bump-version.outputs.old-version }}
 runs:
-    using: "composite"
-    steps:
-        - name: Set up Poetry ${{ inputs.poetry-version }}
-          uses: bakdata/ci-templates/actions/python-setup-poetry@v1.5.3
-          with:
-            python-version: ${{ inputs.python-version }}
-            poetry-version: ${{ inputs.poetry-version }}
-            working-directory: ${{ inputs.working-directory }}
-        # for updating __init__.py etc.
-        - name: Install Poetry bumpversion plugin
-          run: poetry self add poetry-bumpversion
-          shell: bash
-        # Update the pyproject.toml version. Versioning format for dev packages: X.Y.Z
-        # For more information visit: https://www.python.org/dev/peps/pep-0440/#semantic-versioning
-        # https://python-poetry.org/docs/cli/#version
-        - name: Bump version with Poetry
-          id: bump-version
-          run: |
-            echo "old-version=$(poetry version -s)" >> $GITHUB_OUTPUT
-            if [[ "${{ inputs.release-type }}" == "snapshot" ]]; then
-              snapshot_time=$(date +'%Y%m%d%H%M%S')
-              poetry version patch
-              poetry version $(poetry version -s).dev$snapshot_time
-            else
-              poetry version ${{ inputs.release-type }}
-            fi
-            echo "new-version=$(poetry version -s)" >> $GITHUB_OUTPUT
-          shell: bash
-          working-directory: ${{ inputs.working-directory }}
+  using: "composite"
+  steps:
+    - name: Set up Poetry ${{ inputs.poetry-version }}
+      uses: bakdata/ci-templates/actions/python-setup-poetry@v1.5.3
+      with:
+        python-version: ${{ inputs.python-version }}
+        poetry-version: ${{ inputs.poetry-version }}
+        working-directory: ${{ inputs.working-directory }}
+    # for updating __init__.py etc.
+    - name: Install Poetry bumpversion plugin
+      run: poetry self add poetry-bumpversion
+      shell: bash
+    # Update the pyproject.toml version. Versioning format for dev packages: X.Y.Z
+    # For more information visit: https://www.python.org/dev/peps/pep-0440/#semantic-versioning
+    # https://python-poetry.org/docs/cli/#version
+    - name: Bump version with Poetry
+      id: bump-version
+      run: |
+        echo "old-version=$(poetry version -s)" >> $GITHUB_OUTPUT
+        if [[ "${{ inputs.release-type }}" == "snapshot" ]]; then
+          snapshot_time=$(date +'%Y%m%d%H%M%S')
+          poetry version patch
+          poetry version $(poetry version -s).dev$snapshot_time
+        else
+          poetry version ${{ inputs.release-type }}
+        fi
+        echo "new-version=$(poetry version -s)" >> $GITHUB_OUTPUT
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}

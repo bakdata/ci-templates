@@ -1,12 +1,12 @@
 name: "Destroy Kustomize app"
 description: "Destroy resources with Kustomize in the cluster"
 inputs:
-    kustomization-path:
-        description: "Path to the root directory of the kustomization"
-        required: true
+  kustomization-path:
+    description: "Path to the root directory of the kustomization"
+    required: true
 runs:
-    using: "composite"
-    steps:
-        - name: Destroy Kustomize app
-          shell: bash
-          run: kubectl kustomize ${{ inputs.kustomization-path }} | kubectl delete --ignore-not-found=true -f -
+  using: "composite"
+  steps:
+    - name: Destroy Kustomize app
+      shell: bash
+      run: kubectl kustomize ${{ inputs.kustomization-path }} | kubectl delete --ignore-not-found=true -f -

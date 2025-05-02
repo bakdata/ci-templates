@@ -1,40 +1,40 @@
 name: "Publish Python package"
 description: "Publish Python package using Poetry to a package index"
 inputs:
-    index-name:
-        description: "The package index name for publishing packages."
-        required: true
-    index-url:
-        description: "The package index url for publishing packages."
-        required: true
-    index-username:
-        description: "The package index username for publishing packages."
-        required: true
-    index-password:
-        description: "The package index password for publishing packages."
-        required: true
-    working-directory:
-        description: "The working directory of your Python packages. (Default is root directory)"
-        required: false
-        default: "./"
-    peotry-request-timeout:
-        description: "Poetry's HTTP request timeout in seconds. (Default is 120 seconds)"
-        required: false
-        default: "120"
+  index-name:
+    description: "The package index name for publishing packages."
+    required: true
+  index-url:
+    description: "The package index url for publishing packages."
+    required: true
+  index-username:
+    description: "The package index username for publishing packages."
+    required: true
+  index-password:
+    description: "The package index password for publishing packages."
+    required: true
+  working-directory:
+    description: "The working directory of your Python packages. (Default is root directory)"
+    required: false
+    default: "./"
+  peotry-request-timeout:
+    description: "Poetry's HTTP request timeout in seconds. (Default is 120 seconds)"
+    required: false
+    default: "120"
 runs:
-    using: "composite"
-    steps:
-        - name: Build package
-          run: poetry build
-          shell: bash
-          working-directory: ${{ inputs.working-directory }}
-        - name: Publish package to index
-          run: |
-            # set poetry time out
-            echo "POETRY_REQUESTS_TIMEOUT=${{ inputs.peotry-request-timeout }}" >> "$GITHUB_ENV"
-            # set the index as repository for Poetry publish
-            poetry config repositories.${{ inputs.index-name }} ${{ inputs.index-url }}
-            # publish to index
-            poetry publish --repository ${{ inputs.index-name }} --username ${{ inputs.index-username }} --password ${{ inputs.index-password }}
-          shell: bash
-          working-directory: ${{ inputs.working-directory }}
+  using: "composite"
+  steps:
+    - name: Build package
+      run: poetry build
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+    - name: Publish package to index
+      run: |
+        # set poetry time out
+        echo "POETRY_REQUESTS_TIMEOUT=${{ inputs.peotry-request-timeout }}" >> "$GITHUB_ENV"
+        # set the index as repository for Poetry publish
+        poetry config repositories.${{ inputs.index-name }} ${{ inputs.index-url }}
+        # publish to index
+        poetry publish --repository ${{ inputs.index-name }} --username ${{ inputs.index-username }} --password ${{ inputs.index-password }}
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
