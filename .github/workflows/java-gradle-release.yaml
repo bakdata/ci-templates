@@ -1,91 +1,91 @@
 name: Java Gradle Release
 on:
-    workflow_call:
-        inputs:
-            release-type:
-                description: Scope of the release (major, minor or patch).
-                required: true
-                type: string
-            changelog-file:
-                description: Path to the changelog file in the GitHub repository
-                required: false
-                default: CHANGELOG.md
-                type: string
-            gradle-cache:
-                description: Whether Gradle caching is enabled or not. (Default is true)
-                required: false
-                default: true
-                type: boolean
-            gradle-version:
-                description: Gradle version to be installed. (Default is wrapper)
-                required: false
-                type: string
-                default: wrapper
-            java-distribution:
-                description: Java distribution to be installed. (Default is microsoft)
-                required: false
-                type: string
-                default: microsoft
-            java-version:
-                description: Java version to be installed. (Default is 11)
-                required: false
-                type: string
-                default: '11'
-            working-directory:
-                description: Working directory of your Gradle artifacts. (Default is .)
-                required: false
-                type: string
-                default: .
-        secrets:
-            GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
-                description: The workload identity provider to use for fetching secrets
-                required: true
-            GOOGLE_SERVICE_ACCOUNT:
-                description: The service account to use to fetch the secrets
-                required: true
-            GOOGLE_PROJECT_ID:
-                description: The id of the project which contains the secrets
-                required: true
-        outputs:
-            release-version:
-                description: Bumped version of your project.
-                value: ${{ jobs.release.outputs.release-version }}
+  workflow_call:
+    inputs:
+      release-type:
+        description: Scope of the release (major, minor or patch).
+        required: true
+        type: string
+      changelog-file:
+        description: Path to the changelog file in the GitHub repository
+        required: false
+        default: CHANGELOG.md
+        type: string
+      gradle-cache:
+        description: Whether Gradle caching is enabled or not. (Default is true)
+        required: false
+        default: true
+        type: boolean
+      gradle-version:
+        description: Gradle version to be installed. (Default is wrapper)
+        required: false
+        type: string
+        default: wrapper
+      java-distribution:
+        description: Java distribution to be installed. (Default is microsoft)
+        required: false
+        type: string
+        default: microsoft
+      java-version:
+        description: Java version to be installed. (Default is 11)
+        required: false
+        type: string
+        default: '11'
+      working-directory:
+        description: Working directory of your Gradle artifacts. (Default is .)
+        required: false
+        type: string
+        default: .
+    secrets:
+      GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
+        description: The workload identity provider to use for fetching secrets
+        required: true
+      GOOGLE_SERVICE_ACCOUNT:
+        description: The service account to use to fetch the secrets
+        required: true
+      GOOGLE_PROJECT_ID:
+        description: The id of the project which contains the secrets
+        required: true
+    outputs:
+      release-version:
+        description: Bumped version of your project.
+        value: ${{ jobs.release.outputs.release-version }}
 jobs:
-    release:
-        name: Release
-        runs-on: ubuntu-22.04
-        outputs:
-            release-version: ${{ steps.release.outputs.release-version }}
-        steps:
-        -   name: Authenticate with GCloud
-            uses: google-github-actions/auth@v2
-            id: auth
-            with:
-                workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
-                service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-        -   name: Fetch secrets from GSM
-            id: fetch-secrets
-            uses: google-github-actions/get-secretmanager-secrets@v2
-            with:
-                secrets: |-
-                    github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
-                    github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
-                    github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
-                export_to_environment: 'true'
-        -   name: Release on Github
-            id: release
-            uses: bakdata/ci-templates/actions/java-gradle-release@1.63.0
-            with:
-                release-type: ${{ inputs.release-type }}
-                github-email: ${{ env.github-email }}
-                github-username: ${{ env.github-username }}
-                github-token: ${{ env.github-token }}
-                java-distribution: ${{ inputs.java-distribution }}
-                java-version: ${{ inputs.java-version }}
-                gradle-version: ${{ inputs.gradle-version }}
-                gradle-cache: ${{ inputs.gradle-cache }}
-                gradle-cache-read-only: true
-                working-directory: ${{ inputs.working-directory }}
+  release:
+    name: Release
+    runs-on: ubuntu-22.04
+    outputs:
+      release-version: ${{ steps.release.outputs.release-version }}
+    steps:
+      - name: Authenticate with GCloud
+        uses: google-github-actions/auth@v2
+        id: auth
+        with:
+          workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+      - name: Fetch secrets from GSM
+        id: fetch-secrets
+        uses: google-github-actions/get-secretmanager-secrets@v2
+        with:
+          secrets: |-
+            github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
+            github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
+            github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
+          export_to_environment: 'true'
+      - name: Release on Github
+        id: release
+        uses: bakdata/ci-templates/actions/java-gradle-release@1.63.0
+        with:
+          release-type: ${{ inputs.release-type }}
+          github-email: ${{ env.github-email }}
+          github-username: ${{ env.github-username }}
+          github-token: ${{ env.github-token }}
+          java-distribution: ${{ inputs.java-distribution }}
+          java-version: ${{ inputs.java-version }}
+          gradle-version: ${{ inputs.gradle-version }}
+          gradle-cache: ${{ inputs.gradle-cache }}
+          gradle-cache-read-only: true
+          working-directory: ${{ inputs.working-directory }}
 permissions:
-    contents: read
-    id-token: write
+  contents: read
+  id-token: write

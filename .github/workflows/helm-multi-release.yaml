@@ -1,200 +1,200 @@
 name: Helm Multi Release
 on:
-    workflow_call:
-        inputs:
-            charts-path:
-                description: The directory containing the Helm chart(s).
-                required: true
-                type: string
-            subdirs:
-                description: List of subdir to consider
-                required: true
-                type: string
-            artifact-dir:
-                description: Directory next to `charts-path` for preparation of the GitHub pages artifact.
-                required: false
-                default: artifacts
-                type: string
-            gh-pages-branch:
-                description: Name of branch containing the artifacts
-                required: false
-                default: gh-pages
-                type: string
-            helm-version:
-                description: The Helm version.
-                required: false
-                default: v3.10.1
-                type: string
-            lint-config-path:
-                description: The path to the lint configuration file (See https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml).
-                required: false
-                default: .github/lint-config.yaml
-                type: string
-            version:
-                description: Version for helm chart
-                required: false
-                default: ${{ github.ref_name }}
-                type: string
-        secrets:
-            GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
-                description: The workload identity provider to use for fetching secrets
-                required: true
-            GOOGLE_SERVICE_ACCOUNT:
-                description: The service account to use to fetch the secrets
-                required: true
-            GOOGLE_PROJECT_ID:
-                description: The id of the project which contains the secrets
-                required: true
+  workflow_call:
+    inputs:
+      charts-path:
+        description: The directory containing the Helm chart(s).
+        required: true
+        type: string
+      subdirs:
+        description: List of subdir to consider
+        required: true
+        type: string
+      artifact-dir:
+        description: Directory next to `charts-path` for preparation of the GitHub pages artifact.
+        required: false
+        default: artifacts
+        type: string
+      gh-pages-branch:
+        description: Name of branch containing the artifacts
+        required: false
+        default: gh-pages
+        type: string
+      helm-version:
+        description: The Helm version.
+        required: false
+        default: v3.10.1
+        type: string
+      lint-config-path:
+        description: The path to the lint configuration file (See https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml).
+        required: false
+        default: .github/lint-config.yaml
+        type: string
+      version:
+        description: Version for helm chart
+        required: false
+        default: ${{ github.ref_name }}
+        type: string
+    secrets:
+      GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
+        description: The workload identity provider to use for fetching secrets
+        required: true
+      GOOGLE_SERVICE_ACCOUNT:
+        description: The service account to use to fetch the secrets
+        required: true
+      GOOGLE_PROJECT_ID:
+        description: The id of the project which contains the secrets
+        required: true
 concurrency:
-    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-multi-release
-    cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-multi-release
+  cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
 jobs:
-    helm-lint:
-        runs-on: ubuntu-22.04
-        steps:
-        -   name: Authenticate with GCloud
-            uses: google-github-actions/auth@v2
-            id: auth
-            with:
-                workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
-                service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-        -   name: Fetch secrets from GSM
-            id: fetch-secrets
-            uses: google-github-actions/get-secretmanager-secrets@v2
-            with:
-                secrets: |-
-                    github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
-                    github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
-                    github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
-                export_to_environment: 'true'
-        -   name: Lint Helm chart
-            uses: bakdata/ci-templates/actions/helm-lint@1.49.0
-            with:
-                lint-config-path: ${{ inputs.lint-config-path }}
-    package-artifacts:
-        needs: helm-lint
-        strategy:
-            matrix:
-                subdir: ${{ fromJson(inputs.subdirs) }}
-        runs-on: ubuntu-22.04
-        steps:
-        -   name: Authenticate with GCloud
-            uses: google-github-actions/auth@v2
-            id: auth
-            with:
-                workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
-                service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-        -   name: Fetch secrets from GSM
-            id: fetch-secrets
-            uses: google-github-actions/get-secretmanager-secrets@v2
-            with:
-                secrets: |-
-                    github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
-                    github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
-                    github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
-                export_to_environment: 'true'
-        -   name: Check out repository
-            uses: bakdata/ci-templates/actions/checkout@1.49.0
-        -   name: Bump Chart version
-            run: |
-                sudo add-apt-repository ppa:rmescandon/yq
-                sudo apt update
-                sudo apt install yq -y
-                yq e -i '.version = "${{ inputs.version }}"' "./${{ matrix.subdir }}/Chart.yaml"
-            shell: bash
-            working-directory: ${{ inputs.charts-path }}
-        -   name: Prepare artifacts
-            run: |
-                mkdir -p ../${{ inputs.artifact-dir }}/${{ matrix.subdir }}
-                helm package ${{ matrix.subdir }} -d ../${{ inputs.artifact-dir }}/${{ matrix.subdir }}
-            shell: bash
-            working-directory: ${{ inputs.charts-path }}
-        -   name: Upload artifacts with action/upload
-            uses: actions/upload-artifact@v4
-            with:
-                name: helm-chart-${{ matrix.subdir }}
-                path: ${{ inputs.artifact-dir }}
-                retention-days: 1
-    merge-artifacts:
-        runs-on: ubuntu-22.04
-        needs: package-artifacts
-        steps:
-        -   name: Authenticate with GCloud
-            uses: google-github-actions/auth@v2
-            id: auth
-            with:
-                workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
-                service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-        -   name: Fetch secrets from GSM
-            id: fetch-secrets
-            uses: google-github-actions/get-secretmanager-secrets@v2
-            with:
-                secrets: |-
-                    github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
-                    github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
-                    github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
-                export_to_environment: 'true'
-        -   name: Merge Artifacts
-            uses: actions/upload-artifact/merge@v4
-            with:
-                name: helm-charts
-                pattern: helm-chart-*
-    publish:
-        runs-on: ubuntu-22.04
-        needs: merge-artifacts
-        steps:
-        -   name: Authenticate with GCloud
-            uses: google-github-actions/auth@v2
-            id: auth
-            with:
-                workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
-                service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-        -   name: Fetch secrets from GSM
-            id: fetch-secrets
-            uses: google-github-actions/get-secretmanager-secrets@v2
-            with:
-                secrets: |-
-                    github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
-                    github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
-                    github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
-                export_to_environment: 'true'
-        -   name: Check out branch containing the artifatcs and the index.yaml file
-            uses: bakdata/ci-templates/actions/checkout@1.49.0
-            with:
-                ref: ${{ inputs.gh-pages-branch }}
-                persist-credentials: false
-        -   name: Download new artifacts
-            uses: actions/download-artifact@v4
-            with:
-                name: helm-charts
-                path: ${{ inputs.artifact-dir }}
-        -   name: Move artifacts to root dir
-            run: |
-                for subdir in */; do
-                  if [ ! -d "../$subdir" ]; then
-                    mkdir ../"$subdir"
-                  fi
-                  mv "$subdir"/* ../"$subdir"
-                done
-                cd ..
-                rm -rf ${{ inputs.artifact-dir }}
-            shell: bash
-            working-directory: ${{ inputs.artifact-dir }}
-        -   name: Generate index.yaml file
-            run: 'helm repo index .
+  helm-lint:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Authenticate with GCloud
+        uses: google-github-actions/auth@v2
+        id: auth
+        with:
+          workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+      - name: Fetch secrets from GSM
+        id: fetch-secrets
+        uses: google-github-actions/get-secretmanager-secrets@v2
+        with:
+          secrets: |-
+            github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
+            github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
+            github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
+          export_to_environment: 'true'
+      - name: Lint Helm chart
+        uses: bakdata/ci-templates/actions/helm-lint@1.49.0
+        with:
+          lint-config-path: ${{ inputs.lint-config-path }}
+  package-artifacts:
+    needs: helm-lint
+    strategy:
+      matrix:
+        subdir: ${{ fromJson(inputs.subdirs) }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Authenticate with GCloud
+        uses: google-github-actions/auth@v2
+        id: auth
+        with:
+          workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+      - name: Fetch secrets from GSM
+        id: fetch-secrets
+        uses: google-github-actions/get-secretmanager-secrets@v2
+        with:
+          secrets: |-
+            github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
+            github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
+            github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
+          export_to_environment: 'true'
+      - name: Check out repository
+        uses: bakdata/ci-templates/actions/checkout@1.49.0
+      - name: Bump Chart version
+        run: |
+          sudo add-apt-repository ppa:rmescandon/yq
+          sudo apt update
+          sudo apt install yq -y
+          yq e -i '.version = "${{ inputs.version }}"' "./${{ matrix.subdir }}/Chart.yaml"
+        shell: bash
+        working-directory: ${{ inputs.charts-path }}
+      - name: Prepare artifacts
+        run: |
+          mkdir -p ../${{ inputs.artifact-dir }}/${{ matrix.subdir }}
+          helm package ${{ matrix.subdir }} -d ../${{ inputs.artifact-dir }}/${{ matrix.subdir }}
+        shell: bash
+        working-directory: ${{ inputs.charts-path }}
+      - name: Upload artifacts with action/upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: helm-chart-${{ matrix.subdir }}
+          path: ${{ inputs.artifact-dir }}
+          retention-days: 1
+  merge-artifacts:
+    runs-on: ubuntu-22.04
+    needs: package-artifacts
+    steps:
+      - name: Authenticate with GCloud
+        uses: google-github-actions/auth@v2
+        id: auth
+        with:
+          workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+      - name: Fetch secrets from GSM
+        id: fetch-secrets
+        uses: google-github-actions/get-secretmanager-secrets@v2
+        with:
+          secrets: |-
+            github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
+            github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
+            github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
+          export_to_environment: 'true'
+      - name: Merge Artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: helm-charts
+          pattern: helm-chart-*
+  publish:
+    runs-on: ubuntu-22.04
+    needs: merge-artifacts
+    steps:
+      - name: Authenticate with GCloud
+        uses: google-github-actions/auth@v2
+        id: auth
+        with:
+          workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+      - name: Fetch secrets from GSM
+        id: fetch-secrets
+        uses: google-github-actions/get-secretmanager-secrets@v2
+        with:
+          secrets: |-
+            github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
+            github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
+            github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
+          export_to_environment: 'true'
+      - name: Check out branch containing the artifatcs and the index.yaml file
+        uses: bakdata/ci-templates/actions/checkout@1.49.0
+        with:
+          ref: ${{ inputs.gh-pages-branch }}
+          persist-credentials: false
+      - name: Download new artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: helm-charts
+          path: ${{ inputs.artifact-dir }}
+      - name: Move artifacts to root dir
+        run: |
+          for subdir in */; do
+            if [ ! -d "../$subdir" ]; then
+              mkdir ../"$subdir"
+            fi
+            mv "$subdir"/* ../"$subdir"
+          done
+          cd ..
+          rm -rf ${{ inputs.artifact-dir }}
+        shell: bash
+        working-directory: ${{ inputs.artifact-dir }}
+      - name: Generate index.yaml file
+        run: 'helm repo index .
 
-                '
-            shell: bash
-            working-directory: .
-        -   name: Commit and push artifacts and the index.yaml file
-            uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
-            with:
-                add-untracked: true
-                ref: ${{ inputs.gh-pages-branch }}
-                commit-message: Commit new artifacts
-                github-username: ${{ env.github-username }}
-                github-email: ${{ env.github-email }}
-                github-token: ${{ env.github-token }}
+'
+        shell: bash
+        working-directory: .
+      - name: Commit and push artifacts and the index.yaml file
+        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        with:
+          add-untracked: true
+          ref: ${{ inputs.gh-pages-branch }}
+          commit-message: Commit new artifacts
+          github-username: ${{ env.github-username }}
+          github-email: ${{ env.github-email }}
+          github-token: ${{ env.github-token }}
 permissions:
-    contents: read
-    id-token: write
+  contents: read
+  id-token: write

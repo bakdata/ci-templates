@@ -115,7 +115,7 @@ jobs:
       - name: Commit and push the file where the versioning is defined & .bumpversion.cfg file (containing the -${{ inputs.next-dev-release-suffix }} version)
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
-          commit-message: "Bump version and create dev version ${{ steps.bump-version.outputs.release-version }} \u2192 ${{ steps.sembump.outputs.version }}-${{ inputs.next-dev-release-suffix }}"
+          commit-message: "Bump version and create dev version ${{ steps.bump-version.outputs.release-version }} → ${{ steps.sembump.outputs.version }}-${{ inputs.next-dev-release-suffix }}"
           github-username: ${{ env.github-username }}
           github-email: ${{ env.github-email }}
           github-token: ${{ env.github-token }}

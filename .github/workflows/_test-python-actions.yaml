@@ -1,12 +1,10 @@
 name: Test python-setup-poetry action
-
 on:
   pull_request:
     branches:
       - main
     paths:
       - actions/parse-secret-definitions
-
 jobs:
   tests:
     name: Python action unit tests

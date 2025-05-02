@@ -1,78 +1,78 @@
 name: Reusable workflow for publishing Python packages as snapshot
 on:
-    workflow_call:
-        inputs:
-            python-version:
-                description: The Python version for setting up Poetry. (Default is 3.10)
-                required: false
-                default: '3.10'
-                type: string
-            poetry-version:
-                description: The Poetry version to be installed. (Default is 1.5.1)
-                required: false
-                default: 1.5.1
-                type: string
-            working-directory:
-                description: The working directory of your Python package. (Default is root directory)
-                required: false
-                default: ./
-                type: string
-        secrets:
-            GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
-                description: The workload identity provider to use for fetching secrets
-                required: true
-            GOOGLE_SERVICE_ACCOUNT:
-                description: The service account to use to fetch the secrets
-                required: true
-            GOOGLE_PROJECT_ID:
-                description: The id of the project which contains the secrets
-                required: true
-        outputs:
-            release-version:
-                description: The bumped version of the package.
-                value: ${{ jobs.publish-snapshot.outputs.release-version }}
-            old-version:
-                description: The old version of the package.
-                value: ${{ jobs.publish-snapshot.outputs.old-version }}
+  workflow_call:
+    inputs:
+      python-version:
+        description: The Python version for setting up Poetry. (Default is 3.10)
+        required: false
+        default: '3.10'
+        type: string
+      poetry-version:
+        description: The Poetry version to be installed. (Default is 1.5.1)
+        required: false
+        default: 1.5.1
+        type: string
+      working-directory:
+        description: The working directory of your Python package. (Default is root directory)
+        required: false
+        default: ./
+        type: string
+    secrets:
+      GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
+        description: The workload identity provider to use for fetching secrets
+        required: true
+      GOOGLE_SERVICE_ACCOUNT:
+        description: The service account to use to fetch the secrets
+        required: true
+      GOOGLE_PROJECT_ID:
+        description: The id of the project which contains the secrets
+        required: true
+    outputs:
+      release-version:
+        description: The bumped version of the package.
+        value: ${{ jobs.publish-snapshot.outputs.release-version }}
+      old-version:
+        description: The old version of the package.
+        value: ${{ jobs.publish-snapshot.outputs.old-version }}
 concurrency:
-    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-snapshot
-    cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-python-poetry-publish-snapshot
+  cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
 jobs:
-    publish-snapshot:
-        name: Publish snapshot
-        runs-on: ubuntu-22.04
-        outputs:
-            release-version: ${{ steps.bump-version.outputs.release-version }}
-            old-version: ${{ steps.bump-version.outputs.old-version }}
-        steps:
-        -   name: Authenticate with GCloud
-            uses: google-github-actions/auth@v2
-            id: auth
-            with:
-                workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
-                service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-        -   name: Fetch secrets from GSM
-            id: fetch-secrets
-            uses: google-github-actions/get-secretmanager-secrets@v2
-            with:
-                secrets: pypi-token:${{ secrets.GOOGLE_PROJECT_ID }}/PYPI_TOKEN
-                export_to_environment: 'true'
-        -   name: Check out repository
-            uses: bakdata/ci-templates/actions/checkout@1.49.0
-        -   name: Bump version with Poetry
-            id: bump-version
-            uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.21.0
-            with:
-                release-type: snapshot
-                python-version: ${{ inputs.python-version }}
-                poetry-version: ${{ inputs.poetry-version }}
-                working-directory: ${{ inputs.working-directory }}
-        -   name: Build and publish package to TestPyPI
-            uses: bakdata/ci-templates/actions/python-poetry-publish-pypi@1.40.4
-            with:
-                pypi-token: ${{ env.pypi-token }}
-                publish-to-test: 'true'
-                working-directory: ${{ inputs.working-directory }}
+  publish-snapshot:
+    name: Publish snapshot
+    runs-on: ubuntu-22.04
+    outputs:
+      release-version: ${{ steps.bump-version.outputs.release-version }}
+      old-version: ${{ steps.bump-version.outputs.old-version }}
+    steps:
+      - name: Authenticate with GCloud
+        uses: google-github-actions/auth@v2
+        id: auth
+        with:
+          workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+      - name: Fetch secrets from GSM
+        id: fetch-secrets
+        uses: google-github-actions/get-secretmanager-secrets@v2
+        with:
+          secrets: pypi-token:${{ secrets.GOOGLE_PROJECT_ID }}/PYPI_TOKEN
+          export_to_environment: 'true'
+      - name: Check out repository
+        uses: bakdata/ci-templates/actions/checkout@1.49.0
+      - name: Bump version with Poetry
+        id: bump-version
+        uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.21.0
+        with:
+          release-type: snapshot
+          python-version: ${{ inputs.python-version }}
+          poetry-version: ${{ inputs.poetry-version }}
+          working-directory: ${{ inputs.working-directory }}
+      - name: Build and publish package to TestPyPI
+        uses: bakdata/ci-templates/actions/python-poetry-publish-pypi@1.40.4
+        with:
+          pypi-token: ${{ env.pypi-token }}
+          publish-to-test: 'true'
+          working-directory: ${{ inputs.working-directory }}
 permissions:
-    contents: read
-    id-token: write
+  contents: read
+  id-token: write
