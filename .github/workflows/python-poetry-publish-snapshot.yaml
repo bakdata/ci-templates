@@ -20,11 +20,15 @@ on:
         type: string
 
     secrets:
-      pypi-token:
-        description: "TestPyPI token"
+      GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
+        description: The workload identity provider to use for fetching secrets
         required: true
-
-    # Map the workflow outputs to job outputs
+      GOOGLE_SERVICE_ACCOUNT:
+        description: The service account to use to fetch the secrets
+        required: true
+      GOOGLE_PROJECT_ID:
+        description: The id of the project which contains the secrets
+        required: true
     outputs:
       release-version:
         description: "The bumped version of the package."
@@ -41,27 +45,38 @@ jobs:
   publish-snapshot:
     name: Publish snapshot
     runs-on: ubuntu-22.04
-    # Map the job outputs to step outputs
     outputs:
       release-version: ${{ steps.bump-version.outputs.release-version }}
       old-version: ${{ steps.bump-version.outputs.old-version }}
-
     steps:
-      - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@1.49.0
-
-      - name: Bump version with Poetry
-        id: bump-version
-        uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.21.0
-        with:
-          release-type: snapshot
-          python-version: ${{ inputs.python-version }}
-          poetry-version: ${{ inputs.poetry-version }}
-          working-directory: ${{ inputs.working-directory }}
-
-      - name: Build and publish package to TestPyPI
-        uses: bakdata/ci-templates/actions/python-poetry-publish-pypi@1.40.4
-        with:
-          pypi-token: ${{ secrets.pypi-token }}
-          publish-to-test: "true"
-          working-directory: ${{ inputs.working-directory }}
+    - name: Authenticate with GCloud
+      uses: google-github-actions/auth@v2
+      id: auth
+      with:
+        workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+        service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+    - name: Fetch secrets from GSM
+      id: fetch-secrets
+      uses: google-github-actions/get-secretmanager-secrets@v2
+      with:
+        secrets: pypi-token:${{ secrets.GOOGLE_PROJECT_ID }}/PYPI_TOKEN
+        export_to_environment: 'true'
+    - name: Check out repository
+      uses: bakdata/ci-templates/actions/checkout@1.49.0
+    - name: Bump version with Poetry
+      id: bump-version
+      uses: bakdata/ci-templates/actions/python-poetry-bump-version@v1.21.0
+      with:
+        release-type: snapshot
+        python-version: ${{ inputs.python-version }}
+        poetry-version: ${{ inputs.poetry-version }}
+        working-directory: ${{ inputs.working-directory }}
+    - name: Build and publish package to TestPyPI
+      uses: bakdata/ci-templates/actions/python-poetry-publish-pypi@1.40.4
+      with:
+        pypi-token: ${{ env.pypi-token }}
+        publish-to-test: "true"
+        working-directory: ${{ inputs.working-directory }}
+permissions:
+  contents: read
+  id-token: write
