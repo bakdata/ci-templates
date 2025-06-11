@@ -59,46 +59,56 @@ on:
         required: false
         type: boolean
         default: false
-
     secrets:
-      docker-user:
-        description: "Username for the Docker registry login."
+      GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
+        description: The workload identity provider to use for fetching secrets
         required: true
-      docker-password:
-        description: "Password for the Docker registry login."
+      GOOGLE_SERVICE_ACCOUNT:
+        description: The service account to use to fetch the secrets
         required: true
-
+      GOOGLE_PROJECT_ID:
+        description: The id of the project which contains the secrets
+        required: true
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-docker-${{ inputs.image-name }}-${{ inputs.image-tag-flavor }}
   cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
-
 jobs:
   build-and-publish:
     name: Build and Publish
     runs-on: ubuntu-22.04
     steps:
+      - name: Authenticate with GCloud
+        uses: google-github-actions/auth@v2
+        id: auth
+        with:
+          workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+      - name: Fetch secrets from GSM
+        id: fetch-secrets
+        uses: google-github-actions/get-secretmanager-secrets@v2
+        with:
+          secrets: |-
+            docker-password:${{ secrets.GOOGLE_PROJECT_ID }}/DOCKERHUB_TOKEN
+            docker-user:${{ secrets.GOOGLE_PROJECT_ID }}/DOCKERHUB_USERNAME
+          export_to_environment: 'true'
       - name: Check out repository
         uses: bakdata/ci-templates/actions/checkout@1.49.0
         with:
           ref: ${{ inputs.ref }}
           lfs: ${{ inputs.checkout-lfs-files }}
           submodules: ${{ inputs.checkout-submodules }}
-
       - name: Login to the Registry
         uses: "docker/login-action@v3"
         with:
           registry: "${{ inputs.docker-registry }}"
-          username: "${{ secrets.docker-user }}"
-          password: "${{ secrets.docker-password }}"
-
+          username: "${{ env.docker-user }}"
+          password: "${{ env.docker-password }}"
       - uses: ./.github/actions/extra-step/docker-build-and-publish
         # Add your extra step in your repo under .github/actions/extra-step/docker-build-and-publish/action.yaml ,
         # e.g. to free up runner disk space or to install system packages
         if: ${{ hashFiles('.github/actions/extra-step/docker-build-and-publish/action.yaml') != '' }}
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
       - name: Set image name
         run: |
           fullImageName="${{ inputs.image-name }}"
@@ -110,7 +120,6 @@ jobs:
           fi
 
           echo "IMAGE_NAME=${fullImageName}" >> "$GITHUB_ENV"
-
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
@@ -127,7 +136,6 @@ jobs:
           flavor: ${{ inputs.image-tag-flavor }}
         env:
           DOCKER_METADATA_PR_HEAD_SHA: true # set correct sha for PRs
-
       - name: Prepare build args
         id: args
         run: |
@@ -137,7 +145,6 @@ jobs:
             echo "${{ inputs.docker-build-args }}"
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
-
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -149,3 +156,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=${{ inputs.image-name }}-${{ inputs.image-tag-flavor }}
           cache-to: type=gha,mode=max,scope=${{ inputs.image-name }}-${{ inputs.image-tag-flavor }}
+permissions:
+  contents: read
+  id-token: write
