@@ -51,7 +51,6 @@ on:
       GOOGLE_PROJECT_ID:
         description: The id of the project which contains the secrets
         required: true
-
     # Map the workflow outputs to job outputs
     outputs:
       release-version:
