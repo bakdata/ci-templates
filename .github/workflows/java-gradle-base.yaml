@@ -102,7 +102,6 @@ jobs:
 
   assess-code-quality:
     name: Asses code quality
-    if: ${{ !github.event.repository.private }}
     runs-on: ubuntu-22.04
     needs: test
     steps:
