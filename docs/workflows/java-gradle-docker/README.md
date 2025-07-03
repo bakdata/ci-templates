@@ -85,17 +85,10 @@ No outputs.
 
 <!-- AUTO-DOC-SECRETS:START - Do not remove or modify this section -->
 
-| SECRET                  | REQUIRED | DESCRIPTION                                                     |
-| ----------------------- | -------- | --------------------------------------------------------------- |
-| docker-password         | true     | Password for publishing to Dockerhub.                           |
-| docker-username         | true     | Username for publishing to Dockerhub.                           |
-| github-token            | true     | GitHub token for requesting changes from API.                   |
-| ossrh-password          | false    | Password for signing into Sonatype repository.                  |
-| ossrh-username          | false    | Username for signing into Sonatype repository.                  |
-| signing-key-id          | false    | Key id for signing the Sonatype publication.                    |
-| signing-password        | false    | Password for signing the Sonatype publication.                  |
-| signing-secret-key-ring | false    | Key ring (base64 encoded) for signing the Sonatype publication. |
-| sonar-organization      | false    | Organization for Sonarcloud                                     |
-| sonar-token             | false    | Token for Sonarcloud.                                           |
+| SECRET                            | REQUIRED | DESCRIPTION                                                |
+| --------------------------------- | -------- | ---------------------------------------------------------- |
+| GOOGLE_PROJECT_ID                 | true     | The id of the project which contains the secrets           |
+| GOOGLE_SERVICE_ACCOUNT            | true     | The service account to use to fetch the secrets            |
+| GOOGLE_WORKLOAD_IDENTITY_PROVIDER | true     | The workload identity provider to use for fetching secrets |
 
 <!-- AUTO-DOC-SECRETS:END -->
