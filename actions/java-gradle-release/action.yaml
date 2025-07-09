@@ -108,6 +108,21 @@ runs:
         git push --tags origin
       shell: bash
 
+    - name: Update README.md version line
+      run: |
+        sed -i "s/<!--VERSION-->.*<!--\/VERSION-->/<!--VERSION-->${{ steps.evaluate-version.outputs.release-version }}<!--\/VERSION-->/" README.md
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+
+    - name: Commit and push updated README version
+      uses: bakdata/ci-templates/actions/commit-and-push@1.50.4
+      with:
+        commit-message: "Update README version to ${{ steps.evaluate-version.outputs.release-version }}"
+        github-username: ${{ inputs.github-username }}
+        github-email: ${{ inputs.github-email }}
+        github-token: ${{ inputs.github-token }}
+        add-untracked: "true"
+
     - name: Create changelog
       run: ./gradlew -Pchangelog.githubRepository=${{ github.event.repository.name }} -Pchangelog.futureVersionTag=${{ steps.evaluate-version.outputs.release-version }} --stacktrace --info generateChangelog ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
