@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Lint Helm chart
-        uses: bakdata/ci-templates/actions/helm-lint@1.49.0
+        uses: bakdata/ci-templates/actions/helm-lint@tiedemann/secret-fixes
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
   package-artifacts:
@@ -114,7 +114,7 @@ jobs:
             github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
             github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
             github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
-          export_to_environment: 'true'
+          export_to_environment: "true"
       - name: Check out branch containing the artifatcs and the index.yaml file
         uses: bakdata/ci-templates/actions/checkout@1.49.0
         with:
