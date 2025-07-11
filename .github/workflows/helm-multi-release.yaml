@@ -8,8 +8,8 @@ on:
         description: "The directory containing the Helm chart(s)."
         required: true
         type: string
-      release-type:
-        description: "Scope of the release (major, minor or patch)."
+      version:
+        description: "version to publish"
         required: true
         type: string
       subdirs:
@@ -46,13 +46,6 @@ on:
       GOOGLE_PROJECT_ID:
         description: The id of the project which contains the secrets
         required: true
-    outputs:
-      release-version:
-        description: "The bumped version."
-        value: ${{ jobs.package-artifacts.outputs.release-version }}
-      old-version:
-        description: "The old version in your `.bumpversion.cfg` file."
-        value: ${{ jobs.package-artifacts.outputs.old-version }}
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-multi-release
   cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
@@ -76,12 +69,14 @@ jobs:
     steps:
       - name: Check out repository
         uses: bakdata/ci-templates/actions/checkout@1.67.0
-      - name: Bump version
-        id: bump-version
-        uses: bakdata/ci-templates/actions/bump-version@1.67.0
-        with:
-          release-type: ${{ inputs.release-type }}
-          working-directory: ${{ inputs.charts-dir }}
+      - name: Bump Chart version
+        run: |
+          sudo add-apt-repository ppa:rmescandon/yq
+          sudo apt update
+          sudo apt install yq -y
+          yq e -i '.version = "${{ inputs.version }}"' "./${{ matrix.subdir }}/Chart.yaml"
+        shell: bash
+        working-directory: ${{ inputs.charts-dir }}
       - name: Prepare artifacts
         run: |
           mkdir -p ../${{ inputs.artifact-dir }}/${{ matrix.subdir }}
