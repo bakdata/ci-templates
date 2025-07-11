@@ -1,0 +1,154 @@
+name: Docker build and publish
+# Reusable workflow to build and push an image from a Dockerfile to any container registry
+
+on:
+  workflow_call:
+    inputs:
+      docker-context:
+        description: "The docker context."
+        required: false
+        default: "."
+        type: string
+      dockerfile-path:
+        description: "Path to the Dockerfile."
+        required: false
+        default: "./Dockerfile"
+        type: string
+      docker-build-args:
+        description: "List of build-time variables (see https://github.com/docker/build-push-action?tab=readme-ov-file#inputs)"
+        required: false
+        default: ""
+        type: string
+      docker-registry:
+        description: "Host where the image should be pushed to."
+        required: false
+        default: "docker.io"
+        type: string
+      image-namespace:
+        description: "Namespace of Docker image."
+        required: false
+        default: "bakdata"
+        type: string
+      image-name:
+        description: "Name of Docker image."
+        required: false
+        default: "${{ github.event.repository.name }}"
+        type: string
+      image-tag:
+        description: "Tag of Docker image."
+        required: false
+        default: "pipeline-${{ github.run_id }}-git-{{ sha }}"
+        type: string
+      image-tag-flavor:
+        description: "Flavor of Docker image tags. See [docs of metadata-action](https://github.com/docker/metadata-action/blob/v5.6.1/README.md#flavor-input)"
+        required: false
+        default: ""
+        type: string
+      ref:
+        description: "Ref name to checkout"
+        required: false
+        default: ""
+        type: string
+      checkout-submodules:
+        description: "Whether to checkout submodules: `true` to checkout submodules or `recursive` to recursively checkout submodules."
+        required: false
+        default: "false"
+        type: string
+      checkout-lfs-files:
+        description: "Whether the Git checkout action should resolve LFS files or not. (Default is false)"
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
+        description: The workload identity provider to use for fetching secrets
+        required: true
+      GOOGLE_SERVICE_ACCOUNT:
+        description: The service account to use to fetch the secrets
+        required: true
+      GOOGLE_PROJECT_ID:
+        description: The id of the project which contains the secrets
+        required: true
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-docker-${{ inputs.image-name }}-${{ inputs.image-tag-flavor }}
+  cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+jobs:
+  build-and-publish:
+    name: Build and Publish
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Authenticate with GCloud
+        uses: google-github-actions/auth@v2
+        id: auth
+        with:
+          token_format: access_token
+          workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+      - name: Check out repository
+        uses: bakdata/ci-templates/actions/checkout@1.49.0
+        with:
+          ref: ${{ inputs.ref }}
+          lfs: ${{ inputs.checkout-lfs-files }}
+          submodules: ${{ inputs.checkout-submodules }}
+      - name: Login to the Registry
+        uses: "docker/login-action@v3"
+        with:
+          registry: "${{ inputs.docker-registry }}"
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+      - uses: ./.github/actions/extra-step/docker-build-and-publish
+        # Add your extra step in your repo under .github/actions/extra-step/docker-build-and-publish/action.yaml ,
+        # e.g. to free up runner disk space or to install system packages
+        if: ${{ hashFiles('.github/actions/extra-step/docker-build-and-publish/action.yaml') != '' }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Set image name
+        run: |
+          fullImageName="${{ inputs.image-name }}"
+          if [[ -n "${{ inputs.image-namespace }}" ]]; then
+            fullImageName="${{ inputs.image-namespace }}/${fullImageName}"
+          fi
+          if [[ -n "${{ inputs.docker-registry }}" ]]; then
+            fullImageName="${{ inputs.docker-registry }}/${fullImageName}"
+          fi
+
+          echo "IMAGE_NAME=${fullImageName}" >> "$GITHUB_ENV"
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          # on push/PR: dynamically set the CI run id and Git SHA as a custom tag
+          # on tag: release as latest and semver tag
+          tags: |
+            event=push,type=raw,value=${{ inputs.image-tag }}
+            event=pr,type=raw,value=${{ inputs.image-tag }}
+            event=pr,type=ref
+            event=branch,type=ref,enable=${{ github.ref != 'refs/heads/master' && github.ref != 'refs/heads/main' }}
+            event=tag,type=semver,pattern={{ version }}
+          flavor: ${{ inputs.image-tag-flavor }}
+        env:
+          DOCKER_METADATA_PR_HEAD_SHA: true # set correct sha for PRs
+      - name: Prepare build args
+        id: args
+        run: |
+          {
+            echo "build-args<<EOF"
+            echo "IMAGE_TAGS=${{ join(fromJSON(steps.meta.outputs.json).tags) }}"
+            echo "${{ inputs.docker-build-args }}"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ inputs.docker-context }}
+          file: ${{ inputs.dockerfile-path }}
+          build-args: ${{ steps.args.outputs.build-args }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ inputs.image-name }}-${{ inputs.image-tag-flavor }}
+          cache-to: type=gha,mode=max,scope=${{ inputs.image-name }}-${{ inputs.image-tag-flavor }}
+permissions:
+  contents: read
+  id-token: write
