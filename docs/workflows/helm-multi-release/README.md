@@ -82,12 +82,12 @@ jobs:
 | INPUT            | TYPE   | REQUIRED | DEFAULT                      | DESCRIPTION                                                                                                                |
 | ---------------- | ------ | -------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | artifact-dir     | string | false    | `"artifacts"`                | Directory next to `charts-path` for preparation of the GitHub pages artifact.                                              |
-| charts-path      | string | true     |                              | The directory containing the Helm chart(s).                                                                                |
+| charts-dir       | string | true     |                              | The directory containing the Helm chart(s).                                                                                |
 | gh-pages-branch  | string | false    | `"gh-pages"`                 | Name of branch containing the artifacts                                                                                    |
 | helm-version     | string | false    | `"v3.10.1"`                  | The Helm version.                                                                                                          |
 | lint-config-path | string | false    | `".github/lint-config.yaml"` | The path to the lint configuration file (See https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml). |
+| release-type     | string | true     |                              | Scope of the release (major, minor or patch).                                                                              |
 | subdirs          | string | true     |                              | List of subdir to consider                                                                                                 |
-| version          | string | false    | `"${{ github.ref }}"`        | Version for helm chart                                                                                                     |
 
 <!-- AUTO-DOC-INPUT:END -->
 
@@ -95,7 +95,10 @@ jobs:
 
 <!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
 
-No outputs.
+| OUTPUT          | VALUE                                                     | DESCRIPTION                                      |
+| --------------- | --------------------------------------------------------- | ------------------------------------------------ |
+| old-version     | `"${{ jobs.package-artifacts.outputs.old-version }}"`     | The old version in your `.bumpversion.cfg` file. |
+| release-version | `"${{ jobs.package-artifacts.outputs.release-version }}"` | The bumped version.                              |
 
 <!-- AUTO-DOC-OUTPUT:END -->
 

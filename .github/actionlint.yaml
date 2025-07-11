@@ -1,0 +1,4 @@
+paths:
+  .github/workflows/**/*.{yml,yaml}:
+    ignore:
+      - 'property "github-username" is not defined in object type.+'
