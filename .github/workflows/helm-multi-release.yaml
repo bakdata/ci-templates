@@ -35,7 +35,7 @@ on:
       version:
         description: "Version for helm chart"
         required: false
-        default: ${{ github.repository }}
+        default: ${{ github.ref }}
         type: string
     secrets:
       GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
