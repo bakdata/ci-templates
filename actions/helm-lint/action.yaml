@@ -19,8 +19,8 @@ runs:
   steps:
     - name: Check out repository
       uses: bakdata/ci-templates/actions/checkout@1.67.0
-      # with:
-      #   ref: "${{ inputs.ref }}"
+      with:
+        ref: ${{ github.sha }}
       #   # fetch-depth of 0 is needed for the comparison of Helm charts from the HEAD of the current
       #   # branch to the HEAD of the default branch (one or multiple commits in between)
       #   fetch-depth: 0
