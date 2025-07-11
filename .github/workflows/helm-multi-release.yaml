@@ -35,7 +35,7 @@ on:
       version:
         description: "Version for helm chart"
         required: false
-        default: ${{ github.ref_name }}
+        default: ${{ github.name }}
         type: string
     secrets:
       GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
@@ -66,7 +66,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@1.49.0
+        uses: bakdata/ci-templates/actions/checkout@1.67.0
       - name: Bump Chart version
         run: |
           sudo add-apt-repository ppa:rmescandon/yq
@@ -116,12 +116,12 @@ jobs:
             github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
           export_to_environment: "true"
       - name: Check out branch containing the artifatcs and the index.yaml file
-        uses: bakdata/ci-templates/actions/checkout@1.49.0
+        uses: bakdata/ci-templates/actions/checkout@1.67.0
         with:
           ref: ${{ inputs.gh-pages-branch }}
           persist-credentials: false # required for pushing to protected branch or pushing with Dependabot
       - name: Download new artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v4.3.0
         with:
           name: helm-charts
           path: ${{ inputs.artifact-dir }}
@@ -143,7 +143,7 @@ jobs:
         shell: bash
         working-directory: "."
       - name: Commit and push artifacts and the index.yaml file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        uses: bakdata/ci-templates/actions/commit-and-push@1.67.0
         with:
           add-untracked: true
           ref: ${{ inputs.gh-pages-branch }}
