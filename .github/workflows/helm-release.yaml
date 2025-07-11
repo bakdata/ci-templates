@@ -68,6 +68,7 @@ jobs:
         uses: bakdata/ci-templates/actions/helm-lint@tiedemann/secret-fixes
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
+          ref: ${{github.sha}}
   helm-release:
     runs-on: ubuntu-22.04
     needs: helm-lint
