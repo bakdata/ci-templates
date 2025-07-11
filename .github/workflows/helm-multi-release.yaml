@@ -129,6 +129,7 @@ jobs:
           path: ${{ inputs.artifact-dir }}
       - name: Move artifacts to root dir
         run: |
+          ls -la
           for subdir in */; do
             if [ ! -d "../$subdir" ]; then
               mkdir ../"$subdir"
