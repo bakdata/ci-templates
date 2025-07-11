@@ -87,7 +87,7 @@ jobs:
 | helm-version     | string | false    | `"v3.10.1"`                  | The Helm version.                                                                                                          |
 | lint-config-path | string | false    | `".github/lint-config.yaml"` | The path to the lint configuration file (See https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml). |
 | subdirs          | string | true     |                              | List of subdir to consider                                                                                                 |
-| version          | string | false    | `"${{ github.name }}"`       | Version for helm chart                                                                                                     |
+| version          | string | false    | `"${{ github.repository }}"` | Version for helm chart                                                                                                     |
 
 <!-- AUTO-DOC-INPUT:END -->
 
