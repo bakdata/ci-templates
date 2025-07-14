@@ -82,7 +82,7 @@ jobs:
           working-directory: ${{ inputs.working-directory }}
       - name: Create changelog
         id: build-changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@1.52.1
+        uses: bakdata/ci-templates/actions/changelog-generate@main
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ env.github-token }}
