@@ -1,30 +1,17 @@
 name: Add opened issues to specific project board
+
 on:
   issues:
     types:
       - opened
+
 jobs:
   add-issue-to-project:
     name: Add issue to project board
     runs-on: ubuntu-22.04
     steps:
-      - name: Authenticate with GCloud
-        uses: google-github-actions/auth@v2
-        id: auth
-        with:
-          workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-      - name: Fetch secrets from GSM
-        id: fetch-secrets
-        uses: google-github-actions/get-secretmanager-secrets@v2
-        with:
-          secrets: GH_TOKEN:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
-          export_to_environment: 'true'
       - name: Add the issue to the project
         uses: actions/add-to-project@v0.5.0
         with:
           project-url: https://github.com/orgs/bakdata/projects/7
-          github-token: ${{ env.GH_TOKEN }}
-permissions:
-  contents: read
-  id-token: write
+          github-token: ${{ secrets.GH_TOKEN }}

@@ -28,16 +28,19 @@ on:
         required: false
         default: "."
         type: string
+
     secrets:
-      GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
-        description: The workload identity provider to use for fetching secrets
+      github-username:
+        description: "The GitHub username for committing the changes."
         required: true
-      GOOGLE_SERVICE_ACCOUNT:
-        description: The service account to use to fetch the secrets
+      github-email:
+        description: "The GitHub email for committing the changes."
         required: true
-      GOOGLE_PROJECT_ID:
-        description: The id of the project which contains the secrets
+      github-token:
+        description: "The GitHub token for committing the changes."
         required: true
+
+    # Map the workflow outputs to job outputs
     outputs:
       release-version:
         description: "The bumped version."
@@ -45,6 +48,7 @@ on:
       old-version:
         description: "The old version in your `.bumpversion.cfg` file."
         value: ${{ jobs.release.outputs.old-version }}
+
 jobs:
   release:
     runs-on: ubuntu-22.04
@@ -52,59 +56,46 @@ jobs:
     outputs:
       release-version: ${{ steps.bump-version.outputs.release-version }}
       old-version: ${{ steps.bump-version.outputs.old-version }}
+
     steps:
-      - name: Authenticate with GCloud
-        uses: google-github-actions/auth@v2
-        id: auth
-        with:
-          workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-      - name: Fetch secrets from GSM
-        id: fetch-secrets
-        uses: google-github-actions/get-secretmanager-secrets@v2
-        with:
-          secrets: |-
-            github-email:${{ secrets.GOOGLE_PROJECT_ID }}/GH_EMAIL
-            github-token:${{ secrets.GOOGLE_PROJECT_ID }}/GH_TOKEN
-            github-username:${{ secrets.GOOGLE_PROJECT_ID }}/GH_USERNAME
-          export_to_environment: 'true'
       - name: Check out repository
         uses: bakdata/ci-templates/actions/checkout@1.49.0
         with:
           ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false # required for pushing to protected branch later
           fetch-depth: 0 # required for changelog generation
+
       - name: Bump version
         id: bump-version
         uses: bakdata/ci-templates/actions/bump-version@v1.21.2
         with:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.working-directory }}
+
       - name: Create changelog
         id: build-changelog
         uses: bakdata/ci-templates/actions/changelog-generate@1.67.1
         if: ${{ inputs.changelog }}
         with:
-          github-token: ${{ env.github-token }}
+          github-token: ${{ secrets.github-token }}
           tag: ${{ steps.bump-version.outputs.release-version }}
           changelog-file: ${{ inputs.changelog-file }}
+
       - name: Commit and push changes including .bumpversion.cfg file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
         with:
           ref: ${{ github.event.repository.default_branch }}
           commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"
-          github-username: ${{ env.github-username }}
-          github-email: ${{ env.github-email }}
-          github-token: ${{ env.github-token }}
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
+
       - name: Tag and release
         uses: bakdata/ci-templates/actions/tag-and-release@v1.22.0
         with:
           tag: "${{ steps.bump-version.outputs.release-version }}"
-          github-username: ${{ env.github-username }}
-          github-email: ${{ env.github-email }}
-          github-token: ${{ env.github-token }}
+          github-username: ${{ secrets.github-username }}
+          github-email: ${{ secrets.github-email }}
+          github-token: ${{ secrets.github-token }}
           release-title: "${{ steps.bump-version.outputs.release-version }}"
           release-body: "${{ steps.build-changelog.outputs.single-changelog }}"
-permissions:
-  contents: read
-  id-token: write

@@ -28,10 +28,11 @@ No outputs.
 
 <!-- AUTO-DOC-SECRETS:START - Do not remove or modify this section -->
 
-| SECRET                            | REQUIRED | DESCRIPTION                                                |
-| --------------------------------- | -------- | ---------------------------------------------------------- |
-| GOOGLE_PROJECT_ID                 | true     | The id of the project which contains the secrets           |
-| GOOGLE_SERVICE_ACCOUNT            | true     | The service account to use to fetch the secrets            |
-| GOOGLE_WORKLOAD_IDENTITY_PROVIDER | true     | The workload identity provider to use for fetching secrets |
+| SECRET              | REQUIRED | DESCRIPTION                                |
+| ------------------- | -------- | ------------------------------------------ |
+| gke-cluster         | true     | GKE cluster for authentication             |
+| gke-project         | true     | GKE project id for authentication          |
+| gke-region          | true     | GKE region for authentication              |
+| gke-service-account | true     | GKE service account key for authentication |
 
 <!-- AUTO-DOC-SECRETS:END -->
