@@ -58,7 +58,8 @@ runs:
         fi
       shell: bash
     - name: Generate latest only changelog
-      uses: orhun/git-cliff-action@v4.4.2
+      # there is no proper release for the install dir fix, yet
+      uses: orhun/git-cliff-action@104a6cf
       id: git-cliff-latest
       with:
         config: tmp_cliff.toml
@@ -67,7 +68,8 @@ runs:
         GITHUB_REPO: ${{ github.repository }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
     - name: Generate a changelog
-      uses: orhun/git-cliff-action@v4.4.2
+      # there is no proper release for the install dir fix, yet
+      uses: orhun/git-cliff-action@104a6cf
       id: git-cliff
       with:
         config: tmp_cliff.toml
