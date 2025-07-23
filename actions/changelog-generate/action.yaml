@@ -59,7 +59,7 @@ runs:
         fi
       shell: bash
     - name: Generate latest only changelog
-      uses: DerTiedemann/git-cliff-action@tiedemann/debug
+      uses: orhun/git-cliff-action@v4.4.2
       id: git-cliff-latest
       with:
         config: tmp_cliff.toml
@@ -68,7 +68,7 @@ runs:
         GITHUB_REPO: ${{ github.repository }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
     - name: Generate a changelog
-      uses: DerTiedemann/git-cliff-action@tiedemann/debug
+      uses: orhun/git-cliff-action@v4.4.2
       id: git-cliff
       with:
         config: tmp_cliff.toml
