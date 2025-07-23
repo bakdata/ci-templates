@@ -72,7 +72,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Build
-        uses: bakdata/ci-templates/actions/java-gradle-build@1.63.0
+        uses: bakdata/ci-templates/actions/java-gradle-build@test/merged-javadoc
         with:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
