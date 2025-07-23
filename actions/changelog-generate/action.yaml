@@ -59,7 +59,7 @@ runs:
       shell: bash
     - name: Generate latest only changelog
       # there is no proper release for the install dir fix, yet
-      uses: orhun/git-cliff-action@104a6cf
+      uses: orhun/git-cliff-action@104a6cf3c9aa0fdfe4eab129f9c1900e1eb8f7fd
       id: git-cliff-latest
       with:
         config: tmp_cliff.toml
@@ -69,7 +69,7 @@ runs:
         GITHUB_TOKEN: ${{ inputs.github-token }}
     - name: Generate a changelog
       # there is no proper release for the install dir fix, yet
-      uses: orhun/git-cliff-action@104a6cf
+      uses: orhun/git-cliff-action@104a6cf3c9aa0fdfe4eab129f9c1900e1eb8f7fd
       id: git-cliff
       with:
         config: tmp_cliff.toml
