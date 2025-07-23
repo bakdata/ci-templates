@@ -21,6 +21,15 @@ inputs:
     description: "Clean the repository before running the action."
     required: false
     default: "false"
+  verbose:
+    description: "Run git-cliff in verbose mdoe"
+    type: boolean
+    required: false
+    default: false
+  additional-cliff-args:
+    description: Additional arguments to the git-cliff binary
+    required: false
+    default: ""
 
 outputs:
   merged-changelog:
@@ -54,7 +63,7 @@ runs:
       id: git-cliff-latest
       with:
         config: tmp_cliff.toml
-        args: "--unreleased --tag ${{ inputs.tag }} --verbose"
+        args: "--unreleased --tag ${{ inputs.tag }} ${{ inputs.verbose && '--verbose' || '' }} ${{ inputs.additional-cliff-args }}"
       env:
         GITHUB_REPO: ${{ github.repository }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
@@ -63,7 +72,7 @@ runs:
       id: git-cliff
       with:
         config: tmp_cliff.toml
-        args: "--tag ${{ inputs.tag }} --verbose"
+        args: "--tag ${{ inputs.tag }} ${{ inputs.verbose && '--verbose' || '' }} ${{ inputs.additional-cliff-args }}"
       env:
         OUTPUT: ${{ inputs.changelog-file }}
         GITHUB_REPO: ${{ github.repository }}
