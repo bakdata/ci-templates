@@ -86,13 +86,15 @@ steps:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT          | TYPE   | REQUIRED | DEFAULT          | DESCRIPTION                                         |
-| -------------- | ------ | -------- | ---------------- | --------------------------------------------------- |
-| changelog-file | string | false    | `"CHANGELOG.md"` | Path to the changelog file in the GitHub repository |
-| checkout       | string | false    | `"false"`        | Whether to checkout the repository or not.          |
-| clean          | string | false    | `"false"`        | Clean the repository before running the action.     |
-| github-token   | string | true     |                  | The GitHub token for committing the changes.        |
-| tag            | string | true     |                  | Version after bump                                  |
+| INPUT                 | TYPE   | REQUIRED | DEFAULT          | DESCRIPTION                                         |
+| --------------------- | ------ | -------- | ---------------- | --------------------------------------------------- |
+| additional-cliff-args | string | false    |                  | Additional arguments to the git-cliff binary        |
+| changelog-file        | string | false    | `"CHANGELOG.md"` | Path to the changelog file in the GitHub repository |
+| checkout              | string | false    | `"false"`        | Whether to checkout the repository or not.          |
+| clean                 | string | false    | `"false"`        | Clean the repository before running the action.     |
+| github-token          | string | true     |                  | The GitHub token for committing the changes.        |
+| tag                   | string | true     |                  | Version after bump                                  |
+| verbose               | string | false    | `"false"`        | Run git-cliff in verbose mdoe                       |
 
 <!-- AUTO-DOC-INPUT:END -->
 
