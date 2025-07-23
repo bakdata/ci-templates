@@ -65,7 +65,10 @@ runs:
         config: tmp_cliff.toml
         args: "--unreleased --tag ${{ inputs.tag }} ${{ inputs.verbose == 'true' && '--verbose' || '' }} ${{ inputs.additional-cliff-args }}"
       env:
-        OUTPUT: /dev/null
+        # I am not a fan of this, cuz this does not reflect what this step is supposed to do
+        # i.e. just dumping the latest changelog into GHA context
+        # BUT, it works and the file will be written over in the next step anyway
+        OUTPUT: ${{ inputs.changelog-file }}
         GITHUB_REPO: ${{ github.repository }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
     - name: Generate a changelog
