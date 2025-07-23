@@ -59,8 +59,8 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Build jar
-      run: ./gradlew --info --stacktrace jar
+    - name: Build jar (including aggregated Javadoc)
+      run: ./gradlew --info --stacktrace jar aggregateJavadocJar
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
