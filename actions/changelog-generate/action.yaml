@@ -69,5 +69,5 @@ runs:
         GITHUB_REPO: ${{ github.repository }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
     - name: remove tmp config file
-      run: rm tmp_cliff.toml && rm -rf git-cliff*
+      run: rm tmp_cliff.toml && rm -rf git-cliff* && rm -rf bin/git-cliff
       shell: bash
