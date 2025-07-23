@@ -56,55 +56,48 @@ on:
         default: "v3.8.1"
         required: false
         type: string
+
     secrets:
-      GOOGLE_WORKLOAD_IDENTITY_PROVIDER:
-        description: The workload identity provider to use for fetching secrets
+      gke-service-account:
+        description: "GKE service account key for authentication"
         required: true
-      GOOGLE_SERVICE_ACCOUNT:
-        description: The service account to use to fetch the secrets
+      gke-project:
+        description: "GKE project id for authentication"
         required: true
-      GOOGLE_PROJECT_ID:
-        description: The id of the project which contains the secrets
+      gke-region:
+        description: "GKE region for authentication"
         required: true
+      gke-cluster:
+        description: "GKE cluster for authentication"
+        required: true
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-helm-gke-deploy
   cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-22.04
     steps:
-      - name: Authenticate with GCloud
-        uses: google-github-actions/auth@v2
-        id: auth
-        with:
-          workload_identity_provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-      - name: Fetch secrets from GSM
-        id: fetch-secrets
-        uses: google-github-actions/get-secretmanager-secrets@v2
-        with:
-          secrets: |-
-            gke-cluster:${{ secrets.GOOGLE_PROJECT_ID }}/GKE_CLUSTER
-            gke-project:${{ secrets.GOOGLE_PROJECT_ID }}/GKE_PROJECT
-            gke-region:${{ secrets.GOOGLE_PROJECT_ID }}/GKE_REGION
-            gke-service-account:${{ secrets.GOOGLE_PROJECT_ID }}/GKE_SERVICE_ACCOUNT
-          export_to_environment: 'true'
       - name: Checkout repository
         uses: bakdata/ci-templates/actions/checkout@1.49.0
+
       - name: Setup credentials
         uses: bakdata/ci-templates/actions/setup-credentials@1.40.0
         with:
-          gke-service-account: ${{ env.gke-service-account }}
-          gke-project: ${{ env.gke-project }}
-          gke-region: ${{ env.gke-region }}
-          gke-cluster: ${{ env.gke-cluster }}
+          gke-service-account: ${{ secrets.gke-service-account }}
+          gke-project: ${{ secrets.gke-project }}
+          gke-region: ${{ secrets.gke-region }}
+          gke-cluster: ${{ secrets.gke-cluster }}
           gcloud-sdk-version: ${{ inputs.gcloud-sdk-version }}
+
       - name: Setup environment
         uses: bakdata/ci-templates/actions/helm-setup@v1.20.0
         with:
           kubectl-version: ${{ inputs.kubectl-version }}
           helm-version: ${{ inputs.helm-version }}
+
       - name: Deploy Helm chart
         uses: bakdata/ci-templates/actions/helm-deploy@v1.20.0
         with:
@@ -117,6 +110,3 @@ jobs:
           timeout: ${{ inputs.timeout }}
           repository-name: ${{ inputs.repository-name }}
           repository-url: ${{ inputs.repository-url }}
-permissions:
-  contents: read
-  id-token: write

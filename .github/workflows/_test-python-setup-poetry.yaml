@@ -1,4 +1,5 @@
 name: Test python-setup-poetry action
+
 on:
   pull_request:
     branches:
@@ -6,11 +7,14 @@ on:
     paths:
       - actions/python-setup-poetry/action.yaml
       - .github/workflows/_test-python-setup-poetry.yaml
+
 env:
   POETRY_VERSION: "1.2.2"
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-test-python-setup-poetry
   cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
+
 jobs:
   tests:
     name: ${{ matrix.os }} / ${{ matrix.python-version }}
@@ -21,22 +25,26 @@ jobs:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
     steps:
       - uses: bakdata/ci-templates/actions/checkout@1.49.0
+
       - name: Set up Poetry
         uses: ./actions/python-setup-poetry
         with:
           poetry-version: ${{ env.POETRY_VERSION }}
           python-version: ${{ matrix.python-version }}
           working-directory: .tests/poetry
+
       - name: Check Poetry version
         shell: bash
         run: |
           [[ $(poetry --version) == "Poetry (version $POETRY_VERSION)" ]]
         working-directory: .tests/poetry
+
       - name: Check Python version
         shell: bash
         run: |
           poetry run python -c 'import platform; assert str(${{ matrix.python-version }}) in platform.python_version()'
         working-directory: .tests/poetry
+
       - name: Install Poetry package
         shell: bash
         run: poetry install
