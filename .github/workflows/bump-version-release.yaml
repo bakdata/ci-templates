@@ -74,7 +74,7 @@ jobs:
 
       - name: Create changelog
         id: build-changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@1.69.2
+        uses: bakdata/ci-templates/actions/changelog-generate@1.69.1
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}
