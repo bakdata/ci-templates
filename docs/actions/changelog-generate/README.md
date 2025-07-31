@@ -66,7 +66,7 @@ steps:
       fetch-depth: 0
   - name: Create changelog
     id: build_changelog
-    uses: bakdata/ci-templates/actions/changelog-generate@1.69.0
+    uses: bakdata/ci-templates/actions/changelog-generate@main
     with:
       github-token: ${{ secrets.GH_TOKEN }}
       new-tag: "1.0.0"
