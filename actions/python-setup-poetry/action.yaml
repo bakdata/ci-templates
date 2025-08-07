@@ -53,7 +53,7 @@ runs:
       shell: bash
 
     - name: Set up Python ${{ inputs.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       id: setup-python
       with:
         python-version: ${{ inputs.python-version }}
