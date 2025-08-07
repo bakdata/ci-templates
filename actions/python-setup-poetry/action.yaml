@@ -27,7 +27,7 @@ runs:
         python-version: ${{ inputs.python-version }}
     - name: Install Poetry ${{ inputs.poetry-version }}
       shell: bash
-      run: pipx install poetry==${{ inputs.poetry-version }}
+      run: pipx install poetry==${{ inputs.poetry-version }} --python $(which python)
     - uses: actions/setup-python@v5
       with:
         python-version: ${{ inputs.python-version }}
