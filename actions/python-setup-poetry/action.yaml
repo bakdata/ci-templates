@@ -58,6 +58,15 @@ runs:
       run: |
         poetry config virtualenvs.in-project true
         poetry config virtualenvs.path ${{ inputs.working-directory }}/.venv
-        poetry env use "${{ steps.setup-python.outputs.python-path }}"
       shell: bash
       working-directory: ${{ inputs.working-directory }}
+
+    - name: Create Poetry virtual environment with correct Python
+      run: |
+        poetry env use "${{ steps.setup-python.outputs.python-path }}"
+        poetry env info
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      env:
+        PYTHON: ${{ steps.setup-python.outputs.python-path }}
+        POETRY_PYTHON: ${{ steps.setup-python.outputs.python-path }}
