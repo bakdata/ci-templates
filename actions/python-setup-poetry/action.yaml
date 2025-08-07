@@ -51,7 +51,8 @@ runs:
     #     poetry config virtualenvs.in-project true
     #     poetry config virtualenvs.path ${{ inputs.working-directory }}/.venv
     #   shell: bash
-    - run: |
+    - shell: bash
+      run: |
         which python
         python --version
         poetry --version
