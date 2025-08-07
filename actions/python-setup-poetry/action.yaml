@@ -33,7 +33,7 @@ runs:
       shell: bash
 
     - name: Install Poetry ${{ inputs.poetry-version }}
-      run: pipx install poetry==${{ inputs.poetry-version }}
+      run: pipx install --python 3.12 poetry==${{ inputs.poetry-version }}
       shell: bash
 
     - name: Configure Poetry
