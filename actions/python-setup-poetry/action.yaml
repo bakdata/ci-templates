@@ -22,49 +22,56 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install pipx
-      if: ${{ inputs.install-pipx == 'true' }}
-      run: |
-        sudo apt update
-        sudo apt install python3-venv -y
-        # Assumes Ubuntu 22.04 or below
-        python3 -m pip install --user pipx
-        python3 -m pipx ensurepath
-      shell: bash
-
-    # - name: Cache poetry
-    #   id: cache-poetry
-    #   uses: actions/cache@v4
-    #   with:
-    #     path: |
-    #       /opt/pipx/venvs/poetry
-    #       /opt/pipx_bin/poetry
-    #     key: poetry${{ inputs.poetry-version }}-python${{ inputs.python-version }}-${{ runner.os }}
-
     - name: Install Poetry ${{ inputs.poetry-version }}
-      # if: steps.cache-poetry.outputs.cache-hit != 'true'
       run: pipx install poetry==${{ inputs.poetry-version }}
-      shell: bash
-
-    # - name: Configure Poetry
-    #   run: |
-    #     poetry config virtualenvs.in-project true
-    #     poetry config virtualenvs.path ${{ inputs.working-directory }}/.venv
-    #   shell: bash
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: "poetry"
     - shell: bash
       run: |
         which python
         python --version
         poetry --version
         poetry show -v
-    - name: Set up Python ${{ inputs.python-version }}
-      uses: actions/setup-python@v5
-      id: setup-python
-      with:
-        python-version: ${{ inputs.python-version }}
-        cache: poetry
-        cache-dependency-path: ${{ inputs.working-directory }}/poetry.lock
+      # - name: Install pipx
+      #   if: ${{ inputs.install-pipx == 'true' }}
+      #   run: |
+      #     sudo apt update
+      #     sudo apt install python3-venv -y
+      #     # Assumes Ubuntu 22.04 or below
+      #     python3 -m pip install --user pipx
+      #     python3 -m pipx ensurepath
+      #   shell: bash
 
-    - run: poetry env use "${{ steps.setup-python.outputs.python-path }}"
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
+      # # - name: Cache poetry
+      # #   id: cache-poetry
+      # #   uses: actions/cache@v4
+      # #   with:
+      # #     path: |
+      # #       /opt/pipx/venvs/poetry
+      # #       /opt/pipx_bin/poetry
+      # #     key: poetry${{ inputs.poetry-version }}-python${{ inputs.python-version }}-${{ runner.os }}
+
+      # - name: Install Poetry ${{ inputs.poetry-version }}
+      #   # if: steps.cache-poetry.outputs.cache-hit != 'true'
+      #   run: pipx install poetry==${{ inputs.poetry-version }}
+      #   shell: bash
+
+      # - name: Configure Poetry
+      #   run: |
+      #     poetry config virtualenvs.in-project true
+      #     poetry config virtualenvs.path ${{ inputs.working-directory }}/.venv
+      #   shell: bash
+
+      # - name: Set up Python ${{ inputs.python-version }}
+      #   uses: actions/setup-python@v5
+      #   id: setup-python
+      #   with:
+      #     python-version: ${{ inputs.python-version }}
+      #     cache: poetry
+      #     cache-dependency-path: ${{ inputs.working-directory }}/poetry.lock
+
+      # - run: poetry env use "${{ steps.setup-python.outputs.python-path }}"
+      #   shell: bash
+      #   working-directory: ${{ inputs.working-directory }}
