@@ -32,25 +32,7 @@ runs:
         python3 -m pipx ensurepath
       shell: bash
 
-    - name: Set up Python ${{ inputs.python-version }}
-      uses: actions/setup-python@v5
-      id: setup-python
-      with:
-        python-version: ${{ inputs.python-version }}
-        cache: poetry
-        cache-dependency-path: ${{ inputs.working-directory }}/poetry.lock
-
-    # - name: Cache poetry
-    #   id: cache-poetry
-    #   uses: actions/cache@v4
-    #   with:
-    #     path: |
-    #       /opt/pipx/venvs/poetry
-    #       /opt/pipx_bin/poetry
-    #     key: poetry${{ inputs.poetry-version }}-python${{ inputs.python-version }}-${{ runner.os }}
-
     - name: Install Poetry ${{ inputs.poetry-version }}
-      if: steps.cache-poetry.outputs.cache-hit != 'true'
       run: pipx install poetry==${{ inputs.poetry-version }}
       shell: bash
 
@@ -59,6 +41,14 @@ runs:
         poetry config virtualenvs.in-project true
         poetry config virtualenvs.path ${{ inputs.working-directory }}/.venv
       shell: bash
+
+    - name: Set up Python ${{ inputs.python-version }}
+      uses: actions/setup-python@v4
+      id: setup-python
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: poetry
+        cache-dependency-path: ${{ inputs.working-directory }}/poetry.lock
 
     - run: poetry env use "${{ steps.setup-python.outputs.python-path }}"
       shell: bash
