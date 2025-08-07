@@ -28,7 +28,7 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
         cache: poetry
-        cache-dependency-path: ${{ inputs.working-directory }}/poetry.lock
+        # cache-dependency-path: ${{ inputs.working-directory }}/poetry.lock
 
     - name: Install pipx
       if: ${{ inputs.install-pipx == 'true' }}
