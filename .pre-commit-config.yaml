@@ -4,7 +4,7 @@ repos:
       - id: auto-doc
         language: python
         name: Generate doc
-        entry: python3 .github/generate-doc.py
+        entry: python .github/generate-doc.py
         always_run: true
         require_serial: true
         verbose: true

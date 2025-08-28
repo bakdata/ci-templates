@@ -154,6 +154,7 @@ def copy_file(source_path, destination_path):
 
 
 def run():
+    null_out = "NUL" if os.name == 'nt' else "/dev/null"
     auto_doc_cmd = os.environ.get("DOC_CMD")
     if auto_doc_cmd is None or auto_doc_cmd == "":
         auto_doc_cmd = "auto-doc"
@@ -191,7 +192,7 @@ def run():
             for line in template[: -1]:
                 file_action_template.write(line + '\n')
         os.system(
-            f"{auto_doc_cmd} -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action} > /dev/null")
+            f"{auto_doc_cmd} -f {action_file} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_action} > {null_out}")
         replace_string_in_markdown(tmp_docu_output_action, "# ", "## ")
 
         output_file_action = os.path.join(
@@ -224,7 +225,7 @@ def run():
                     file_workflow_template.write(line + '\n')
 
             os.system(
-                f"{auto_doc_cmd} -f {workflow_path} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_workflow} -r > /dev/null")
+                f"{auto_doc_cmd} -f {workflow_path} --colMaxWidth 10000 --colMaxWords 2000 -o {tmp_docu_output_workflow} -r > {null_out}")
             replace_string_in_markdown(
                 tmp_docu_output_workflow, "# ", "## ")
 
