@@ -28,5 +28,5 @@ runs:
     - name: Create Github release
       uses: softprops/action-gh-release@v2.0.4
       with:
-        body: ${{ steps.changelog.outputs.single-changelog }}
+        body_path: CHANGELOG.md
         files: "**/build/libs/*.jar"
