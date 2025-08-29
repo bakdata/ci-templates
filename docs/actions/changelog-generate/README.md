@@ -93,7 +93,6 @@ steps:
 | checkout              | string | false    | `"false"`        | Whether to checkout the repository or not.          |
 | clean                 | string | false    | `"false"`        | Clean the repository before running the action.     |
 | github-token          | string | true     |                  | The GitHub token for committing the changes.        |
-| tag                   | string | true     |                  | Version after bump                                  |
 | verbose               | string | false    | `"false"`        | Run git-cliff in verbose mdoe                       |
 
 <!-- AUTO-DOC-INPUT:END -->
@@ -102,10 +101,9 @@ steps:
 
 <!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
 
-| OUTPUT           | TYPE   | DESCRIPTION                |
-| ---------------- | ------ | -------------------------- |
-| merged-changelog | string | All changelogs combined.   |
-| single-changelog | string | Only the latest changelog. |
+| OUTPUT    | TYPE   | DESCRIPTION       |
+| --------- | ------ | ----------------- |
+| changelog | string | Changelog output. |
 
 <!-- AUTO-DOC-OUTPUT:END -->
 
