@@ -83,6 +83,7 @@ runs:
         GITHUB_TOKEN: ${{ inputs.github-token }}
     - name: Print changelog
       run: cat ${{ inputs.changelog-file }}
+      shell: bash
     - name: remove tmp config file
       run: rm tmp_cliff.toml
       shell: bash
