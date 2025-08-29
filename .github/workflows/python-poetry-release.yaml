@@ -95,7 +95,7 @@ jobs:
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}
-          additional-cliff-args: --unreleased --tag ${{ inputs.tag }}
+          additional-cliff-args: --unreleased --tag ${{ steps.bump-version.outputs.release-version }}
 
       - name: Create changelog
         uses: bakdata/ci-templates/actions/changelog-generate@feature/gradle-release-git-cliff
@@ -103,7 +103,7 @@ jobs:
         with:
           github-token: ${{ secrets.github-token }}
           changelog-file: ${{ inputs.changelog-file }}
-          additional-cliff-args: --tag ${{ inputs.tag }}
+          additional-cliff-args: --tag ${{ steps.bump-version.outputs.release-version }}
 
       - name: Commit and push pyproject.toml file
         uses: bakdata/ci-templates/actions/commit-and-push@1.25.2
