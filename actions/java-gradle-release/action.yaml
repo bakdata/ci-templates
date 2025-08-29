@@ -98,7 +98,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Create changelog
+    - name: Create changelog # Generate changelog before creating the tag or the tag appears twice in the changelog
       uses: bakdata/ci-templates/actions/changelog-generate@feature/gradle-release-git-cliff
       with:
         github-token: ${{ inputs.github-token }}

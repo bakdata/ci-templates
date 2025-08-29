@@ -9,7 +9,7 @@ inputs:
   changelog-file:
     description: Path to the changelog file in the GitHub repository
     required: false
-    default: "CHANGELOG.md"
+    default: ""
   checkout:
     description: "Whether to checkout the repository or not."
     required: false
@@ -64,5 +64,5 @@ runs:
       run: rm tmp_cliff.toml
       shell: bash
     - name: remove git-cliff stuff
-      run: rm -r git-cliff/
+      run: rm -r git-cliff/ # git-cliff action does not use temp dir properly
       shell: bash

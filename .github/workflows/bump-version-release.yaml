@@ -72,14 +72,21 @@ jobs:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.working-directory }}
 
-      - name: Create changelog
+      - name: Create single changelog
         id: build-changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@1.69.1
+        uses: bakdata/ci-templates/actions/changelog-generate@feature/gradle-release-git-cliff
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}
-          tag: ${{ steps.bump-version.outputs.release-version }}
+          additional-cliff-args: --unreleased --tag ${{ inputs.tag }}
+
+      - name: Create changelog
+        uses: bakdata/ci-templates/actions/changelog-generate@feature/gradle-release-git-cliff
+        if: ${{ inputs.changelog }}
+        with:
+          github-token: ${{ secrets.github-token }}
           changelog-file: ${{ inputs.changelog-file }}
+          additional-cliff-args: --tag ${{ inputs.tag }}
 
       - name: Commit and push changes including .bumpversion.cfg file
         uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
@@ -98,4 +105,4 @@ jobs:
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}
           release-title: "${{ steps.bump-version.outputs.release-version }}"
-          release-body: "${{ steps.build-changelog.outputs.single-changelog }}"
+          release-body: "${{ steps.build-changelog.outputs.changelog }}"
