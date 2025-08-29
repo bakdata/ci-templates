@@ -20,6 +20,7 @@ runs:
         path: build
 
     - name: Generate changelog
+      id: changelog
       uses: bakdata/ci-templates/actions/changelog-generate@feature/gradle-release-git-cliff
       with:
         github-token: ${{ inputs.github-token }}
