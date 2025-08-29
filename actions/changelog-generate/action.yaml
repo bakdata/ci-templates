@@ -62,16 +62,13 @@ runs:
       id: git-cliff-latest
       with:
         config: tmp_cliff.toml
-        args: "--unreleased --tag ${{ inputs.tag }} ${{ inputs.verbose == 'true' && '--verbose' || '' }} ${{ inputs.additional-cliff-args }}"
+        args: "--tag ${{ inputs.tag }} ${{ inputs.verbose == 'true' && '--verbose' || '' }} ${{ inputs.additional-cliff-args }}"
       env:
         # I am not a fan of this, cuz this does not reflect what this step is supposed to do
         # i.e. just dumping the latest changelog into GHA context
         # BUT, it works and the file will be written over in the next step anyway
         GITHUB_REPO: ${{ github.repository }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
-    - name: Print changelog
-      run: cat ${{ inputs.changelog-file }}
-      shell: bash
     - name: Generate a changelog
       uses: orhun/git-cliff-action@v4.5.1
       id: git-cliff
@@ -81,9 +78,6 @@ runs:
       env:
         GITHUB_REPO: ${{ github.repository }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
-    - name: Print changelog
-      run: cat ${{ inputs.changelog-file }}
-      shell: bash
     - name: remove tmp config file
       run: rm tmp_cliff.toml
       shell: bash
