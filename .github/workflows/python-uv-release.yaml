@@ -104,7 +104,7 @@ jobs:
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}
-          additional-cliff-args: --unreleased --tag ${{ steps.bump-version.outputs.release-version }}
+          additional-cliff-args: --unreleased --tag ${{ steps.bump-version-release.outputs.release-version }}
 
       - name: Create changelog
         uses: bakdata/ci-templates/actions/changelog-generate@feature/gradle-release-git-cliff
@@ -112,7 +112,7 @@ jobs:
         with:
           github-token: ${{ secrets.github-token }}
           changelog-file: ${{ inputs.changelog-file }}
-          additional-cliff-args: --tag ${{ steps.bump-version.outputs.release-version }}
+          additional-cliff-args: --tag ${{ steps.bump-version-release.outputs.release-version }}
 
       - name: Commit and push changes including .bumpversion.cfg file
         uses: bakdata/ci-templates/actions/commit-and-push@1.64.0
