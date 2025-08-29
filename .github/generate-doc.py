@@ -3,6 +3,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 
 
 TARGET_SUBSECTION_TITLE = 'References'
@@ -154,6 +155,7 @@ def copy_file(source_path, destination_path):
 
 
 def run():
+    sys.stdout.reconfigure(encoding='utf-8')
     null_out = "NUL" if os.name == 'nt' else "/dev/null"
     auto_doc_cmd = os.environ.get("DOC_CMD")
     if auto_doc_cmd is None or auto_doc_cmd == "":
