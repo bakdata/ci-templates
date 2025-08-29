@@ -70,7 +70,7 @@ runs:
         GITHUB_REPO: ${{ github.repository }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
     - name: Print changelog
-      run: echo ${{ steps.git-cliff-latest.outputs.content }}
+      run: echo "${{ steps.git-cliff-latest.outputs.content }}"
       shell: bash
     - name: Generate a changelog
       uses: orhun/git-cliff-action@v4.5.1
@@ -82,7 +82,7 @@ runs:
         GITHUB_REPO: ${{ github.repository }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
     - name: Print changelog
-      run: echo ${{ steps.git-cliff.outputs.content }}
+      run: echo "${{ steps.git-cliff.outputs.content }}"
       shell: bash
     - name: remove tmp config file
       run: rm tmp_cliff.toml
