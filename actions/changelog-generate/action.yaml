@@ -71,7 +71,7 @@ runs:
       id: git-cliff
       with:
         config: tmp_cliff.toml
-        args: "--unreleased --tag ${{ inputs.tag }} ${{ (inputs.changelog-file != '' && format('--output {0}', inputs.changelog-file)) || '' }} ${{ inputs.verbose == 'true' && '--verbose' || '' }} ${{ inputs.additional-cliff-args }}"
+        args: "--tag ${{ inputs.tag }} ${{ (inputs.changelog-file != '' && format('--output {0}', inputs.changelog-file)) || '' }} ${{ inputs.verbose == 'true' && '--verbose' || '' }} ${{ inputs.additional-cliff-args }}"
       env:
         GITHUB_REPO: ${{ github.repository }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
