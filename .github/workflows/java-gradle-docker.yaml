@@ -167,7 +167,7 @@ jobs:
 
     steps:
       - name: Release on Github
-        uses: bakdata/ci-templates/actions/java-gradle-release-github@feature/gradle-release-git-cliff
+        uses: bakdata/ci-templates/actions/java-gradle-release-github@1.70.0
         with:
           github-token: ${{ secrets.github-token }}
           java-distribution: ${{ inputs.java-distribution }}

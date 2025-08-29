@@ -99,7 +99,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
 
     - name: Create changelog # Generate changelog before creating the tag or the tag appears twice in the changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@feature/gradle-release-git-cliff
+      uses: bakdata/ci-templates/actions/changelog-generate@1.70.0
       with:
         github-token: ${{ inputs.github-token }}
         changelog-file: ${{ runner.temp }}/CHANGELOG.md # Use temporary file to not have uncommitted changes

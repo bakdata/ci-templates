@@ -91,14 +91,14 @@ jobs:
 
       - name: Create single changelog
         id: build-changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@feature/gradle-release-git-cliff
+        uses: bakdata/ci-templates/actions/changelog-generate@1.70.0
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}
           additional-cliff-args: --unreleased --tag ${{ steps.bump-version.outputs.release-version }}
 
       - name: Create changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@feature/gradle-release-git-cliff
+        uses: bakdata/ci-templates/actions/changelog-generate@1.70.0
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}

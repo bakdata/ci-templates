@@ -21,7 +21,7 @@ runs:
 
     - name: Generate changelog
       id: changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@feature/gradle-release-git-cliff
+      uses: bakdata/ci-templates/actions/changelog-generate@1.70.0
       with:
         github-token: ${{ inputs.github-token }}
         additional-cliff-args: --current --strip all # passing --tag ${{ github.ref_name }} generates a full changelog
