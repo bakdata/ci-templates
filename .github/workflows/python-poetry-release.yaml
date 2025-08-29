@@ -89,14 +89,21 @@ jobs:
           poetry-version: ${{ inputs.poetry-version }}
           working-directory: ${{ inputs.working-directory }}
 
-      - name: Create changelog
+      - name: Create single changelog
         id: build-changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@1.69.1
+        uses: bakdata/ci-templates/actions/changelog-generate@1.70.0
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}
-          tag: ${{ steps.bump-version.outputs.release-version }}
+          additional-cliff-args: --unreleased --tag ${{ steps.bump-version.outputs.release-version }}
+
+      - name: Create changelog
+        uses: bakdata/ci-templates/actions/changelog-generate@1.70.0
+        if: ${{ inputs.changelog }}
+        with:
+          github-token: ${{ secrets.github-token }}
           changelog-file: ${{ inputs.changelog-file }}
+          additional-cliff-args: --tag ${{ steps.bump-version.outputs.release-version }}
 
       - name: Commit and push pyproject.toml file
         uses: bakdata/ci-templates/actions/commit-and-push@1.25.2
@@ -113,7 +120,7 @@ jobs:
         with:
           tag: "${{ steps.bump-version.outputs.release-version }}"
           release-title: "${{ steps.bump-version.outputs.release-version }}"
-          release-body: "${{ steps.build-changelog.outputs.single-changelog }}"
+          release-body: "${{ steps.build-changelog.outputs.changelog }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
           github-token: ${{ secrets.github-token }}

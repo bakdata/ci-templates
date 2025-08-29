@@ -98,29 +98,22 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
+    - name: Create changelog # Generate changelog before creating the tag or the tag appears twice in the changelog
+      uses: bakdata/ci-templates/actions/changelog-generate@1.70.0
+      with:
+        github-token: ${{ inputs.github-token }}
+        changelog-file: ${{ runner.temp }}/CHANGELOG.md # Use temporary file to not have uncommitted changes
+        additional-cliff-args: --tag ${{ steps.evaluate-version.outputs.release-version }}
+
     - name: Create release
       run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -Prelease.disablePushToRemote=true -Prelease.requireBranch=${{ github.event.repository.default_branch }} ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Push release tag
+    - name: Commit CHANGELOG.md file and push
       run: |
-        git push --tags origin
+        mv ${{ runner.temp }}/CHANGELOG.md CHANGELOG.md
+        git add CHANGELOG.md
+        git commit -m "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}"
+        git push --follow-tags origin
       shell: bash
-
-    - name: Create changelog
-      run: ./gradlew -Pchangelog.githubRepository=${{ github.event.repository.name }} -Pchangelog.futureVersionTag=${{ steps.evaluate-version.outputs.release-version }} --stacktrace --info generateChangelog ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-      env:
-        GITHUB_USER: ${{ github.repository_owner }}
-        GITHUB_TOKEN: ${{ inputs.github-token }}
-
-    - name: Commit and push CHANGELOG.md file
-      uses: bakdata/ci-templates/actions/commit-and-push@1.50.4
-      with:
-        commit-message: "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}"
-        github-username: ${{ inputs.github-username }}
-        github-email: ${{ inputs.github-email }}
-        github-token: ${{ inputs.github-token }}
-        add-untracked: "true"

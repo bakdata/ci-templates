@@ -5,14 +5,11 @@ inputs:
   github-token:
     description: "The GitHub token for committing the changes."
     required: true
-  tag:
-    description: Version after bump
-    required: true
   # optional inputs
   changelog-file:
     description: Path to the changelog file in the GitHub repository
     required: false
-    default: "CHANGELOG.md"
+    default: ""
   checkout:
     description: "Whether to checkout the repository or not."
     required: false
@@ -31,12 +28,9 @@ inputs:
     default: ""
 
 outputs:
-  merged-changelog:
-    description: "All changelogs combined."
+  changelog:
+    description: "Changelog output."
     value: ${{ steps.git-cliff.outputs.content }}
-  single-changelog:
-    description: "Only the latest changelog."
-    value: ${{ steps.git-cliff-latest.outputs.content }}
 
 runs:
   using: "composite"
@@ -57,29 +51,18 @@ runs:
           cp $DEFAULT_PATH tmp_cliff.toml
         fi
       shell: bash
-    - name: Generate latest only changelog
-      uses: orhun/git-cliff-action@v4.5.1
-      id: git-cliff-latest
-      with:
-        config: tmp_cliff.toml
-        args: "--unreleased --tag ${{ inputs.tag }} ${{ inputs.verbose == 'true' && '--verbose' || '' }} ${{ inputs.additional-cliff-args }}"
-      env:
-        # I am not a fan of this, cuz this does not reflect what this step is supposed to do
-        # i.e. just dumping the latest changelog into GHA context
-        # BUT, it works and the file will be written over in the next step anyway
-        OUTPUT: ${{ inputs.changelog-file }}
-        GITHUB_REPO: ${{ github.repository }}
-        GITHUB_TOKEN: ${{ inputs.github-token }}
     - name: Generate a changelog
       uses: orhun/git-cliff-action@v4.5.1
       id: git-cliff
       with:
         config: tmp_cliff.toml
-        args: "--tag ${{ inputs.tag }} ${{ inputs.verbose == 'true' && '--verbose' || '' }} ${{ inputs.additional-cliff-args }}"
+        args: "${{ (inputs.changelog-file != '' && format('--output {0}', inputs.changelog-file)) || '' }} ${{ inputs.verbose == 'true' && '--verbose' || '' }} ${{ inputs.additional-cliff-args }}"
       env:
-        OUTPUT: ${{ inputs.changelog-file }}
         GITHUB_REPO: ${{ github.repository }}
         GITHUB_TOKEN: ${{ inputs.github-token }}
     - name: remove tmp config file
       run: rm tmp_cliff.toml
+      shell: bash
+    - name: remove git-cliff stuff
+      run: rm -r git-cliff/ # git-cliff action does not use temp dir properly
       shell: bash

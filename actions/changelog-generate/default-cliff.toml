@@ -55,7 +55,9 @@ conventional_commits = true
 filter_unconventional = false
 split_commits = false
 commit_preprocessors = []
-commit_parsers = []
+commit_parsers = [
+  { field = "author.email", pattern = ".*bot@.*", skip = true }
+]
 protect_breaking_commits = false
 filter_commits = false
 topo_order = false
