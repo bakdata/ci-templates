@@ -98,19 +98,21 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Create release
-      run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -Prelease.disablePushToRemote=true -Prelease.requireBranch=${{ github.event.repository.default_branch }} ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
-      shell: bash
-      working-directory: ${{ inputs.working-directory }}
-
     - name: Create changelog
       uses: bakdata/ci-templates/actions/changelog-generate@feature/gradle-release-git-cliff
       with:
         github-token: ${{ inputs.github-token }}
         tag: ${{ steps.evaluate-version.outputs.release-version }}
+        changelog-file: ${{ runner.temp }}/CHANGELOG.md
+
+    - name: Create release
+      run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -Prelease.disablePushToRemote=true -Prelease.requireBranch=${{ github.event.repository.default_branch }} ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
 
     - name: Commit CHANGELOG.md file and push
       run: |
+        mv ${{ runner.temp }}/CHANGELOG.md CHANGELOG.md
         git add CHANGELOG.md
         git commit -m "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}"
         git push --follow-tags origin
