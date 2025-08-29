@@ -24,7 +24,7 @@ runs:
       uses: bakdata/ci-templates/actions/changelog-generate@feature/gradle-release-git-cliff
       with:
         github-token: ${{ inputs.github-token }}
-        additional-cliff-args: --current
+        additional-cliff-args: --tag ${{ github.ref_name }} --strip all
 
     - name: Create Github release
       uses: softprops/action-gh-release@v2.0.4
