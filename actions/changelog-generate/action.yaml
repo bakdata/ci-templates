@@ -84,3 +84,6 @@ runs:
     - name: remove tmp config file
       run: rm tmp_cliff.toml
       shell: bash
+    - name: remove git-cliff stuff
+      run: rm -r git-cliff/
+      shell: bash
