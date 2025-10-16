@@ -59,6 +59,11 @@ on:
         required: false
         type: boolean
         default: false
+      debloat:
+        description: "Whether the debload action should be run before building the image"
+        required: false
+        type: boolean
+        default: false
 
     secrets:
       docker-user:
@@ -78,7 +83,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@1.49.0
+        uses: bakdata/ci-templates/actions/checkout@1.70.0
         with:
           ref: ${{ inputs.ref }}
           lfs: ${{ inputs.checkout-lfs-files }}
@@ -90,6 +95,10 @@ jobs:
           registry: "${{ inputs.docker-registry }}"
           username: "${{ secrets.docker-user }}"
           password: "${{ secrets.docker-password }}"
+
+      - name: "Debloat runner"
+        uses: bakdata/ci-templates/actions/debloat-runner@1.70.0
+        if: ${{ inputs.debloat == 'true' }}
 
       - uses: ./.github/actions/extra-step/docker-build-and-publish
         # Add your extra step in your repo under .github/actions/extra-step/docker-build-and-publish/action.yaml ,
