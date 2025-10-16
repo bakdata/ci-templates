@@ -1,0 +1,13 @@
+name: "Debloat runner"
+description: "Remove unnessecary libraries & binaries for more leeway on space intensive builds"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repository code
+      uses: actions/checkout@v4
+    - name: Cleaning script
+      shell: bash
+      run: |
+        chmod +x ./actions/debloat-runner/util_free_space.sh
+        ./actions/debloat-runner/util_free_space.sh
