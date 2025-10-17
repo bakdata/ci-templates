@@ -42,7 +42,7 @@ jobs:
         uses: bakdata/ci-templates/actions/checkout@1.49.0
 
       - name: Set up Poetry ${{ inputs.poetry-version }}
-        uses: bakdata/ci-templates/actions/python-setup-poetry@feature/setup-python-v6
+        uses: bakdata/ci-templates/actions/python-setup-poetry@1.69.2
         with:
           python-version: ${{ inputs.python-version }}
           poetry-version: ${{ inputs.poetry-version }}
@@ -54,7 +54,7 @@ jobs:
         working-directory: ${{ inputs.working-directory }}
 
       - name: Publish to ${{ inputs.publish-to-test && 'TestPyPI' || 'PyPI' }}
-        uses: bakdata/ci-templates/actions/python-poetry-publish-pypi@feature/setup-python-v6
+        uses: bakdata/ci-templates/actions/python-poetry-publish-pypi@1.25.2
         with:
           pypi-token: ${{ secrets.pypi-token }}
           publish-to-test: ${{ inputs.publish-to-test }}
