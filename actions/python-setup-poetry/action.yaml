@@ -37,19 +37,24 @@ runs:
         python3 -m pip install --user pipx
         python3 -m pipx ensurepath
 
-#    - name: Cache poetry
-#      id: cache-poetry
-#      uses: actions/cache@v4
-#      with:
-#        path: |
-#          /opt/pipx/venvs/poetry
-#          /opt/pipx_bin/poetry
-#        key: poetry${{ inputs.poetry-version }}-python${{ inputs.python-version }}-${{ runner.os }}
+    - name: Cache poetry
+      id: cache-poetry
+      uses: actions/cache@v4
+      with:
+        path: |
+          /opt/pipx/venvs/poetry
+          /opt/pipx_bin/poetry
+        key: poetry${{ inputs.poetry-version }}-python${{ inputs.python-version }}-${{ runner.os }}
 
     - name: Install Poetry ${{ inputs.poetry-version }}
-      #if: steps.cache-poetry.outputs.cache-hit != 'true'
+      if: steps.cache-poetry.outputs.cache-hit != 'true'
       shell: bash
       run: pipx install poetry==${{ inputs.poetry-version }} --python "${{ steps.setup-python.outputs.python-path }}"
+
+    - name: Configure Poetry Python version
+      run: |
+        poetry env use "${{ steps.setup-python.outputs.python-path }}"
+      shell: bash
 
     - name: Set up Python ${{ inputs.python-version }} poetry cache
       uses: actions/setup-python@v6
