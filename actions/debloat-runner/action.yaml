@@ -4,10 +4,8 @@ description: "Remove unnessecary libraries & binaries for more leeway on space i
 runs:
   using: "composite"
   steps:
-    - name: Checkout repository code
-      uses: actions/checkout@v4
     - name: Cleaning script
       shell: bash
-      run: |
-        chmod +x ./actions/debloat-runner/util_free_space.sh
-        ./actions/debloat-runner/util_free_space.sh
+      # might be nessecary
+      # chmod +x $GITHUB_ACTION_PATH//util_free_space.sh
+      run: ./$GITHUB_ACTION_PATH//util_free_space.sh
