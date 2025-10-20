@@ -8,4 +8,4 @@ runs:
       shell: bash
       # might be nessecary
       # chmod +x $GITHUB_ACTION_PATH//util_free_space.sh
-      run: ./$GITHUB_ACTION_PATH//util_free_space.sh
+      run: bash $GITHUB_ACTION_PATH/util_free_space.sh
