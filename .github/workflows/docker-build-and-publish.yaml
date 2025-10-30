@@ -97,7 +97,7 @@ jobs:
           password: "${{ secrets.docker-password }}"
 
       - name: "Debloat runner"
-        uses: bakdata/ci-templates/actions/debloat-runner@tiedemann/debloat-action-and-docker-workflow-integration
+        uses: jlumbroso/free-disk-space@v1.3.1
         if: inputs.debloat
 
       - uses: ./.github/actions/extra-step/docker-build-and-publish
