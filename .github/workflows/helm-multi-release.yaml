@@ -85,6 +85,7 @@ jobs:
       - name: Prepare artifacts
         run: |
           mkdir -p ../${{ inputs.artifact-dir }}/${{ matrix.subdir }}
+          helm dependency build ${{ matrix.subdir }}
           helm package ${{ matrix.subdir }} -d ../${{ inputs.artifact-dir }}/${{ matrix.subdir }}
         shell: bash
         working-directory: ${{ inputs.charts-path }}
