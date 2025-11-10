@@ -20,6 +20,7 @@ runs:
 
     - name: Helm package
       run: |
+        helm dependency build .
         helm package .
         helm repo index . --merge index.yaml
       shell: bash
