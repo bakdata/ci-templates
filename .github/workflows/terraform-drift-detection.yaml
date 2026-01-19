@@ -1,0 +1,66 @@
+name: Terraform Drift Detection
+# Reusable workflow for detecting drift in Terraform configurations
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        description: "The directory where Terraform files are located"
+        required: false
+        default: "."
+        type: string
+      terraform-version:
+        description: "The version of Terraform to use"
+        required: false
+        default: "1.13.3"
+        type: string
+      gcp-project-id:
+        description: "The GCP Project ID"
+        required: true
+        type: string
+      source-branch:
+        description: "The branch to use as the source of truth"
+        required: false
+        default: "main"
+        type: string
+    secrets:
+      google-workload-identity-provider:
+        description: "The Workload Identity Provider resource name"
+        required: true
+      google-service-account:
+        description: "The GCP Service Account email"
+        required: true
+
+jobs:
+  drift-detection:
+    name: Detect Drift (${{ inputs.working-directory }})
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout Code
+        uses: bakdata/ci-templates/actions/checkout@1.70.0
+        with:
+          ref: ${{ inputs.source-branch }}
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.google-workload-identity-provider }}
+          service_account: ${{ secrets.google-service-account }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ inputs.terraform-version }}
+
+      - name: Terraform Init
+        working-directory: ${{ inputs.working-directory }}
+        run: terraform init
+
+      - name: Terraform Plan
+        id: plan
+        working-directory: ${{ inputs.working-directory }}
+        run: terraform plan -detailed-exitcode
