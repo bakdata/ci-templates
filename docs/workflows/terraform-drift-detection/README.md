@@ -42,14 +42,31 @@ jobs:
 ### Inputs
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
+
+| INPUT             | TYPE   | REQUIRED | DEFAULT    | DESCRIPTION                                     |
+| ----------------- | ------ | -------- | ---------- | ----------------------------------------------- |
+| gcp-project-id    | string | true     |            | The GCP Project ID                              |
+| source-branch     | string | false    | `"main"`   | The branch to use as the source of truth        |
+| terraform-version | string | false    | `"1.13.3"` | The version of Terraform to use                 |
+| working-directory | string | false    | `"."`      | The directory where Terraform files are located |
+
 <!-- AUTO-DOC-INPUT:END -->
 
 ### Outputs
 
 <!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
+
+No outputs.
+
 <!-- AUTO-DOC-OUTPUT:END -->
 
 ### Secrets
 
 <!-- AUTO-DOC-SECRETS:START - Do not remove or modify this section -->
+
+| SECRET                            | REQUIRED | DESCRIPTION                                  |
+| --------------------------------- | -------- | -------------------------------------------- |
+| google-service-account            | true     | The GCP Service Account email                |
+| google-workload-identity-provider | true     | The Workload Identity Provider resource name |
+
 <!-- AUTO-DOC-SECRETS:END -->
