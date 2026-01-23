@@ -42,6 +42,9 @@ jobs:
       contents: read
       id-token: write
 
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.slack-webhook-url }}
+
     steps:
       - name: Checkout Code
         uses: bakdata/ci-templates/actions/checkout@1.70.0
@@ -70,7 +73,7 @@ jobs:
           set +e
           terraform plan -detailed-exitcode -no-color -out=tfplan
           EXIT_CODE=$?
-          echo "exit_code=$EXIT_CODE" >> $GITHUB_OUTPUT
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
           if [ "$EXIT_CODE" -eq 2 ]; then
             terraform show -no-color tfplan > plan_output.txt
             exit 0
@@ -87,19 +90,20 @@ jobs:
           CHANGED=$(echo "$SUMMARY" | sed -E 's/.*, ([0-9]+) to change.*/\1/' | grep -E '^[0-9]+$' || echo 0)
           DELETED=$(echo "$SUMMARY" | sed -E 's/.*, ([0-9]+) to destroy.*/\1/' | grep -E '^[0-9]+$' || echo 0)
           
-          echo "created=$CREATED" >> $GITHUB_OUTPUT
-          echo "changed=$CHANGED" >> $GITHUB_OUTPUT
-          echo "deleted=$DELETED" >> $GITHUB_OUTPUT
-          
-          echo "snippet<<EOF" >> $GITHUB_OUTPUT
-          head -n 40 plan_output.txt >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          {
+            echo "created=$CREATED"
+            echo "changed=$CHANGED"
+            echo "deleted=$DELETED"
+            echo "snippet<<EOF"
+            head -n 40 plan_output.txt
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Send Slack Notification
-        if: steps.plan.outputs.exit_code == '2' && secrets.slack-webhook-url != ''
+        if: steps.plan.outputs.exit_code == '2' && env.SLACK_WEBHOOK_URL != ''
         uses: slackapi/slack-github-action@v2.1.1
         with:
-          webhook: ${{ secrets.slack-webhook-url }}
+          webhook: ${{ env.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
             text: "🚨 *Terraform Drift Detected* in `${{ inputs.working-directory }}` (${{ inputs.gcp-project-id }})"

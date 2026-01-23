@@ -68,5 +68,6 @@ No outputs.
 | --------------------------------- | -------- | -------------------------------------------- |
 | google-service-account            | true     | The GCP Service Account email                |
 | google-workload-identity-provider | true     | The Workload Identity Provider resource name |
+| slack-webhook-url                 | false    | The Slack Webhook URL to send notifications  |
 
 <!-- AUTO-DOC-SECRETS:END -->
