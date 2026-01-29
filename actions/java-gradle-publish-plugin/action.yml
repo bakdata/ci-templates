@@ -52,7 +52,7 @@ runs:
       uses: bakdata/ci-templates/actions/checkout@1.49.0
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@feature/update-java-actions
+      uses: bakdata/ci-templates/actions/java-gradle-setup@1.71.0
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
