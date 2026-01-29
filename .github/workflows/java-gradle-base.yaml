@@ -72,7 +72,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Build
-        uses: bakdata/ci-templates/actions/java-gradle-build@1.63.0
+        uses: bakdata/ci-templates/actions/java-gradle-build@feature/update-java-actions
         with:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
@@ -89,7 +89,7 @@ jobs:
     needs: build
     steps:
       - name: Run unit tests
-        uses: bakdata/ci-templates/actions/java-gradle-test@1.63.0
+        uses: bakdata/ci-templates/actions/java-gradle-test@feature/update-java-actions
         with:
           gradle-cache: ${{ inputs.gradle-cache }}
           gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
@@ -107,7 +107,7 @@ jobs:
     needs: test
     steps:
       - name: Assess code quality
-        uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@1.71.0
+        uses: bakdata/ci-templates/actions/java-gradle-assess-code-quality@feature/update-java-actions
         with:
           download-lfs-files: ${{ inputs.download-lfs-files }}
           gradle-cache: ${{ inputs.gradle-cache }}

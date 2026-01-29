@@ -57,7 +57,7 @@ runs:
       shell: bash
 
     - name: Set up Maven with version ${{ inputs.maven-version }}
-      uses: bakdata/ci-templates/actions/java-maven-setup@1.49.0
+      uses: bakdata/ci-templates/actions/java-maven-setup@feature/update-java-actions
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}

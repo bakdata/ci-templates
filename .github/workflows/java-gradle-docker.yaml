@@ -93,7 +93,7 @@ concurrency:
 jobs:
   build-and-test:
     name: Build, Test and Assess code quality
-    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@1.71.0
+    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@feature/update-java-actions
     with:
       java-distribution: ${{ inputs.java-distribution }}
       java-version: ${{ inputs.java-version }}
@@ -124,7 +124,7 @@ jobs:
 
       - name: Jib build
         id: build-image
-        uses: bakdata/ci-templates/actions/java-gradle-build-jib@1.63.0
+        uses: bakdata/ci-templates/actions/java-gradle-build-jib@feature/update-java-actions
         with:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
@@ -144,7 +144,7 @@ jobs:
 
     steps:
       - name: Publish
-        uses: bakdata/ci-templates/actions/java-gradle-publish@1.63.0
+        uses: bakdata/ci-templates/actions/java-gradle-publish@feature/update-java-actions
         with:
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
