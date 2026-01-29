@@ -79,6 +79,13 @@ runs:
         gradle-cache-read-only: ${{ inputs.gradle-cache-read-only }}
         gradle-dependency-graph: disabled
 
+    - name: Cache SonarQube packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.sonar/cache
+        key: ${{ runner.os }}-sonar
+        restore-keys: ${{ runner.os }}-sonar
+
     - name: Assess code quality
       if: ${{ inputs.sonar-token != '' }}
       run: |
