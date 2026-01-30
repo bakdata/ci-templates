@@ -90,6 +90,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-java-gradle-docker
   cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
 
+permissions:
+  checks: write
+
 jobs:
   build-and-test:
     name: Build, Test and Assess code quality
