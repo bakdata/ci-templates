@@ -71,6 +71,10 @@ concurrency:
   cancel-in-progress: ${{ github.ref_name != github.event.repository.default_branch }}
 
 permissions:
+  # This permission is needed to create GitHub releases.
+  contents: write
+
+  # This permission is needed to allow Java Gradle tests to interact with GitHub's checks API.
   checks: write
 
 jobs:
