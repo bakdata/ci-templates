@@ -51,4 +51,4 @@ runs:
         bump-my-version "${parameters[@]}"
         echo "new-version=$(bump-my-version show current_version)" >> "$GITHUB_OUTPUT"
       shell: bash
-      working-directory: ${{ inputs[working-directory] }}
+      working-directory: ${{ inputs['working-directory'] }}

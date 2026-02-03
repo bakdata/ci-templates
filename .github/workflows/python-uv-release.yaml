@@ -92,7 +92,8 @@ jobs:
         id: bump-version-release
         uses: bakdata/ci-templates/actions/bump-version@switch-to-bump-my-version
         with:
-          release-type: release --allow-dirty
+          release-type: ${{inputs.release-type}}
+          allow-dirty: true
           working-directory: ${{ inputs.working-directory }}
 
       - name: Apply version bump to uv lock
