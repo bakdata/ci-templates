@@ -118,7 +118,7 @@ jobs:
       - name: Commit and push changes including .bumpversion.cfg file
         uses: bakdata/ci-templates/actions/commit-and-push@1.64.0
         with:
-          ref: ${{ github.event.repository.switch-to-bump-my-version }}
+          ref: ${{ github.ref_name }}
           commit-message: "Bump version ${{ steps.bump-version-dev.outputs.old-version }} → ${{ steps.bump-version-release.outputs.release-version }}"
           github-username: ${{ secrets.github-username }}
           github-email: ${{ secrets.github-email }}
