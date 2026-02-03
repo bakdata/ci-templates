@@ -38,6 +38,8 @@ runs:
       id: bump-version
       run: |
         ls -lisa
+        git config --global user.emal "dmitriyriffel1@gmail.con"
+        git config --global user.name "DmitriyRiffel"
         git add .
         git commit -m "Test Commit in action.yaml"
         parameters=(bump --no-commit --no-tag)
