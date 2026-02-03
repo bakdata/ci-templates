@@ -37,7 +37,6 @@ runs:
     - name: Bump version
       id: bump-version
       run: |
-        ls -lisa
         parameters=(bump --no-commit --no-tag)
         echo "old-version=$(bump-my-version show current_version)" >> "$GITHUB_OUTPUT"
         if [[ "${{ inputs['allow-dirty'] }}" == "true" ]]; then
