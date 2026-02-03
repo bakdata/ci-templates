@@ -83,14 +83,14 @@ jobs:
 
       - name: Bump version
         id: bump-version-dev
-        uses: bakdata/ci-templates/actions/bump-version@1.64.0
+        uses: bakdata/ci-templates/actions/bump-version@switch-to-bump-my-version
         with:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.working-directory }}
 
       - name: Bump version release
         id: bump-version-release
-        uses: bakdata/ci-templates/actions/bump-version@1.64.0
+        uses: bakdata/ci-templates/actions/bump-version@switch-to-bump-my-version
         with:
           release-type: release --allow-dirty
           working-directory: ${{ inputs.working-directory }}
