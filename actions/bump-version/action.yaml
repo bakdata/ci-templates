@@ -38,7 +38,8 @@ runs:
       id: bump-version
       run: |
         ls -lisa
-        git status
+        git add .
+        git commit -m "Test Commit in action.yaml"
         parameters=(bump --no-commit --no-tag)
         echo "old-version=$(bump-my-version show current_version)" >> "$GITHUB_OUTPUT"
         if [[ "${{ inputs.allow-dirty }}" == "true" ]]; then
