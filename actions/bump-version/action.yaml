@@ -37,7 +37,7 @@ runs:
     - name: Bump version
       id: bump-version
       run: |
-        ls
+        ls -lisa
         git status
         parameters=(bump --no-commit --no-tag)
         echo "old-version=$(bump-my-version show current_version)" >> "$GITHUB_OUTPUT"
