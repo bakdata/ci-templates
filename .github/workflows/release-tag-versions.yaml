@@ -58,7 +58,7 @@ jobs:
 
       - name: Bump input version to create a new release tag
         id: bump-version
-        uses: bakdata/ci-templates/actions/bump-version@v1.73.0
+        uses: bakdata/ci-templates/actions/bump-version@1.73.0
         with:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.version-configs-dir }}
@@ -103,7 +103,7 @@ jobs:
         shell: bash
 
       - name: Bump to "tag-${{ inputs.next-dev-release-suffix }}" version
-        uses: bakdata/ci-templates/actions/bump-version@v1.73.0
+        uses: bakdata/ci-templates/actions/bump-version@1.73.0
         with:
           release-type: ${{ inputs.next-dev-release-type }}
           working-directory: ${{ inputs.version-configs-dir }}
