@@ -39,15 +39,15 @@ runs:
       run: |
         parameters=(bump --no-commit --no-tag)
         echo "old-version=$(bump-my-version show current_version)" >> "$GITHUB_OUTPUT"
-        if [[ "${{ inputs['allow-dirty'] }}" == "true" ]]; then
+        if [[ "${{ inputs.allow-dirty }}" == "true" ]]; then
           parameters+=(--allow-dirty)
         fi
-        if [ -n "${{ inputs['new-version'] }}" ]; then
-          parameters+=(--new-version ${{ inputs['new-version'] }})
+        if [ -n "${{ inputs.new-version }}" ]; then
+          parameters+=(--new-version ${{ inputs.new-version }})
         else
-          parameters+=("${{ inputs['release-type'] }}")
+          parameters+=("${{ inputs.release-type }}")
         fi
         bump-my-version "${parameters[@]}"
         echo "new-version=$(bump-my-version show current_version)" >> "$GITHUB_OUTPUT"
       shell: bash
-      working-directory: ${{ inputs['working-directory'] }}
+      working-directory: ${{ inputs.working-directory }}
