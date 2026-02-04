@@ -81,18 +81,18 @@ jobs:
           persist-credentials: false # required for pushing to protected branch later
           fetch-depth: 0 # required for changelog generation
 
-      # - name: Bump version
-      #   id: bump-version-dev
-      #   uses: bakdata/ci-templates/actions/bump-version@switch-to-bump-my-version
-      #   with:
-      #     release-type: ${{ inputs.release-type }}
-      #     working-directory: ${{ inputs.working-directory }}
+      - name: Bump version
+        id: bump-version-dev
+        uses: bakdata/ci-templates/actions/bump-version@switch-to-bump-my-version
+        with:
+          release-type: ${{ inputs.release-type }}
+          working-directory: ${{ inputs.working-directory }}
 
       - name: Bump version release
         id: bump-version-release
         uses: bakdata/ci-templates/actions/bump-version@switch-to-bump-my-version
         with:
-          release-type: release --allow-dirty
+          release-type: release
           allow-dirty: true
           working-directory: ${{ inputs.working-directory }}
 
