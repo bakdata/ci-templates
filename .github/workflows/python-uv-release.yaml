@@ -92,7 +92,7 @@ jobs:
         id: bump-version-release
         uses: bakdata/ci-templates/actions/bump-version@switch-to-bump-my-version
         with:
-          release-type: ${{inputs.release-type}}
+          release-type: release --allow-dirty
           allow-dirty: true
           working-directory: ${{ inputs.working-directory }}
 
