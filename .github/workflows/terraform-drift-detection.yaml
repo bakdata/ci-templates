@@ -107,22 +107,40 @@ jobs:
           webhook: ${{ env.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: "🚨 *Terraform Drift Detected* in `${{ inputs.working-directory }}` (${{ inputs.gcp-project-id }})"
-            attachments:
-              - color: "#FF9800"
-                blocks:
-                  - type: "section"
-                    text:
-                      type: "mrkdwn"
-                      text: "Infrastructure drift has been detected! 🔎🏗️\n\n*Summary:*\n✨ `${{ steps.parse.outputs.created }}` created\n🔄 `${{ steps.parse.outputs.changed }}` changed\n🗑️ `${{ steps.parse.outputs.deleted }}` deleted"
-                  - type: "section"
-                    text:
-                      type: "mrkdwn"
-                      text: "*Plan Snippet:*\n```\n${{ steps.parse.outputs.snippet }}\n```"
-                  - type: "actions"
-                    elements:
-                      - type: "button"
-                        text:
-                          type: "plain_text"
-                          text: "View Details ↗️"
-                        url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            {
+              "text": ${{ toJson(format('🚨 *Terraform Drift Detected* in `{0}` ({1})', inputs.working-directory, inputs.gcp-project-id)) }},
+              "attachments": [
+                {
+                  "color": "#FF9800",
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": ${{ toJson(format('Infrastructure drift has been detected! 🔎🏗️\n\n*Summary:*\n✨ `{0}` created\n🔄 `{1}` changed\n🗑️ `{2}` deleted', steps.parse.outputs.created, steps.parse.outputs.changed, steps.parse.outputs.deleted)) }}
+                      }
+                    },
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": ${{ toJson(format('*Plan Snippet:*\n```\n{0}\n```', steps.parse.outputs.snippet)) }}
+                      }
+                    },
+                    {
+                      "type": "actions",
+                      "elements": [
+                        {
+                          "type": "button",
+                          "text": {
+                            "type": "plain_text",
+                            "text": "View Details ↗️"
+                          },
+                          "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
