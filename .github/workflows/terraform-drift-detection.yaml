@@ -61,6 +61,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ inputs.terraform-version }}
+          terraform_wrapper: false
 
       - name: Terraform Init
         working-directory: ${{ inputs.working-directory }}
@@ -89,7 +90,7 @@ jobs:
           CREATED=$(echo "$SUMMARY" | sed -E 's/.*Plan: ([0-9]+) to add.*/\1/' | grep -E '^[0-9]+$' || echo 0)
           CHANGED=$(echo "$SUMMARY" | sed -E 's/.*, ([0-9]+) to change.*/\1/' | grep -E '^[0-9]+$' || echo 0)
           DELETED=$(echo "$SUMMARY" | sed -E 's/.*, ([0-9]+) to destroy.*/\1/' | grep -E '^[0-9]+$' || echo 0)
-          
+
           {
             echo "created=$CREATED"
             echo "changed=$CHANGED"
