@@ -103,44 +103,57 @@ jobs:
       - name: Send Slack Notification
         if: steps.plan.outputs.exit_code == '2' && env.SLACK_WEBHOOK_URL != ''
         uses: slackapi/slack-github-action@v2.1.1
+        env:
+          DRIFT_SUMMARY: |
+            Infrastructure drift has been detected! 🔎🏗️
+
+            *Summary:*
+            ✨ `${{ steps.parse.outputs.created }}` created
+            🔄 `${{ steps.parse.outputs.changed }}` changed
+            🗑️ `${{ steps.parse.outputs.deleted }}` deleted
+          PLAN_SNIPPET: |
+            *Plan Snippet:*
+            ```
+            ${{ steps.parse.outputs.snippet }}
+            ```
         with:
           webhook: ${{ env.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
-          payload: |
-            {
-              "text": ${{ toJson(format('🚨 *Terraform Drift Detected* in `{0}` ({1})', inputs.working-directory, inputs.gcp-project-id)) }},
-              "attachments": [
+          payload: >
+            ${{ toJson({
+              text: format('🚨 *Terraform Drift Detected* in `{0}` ({1})', inputs.working-directory, inputs.gcp-project-id),
+              attachments: [
                 {
-                  "color": "#FF9800",
-                  "blocks": [
+                  color: "#FF9800",
+                  blocks: [
                     {
-                      "type": "section",
-                      "text": {
-                        "type": "mrkdwn",
-                        "text": ${{ toJson(format('Infrastructure drift has been detected! 🔎🏗️\n\n*Summary:*\n✨ `{0}` created\n🔄 `{1}` changed\n🗑️ `{2}` deleted', steps.parse.outputs.created, steps.parse.outputs.changed, steps.parse.outputs.deleted)) }}
+                      type: "section",
+                      text: {
+                        type: "mrkdwn",
+                        text: env.DRIFT_SUMMARY
                       }
                     },
                     {
-                      "type": "section",
-                      "text": {
-                        "type": "mrkdwn",
-                        "text": ${{ toJson(format('*Plan Snippet:*\n```\n{0}\n```', steps.parse.outputs.snippet)) }}
+                      type: "section",
+                      text: {
+                        type: "mrkdwn",
+                        text: env.PLAN_SNIPPET
                       }
                     },
                     {
-                      "type": "actions",
-                      "elements": [
+                      type: "actions",
+                      elements: [
                         {
-                          "type": "button",
-                          "text": {
-                            "type": "plain_text",
-                            "text": "View Details ↗️"
+                          type: "button",
+                          text: {
+                            type: "plain_text",
+                            text: "View Details ↗️"
                           },
-                          "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                          url: format('{0}/{1}/actions/runs/{2}', github.server_url, github.repository, github.run_id)
                         }
                       ]
                     }
                   ]
                 }
               ]
-            }
+            }) }}
