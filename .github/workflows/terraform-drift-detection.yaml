@@ -100,60 +100,61 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
+      - name: Prepare Slack Payload
+        if: steps.plan.outputs.exit_code == '2' && env.SLACK_WEBHOOK_URL != ''
+        shell: python
+        env:
+          CREATED: ${{ steps.parse.outputs.created }}
+          CHANGED: ${{ steps.parse.outputs.changed }}
+          DELETED: ${{ steps.parse.outputs.deleted }}
+          SNIPPET: ${{ steps.parse.outputs.snippet }}
+          WORKING_DIR: ${{ inputs.working-directory }}
+          PROJECT_ID: ${{ inputs.gcp-project-id }}
+        run: |
+          import json
+          import os
+
+          payload = {
+              "text": f"🚨 *Terraform Drift Detected* in `{os.environ['WORKING_DIR']}` ({os.environ['PROJECT_ID']})",
+              "attachments": [
+                  {
+                      "color": "#FF9800",
+                      "blocks": [
+                          {
+                              "type": "section",
+                              "text": {
+                                  "type": "mrkdwn",
+                                  "text": f"Infrastructure drift has been detected! 🔎🏗️\n\n*Summary:*\n✨ `{os.environ['CREATED']}` created\n🔄 `{os.environ['CHANGED']}` changed\n🗑️ `{os.environ['DELETED']}` deleted"
+                              }
+                          },
+                          {
+                              "type": "section",
+                              "text": {
+                                  "type": "mrkdwn",
+                                  "text": f"*Plan Snippet:*\n```\n{os.environ['SNIPPET']}\n```"
+                              }
+                          },
+                          {
+                              "type": "actions",
+                              "elements": [
+                                  {
+                                      "type": "button",
+                                      "text": {"type": "plain_text", "text": "View Details ↗️"},
+                                      "url": f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
+                                  }
+                              ]
+                          }
+                      ]
+                  }
+              ]
+          }
+          with open('slack_payload.json', 'w') as f:
+              json.dump(payload, f)
+
       - name: Send Slack Notification
         if: steps.plan.outputs.exit_code == '2' && env.SLACK_WEBHOOK_URL != ''
         uses: slackapi/slack-github-action@v2.1.1
-        env:
-          DRIFT_SUMMARY: |
-            Infrastructure drift has been detected! 🔎🏗️
-
-            *Summary:*
-            ✨ `${{ steps.parse.outputs.created }}` created
-            🔄 `${{ steps.parse.outputs.changed }}` changed
-            🗑️ `${{ steps.parse.outputs.deleted }}` deleted
-          PLAN_SNIPPET: |
-            *Plan Snippet:*
-            ```
-            ${{ steps.parse.outputs.snippet }}
-            ```
         with:
           webhook: ${{ env.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
-          payload: >
-            ${{ toJson({
-              text: format('🚨 *Terraform Drift Detected* in `{0}` ({1})', inputs.working-directory, inputs.gcp-project-id),
-              attachments: [
-                {
-                  color: "#FF9800",
-                  blocks: [
-                    {
-                      type: "section",
-                      text: {
-                        type: "mrkdwn",
-                        text: env.DRIFT_SUMMARY
-                      }
-                    },
-                    {
-                      type: "section",
-                      text: {
-                        type: "mrkdwn",
-                        text: env.PLAN_SNIPPET
-                      }
-                    },
-                    {
-                      type: "actions",
-                      elements: [
-                        {
-                          type: "button",
-                          text: {
-                            type: "plain_text",
-                            text: "View Details ↗️"
-                          },
-                          url: format('{0}/{1}/actions/runs/{2}', github.server_url, github.repository, github.run_id)
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }) }}
+          payload-file-path: slack_payload.json
