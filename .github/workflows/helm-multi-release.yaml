@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Lint Helm chart
-        uses: bakdata/ci-templates/actions/helm-lint@1.49.0
+        uses: bakdata/ci-templates/actions/helm-lint@fix/helm-pr
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
 
