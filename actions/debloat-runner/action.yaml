@@ -1,0 +1,11 @@
+name: "Debloat runner"
+description: "Remove unnessecary libraries & binaries for more leeway on space intensive builds"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Cleaning script
+      shell: bash
+      # might be nessecary
+      # chmod +x $GITHUB_ACTION_PATH//util_free_space.sh
+      run: bash $GITHUB_ACTION_PATH/util_free_space.sh
