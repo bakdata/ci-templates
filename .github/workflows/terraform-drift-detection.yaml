@@ -1,0 +1,160 @@
+name: Terraform Drift Detection
+# Reusable workflow for detecting drift in Terraform configurations
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        description: "The directory where Terraform files are located"
+        required: false
+        default: "."
+        type: string
+      terraform-version:
+        description: "The version of Terraform to use"
+        required: false
+        default: "1.13.3"
+        type: string
+      gcp-project-id:
+        description: "The GCP Project ID"
+        required: true
+        type: string
+      source-branch:
+        description: "The branch to use as the source of truth"
+        required: false
+        default: "main"
+        type: string
+    secrets:
+      google-workload-identity-provider:
+        description: "The Workload Identity Provider resource name"
+        required: true
+      google-service-account:
+        description: "The GCP Service Account email"
+        required: true
+      slack-webhook-url:
+        description: "The Slack Webhook URL to send notifications"
+        required: false
+
+jobs:
+  drift-detection:
+    name: Detect Drift (${{ inputs.working-directory }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.slack-webhook-url }}
+
+    steps:
+      - name: Checkout Code
+        uses: bakdata/ci-templates/actions/checkout@1.70.0
+        with:
+          ref: ${{ inputs.source-branch }}
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.google-workload-identity-provider }}
+          service_account: ${{ secrets.google-service-account }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ inputs.terraform-version }}
+          terraform_wrapper: false
+
+      - name: Terraform Init
+        working-directory: ${{ inputs.working-directory }}
+        run: terraform init
+
+      - name: Terraform Plan
+        id: plan
+        working-directory: ${{ inputs.working-directory }}
+        run: |
+          set +e
+          terraform plan -detailed-exitcode -no-color -out=tfplan
+          EXIT_CODE=$?
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          if [ "$EXIT_CODE" -eq 2 ]; then
+            terraform show -no-color tfplan > plan_output.txt
+            exit 0
+          fi
+          exit $EXIT_CODE
+
+      - name: Parse Plan Output
+        if: steps.plan.outputs.exit_code == '2'
+        id: parse
+        working-directory: ${{ inputs.working-directory }}
+        run: |
+          SUMMARY=$(grep "Plan:" plan_output.txt || echo "Plan: 0 to add, 0 to change, 0 to destroy.")
+          CREATED=$(echo "$SUMMARY" | sed -E 's/.*Plan: ([0-9]+) to add.*/\1/' | grep -E '^[0-9]+$' || echo 0)
+          CHANGED=$(echo "$SUMMARY" | sed -E 's/.*, ([0-9]+) to change.*/\1/' | grep -E '^[0-9]+$' || echo 0)
+          DELETED=$(echo "$SUMMARY" | sed -E 's/.*, ([0-9]+) to destroy.*/\1/' | grep -E '^[0-9]+$' || echo 0)
+
+          {
+            echo "created=$CREATED"
+            echo "changed=$CHANGED"
+            echo "deleted=$DELETED"
+            echo "snippet<<EOF"
+            head -n 40 plan_output.txt
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Prepare Slack Payload
+        if: steps.plan.outputs.exit_code == '2' && env.SLACK_WEBHOOK_URL != ''
+        shell: python
+        env:
+          CREATED: ${{ steps.parse.outputs.created }}
+          CHANGED: ${{ steps.parse.outputs.changed }}
+          DELETED: ${{ steps.parse.outputs.deleted }}
+          SNIPPET: ${{ steps.parse.outputs.snippet }}
+          WORKING_DIR: ${{ inputs.working-directory }}
+          PROJECT_ID: ${{ inputs.gcp-project-id }}
+        run: |
+          import json
+          import os
+
+          payload = {
+              "text": f"🚨 *Terraform Drift Detected* in `{os.environ['WORKING_DIR']}` ({os.environ['PROJECT_ID']})",
+              "attachments": [
+                  {
+                      "color": "#FF9800",
+                      "blocks": [
+                          {
+                              "type": "section",
+                              "text": {
+                                  "type": "mrkdwn",
+                                  "text": f"Infrastructure drift has been detected! 🔎🏗️\n\n*Summary:*\n✨ `{os.environ['CREATED']}` created\n🔄 `{os.environ['CHANGED']}` changed\n🗑️ `{os.environ['DELETED']}` deleted"
+                              }
+                          },
+                          {
+                              "type": "section",
+                              "text": {
+                                  "type": "mrkdwn",
+                                  "text": f"*Plan Snippet:*\n```\n{os.environ['SNIPPET']}\n```"
+                              }
+                          },
+                          {
+                              "type": "actions",
+                              "elements": [
+                                  {
+                                      "type": "button",
+                                      "text": {"type": "plain_text", "text": "View Details ↗️"},
+                                      "url": f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}"
+                                  }
+                              ]
+                          }
+                      ]
+                  }
+              ]
+          }
+          with open('slack_payload.json', 'w') as f:
+              json.dump(payload, f)
+
+      - name: Send Slack Notification
+        if: steps.plan.outputs.exit_code == '2' && env.SLACK_WEBHOOK_URL != ''
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ env.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload-file-path: slack_payload.json

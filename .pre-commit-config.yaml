@@ -10,7 +10,7 @@ repos:
         verbose: true
 
   - repo: https://github.com/executablebooks/mdformat
-    rev: 0.7.17
+    rev: 1.0.0
     hooks:
       - id: mdformat
         additional_dependencies:
@@ -21,7 +21,7 @@ repos:
         files: '^docs/.*\.md$'
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       - id: check-yaml
         always_run: true
@@ -31,3 +31,9 @@ repos:
         always_run: true
         require_serial: true
         files: 'docs.*\.md$'
+
+  - repo: https://github.com/rhysd/actionlint/
+    rev: v1.7.10
+    hooks:
+      - id: actionlint
+        always_run: true
