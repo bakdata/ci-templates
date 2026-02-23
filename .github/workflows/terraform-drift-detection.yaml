@@ -23,6 +23,11 @@ on:
         required: false
         default: "main"
         type: string
+      snippet-length:
+        description: "The length of the snippet of the plan output sent to the webhook"
+        required: false
+        default: 40
+        type: number
     secrets:
       google-workload-identity-provider:
         description: "The Workload Identity Provider resource name"
@@ -96,7 +101,7 @@ jobs:
             echo "changed=$CHANGED"
             echo "deleted=$DELETED"
             echo "snippet<<EOF"
-            head -n 40 plan_output.txt
+            head -n ${{ inputs.snippet-length }} plan_output.txt
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
