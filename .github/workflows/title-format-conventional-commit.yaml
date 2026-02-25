@@ -1,0 +1,34 @@
+name: Validate PR title format
+  # Reusable workflow for validating the title format to match the converntional commit format
+on:
+  workflow_call:
+
+jobs:
+  pr-title-check:
+    name: Validate PR title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          CC_REGEX: '^(([Dd]raft:)[[:space:]]+)?(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)'
+        run: |
+          echo "PR title: $PR_TITLE"
+          if ! echo "$PR_TITLE" | grep -Eq "$CC_REGEX"; then
+            echo "=================================================================="
+            echo "ERROR: Pull Request title does not follow Conventional Commits."
+            echo "Please re-title this PR to match the required pattern:"
+            echo "    type: description"
+            echo "    type(scope): description"
+            echo "    type(scope)!: description"
+            echo "    Draft: type(scope)!: description"
+            echo "Examples:"
+            echo "    fix: correct spelling mistake in welcome email"
+            echo "    feat(api): add user login endpoint"
+            echo "    docs(readme)!: update API contract (breaking change)"
+            echo "    Draft: docs(readme)!: update API contract (breaking change)"
+            echo "=================================================================="
+            exit 1
+          else
+            echo "PR title format is valid."
+          fi
