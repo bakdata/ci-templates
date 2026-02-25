@@ -36,7 +36,7 @@ jobs:
   validate-pr-title:
     runs-on: ubuntu-latest
     steps:
-        - uses: bakdata/ci-templates/.github/workflows/title-format-conventional-commit.yaml@main
+        - uses: bakdata/ci-templates/actions/title-format-conventional-commit@main
 ```
 
 <!-- AUTO-DOC-INPUT:END -->
