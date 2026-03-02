@@ -96,9 +96,6 @@ jobs:
           allow-dirty: true
           working-directory: ${{ inputs.working-directory }}
 
-      - name: Apply version bump to uv lock
-        run: uv lock --no-refresh
-
       - name: Create single changelog
         id: build-changelog
         uses: bakdata/ci-templates/actions/changelog-generate@1.70.0
