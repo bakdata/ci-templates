@@ -105,7 +105,7 @@ jobs:
 
     steps:
       - name: Publish
-        uses: bakdata/ci-templates/actions/java-gradle-publish@feature/repo-branch
+        uses: bakdata/ci-templates/actions/java-gradle-publish@1.77.0
         with:
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
