@@ -55,12 +55,12 @@ runs:
         gradle-dependency-graph: ${{ inputs.gradle-dependency-graph }}
 
     - name: Compile
-      run: ./gradlew --info --stacktrace build -x test ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
+      run: ./gradlew --info --console=colored --stacktrace build -x test ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
     - name: Build jar
-      run: ./gradlew --info --stacktrace jar
+      run: ./gradlew --info --console=colored --stacktrace jar
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
