@@ -98,7 +98,7 @@ runs:
           ${{ (github.event_name == 'pull_request' && format('-Dsonar.pullrequest.key={0}', github.event.pull_request.number)) || '' }} \
           ${{ (github.event_name == 'pull_request' && format('-Dsonar.pullrequest.branch={0}', github.head_ref)) || '' }} \
           ${{ (github.event_name == 'pull_request' && format('-Dsonar.pullrequest.base={0}', github.base_ref)) || '' }} \
-          --info --console=colored --stacktrace sonar \
+          --info --console=plain --stacktrace sonar \
           ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
@@ -110,7 +110,7 @@ runs:
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
-        ./gradlew --info --console=colored --stacktrace sign
+        ./gradlew --info --console=plain --stacktrace sign
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
