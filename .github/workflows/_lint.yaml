@@ -6,7 +6,7 @@ on:
 jobs:
   actionlint:
     name: actionlint
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Lint actions and workflows
         uses: bakdata/ci-templates/actions/action-lint@1.49.0
