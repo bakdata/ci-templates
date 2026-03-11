@@ -64,14 +64,10 @@ runs:
     - name: Publish snapshots to Nexus
       if: ${{ !startsWith(github.ref, 'refs/tags/') }}
       run: |
+        set -o pipefail  # Avoid masking errors in the publish command when piping to tee
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
         ./gradlew --info --stacktrace publishToNexus -x test -Prepository.url=${{ github.server_url }}/${{ github.repository }} -Prepository.defaultBranch=${{ github.event.repository.default_branch }} ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} | tee publish.log
-        echo "### Published artifacts:" >> $GITHUB_STEP_SUMMARY
-        # Parse and deduplicate published artifact versions to print to the step summary
-        grep -E "^Uploading .* to /" publish.log \
-          | sed -E 's/([0-9]+(\.[0-9]+)+-[0-9]{8}\.[0-9]{6}-[0-9]+)[^ ]*/\1*/g' \
-          | sort -u >> $GITHUB_STEP_SUMMARY
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
@@ -80,6 +76,17 @@ runs:
         OSSRH_USERNAME: "${{ inputs.ossrh-username }}"
         OSSRH_PASSWORD: "${{ inputs.ossrh-password }}"
         CI: "true"
+
+    - name: Summarize snapshot publication in step summary
+      if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+      run: |
+        echo "### Published artifacts:" >> $GITHUB_STEP_SUMMARY
+        # Parse and deduplicate published artifact versions to print to the step summary
+        grep -E "^Uploading .* to /" publish.log \
+          | sed -E 's/([0-9]+(\.[0-9]+)+-[0-9]{8}\.[0-9]{6}-[0-9]+)[^ ]*/\1*/g' \
+          | sort -u >> $GITHUB_STEP_SUMMARY || true
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
 
     - name: Publish releases to Nexus
       if: ${{ startsWith(github.ref, 'refs/tags/')}}
