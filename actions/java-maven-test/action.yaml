@@ -6,13 +6,13 @@ inputs:
     description: "Maven version to be installed."
     required: true
   java-distribution:
-    description: "Java distribution to be installed. (Default is microsoft)"
+    description: "Java distribution to be installed. (Default is temurin)"
     required: false
-    default: "microsoft"
+    default: "temurin"
   java-version:
-    description: "Java version to be installed. (Default is 11)"
+    description: "Java version to be installed. (Default is 17)"
     required: false
-    default: "11"
+    default: "17"
   working-directory:
     description: "Working directory of your Maven artifacts. (Default is .)"
     required: false
@@ -35,7 +35,7 @@ runs:
         lfs: ${{ inputs.download-lfs-files }}
 
     - name: Set up Maven with version ${{ inputs.maven-version }}
-      uses: bakdata/ci-templates/actions/java-maven-setup@1.71.0
+      uses: bakdata/ci-templates/actions/java-maven-setup@feature/temurin
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}

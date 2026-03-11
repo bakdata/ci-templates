@@ -5,15 +5,15 @@ on:
   workflow_call:
     inputs:
       java-distribution:
-        description: "Java distribution to be installed. (Default is microsoft)"
+        description: "Java distribution to be installed. (Default is temurin)"
         required: false
         type: string
-        default: "microsoft"
+        default: "temurin"
       java-version:
-        description: "Java version to be installed. (Default is 11)"
+        description: "Java version to be installed. (Default is 17)"
         required: false
         type: string
-        default: "11"
+        default: "17"
       gradle-version:
         description: "Gradle version to be installed. (Default is wrapper)"
         required: false
@@ -80,7 +80,7 @@ permissions:
 jobs:
   build-and-test:
     name: Build, Test and Assess code quality
-    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@1.78.0
+    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@feature/temurin
     with:
       java-distribution: ${{ inputs.java-distribution }}
       java-version: ${{ inputs.java-version }}
@@ -105,7 +105,7 @@ jobs:
 
     steps:
       - name: Publish
-        uses: bakdata/ci-templates/actions/java-gradle-publish@1.77.0
+        uses: bakdata/ci-templates/actions/java-gradle-publish@feature/temurin
         with:
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
