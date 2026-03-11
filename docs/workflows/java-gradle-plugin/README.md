@@ -30,7 +30,7 @@ on:
 jobs:
   call-workflow-passing-data:
     name: Java Gradle Library
-    uses: bakdata/ci-templates/.github/workflows/java-gradle-pluglin.yaml@main
+    uses: bakdata/ci-templates/.github/workflows/java-gradle-plugin.yaml@main
     with:
       java-distribution: "microsoft" # (Optional) Default is microsoft
       java-version: "11" # (Optional) Default is 11
