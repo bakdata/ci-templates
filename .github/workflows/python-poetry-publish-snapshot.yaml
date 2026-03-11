@@ -40,7 +40,7 @@ concurrency:
 jobs:
   publish-snapshot:
     name: Publish snapshot
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     # Map the job outputs to step outputs
     outputs:
       release-version: ${{ steps.bump-version.outputs.release-version }}
