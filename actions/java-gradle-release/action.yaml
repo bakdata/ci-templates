@@ -118,7 +118,8 @@ runs:
     - name: Commit CHANGELOG.md file and push
       run: |
         mv ${{ runner.temp }}/CHANGELOG.md CHANGELOG.md
+        git diff
         git add CHANGELOG.md
         git commit -m "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}"
-        git push --follow-tags origin
+        cat CHANGELOG.md
       shell: bash
