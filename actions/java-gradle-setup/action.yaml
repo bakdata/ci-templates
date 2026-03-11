@@ -3,13 +3,13 @@ description: "Setup Java and Gradle"
 
 inputs:
   java-distribution:
-    description: "Java distribution to be installed. (Default is microsoft)"
+    description: "Java distribution to be installed. (Default is temurin)"
     required: false
-    default: "microsoft"
+    default: "temurin"
   java-version:
-    description: "Java version to be installed. (Default is 11)"
+    description: "Java version to be installed. (Default is 17)"
     required: false
-    default: "11"
+    default: "17"
   gradle-version:
     description: "Gradle version to be installed. (Default is wrapper)"
     required: false
