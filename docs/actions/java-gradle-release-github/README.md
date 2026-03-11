@@ -23,9 +23,10 @@ steps:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT        | TYPE   | REQUIRED | DEFAULT | DESCRIPTION                                   |
-| ------------ | ------ | -------- | ------- | --------------------------------------------- |
-| github-token | string | true     |         | GitHub token for requesting changes from API. |
+| INPUT                 | TYPE   | REQUIRED | DEFAULT        | DESCRIPTION                                   |
+| --------------------- | ------ | -------- | -------------- | --------------------------------------------- |
+| changelog-config-path | string | false    | `"cliff.toml"` | Path to local git cliff config                |
+| github-token          | string | true     |                | GitHub token for requesting changes from API. |
 
 <!-- AUTO-DOC-INPUT:END -->
 

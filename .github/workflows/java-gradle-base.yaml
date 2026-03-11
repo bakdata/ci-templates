@@ -30,15 +30,15 @@ on:
         type: string
         default: "wrapper"
       java-distribution:
-        description: "Java distribution to be installed. (Default is microsoft)"
+        description: "Java distribution to be installed. (Default is temurin)"
         required: false
         type: string
-        default: "microsoft"
+        default: "temurin"
       java-version:
-        description: "Java version to be installed. (Default is 11)"
+        description: "Java version to be installed. (Default is 17)"
         required: false
         type: string
-        default: "11"
+        default: "17"
       working-directory:
         description: "Working directory of your Gradle artifacts. (Default is .)"
         required: false
@@ -69,7 +69,7 @@ concurrency:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Build
         uses: bakdata/ci-templates/actions/java-gradle-build@fix/gradle-console-colored
@@ -85,7 +85,7 @@ jobs:
 
   test:
     name: Test
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: build
     steps:
       - name: Run unit tests
@@ -103,7 +103,7 @@ jobs:
   assess-code-quality:
     name: Asses code quality
     if: ${{ !github.event.repository.private }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: test
     steps:
       - name: Assess code quality

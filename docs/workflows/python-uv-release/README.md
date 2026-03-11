@@ -59,6 +59,7 @@ jobs:
 
 | INPUT             | TYPE    | REQUIRED | DEFAULT          | DESCRIPTION                                                     |
 | ----------------- | ------- | -------- | ---------------- | --------------------------------------------------------------- |
+| bump-dev          | boolean | false    | `false`          | Bump to the next dev version after release.                     |
 | changelog         | boolean | false    | `true`           | Create changelog for release.                                   |
 | changelog-config  | string  | false    |                  | Changelog config path.                                          |
 | changelog-file    | string  | false    | `"CHANGELOG.md"` | Path to the changelog file in the GitHub repository             |

@@ -26,6 +26,10 @@ inputs:
     description: Additional arguments to the git-cliff binary
     required: false
     default: ""
+  config-path:
+    description: "Path to local git cliff config"
+    required: false
+    default: "cliff.toml"
 
 outputs:
   changelog:
@@ -45,8 +49,8 @@ runs:
       id: get-config-path
       run: |
         DEFAULT_PATH=$GITHUB_ACTION_PATH/default-cliff.toml
-        if [ -f cliff.toml ]; then
-          cp cliff.toml tmp_cliff.toml
+        if [ -f ${{ inputs.config-path }} ]; then
+          cp ${{ inputs.config-path }} tmp_cliff.toml
         else
           cp $DEFAULT_PATH tmp_cliff.toml
         fi
