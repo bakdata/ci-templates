@@ -10,3 +10,5 @@ jobs:
     steps:
       - name: Lint actions and workflows
         uses: bakdata/ci-templates/actions/action-lint@1.49.0
+        with:
+          action-lint-version: "v1.7.11"
