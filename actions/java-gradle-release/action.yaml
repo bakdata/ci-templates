@@ -102,11 +102,6 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    - name: Debug changelog config
-      run: |
-        echo ${{ inputs.changelog-config-path }}
-      shell: bash
-
     - name: Create changelog # Generate changelog before creating the tag or the tag appears twice in the changelog
       uses: bakdata/ci-templates/actions/changelog-generate@feature/configurable-git-cliff
       with:
@@ -123,8 +118,7 @@ runs:
     - name: Commit CHANGELOG.md file and push
       run: |
         mv ${{ runner.temp }}/CHANGELOG.md CHANGELOG.md
-        git diff
         git add CHANGELOG.md
         git commit -m "Changelog for version ${{ steps.evaluate-version.outputs.release-version }}"
-        cat CHANGELOG.md
+        git push --follow-tags origin
       shell: bash
