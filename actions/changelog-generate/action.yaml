@@ -49,6 +49,7 @@ runs:
       id: get-config-path
       run: |
         DEFAULT_PATH=$GITHUB_ACTION_PATH/default-cliff.toml
+        echo $DEFAULT_PATH
         if [ -f ${{ inputs.config-path }} ]; then
           cp ${{ inputs.config-path }} tmp_cliff.toml
         else
