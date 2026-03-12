@@ -2,6 +2,8 @@
 
 This workflow regularly checks for drift between your infrastructure and your Terraform configuration.
 
+![Example Alert](example_alert.png)
+
 ## Prerequisites
 
 Prepare a GCP Service Account and a Workload Identity Provider to authenticate with Google Cloud.
@@ -13,6 +15,7 @@ This workflow is built from the following actions:
 - [checkout](https://github.com/bakdata/ci-templates/tree/main/actions/checkout)
 - [google-github-actions/auth](https://github.com/google-github-actions/auth)
 - [hashicorp/setup-terraform](https://github.com/hashicorp/setup-terraform)
+- [slackapi/slack-github-action](https://github.com/slackapi/slack-github-action)
 
 ## Calling the workflow
 
@@ -35,6 +38,7 @@ jobs:
     secrets:
       google-workload-identity-provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
       google-service-account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+      slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
 ```
 
 ## References
@@ -43,12 +47,13 @@ jobs:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT             | TYPE   | REQUIRED | DEFAULT    | DESCRIPTION                                     |
-| ----------------- | ------ | -------- | ---------- | ----------------------------------------------- |
-| gcp-project-id    | string | true     |            | The GCP Project ID                              |
-| source-branch     | string | false    | `"main"`   | The branch to use as the source of truth        |
-| terraform-version | string | false    | `"1.13.3"` | The version of Terraform to use                 |
-| working-directory | string | false    | `"."`      | The directory where Terraform files are located |
+| INPUT             | TYPE   | REQUIRED | DEFAULT    | DESCRIPTION                                                      |
+| ----------------- | ------ | -------- | ---------- | ---------------------------------------------------------------- |
+| gcp-project-id    | string | true     |            | The GCP Project ID                                               |
+| snippet-length    | number | false    | `40`       | The length of the snippet of the plan output sent to the webhook |
+| source-branch     | string | false    | `"main"`   | The branch to use as the source of truth                         |
+| terraform-version | string | false    | `"1.13.3"` | The version of Terraform to use                                  |
+| working-directory | string | false    | `"."`      | The directory where Terraform files are located                  |
 
 <!-- AUTO-DOC-INPUT:END -->
 
