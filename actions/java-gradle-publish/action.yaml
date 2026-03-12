@@ -85,7 +85,7 @@ runs:
         # Parse and deduplicate published artifact versions to print to the step summary
         grep -E "^Uploading .* to /" publish.log \
           | grep -v "^Uploading maven-metadata\.xml to /" \
-          | sed -E 's/([0-9]+(\.[0-9]+)+-[0-9]{8}\.[0-9]{6}-[0-9]+)[^ ]*/\1*/g' \
+          | sed -E 's/([0-9]+(\.[0-9]+)+-[0-9]{8}\.[0-9]{6}-[0-9]+)[^ ]*/\1/g' \
           | sort -u >> $GITHUB_STEP_SUMMARY || true
         echo '```' >> $GITHUB_STEP_SUMMARY
       shell: bash
