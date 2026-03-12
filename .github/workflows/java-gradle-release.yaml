@@ -68,7 +68,7 @@ jobs:
     steps:
       - name: Release on Github
         id: release
-        uses: bakdata/ci-templates/actions/java-gradle-release@fix/gradle-console-colored
+        uses: bakdata/ci-templates/actions/java-gradle-release@1.80.0
         with:
           release-type: ${{ inputs.release-type }}
           github-email: ${{ secrets.github-email }}

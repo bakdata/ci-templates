@@ -131,7 +131,7 @@ jobs:
 
       - name: Jib build
         id: build-image
-        uses: bakdata/ci-templates/actions/java-gradle-build-jib@fix/gradle-console-colored
+        uses: bakdata/ci-templates/actions/java-gradle-build-jib@1.80.0
         with:
           java-distribution: ${{ inputs.java-distribution }}
           java-version: ${{ inputs.java-version }}
@@ -151,7 +151,7 @@ jobs:
 
     steps:
       - name: Publish
-        uses: bakdata/ci-templates/actions/java-gradle-publish@fix/gradle-console-colored
+        uses: bakdata/ci-templates/actions/java-gradle-publish@1.80.0
         with:
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
