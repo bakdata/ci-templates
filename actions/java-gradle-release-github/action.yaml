@@ -5,6 +5,10 @@ inputs:
   github-token:
     description: "GitHub token for requesting changes from API."
     required: true
+  changelog-config-path:
+    description: "Path to local git cliff config"
+    required: false
+    default: "cliff.toml"
 runs:
   using: "composite"
   steps:
@@ -21,10 +25,11 @@ runs:
 
     - name: Generate changelog
       id: changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@1.70.0
+      uses: bakdata/ci-templates/actions/changelog-generate@1.78.0
       with:
         github-token: ${{ inputs.github-token }}
         additional-cliff-args: --current --strip all # passing --tag ${{ github.ref_name }} generates a full changelog
+        config-path: ${{ inputs.changelog-config-path }}
 
     - name: Create Github release
       uses: softprops/action-gh-release@v2.0.4

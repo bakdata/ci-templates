@@ -55,10 +55,10 @@ concurrency:
 
 jobs:
   helm-lint:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Lint Helm chart
-        uses: bakdata/ci-templates/actions/helm-lint@1.49.0
+        uses: bakdata/ci-templates/actions/helm-lint@1.74.0
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
 
@@ -67,7 +67,7 @@ jobs:
     strategy:
       matrix:
         subdir: ${{ fromJson(inputs.subdirs) }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Check out repository
@@ -98,7 +98,7 @@ jobs:
           retention-days: 1
 
   merge-artifacts:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: package-artifacts
     steps:
       - name: Merge Artifacts
@@ -108,7 +108,7 @@ jobs:
           pattern: helm-chart-*
 
   publish:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: merge-artifacts
 
     steps:

@@ -18,13 +18,13 @@ inputs:
     description: "Password for signing into Sonatype repository."
     required: true
   java-distribution:
-    description: "Java distribution to be installed. (Default is microsoft)"
+    description: "Java distribution to be installed. (Default is temurin)"
     required: false
-    default: "microsoft"
+    default: "temurin"
   java-version:
-    description: "Java version to be installed. (Default is 11)"
+    description: "Java version to be installed. (Default is 17)"
     required: false
-    default: "11"
+    default: "17"
   gradle-version:
     description: "Gradle version to be installed. (Default is wrapper)"
     required: false
@@ -52,7 +52,7 @@ runs:
       uses: bakdata/ci-templates/actions/checkout@1.49.0
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@1.63.0
+      uses: bakdata/ci-templates/actions/java-gradle-setup@1.78.0
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
@@ -66,7 +66,7 @@ runs:
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
-        ./gradlew --info --stacktrace publishToNexus -x test ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
+        ./gradlew --info --stacktrace publishToNexus -x test -Prepository.url=${{ github.server_url }}/${{ github.repository }} -Prepository.defaultBranch=${{ github.event.repository.default_branch }} ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
@@ -81,7 +81,7 @@ runs:
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
-        ./gradlew --info --stacktrace publishToNexus closeAndReleaseStagingRepositories -x test
+        ./gradlew --info --stacktrace publishToNexus closeAndReleaseStagingRepositories -x test -Prepository.url=${{ github.server_url }}/${{ github.repository }} -Prepository.defaultBranch=${{ github.event.repository.default_branch }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:

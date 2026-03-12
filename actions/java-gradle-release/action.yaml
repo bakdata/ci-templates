@@ -31,17 +31,21 @@ inputs:
     required: false
     default: "wrapper"
   java-distribution:
-    description: "Java distribution to be installed. (Default is microsoft)"
+    description: "Java distribution to be installed. (Default is temurin)"
     required: false
-    default: "microsoft"
+    default: "temurin"
   java-version:
-    description: "Java version to be installed. (Default is 11)"
+    description: "Java version to be installed. (Default is 17)"
     required: false
-    default: "11"
+    default: "17"
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is .)"
     required: false
     default: "."
+  changelog-config-path:
+    description: "Path to local git cliff config"
+    required: false
+    default: "cliff.toml"
 
 outputs:
   release-version:
@@ -76,7 +80,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@1.63.0
+      uses: bakdata/ci-templates/actions/java-gradle-setup@1.78.0
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
@@ -99,11 +103,12 @@ runs:
       working-directory: ${{ inputs.working-directory }}
 
     - name: Create changelog # Generate changelog before creating the tag or the tag appears twice in the changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@1.70.0
+      uses: bakdata/ci-templates/actions/changelog-generate@1.78.0
       with:
         github-token: ${{ inputs.github-token }}
         changelog-file: ${{ runner.temp }}/CHANGELOG.md # Use temporary file to not have uncommitted changes
         additional-cliff-args: --tag ${{ steps.evaluate-version.outputs.release-version }}
+        config-path: ${{ inputs.changelog-config-path }}
 
     - name: Create release
       run: ./gradlew release -x test -Prelease.useAutomaticVersion=true -Prelease.releaseVersion=${{ steps.evaluate-version.outputs.release-version }} -Prelease.disablePushToRemote=true -Prelease.requireBranch=${{ github.event.repository.default_branch }} ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}

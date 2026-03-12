@@ -1,10 +1,6 @@
 name: "Lint Helm chart"
 description: "Lint all Helm charts in the charts directory of a repository"
 inputs:
-  ref:
-    description: "The ref name to checkout the repository."
-    required: false
-    default: ${{ github.ref_name }}
   lint-config-path:
     description: "The path to the lint configuration file (For an example see https://github.com/helm/chart-testing/blob/main/pkg/config/test_config.yaml)."
     required: false
@@ -20,7 +16,6 @@ runs:
     - name: Check out repository
       uses: bakdata/ci-templates/actions/checkout@1.49.0
       with:
-        ref: "${{ inputs.ref }}"
         # fetch-depth of 0 is needed for the comparison of Helm charts from the HEAD of the current
         # branch to the HEAD of the default branch (one or multiple commits in between)
         fetch-depth: 0

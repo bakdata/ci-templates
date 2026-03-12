@@ -61,8 +61,8 @@ jobs:
 | changelog-file    | string  | false    | `"CHANGELOG.md"` | Path to the changelog file in the GitHub repository         |
 | gradle-cache      | boolean | false    | `true`           | Whether Gradle caching is enabled or not. (Default is true) |
 | gradle-version    | string  | false    | `"wrapper"`      | Gradle version to be installed. (Default is wrapper)        |
-| java-distribution | string  | false    | `"microsoft"`    | Java distribution to be installed. (Default is microsoft)   |
-| java-version      | string  | false    | `"11"`           | Java version to be installed. (Default is 11)               |
+| java-distribution | string  | false    | `"temurin"`      | Java distribution to be installed. (Default is temurin)     |
+| java-version      | string  | false    | `"17"`           | Java version to be installed. (Default is 17)               |
 | release-type      | string  | true     |                  | Scope of the release (major, minor or patch).               |
 | working-directory | string  | false    | `"."`            | Working directory of your Gradle artifacts. (Default is .)  |
 
