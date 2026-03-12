@@ -17,6 +17,7 @@ The following workflows can be found here:
 - [Python Poetry Publish Snapshot](#python-poetry-publish-snapshot)
 - [Python Poetry Release](#python-poetry-release)
 - [Release Tag Versions](#release-tag-versions)
+- [Terraform Drift Detection](#terraform-drift-detection)
 
 ## Bump version release
 
@@ -92,3 +93,8 @@ The following workflows can be found here:
 
 - [Description](https://github.com/bakdata/ci-templates/tree/main/docs/workflows/release-tag-versions)
 - [References](https://github.com/bakdata/ci-templates/tree/main/docs/workflows/release-tag-versions)
+
+## Terraform Drift Detection
+
+- [Description](https://github.com/bakdata/ci-templates/tree/main/docs/workflows/terraform-drift-detection)
+- [References](https://github.com/bakdata/ci-templates/tree/main/docs/workflows/terraform-drift-detection)

@@ -67,7 +67,7 @@ runs:
         set -o pipefail  # Avoid masking errors in the publish command when piping to tee
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
-        ./gradlew --info --stacktrace publishToNexus -x test -Prepository.url=${{ github.server_url }}/${{ github.repository }} -Prepository.defaultBranch=${{ github.event.repository.default_branch }} ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} | tee publish.log
+        ./gradlew --info --console=plain --stacktrace publishToNexus -x test -Prepository.url=${{ github.server_url }}/${{ github.repository }} -Prepository.defaultBranch=${{ github.event.repository.default_branch }} ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }} | tee publish.log
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:
@@ -96,7 +96,7 @@ runs:
       run: |
         export SIGNING_SECRET_KEY_RING_FILE="$(mktemp -d)/secring.gpg"
         echo '${{ inputs.signing-secret-key-ring }}' | base64 -d > $SIGNING_SECRET_KEY_RING_FILE
-        ./gradlew --info --stacktrace publishToNexus closeAndReleaseStagingRepositories -x test -Prepository.url=${{ github.server_url }}/${{ github.repository }} -Prepository.defaultBranch=${{ github.event.repository.default_branch }}
+        ./gradlew --info --console=plain --stacktrace publishToNexus closeAndReleaseStagingRepositories -x test -Prepository.url=${{ github.server_url }}/${{ github.repository }} -Prepository.defaultBranch=${{ github.event.repository.default_branch }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       env:

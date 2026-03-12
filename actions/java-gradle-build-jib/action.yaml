@@ -2,7 +2,7 @@ name: "Build Multi-Platform image"
 description: "Build Multi-Platform image using Gradle"
 
 outputs:
-  image-tag: 
+  image-tag:
     description: "The tag of the docker image."
     value: ${{ steps.meta.outputs.tags }}
 
@@ -88,7 +88,7 @@ runs:
     - name: Build Docker image
       run: |
         ./gradlew jib \
-          --info --stacktrace \
+          --info --console=plain --stacktrace \
           -Djib.from.platforms=${{ inputs.platforms }} \
           ${{ inputs.jib-from-image && format('-Djib.from.image={0}', inputs.jib-from-image) || '' }} \
           ${{ inputs.class && format('-Djib.container.mainClass={0}', inputs.class) || '' }} \
