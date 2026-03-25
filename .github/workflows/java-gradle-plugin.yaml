@@ -86,7 +86,7 @@ permissions:
 jobs:
   build-and-test:
     name: Build, Test and Assess code quality
-    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@1.78.0
+    uses: bakdata/ci-templates/.github/workflows/java-gradle-base.yaml@fix/node-20
     with:
       java-distribution: ${{ inputs.java-distribution }}
       java-version: ${{ inputs.java-version }}
@@ -110,7 +110,7 @@ jobs:
 
     steps:
       - name: Publish
-        uses: bakdata/ci-templates/actions/java-gradle-publish@1.81.0
+        uses: bakdata/ci-templates/actions/java-gradle-publish@fix/node-20
         with:
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
@@ -133,7 +133,7 @@ jobs:
 
     steps:
       - name: Publish plugin
-        uses: bakdata/ci-templates/actions/java-gradle-publish-plugin@1.80.0
+        uses: bakdata/ci-templates/actions/java-gradle-publish-plugin@fix/node-20
         with:
           signing-secret-key-ring: ${{ secrets.signing-secret-key-ring }}
           signing-key-id: ${{ secrets.signing-key-id }}
@@ -156,6 +156,6 @@ jobs:
 
     steps:
       - name: Release on Github
-        uses: bakdata/ci-templates/actions/java-gradle-release-github@1.70.0
+        uses: bakdata/ci-templates/actions/java-gradle-release-github@fix/node-20
         with:
           github-token: ${{ secrets.github-token }}

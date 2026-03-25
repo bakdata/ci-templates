@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@1.49.0
+        uses: bakdata/ci-templates/actions/checkout@fix/node-20
 
       - name: Set up Poetry ${{ inputs.poetry-version }}
         uses: bakdata/ci-templates/actions/python-setup-poetry@fix/node-20

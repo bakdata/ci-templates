@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Lint Helm chart
-        uses: bakdata/ci-templates/actions/helm-lint@1.74.0
+        uses: bakdata/ci-templates/actions/helm-lint@fix/node-20
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
 
@@ -71,7 +71,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@1.49.0
+        uses: bakdata/ci-templates/actions/checkout@fix/node-20
 
       - name: Bump Chart version
         run: |
@@ -91,7 +91,7 @@ jobs:
         working-directory: ${{ inputs.charts-path }}
 
       - name: Upload artifacts with action/upload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: helm-chart-${{ matrix.subdir }}
           path: ${{ inputs.artifact-dir }}
@@ -113,7 +113,7 @@ jobs:
 
     steps:
       - name: Check out branch containing the artifatcs and the index.yaml file
-        uses: bakdata/ci-templates/actions/checkout@1.49.0
+        uses: bakdata/ci-templates/actions/checkout@fix/node-20
         with:
           ref: ${{ inputs.gh-pages-branch }}
           persist-credentials: false # required for pushing to protected branch or pushing with Dependabot
