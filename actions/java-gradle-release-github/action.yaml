@@ -13,7 +13,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@fix/node-20
+      uses: bakdata/ci-templates/actions/checkout@1.81.1
       with:
         fetch-depth: 0
 
@@ -25,7 +25,7 @@ runs:
 
     - name: Generate changelog
       id: changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@fix/node-20
+      uses: bakdata/ci-templates/actions/changelog-generate@1.81.1
       with:
         github-token: ${{ inputs.github-token }}
         additional-cliff-args: --current --strip all # passing --tag ${{ github.ref_name }} generates a full changelog

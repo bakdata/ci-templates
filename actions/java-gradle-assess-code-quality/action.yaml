@@ -64,13 +64,13 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@fix/node-20
+      uses: bakdata/ci-templates/actions/checkout@1.81.1
       with:
         lfs: ${{ inputs.download-lfs-files }}
         fetch-depth: 0
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@fix/node-20
+      uses: bakdata/ci-templates/actions/java-gradle-setup@1.81.1
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}

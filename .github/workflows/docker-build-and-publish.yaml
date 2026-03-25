@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@fix/node-20
+        uses: bakdata/ci-templates/actions/checkout@1.81.1
         with:
           ref: ${{ inputs.ref }}
           lfs: ${{ inputs.checkout-lfs-files }}

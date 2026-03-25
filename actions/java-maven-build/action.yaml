@@ -25,10 +25,10 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@fix/node-20
+      uses: bakdata/ci-templates/actions/checkout@1.81.1
 
     - name: Set up Maven with version ${{ inputs.maven-version }}
-      uses: bakdata/ci-templates/actions/java-maven-setup@fix/node-20
+      uses: bakdata/ci-templates/actions/java-maven-setup@1.81.1
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}

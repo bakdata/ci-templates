@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out default branch
-        uses: bakdata/ci-templates/actions/checkout@fix/node-20
+        uses: bakdata/ci-templates/actions/checkout@1.81.1
         with:
           persist-credentials: false
 
@@ -58,14 +58,14 @@ jobs:
 
       - name: Bump input version to create a new release tag
         id: bump-version
-        uses: bakdata/ci-templates/actions/bump-version@fix/node-20
+        uses: bakdata/ci-templates/actions/bump-version@1.81.1
         with:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.version-configs-dir }}
           new-version: ${{ steps.suffixstep.outputs.version_var }}
 
       - name: Commit and push the file where the versioning is defined & .bumpversion.cfg file to release new tag
-        uses: bakdata/ci-templates/actions/commit-and-push@fix/node-20
+        uses: bakdata/ci-templates/actions/commit-and-push@1.81.1
         with:
           commit-message: "Bump version and create release version ${{ steps.bump-version.outputs.release-version }}"
           github-username: ${{ secrets.github-username }}
@@ -103,14 +103,14 @@ jobs:
         shell: bash
 
       - name: Bump to "tag-${{ inputs.next-dev-release-suffix }}" version
-        uses: bakdata/ci-templates/actions/bump-version@fix/node-20
+        uses: bakdata/ci-templates/actions/bump-version@1.81.1
         with:
           release-type: ${{ inputs.next-dev-release-type }}
           working-directory: ${{ inputs.version-configs-dir }}
           new-version: ${{ steps.sembump.outputs.version }}-${{ inputs.next-dev-release-suffix }}
 
       - name: Commit and push the file where the versioning is defined & .bumpversion.cfg file (containing the -${{ inputs.next-dev-release-suffix }} version)
-        uses: bakdata/ci-templates/actions/commit-and-push@fix/node-20
+        uses: bakdata/ci-templates/actions/commit-and-push@1.81.1
         with:
           commit-message: "Bump version and create dev version ${{ steps.bump-version.outputs.release-version }} → ${{ steps.sembump.outputs.version }}-${{ inputs.next-dev-release-suffix }}"
           github-username: ${{ secrets.github-username }}

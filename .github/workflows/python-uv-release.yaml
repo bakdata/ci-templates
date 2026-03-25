@@ -80,7 +80,7 @@ jobs:
           version: ${{ inputs.uv-version }}
 
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@fix/node-20
+        uses: bakdata/ci-templates/actions/checkout@1.81.1
         with:
           ref: ${{ github.event.repository.default_branch }}
           persist-credentials: false # required for pushing to protected branch later
@@ -95,7 +95,7 @@ jobs:
 
       - name: Set to latest release version
         if: ${{ inputs.bump-dev }}
-        uses: bakdata/ci-templates/actions/bump-version@fix/node-20
+        uses: bakdata/ci-templates/actions/bump-version@1.81.1
         with:
           release-type: patch
           new-version: ${{ steps.latest-tag.outputs.version }}
@@ -103,14 +103,14 @@ jobs:
 
       - name: Bump version
         id: bump-version
-        uses: bakdata/ci-templates/actions/bump-version@fix/node-20
+        uses: bakdata/ci-templates/actions/bump-version@1.81.1
         with:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.working-directory }}
 
       - name: Bump version release
         id: bump-version-release
-        uses: bakdata/ci-templates/actions/bump-version@fix/node-20
+        uses: bakdata/ci-templates/actions/bump-version@1.81.1
         with:
           release-type: release
           allow-dirty: true
@@ -118,14 +118,14 @@ jobs:
 
       - name: Create single changelog
         id: build-changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@fix/node-20
+        uses: bakdata/ci-templates/actions/changelog-generate@1.81.1
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}
           additional-cliff-args: --unreleased --tag ${{ steps.bump-version-release.outputs.release-version }}
 
       - name: Create changelog
-        uses: bakdata/ci-templates/actions/changelog-generate@fix/node-20
+        uses: bakdata/ci-templates/actions/changelog-generate@1.81.1
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}
@@ -133,7 +133,7 @@ jobs:
           additional-cliff-args: --tag ${{ steps.bump-version-release.outputs.release-version }}
 
       - name: Commit and push changes including .bumpversion.cfg file
-        uses: bakdata/ci-templates/actions/commit-and-push@fix/node-20
+        uses: bakdata/ci-templates/actions/commit-and-push@1.81.1
         with:
           ref: ${{ github.event.repository.default_branch }}
           commit-message: "chore(release): ${{ inputs.bump-dev && steps.latest-tag.outputs.version || steps.bump-version.outputs.old-version }} → ${{ steps.bump-version-release.outputs.release-version }}"
@@ -155,14 +155,14 @@ jobs:
       - name: Prepare development version
         id: bump-version-dev
         if: ${{ inputs.bump-dev }}
-        uses: bakdata/ci-templates/actions/bump-version@fix/node-20
+        uses: bakdata/ci-templates/actions/bump-version@1.81.1
         with:
           release-type: minor
           working-directory: ${{ inputs.working-directory }}
 
       - name: Commit and push changes including .bumpversion.cfg file
         if: ${{ inputs.bump-dev }}
-        uses: bakdata/ci-templates/actions/commit-and-push@fix/node-20
+        uses: bakdata/ci-templates/actions/commit-and-push@1.81.1
         with:
           ref: ${{ github.event.repository.default_branch }}
           commit-message: "chore(release): prepare ${{ steps.bump-version-dev.outputs.release-version }}"

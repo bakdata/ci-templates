@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Lint Helm chart
-        uses: bakdata/ci-templates/actions/helm-lint@fix/node-20
+        uses: bakdata/ci-templates/actions/helm-lint@1.81.1
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
 
@@ -71,7 +71,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@fix/node-20
+        uses: bakdata/ci-templates/actions/checkout@1.81.1
 
       - name: Bump Chart version
         run: |
@@ -110,7 +110,7 @@ jobs:
 
     steps:
       - name: Check out branch containing the artifatcs and the index.yaml file
-        uses: bakdata/ci-templates/actions/checkout@fix/node-20
+        uses: bakdata/ci-templates/actions/checkout@1.81.1
         with:
           ref: ${{ inputs.gh-pages-branch }}
           persist-credentials: false # required for pushing to protected branch or pushing with Dependabot
@@ -141,7 +141,7 @@ jobs:
         working-directory: "."
 
       - name: Commit and push artifacts and the index.yaml file
-        uses: bakdata/ci-templates/actions/commit-and-push@fix/node-20
+        uses: bakdata/ci-templates/actions/commit-and-push@1.81.1
         with:
           add-untracked: true
           ref: ${{ inputs.gh-pages-branch }}
