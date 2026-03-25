@@ -112,12 +112,12 @@ jobs:
           cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ inputs.charts-dir }}/index.yaml
 
       - name: Create Helm package & update index
-        uses: bakdata/ci-templates/actions/helm-package@v1.6.0
+        uses: bakdata/ci-templates/actions/helm-package@fix/node-20
         with:
           charts-dir: ${{ inputs.charts-dir }}
 
       - name: Commit and push Chart.yaml & .bumpversion.cfg file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        uses: bakdata/ci-templates/actions/commit-and-push@fix/node-20
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"

@@ -21,7 +21,7 @@ runs:
         fetch-depth: 0
 
     - name: Set up Helm
-      uses: azure/setup-helm@v3
+      uses: azure/setup-helm@v5
       with:
         version: "${{ inputs.helm-version }}"
 

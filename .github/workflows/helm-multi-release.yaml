@@ -99,7 +99,7 @@ jobs:
     needs: package-artifacts
     steps:
       - name: Merge Artifacts
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         with:
           name: helm-charts
           pattern: helm-chart-*
@@ -116,7 +116,7 @@ jobs:
           persist-credentials: false # required for pushing to protected branch or pushing with Dependabot
 
       - name: Download new artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: helm-charts
           path: ${{ inputs.artifact-dir }}
@@ -141,7 +141,7 @@ jobs:
         working-directory: "."
 
       - name: Commit and push artifacts and the index.yaml file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        uses: bakdata/ci-templates/actions/commit-and-push@fix/node-20
         with:
           add-untracked: true
           ref: ${{ inputs.gh-pages-branch }}

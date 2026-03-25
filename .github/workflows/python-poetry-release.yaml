@@ -106,7 +106,7 @@ jobs:
           additional-cliff-args: --tag ${{ steps.bump-version.outputs.release-version }}
 
       - name: Commit and push pyproject.toml file
-        uses: bakdata/ci-templates/actions/commit-and-push@1.25.2
+        uses: bakdata/ci-templates/actions/commit-and-push@fix/node-20
         with:
           ref: ${{ inputs.ref }}
           commit-message: "Bump version ${{ steps.bump-version.outputs.old-version }} → ${{ steps.bump-version.outputs.release-version }}"

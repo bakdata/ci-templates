@@ -65,7 +65,7 @@ jobs:
           gcloud-sdk-version: ${{ inputs.gcloud-sdk-version }}
 
       - name: Setup environment
-        uses: bakdata/ci-templates/actions/helm-setup@v1.20.0
+        uses: bakdata/ci-templates/actions/helm-setup@fix/node-20
         with:
           kubectl-version: ${{ inputs.kubectl-version }}
           helm-version: ${{ inputs.helm-version }}
