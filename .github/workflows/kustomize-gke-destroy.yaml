@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
-        uses: bakdata/ci-templates/actions/checkout@1.49.0
+        uses: bakdata/ci-templates/actions/checkout@1.81.1
 
       - name: Setup credentials
         uses: bakdata/ci-templates/actions/setup-credentials@1.40.0
@@ -60,7 +60,7 @@ jobs:
           gcloud-sdk-version: ${{ inputs.gcloud-sdk-version }}
 
       - name: Setup environment
-        uses: bakdata/ci-templates/actions/helm-setup@v1.20.0
+        uses: bakdata/ci-templates/actions/helm-setup@1.81.1
         with:
           kubectl-version: ${{ inputs.kubectl-version }}
           helm-version: ${{ inputs.helm-version }}

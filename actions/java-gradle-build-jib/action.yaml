@@ -61,12 +61,12 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@1.49.0
+      uses: bakdata/ci-templates/actions/checkout@1.81.1
       with:
         lfs: ${{ inputs.download-lfs-files }}
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@1.78.0
+      uses: bakdata/ci-templates/actions/java-gradle-setup@1.81.1
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
@@ -77,7 +77,7 @@ runs:
 
     - name: Docker metadata
       id: meta
-      uses: docker/metadata-action@v5
+      uses: docker/metadata-action@v6
       with:
         tags: |
           event=tag,type=semver,pattern={{version}}

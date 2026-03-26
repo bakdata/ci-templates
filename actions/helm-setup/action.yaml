@@ -25,6 +25,6 @@ runs:
         chmod +x /usr/local/bin/kfilt
 
     - name: Install Helm
-      uses: azure/setup-helm@v3
+      uses: azure/setup-helm@v5
       with:
         version: ${{ inputs.helm-version }}

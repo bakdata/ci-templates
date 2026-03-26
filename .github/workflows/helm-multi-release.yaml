@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Lint Helm chart
-        uses: bakdata/ci-templates/actions/helm-lint@1.74.0
+        uses: bakdata/ci-templates/actions/helm-lint@1.81.1
         with:
           lint-config-path: "${{ inputs.lint-config-path }}"
 
@@ -71,13 +71,10 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@1.49.0
+        uses: bakdata/ci-templates/actions/checkout@1.81.1
 
       - name: Bump Chart version
         run: |
-          sudo add-apt-repository ppa:rmescandon/yq
-          sudo apt update
-          sudo apt install yq -y
           yq e -i '.version = "${{ inputs.version }}"' "./${{ matrix.subdir }}/Chart.yaml"
         shell: bash
         working-directory: ${{ inputs.charts-path }}
@@ -91,7 +88,7 @@ jobs:
         working-directory: ${{ inputs.charts-path }}
 
       - name: Upload artifacts with action/upload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: helm-chart-${{ matrix.subdir }}
           path: ${{ inputs.artifact-dir }}
@@ -102,7 +99,7 @@ jobs:
     needs: package-artifacts
     steps:
       - name: Merge Artifacts
-        uses: actions/upload-artifact/merge@v4
+        uses: actions/upload-artifact/merge@v7
         with:
           name: helm-charts
           pattern: helm-chart-*
@@ -113,13 +110,13 @@ jobs:
 
     steps:
       - name: Check out branch containing the artifatcs and the index.yaml file
-        uses: bakdata/ci-templates/actions/checkout@1.49.0
+        uses: bakdata/ci-templates/actions/checkout@1.81.1
         with:
           ref: ${{ inputs.gh-pages-branch }}
           persist-credentials: false # required for pushing to protected branch or pushing with Dependabot
 
       - name: Download new artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: helm-charts
           path: ${{ inputs.artifact-dir }}
@@ -144,7 +141,7 @@ jobs:
         working-directory: "."
 
       - name: Commit and push artifacts and the index.yaml file
-        uses: bakdata/ci-templates/actions/commit-and-push@v1.6.0
+        uses: bakdata/ci-templates/actions/commit-and-push@1.81.1
         with:
           add-untracked: true
           ref: ${{ inputs.gh-pages-branch }}

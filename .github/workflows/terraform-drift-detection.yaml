@@ -52,7 +52,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: bakdata/ci-templates/actions/checkout@1.70.0
+        uses: bakdata/ci-templates/actions/checkout@1.81.1
         with:
           ref: ${{ inputs.source-branch }}
 

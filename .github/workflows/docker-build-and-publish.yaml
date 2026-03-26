@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@1.49.0
+        uses: bakdata/ci-templates/actions/checkout@1.81.1
         with:
           ref: ${{ inputs.ref }}
           lfs: ${{ inputs.checkout-lfs-files }}
@@ -97,7 +97,7 @@ jobs:
         if: ${{ hashFiles('.github/actions/extra-step/docker-build-and-publish/action.yaml') != '' }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Set image name
         run: |
@@ -113,7 +113,7 @@ jobs:
 
       - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.IMAGE_NAME }}
           # on push/PR: dynamically set the CI run id and Git SHA as a custom tag
@@ -139,7 +139,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v7
         with:
           context: ${{ inputs.docker-context }}
           file: ${{ inputs.dockerfile-path }}

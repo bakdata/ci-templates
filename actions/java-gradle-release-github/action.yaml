@@ -13,19 +13,19 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@1.49.0
+      uses: bakdata/ci-templates/actions/checkout@1.81.1
       with:
         fetch-depth: 0
 
     - name: Download build artifact
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v8
       with:
         name: build-artifact
         path: build
 
     - name: Generate changelog
       id: changelog
-      uses: bakdata/ci-templates/actions/changelog-generate@1.78.0
+      uses: bakdata/ci-templates/actions/changelog-generate@1.81.1
       with:
         github-token: ${{ inputs.github-token }}
         additional-cliff-args: --current --strip all # passing --tag ${{ github.ref_name }} generates a full changelog
