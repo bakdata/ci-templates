@@ -41,14 +41,19 @@ runs:
     - name: Check out repository
       uses: bakdata/ci-templates/actions/checkout@1.81.1
       with:
-        fetch-depth: 0
-        token: ${{ inputs.github-token }}
+        fetch-depth: 0 # required for changelog generation
+        persist-credentials: false # required for pushing to protected branch later
 
     - name: Setup git
       run: |
         git config user.email ${{ inputs.github-email }}
         git config user.name ${{ inputs.github-username }}
       shell: bash
+
+    - name: Configure git credentials
+      uses: de-vri-es/setup-git-credentials@v2
+      with:
+        credentials: https://github-token:${{ inputs.github-token }}@github.com
 
     - name: Setup semver
       run: |
@@ -57,7 +62,7 @@ runs:
       shell: bash
 
     - name: Set up Maven with version ${{ inputs.maven-version }}
-      uses: bakdata/ci-templates/actions/java-maven-setup@1.81.1
+      uses: bakdata/ci-templates/actions/java-maven-setup@1.81.2
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
