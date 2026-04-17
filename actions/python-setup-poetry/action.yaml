@@ -37,18 +37,17 @@ runs:
         python3 -m pip install --user pipx
         python3 -m pipx ensurepath
 
-# FIXME poetry caching is broken
-#    - name: Cache poetry
-#      id: cache-poetry
-#      uses: actions/cache@v5
-#      with:
-#        path: |
-#          /opt/pipx/venvs/poetry
-#          /opt/pipx_bin/poetry
-#        key: poetry${{ inputs.poetry-version }}-python${{ inputs.python-version }}-${{ runner.os }}
+    - name: Cache Poetry binary
+      id: cache-poetry
+      uses: actions/cache@v5
+      with:
+        path: |
+          /opt/pipx/venvs/poetry
+          /opt/pipx_bin/poetry
+        key: pipx-poetry-${{ inputs.poetry-version }}-python-${{ steps.setup-python.outputs.python-version }}-${{ runner.os }}
 
     - name: Install Poetry ${{ inputs.poetry-version }}
-      #if: steps.cache-poetry.outputs.cache-hit != 'true'
+      if: steps.cache-poetry.outputs.cache-hit != 'true'
       shell: bash
       run: pipx install poetry==${{ inputs.poetry-version }} --python "${{ steps.setup-python.outputs.python-path }}"
 
