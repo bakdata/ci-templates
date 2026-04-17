@@ -34,10 +34,21 @@ Deduplicate the list. Each unique name becomes a starting point for the recursiv
 
 ### 2. Find direct dependents
 
-For **each** action or workflow name from step 1, search for all `uses:` references in action and workflow YAML files:
+For **each** action or workflow name from step 1, search for all `uses:` references in action and workflow YAML files.
 
-- For actions: `grep pattern: bakdata/ci-templates/actions/<action-name>@`
-- For workflows: `grep pattern: bakdata/ci-templates/.github/workflows/<workflow-name>@`
+**CRITICAL — actions and workflows are different things and must be searched separately:**
+
+- An **action** lives at `actions/<name>/action.yaml` and is referenced as `bakdata/ci-templates/actions/<name>@<version>`.
+- A **reusable workflow** lives at `.github/workflows/<name>.yaml` and is referenced as `bakdata/ci-templates/.github/workflows/<name>.yaml@<version>`.
+
+An action and a workflow **can share the same base name** (e.g. `actions/python-poetry-publish-pypi/` and `.github/workflows/python-poetry-publish-pypi.yaml`). They have **independent dependency chains**. When a file is modified, determine **whether it is an action or a workflow** by its file path and search only with the corresponding grep pattern:
+
+- If the modified file is an **action** (`actions/<name>/action.yaml`): `grep -rn 'bakdata/ci-templates/actions/<name>@' .github/workflows/ actions/ --include='*.yaml' --include='*.yml'`
+- If the modified file is a **workflow** (`.github/workflows/<name>.yaml`): `grep -rn 'bakdata/ci-templates/\.github/workflows/<name>\.yaml@' .github/workflows/ --include='*.yaml' --include='*.yml'`
+
+**Anchoring:** Action grep patterns must use `/<name>@` (with the leading `/`) to prevent partial prefix matches. For example, searching for `python-poetry-publish` must not accidentally match `python-poetry-publish-pypi`. The `/` before `<name>` and the `@` after it together ensure an exact action-name match.
+
+**Never assume that bumping a workflow also requires bumping a same-named action, or vice versa.** Only bump a reference if the target it points to was actually modified or transitively depends on something that was modified.
 
 Search all names in parallel where possible. Collect all matches into a single list of files and lines to update.
 
@@ -49,7 +60,12 @@ For each match from step 2, replace the `@<old-version>` suffix with `@<current-
 
 ### 4. Recurse into transitive dependents
 
-For every action or workflow file that was modified in step 3, repeat steps 2–3 using that file's action/workflow name as the new search target.
+For every action or workflow file that was modified in step 3, repeat steps 2–3 using that file's action/workflow name as the new search target, **respecting the action-vs-workflow distinction**:
+
+- If `actions/<name>/action.yaml` was modified → `grep -rn 'bakdata/ci-templates/actions/<name>@' .github/workflows/ actions/ --include='*.yaml' --include='*.yml'`
+- If `.github/workflows/<name>.yaml` was modified → `grep -rn 'bakdata/ci-templates/\.github/workflows/<name>\.yaml@' .github/workflows/ --include='*.yaml' --include='*.yml'`
+
+**Do not cross types**: modifying a workflow does not require bumping a same-named action, and vice versa. The grep pattern determines the type.
 
 Continue until no new references are found.
 
@@ -68,20 +84,19 @@ After all replacements, summarize the full dependency tree that was updated, sho
 - **Track visited actions** to avoid infinite loops in case of circular references.
 - **Use `multi_replace_string_in_file`** for efficiency when multiple replacements are needed.
 - **Include 3–5 lines of context** around each replacement to ensure unique matches.
+- **Strictly distinguish actions from workflows.** An action (`actions/<name>/`) and a workflow (`.github/workflows/<name>.yaml`) can share the same base name but have completely independent dependency chains. Use `grep` with the exact reference pattern to determine dependents deterministically — never infer dependencies from name similarity alone.
 
 ## Example
 
-Given a change to `python-setup-poetry`, the dependency chain might look like:
+Given a change to the **action** `python-setup-poetry`, the dependency chain looks like:
 
 ```
-python-setup-poetry (changed)
-├── actions/python-poetry-bump-version/action.yaml  →  @branch
-├── .github/workflows/python-poetry-publish-pypi.yaml  →  @branch
-│   └── .github/workflows/python-poetry-publish-snapshot.yaml  →  @branch
-├── python-poetry-bump-version (updated above, now trace its dependents)
-│   ├── .github/workflows/python-poetry-publish-snapshot.yaml  →  @branch
-│   └── .github/workflows/python-poetry-release.yaml  →  @branch
-└── python-poetry-publish-pypi (updated above, now trace its dependents)
-    ├── .github/workflows/python-poetry-publish-pypi.yaml  →  @branch  (self-ref)
-    └── .github/workflows/python-poetry-publish-snapshot.yaml  →  @branch
+python-setup-poetry (changed action)
+├── actions/python-poetry-bump-version/action.yaml          →  @branch  (uses the action)
+│   ├── .github/workflows/python-poetry-publish-snapshot.yaml  →  @branch  (uses the action)
+│   └── .github/workflows/python-poetry-release.yaml           →  @branch  (uses the action)
+└── .github/workflows/python-poetry-publish-pypi.yaml       →  @branch  (uses the action)
+    (no further dependents — no workflows call .github/workflows/python-poetry-publish-pypi.yaml)
 ```
+
+**Note:** There also exists an **action** called `actions/python-poetry-publish-pypi/` which shares the same base name as the workflow `.github/workflows/python-poetry-publish-pypi.yaml`. The action does **not** depend on `python-setup-poetry`, so it must **not** be bumped. The workflow does depend on it, so it is bumped. Always verify via `grep` which exact `uses:` reference pattern appears — do not confuse same-named actions and workflows.
