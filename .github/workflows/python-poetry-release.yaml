@@ -82,7 +82,7 @@ jobs:
 
       - name: Bump version with Poetry
         id: bump-version
-        uses: bakdata/ci-templates/actions/python-poetry-bump-version@1.81.1
+        uses: bakdata/ci-templates/actions/python-poetry-bump-version@1.81.4
         with:
           release-type: ${{ inputs.release-type }}
           python-version: ${{ inputs.python-version }}
