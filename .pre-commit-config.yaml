@@ -20,6 +20,15 @@ repos:
         require_serial: true
         files: '^docs/.*\.md$'
 
+  - repo: local
+    hooks:
+      - id: dprint
+        name: dprint
+        entry: dprint fmt
+        language: system
+        require_serial: true # run once for all files
+        pass_filenames: false
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
