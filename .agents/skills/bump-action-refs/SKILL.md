@@ -26,6 +26,7 @@ git diff --name-only main -- 'actions/' '.github/workflows/'
 ```
 
 From the output, extract the changed action and workflow names:
+
 - For files matching `actions/<action-name>/action.yaml` or `actions/<action-name>/action.yml`, extract `<action-name>`.
 - For files matching `.github/workflows/<workflow-name>.yaml`, extract `<workflow-name>`.
 
@@ -55,6 +56,7 @@ Continue until no new references are found.
 ### 5. Report the dependency chain
 
 After all replacements, summarize the full dependency tree that was updated, showing:
+
 - Which files were modified
 - Which `uses:` lines were changed
 - The old and new version refs
