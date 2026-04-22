@@ -28,6 +28,7 @@ repos:
         language: system
         require_serial: true # run once for all files
         pass_filenames: false
+        additional_dependencies: ["dprint@0.54.0"]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
