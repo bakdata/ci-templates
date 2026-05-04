@@ -27,13 +27,13 @@ inputs:
     required: false
     default: "wrapper"
   java-distribution:
-    description: "Java distribution to be installed. (Default is microsoft)"
+    description: "Java distribution to be installed. (Default is temurin)"
     required: false
-    default: "microsoft"
+    default: "temurin"
   java-version:
-    description: "Java version to be installed. (Default is 11)"
+    description: "Java version to be installed. (Default is 17)"
     required: false
-    default: "11"
+    default: "17"
   working-directory:
     description: "Working directory of your Gradle artifacts. (Default is .)"
     required: false
@@ -43,12 +43,12 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@1.49.0
+      uses: bakdata/ci-templates/actions/checkout@1.81.1
       with:
         lfs: ${{ inputs.download-lfs-files }}
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@1.63.0
+      uses: bakdata/ci-templates/actions/java-gradle-setup@1.81.1
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
@@ -58,12 +58,12 @@ runs:
         gradle-dependency-graph: ${{ inputs.gradle-dependency-graph }}
 
     - name: Run tests
-      run: ./gradlew check --info --stacktrace ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
+      run: ./gradlew check --info --console=plain --stacktrace ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
     - name: Report test results
-      uses: mikepenz/action-junit-report@v5
+      uses: mikepenz/action-junit-report@v6
       if: always() # always run even if the previous step fails
       with:
         report_paths: "**/build/test-results/test/TEST-*.xml"

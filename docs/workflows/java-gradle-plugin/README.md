@@ -30,7 +30,7 @@ on:
 jobs:
   call-workflow-passing-data:
     name: Java Gradle Library
-    uses: bakdata/ci-templates/.github/workflows/java-gradle-pluglin.yaml@main
+    uses: bakdata/ci-templates/.github/workflows/java-gradle-plugin.yaml@main
     with:
       java-distribution: "microsoft" # (Optional) Default is microsoft
       java-version: "11" # (Optional) Default is 11
@@ -57,15 +57,15 @@ jobs:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT                       | TYPE    | REQUIRED | DEFAULT       | DESCRIPTION                                                                                       |
-| --------------------------- | ------- | -------- | ------------- | ------------------------------------------------------------------------------------------------- |
-| gradle-cache                | boolean | false    | `true`        | Whether Gradle caching is enabled or not. (Default is true)                                       |
-| gradle-cache-read-only      | boolean | false    | `false`       | Whether Gradle caching should be read-only. Only used for build and test jobs. (Default is false) |
-| gradle-refresh-dependencies | boolean | false    | `false`       | Whether Gradle should refresh dependencies. (Default is false)                                    |
-| gradle-version              | string  | false    | `"wrapper"`   | Gradle version to be installed. (Default is wrapper)                                              |
-| java-distribution           | string  | false    | `"microsoft"` | Java distribution to be installed. (Default is microsoft)                                         |
-| java-version                | string  | false    | `"11"`        | Java version to be installed. (Default is 11)                                                     |
-| working-directory           | string  | false    | `"."`         | Working directory of your Gradle artifacts. (Default is .)                                        |
+| INPUT                       | TYPE    | REQUIRED | DEFAULT     | DESCRIPTION                                                                                       |
+| --------------------------- | ------- | -------- | ----------- | ------------------------------------------------------------------------------------------------- |
+| gradle-cache                | boolean | false    | `true`      | Whether Gradle caching is enabled or not. (Default is true)                                       |
+| gradle-cache-read-only      | boolean | false    | `false`     | Whether Gradle caching should be read-only. Only used for build and test jobs. (Default is false) |
+| gradle-refresh-dependencies | boolean | false    | `false`     | Whether Gradle should refresh dependencies. (Default is false)                                    |
+| gradle-version              | string  | false    | `"wrapper"` | Gradle version to be installed. (Default is wrapper)                                              |
+| java-distribution           | string  | false    | `"temurin"` | Java distribution to be installed. (Default is temurin)                                           |
+| java-version                | string  | false    | `"17"`      | Java version to be installed. (Default is 17)                                                     |
+| working-directory           | string  | false    | `"."`       | Working directory of your Gradle artifacts. (Default is .)                                        |
 
 <!-- AUTO-DOC-INPUT:END -->
 

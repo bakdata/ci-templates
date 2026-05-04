@@ -7,13 +7,13 @@ inputs:
     required: false
     default: "build-artifact"
   java-distribution:
-    description: "Java distribution to be installed. (Default is microsoft)"
+    description: "Java distribution to be installed. (Default is temurin)"
     required: false
-    default: "microsoft"
+    default: "temurin"
   java-version:
-    description: "Java version to be installed. (Default is 11)"
+    description: "Java version to be installed. (Default is 17)"
     required: false
-    default: "11"
+    default: "17"
   gradle-version:
     description: "Gradle version to be installed. (Default is wrapper)"
     required: false
@@ -42,10 +42,10 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: bakdata/ci-templates/actions/checkout@1.49.0
+      uses: bakdata/ci-templates/actions/checkout@1.81.1
 
     - name: Set up Gradle with version ${{ inputs.gradle-version }}
-      uses: bakdata/ci-templates/actions/java-gradle-setup@1.63.0
+      uses: bakdata/ci-templates/actions/java-gradle-setup@1.81.1
       with:
         java-distribution: ${{ inputs.java-distribution }}
         java-version: ${{ inputs.java-version }}
@@ -55,17 +55,17 @@ runs:
         gradle-dependency-graph: ${{ inputs.gradle-dependency-graph }}
 
     - name: Compile
-      run: ./gradlew --info --stacktrace build -x test ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
+      run: ./gradlew --info --console=plain --stacktrace build -x test ${{ inputs.gradle-refresh-dependencies == 'true' && '--refresh-dependencies' || '' }}
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
     - name: Build jar
-      run: ./gradlew --info --stacktrace jar
+      run: ./gradlew --info --console=plain --stacktrace jar
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
     - name: Upload build artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ inputs.build-artifact-name }}
         path: ${{ inputs.working-directory }}/**/build/libs/*.jar

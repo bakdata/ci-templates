@@ -14,12 +14,13 @@ runs:
   using: "composite"
   steps:
     - name: Set up Helm
-      uses: azure/setup-helm@v3
+      uses: azure/setup-helm@v5
       with:
         version: "${{ inputs.helm-version }}"
 
     - name: Helm package
       run: |
+        helm dependency build .
         helm package .
         helm repo index . --merge index.yaml
       shell: bash

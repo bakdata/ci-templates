@@ -38,12 +38,12 @@ steps:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT             | TYPE   | REQUIRED | DEFAULT  | DESCRIPTION                                           |
-| ----------------- | ------ | -------- | -------- | ----------------------------------------------------- |
-| allow-dirty       | string | false    | `"true"` | Allow unclean Git status in the working directory.    |
-| new-version       | string | false    |          |                                                       |
-| release-type      | string | true     |          | The type of the release (major, minor or patch).      |
-| working-directory | string | false    | `"."`    | The directory containing the `.bumpversion.cfg` file. |
+| INPUT             | TYPE   | REQUIRED | DEFAULT  | DESCRIPTION                                                                                            |
+| ----------------- | ------ | -------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| allow-dirty       | string | false    | `"true"` | Allow unclean Git status in the working directory.                                                     |
+| new-version       | string | false    |          | Optional explicit version to set (overrides release-type).                                             |
+| release-type      | string | true     |          | The type of the release (major, minor or patch).                                                       |
+| working-directory | string | false    | `"."`    | Directory that contains the bumpversion config (.bumpversion.toml/.bumpversion.cfg) or pyproject.toml. |
 
 <!-- AUTO-DOC-INPUT:END -->
 
@@ -51,10 +51,10 @@ steps:
 
 <!-- AUTO-DOC-OUTPUT:START - Do not remove or modify this section -->
 
-| OUTPUT          | TYPE   | DESCRIPTION                                      |
-| --------------- | ------ | ------------------------------------------------ |
-| old-version     | string | The old version in your `.bumpversion.cfg` file. |
-| release-version | string | The bumped version of your project.              |
+| OUTPUT          | TYPE   | DESCRIPTION                           |
+| --------------- | ------ | ------------------------------------- |
+| old-version     | string | The previous version of your project. |
+| release-version | string | The bumped version of your project.   |
 
 <!-- AUTO-DOC-OUTPUT:END -->
 

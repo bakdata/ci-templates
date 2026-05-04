@@ -43,7 +43,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         repository: ${{ inputs.repository }}
         ref: ${{ inputs.ref }}
@@ -60,7 +60,7 @@ runs:
     - name: LFS Cache
       if: ${{ inputs.lfs == 'true' && inputs.cache == 'true' }}
       id: cache-lfs
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: .git/lfs/objects
         key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
