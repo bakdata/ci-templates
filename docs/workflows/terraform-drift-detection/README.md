@@ -33,7 +33,7 @@ jobs:
     uses: bakdata/ci-templates/.github/workflows/terraform-drift-detection.yaml@main
     with:
       working-directory: "infrastructure/prod"
-      gcp-project-id: "your-gcp-project-id"
+      google-project-id: "your-google-project-id"
       source-branch: "main"
     secrets:
       google-workload-identity-provider: ${{ secrets.GOOGLE_WORKLOAD_IDENTITY_PROVIDER }}
@@ -49,7 +49,7 @@ jobs:
 
 | INPUT             | TYPE   | REQUIRED | DEFAULT    | DESCRIPTION                                                      |
 | ----------------- | ------ | -------- | ---------- | ---------------------------------------------------------------- |
-| gcp-project-id    | string | true     |            | The GCP Project ID                                               |
+| google-project-id    | string | true     |            | The GCP Project ID                                               |
 | snippet-length    | number | false    | `40`       | The length of the snippet of the plan output sent to the webhook |
 | source-branch     | string | false    | `"main"`   | The branch to use as the source of truth                         |
 | terraform-version | string | false    | `"1.13.3"` | The version of Terraform to use                                  |

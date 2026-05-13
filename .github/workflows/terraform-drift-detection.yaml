@@ -31,7 +31,7 @@ on:
       google-service-account:
         description: "The GCP Service Account email"
         required: true
-      gcp-project-id:
+      google-project-id:
         description: "The GCP Project ID"
         required: true
 
@@ -61,7 +61,7 @@ jobs:
       - uses: "google-github-actions/get-secretmanager-secrets@v3"
         with:
           secrets: |-
-            TF_DRIFT_DETECTION_SLACK_WEBHOOK_URL:${{ secrets.gcp-project-id }}/TF_DRIFT_DETECTION_SLACK_WEBHOOK_URL
+            TF_DRIFT_DETECTION_SLACK_WEBHOOK_URL:${{ secrets.google-project-id }}/TF_DRIFT_DETECTION_SLACK_WEBHOOK_URL
           export_to_environment: true
 
       - name: Setup Terraform
@@ -116,7 +116,7 @@ jobs:
           DELETED: ${{ steps.parse.outputs.deleted }}
           SNIPPET: ${{ steps.parse.outputs.snippet }}
           WORKING_DIR: ${{ inputs.working-directory }}
-          PROJECT_ID: ${{ secrets.gcp-project-id }}
+          PROJECT_ID: ${{ secrets.google-project-id }}
           REPO_NAME: ${{ github.event.repository.name }}
         run: |
           import json
