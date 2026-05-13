@@ -31,10 +31,10 @@ runs:
         workload_identity_provider: ${{ inputs.workload-identity-provider }}
         service_account: ${{ inputs.gke-service-account }}
     - id: "parse_secrets"
-      uses: "bakdata/ci-templates/actions/parse-secrets-definitions@1.48.0"
+      uses: "bakdata/ci-templates/actions/gcp-gsm-parse-secrets@tiedemann/drift-detection-secret-manager"
       with:
-        project_name: ${{ inputs.gke-project-name }}
-        secrets_list: ${{ inputs.secrets-to-inject }}
+        project-name: ${{ inputs.gke-project-name }}
+        secrets-list: ${{ inputs.secrets-to-inject }}
     - id: "secrets"
       uses: "google-github-actions/get-secretmanager-secrets@v2"
       with:
