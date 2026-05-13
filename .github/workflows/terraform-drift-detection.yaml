@@ -59,7 +59,7 @@ jobs:
           service_account: ${{ secrets.google-service-account }}
 
       - name: Load Slack URL from secret manager
-        uses: bakdata/ci-templates/actions/gcp-load-secrets@tiedemann/drift-detection-secret-manager
+        uses: bakdata/ci-templates/actions/gcp-gsm-load-secrets@tiedemann/drift-detection-secret-manager
         with:
           workload-identity-provider: ${{ secrets.google-workload-identity-provider }}
           gke-service-account: ${{ secrets.google-service-account }}
