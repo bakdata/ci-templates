@@ -34,7 +34,6 @@ on:
       gcp-project-id:
         description: "The GCP Project ID"
         required: true
-        type: string
 
 jobs:
   drift-detection:
