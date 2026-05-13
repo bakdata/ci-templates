@@ -58,15 +58,6 @@ jobs:
           workload_identity_provider: ${{ secrets.google-workload-identity-provider }}
           service_account: ${{ secrets.google-service-account }}
 
-      # - name: Load Slack URL from secret manager
-      #   uses: bakdata/ci-templates/actions/gcp-gsm-load-secrets@tiedemann/drift-detection-secret-manager
-      #   with:
-      #     workload-identity-provider: ${{ secrets.google-workload-identity-provider }}
-      #     gke-service-account: ${{ secrets.google-service-account }}
-      #     gke-project-name: ${{ secrets.google-project-id }}
-      #     secrets-to-inject: "TF_DRIFT_DETECTION_SLACK_WEBHOOK_URL"
-      #     export-to-environment: true
-
       - uses: "google-github-actions/get-secretmanager-secrets@v3"
         with:
           secrets: |-
@@ -125,13 +116,14 @@ jobs:
           DELETED: ${{ steps.parse.outputs.deleted }}
           SNIPPET: ${{ steps.parse.outputs.snippet }}
           WORKING_DIR: ${{ inputs.working-directory }}
-          PROJECT_ID: ${{ inputs.gcp-project-id }}
+          PROJECT_ID: ${{ secrets.gcp-project-id }}
+          REPO_NAME: ${{ github.event.repository.name }}
         run: |
           import json
           import os
 
           payload = {
-              "text": f"🚨 *Terraform Drift Detected* in `{os.environ['WORKING_DIR']}` ({os.environ['PROJECT_ID']})",
+              "text": f"🚨 *Terraform Drift Detected* in `{os.environ['WORKING_DIR']}` Repo: `{os.environ['REPO_NAME']}` Project: `{os.environ['PROJECT_ID']}`",
               "attachments": [
                   {
                       "color": "#FF9800",
