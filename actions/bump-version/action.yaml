@@ -31,7 +31,7 @@ runs:
   steps:
     - name: Set up bump-my-version
       run: |
-        pipx install bump-my-version
+        pipx install bump-my-version==1.3.0
       shell: bash
 
     - name: Bump version
