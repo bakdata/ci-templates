@@ -95,7 +95,7 @@ jobs:
 
       - name: Set to latest release version
         if: ${{ inputs.bump-dev }}
-        uses: bakdata/ci-templates/actions/bump-version@1.81.1
+        uses: bakdata/ci-templates/actions/bump-version@1.81.5
         with:
           release-type: patch
           new-version: ${{ steps.latest-tag.outputs.version }}
@@ -103,14 +103,14 @@ jobs:
 
       - name: Bump version
         id: bump-version
-        uses: bakdata/ci-templates/actions/bump-version@1.81.1
+        uses: bakdata/ci-templates/actions/bump-version@1.81.5
         with:
           release-type: ${{ inputs.release-type }}
           working-directory: ${{ inputs.working-directory }}
 
       - name: Bump version release
         id: bump-version-release
-        uses: bakdata/ci-templates/actions/bump-version@1.81.1
+        uses: bakdata/ci-templates/actions/bump-version@1.81.5
         with:
           release-type: release
           allow-dirty: true
@@ -155,7 +155,7 @@ jobs:
       - name: Prepare development version
         id: bump-version-dev
         if: ${{ inputs.bump-dev }}
-        uses: bakdata/ci-templates/actions/bump-version@1.81.1
+        uses: bakdata/ci-templates/actions/bump-version@1.81.5
         with:
           release-type: minor
           working-directory: ${{ inputs.working-directory }}
