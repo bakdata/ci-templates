@@ -53,7 +53,7 @@ jobs:
           ref: ${{ inputs.source-branch }}
 
       - name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/auth@v3
         with:
           workload_identity_provider: ${{ secrets.google-workload-identity-provider }}
           service_account: ${{ secrets.google-service-account }}
@@ -66,7 +66,7 @@ jobs:
           export_to_environment: true
 
       - name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/auth@v3
         with:
           workload_identity_provider: ${{ secrets.google-workload-identity-provider }}
           service_account: ${{ env.TF_DRIFT_DETECTION_SERVICE_ACCOUNT }}
@@ -79,11 +79,15 @@ jobs:
 
       - name: Terraform Init
         working-directory: ${{ inputs.working-directory }}
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.drift-auth.outputs.credentials_file_path }}
         run: terraform init
 
       - name: Terraform Plan
         id: plan
         working-directory: ${{ inputs.working-directory }}
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.drift-auth.outputs.credentials_file_path }}
         run: |
           set +e
           terraform plan -detailed-exitcode -no-color -out=tfplan
