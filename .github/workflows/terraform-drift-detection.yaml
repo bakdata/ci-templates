@@ -56,7 +56,7 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ secrets.google-workload-identity-provider }}
-          service_account: ${{ secrets.google-service-account-secret }}
+          service_account: ${{ secrets.google-service-account }}
 
       - uses: "google-github-actions/get-secretmanager-secrets@v3"
         with:
