@@ -28,8 +28,11 @@ on:
       google-workload-identity-provider:
         description: "The Workload Identity Provider resource name"
         required: true
-      google-service-account:
-        description: "The GCP Service Account email"
+      google-service-account-secret:
+        description: "The GCP Service Account email for accessing secrets"
+        required: true
+      google-service-account-drift:
+        description: "The GCP Service Account email for reading terraform resoruces"
         required: true
       google-project-id:
         description: "The GCP Project ID"
@@ -56,13 +59,19 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ secrets.google-workload-identity-provider }}
-          service_account: ${{ secrets.google-service-account }}
+          service_account: ${{ secrets.google-service-account-secret }}
 
       - uses: "google-github-actions/get-secretmanager-secrets@v3"
         with:
           secrets: |-
             TF_DRIFT_DETECTION_SLACK_WEBHOOK_URL:${{ secrets.google-project-id }}/TF_DRIFT_DETECTION_SLACK_WEBHOOK_URL
           export_to_environment: true
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.google-workload-identity-provider }}
+          service_account: ${{ secrets.google-service-account-drift }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
