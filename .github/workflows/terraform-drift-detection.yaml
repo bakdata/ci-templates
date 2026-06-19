@@ -67,6 +67,7 @@ jobs:
 
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v3
+        id: drift-auth
         with:
           workload_identity_provider: ${{ secrets.google-workload-identity-provider }}
           service_account: ${{ env.TF_DRIFT_DETECTION_SERVICE_ACCOUNT }}
