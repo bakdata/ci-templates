@@ -49,7 +49,6 @@ jobs:
 
 | INPUT             | TYPE   | REQUIRED | DEFAULT    | DESCRIPTION                                                      |
 | ----------------- | ------ | -------- | ---------- | ---------------------------------------------------------------- |
-| google-project-id    | string | true     |            | The GCP Project ID                                               |
 | snippet-length    | number | false    | `40`       | The length of the snippet of the plan output sent to the webhook |
 | source-branch     | string | false    | `"main"`   | The branch to use as the source of truth                         |
 | terraform-version | string | false    | `"1.13.3"` | The version of Terraform to use                                  |
@@ -69,10 +68,10 @@ No outputs.
 
 <!-- AUTO-DOC-SECRETS:START - Do not remove or modify this section -->
 
-| SECRET                            | REQUIRED | DESCRIPTION                                  |
-| --------------------------------- | -------- | -------------------------------------------- |
-| google-service-account            | true     | The GCP Service Account email                |
-| google-workload-identity-provider | true     | The Workload Identity Provider resource name |
-| slack-webhook-url                 | false    | The Slack Webhook URL to send notifications  |
+| SECRET                            | REQUIRED | DESCRIPTION                                         |
+| --------------------------------- | -------- | --------------------------------------------------- |
+| google-project-id                 | true     | The GCP Project ID                                  |
+| google-service-account            | true     | The GCP Service Account email for accessing secrets |
+| google-workload-identity-provider | true     | The Workload Identity Provider resource name        |
 
 <!-- AUTO-DOC-SECRETS:END -->

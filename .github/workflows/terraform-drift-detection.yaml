@@ -43,9 +43,6 @@ jobs:
       contents: read
       id-token: write
 
-    env:
-      SLACK_WEBHOOK_URL: ${{ secrets.slack-webhook-url }}
-
     steps:
       - name: Checkout Code
         uses: bakdata/ci-templates/actions/checkout@1.81.1
