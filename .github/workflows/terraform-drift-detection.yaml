@@ -79,7 +79,7 @@ jobs:
         working-directory: ${{ inputs.working-directory }}
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.drift-auth.outputs.credentials_file_path }}
-        run: terraform init
+        run: terraform init -lock=false
 
       - name: Terraform Plan
         id: plan
