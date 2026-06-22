@@ -14,10 +14,6 @@ on:
         required: false
         default: "1.13.3"
         type: string
-      gcp-project-id:
-        description: "The GCP Project ID"
-        required: true
-        type: string
       source-branch:
         description: "The branch to use as the source of truth"
         required: false
@@ -33,11 +29,11 @@ on:
         description: "The Workload Identity Provider resource name"
         required: true
       google-service-account:
-        description: "The GCP Service Account email"
+        description: "The GCP Service Account email for accessing secrets"
         required: true
-      slack-webhook-url:
-        description: "The Slack Webhook URL to send notifications"
-        required: false
+      google-project-id:
+        description: "The GCP Project ID"
+        required: true
 
 jobs:
   drift-detection:
@@ -47,9 +43,6 @@ jobs:
       contents: read
       id-token: write
 
-    env:
-      SLACK_WEBHOOK_URL: ${{ secrets.slack-webhook-url }}
-
     steps:
       - name: Checkout Code
         uses: bakdata/ci-templates/actions/checkout@1.81.1
@@ -57,10 +50,24 @@ jobs:
           ref: ${{ inputs.source-branch }}
 
       - name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/auth@v3
         with:
           workload_identity_provider: ${{ secrets.google-workload-identity-provider }}
           service_account: ${{ secrets.google-service-account }}
+
+      - uses: "google-github-actions/get-secretmanager-secrets@v3"
+        with:
+          secrets: |-
+            TF_DRIFT_DETECTION_SLACK_WEBHOOK_URL:${{ secrets.google-project-id }}/TF_DRIFT_DETECTION_SLACK_WEBHOOK_URL
+            TF_DRIFT_DETECTION_SERVICE_ACCOUNT:${{ secrets.google-project-id }}/TF_DRIFT_DETECTION_SERVICE_ACCOUNT
+          export_to_environment: true
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v3
+        id: drift-auth
+        with:
+          workload_identity_provider: ${{ secrets.google-workload-identity-provider }}
+          service_account: ${{ env.TF_DRIFT_DETECTION_SERVICE_ACCOUNT }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -70,11 +77,15 @@ jobs:
 
       - name: Terraform Init
         working-directory: ${{ inputs.working-directory }}
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.drift-auth.outputs.credentials_file_path }}
         run: terraform init
 
       - name: Terraform Plan
         id: plan
         working-directory: ${{ inputs.working-directory }}
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.drift-auth.outputs.credentials_file_path }}
         run: |
           set +e
           terraform plan -detailed-exitcode -no-color -out=tfplan
@@ -106,7 +117,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Prepare Slack Payload
-        if: steps.plan.outputs.exit_code == '2' && env.SLACK_WEBHOOK_URL != ''
+        if: steps.plan.outputs.exit_code == '2' && env.TF_DRIFT_DETECTION_SLACK_WEBHOOK_URL != ''
         shell: python
         env:
           CREATED: ${{ steps.parse.outputs.created }}
@@ -114,13 +125,14 @@ jobs:
           DELETED: ${{ steps.parse.outputs.deleted }}
           SNIPPET: ${{ steps.parse.outputs.snippet }}
           WORKING_DIR: ${{ inputs.working-directory }}
-          PROJECT_ID: ${{ inputs.gcp-project-id }}
+          PROJECT_ID: ${{ secrets.google-project-id }}
+          REPO_NAME: ${{ github.event.repository.name }}
         run: |
           import json
           import os
 
           payload = {
-              "text": f"🚨 *Terraform Drift Detected* in `{os.environ['WORKING_DIR']}` ({os.environ['PROJECT_ID']})",
+              "text": f"🚨 *Terraform Drift Detected* in `{os.environ['WORKING_DIR']}` Repo: `{os.environ['REPO_NAME']}` Project: `{os.environ['PROJECT_ID']}`",
               "attachments": [
                   {
                       "color": "#FF9800",
@@ -157,9 +169,9 @@ jobs:
               json.dump(payload, f)
 
       - name: Send Slack Notification
-        if: steps.plan.outputs.exit_code == '2' && env.SLACK_WEBHOOK_URL != ''
+        if: steps.plan.outputs.exit_code == '2' && env.TF_DRIFT_DETECTION_SLACK_WEBHOOK_URL != ''
         uses: slackapi/slack-github-action@v2.1.1
         with:
-          webhook: ${{ env.SLACK_WEBHOOK_URL }}
+          webhook: ${{ env.TF_DRIFT_DETECTION_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload-file-path: slack_payload.json
