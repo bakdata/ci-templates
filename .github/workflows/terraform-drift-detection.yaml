@@ -79,7 +79,7 @@ jobs:
         working-directory: ${{ inputs.working-directory }}
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.drift-auth.outputs.credentials_file_path }}
-        run: terraform init
+        run: terraform init -lock=false
 
       - name: Terraform Plan
         id: plan
@@ -88,7 +88,7 @@ jobs:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.drift-auth.outputs.credentials_file_path }}
         run: |
           set +e
-          terraform plan -detailed-exitcode -no-color -out=tfplan
+          terraform plan -lock=false -detailed-exitcode -no-color -out=tfplan
           EXIT_CODE=$?
           echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
           if [ "$EXIT_CODE" -eq 2 ]; then
