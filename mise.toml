@@ -1,2 +1,6 @@
 [tools]
 pre-commit = "4.5.1"
+auto-doc = "3.4.0"
+
+[hooks]
+postinstall = "pre-commit install"
