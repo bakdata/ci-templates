@@ -98,7 +98,7 @@ jobs:
           github-token: ${{ secrets.github-token }}
 
       - name: Tag and release
-        uses: bakdata/ci-templates/actions/tag-and-release@v1.22.0
+        uses: bakdata/ci-templates/actions/tag-and-release@1.82.2
         with:
           tag: "${{ steps.bump-version.outputs.release-version }}"
           github-username: ${{ secrets.github-username }}
