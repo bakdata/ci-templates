@@ -116,7 +116,7 @@ jobs:
           add-untracked: "true"
 
       - name: Tag and release
-        uses: bakdata/ci-templates/actions/tag-and-release@v1.22.0
+        uses: bakdata/ci-templates/actions/tag-and-release@1.82.2
         with:
           tag: "${{ steps.bump-version.outputs.release-version }}"
           release-title: "${{ steps.bump-version.outputs.release-version }}"
