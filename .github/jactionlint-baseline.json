@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "file": "actions/java-gradle-assess-code-quality/action.yaml",
+      "rule": "template-injection",
+      "fingerprint": "d39f5ebc63603d9c",
+      "context": "f5b32f1f5f0f6a7f",
+      "occurrence": 0,
+      "message": "\"github.head_ref\" is potentially untrusted. avoid using it directly in inline scripts. instead, pass it through an environment variable. see https://docs.github.com/en/actions/reference/security/secure-use#good-practices-for-mitigating-script-injection-attacks for more details"
+    },
+    {
+      "file": "actions/java-gradle-build-jib/action.yaml",
+      "rule": "action-syntax",
+      "fingerprint": "4daab32ff1cf52ec",
+      "context": "a902489684f482c8",
+      "occurrence": 0,
+      "message": "\"type\" has no effect on the input \"platforms\" of an action, whose inputs are always strings. remove it or document the accepted values in \"description\""
+    }
+  ]
+}
