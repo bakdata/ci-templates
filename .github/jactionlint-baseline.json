@@ -1,0 +1,229 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "file": "actions/changelog-generate/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "2e130cad5d8af895",
+      "context": "841f4c5553e09190",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2086:info:5:6: Double quote to prevent globbing and word splitting"
+    },
+    {
+      "file": "actions/docker-publish/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "9000f442d82e8301",
+      "context": "85331e8082e20144",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2012:info:1:9: Use find instead of ls to better handle non-alphanumeric filenames"
+    },
+    {
+      "file": "actions/docker-push/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "4a9239fc2550b2b4",
+      "context": "0fee2cb934586461",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2086:info:11:56: Double quote to prevent globbing and word splitting"
+    },
+    {
+      "file": "actions/docker-push/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "6f7b4397afa4c624",
+      "context": "ea90fb9aec8dd8c5",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2086:info:13:32: Double quote to prevent globbing and word splitting"
+    },
+    {
+      "file": "actions/helm-deploy/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "2ddd47fb84a33218",
+      "context": "728ab71853a98035",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2091:warning:3:4: Remove surrounding $() to avoid executing output (or use eval if intentional)"
+    },
+    {
+      "file": "actions/helm-deploy/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "e2c1970c0740d7fd",
+      "context": "728ab71853a98035",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2327:warning:3:4: This command substitution will be empty because the command's output gets redirected away"
+    },
+    {
+      "file": "actions/helm-deploy/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "d5d181d6f1a8e04a",
+      "context": "728ab71853a98035",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2328:error:3:47: This redirection takes output away from the command substitution"
+    },
+    {
+      "file": "actions/helm-deploy/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "0e77523a201dd428",
+      "context": "450c93aeda6f12c7",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2207:warning:5:16: Prefer mapfile or read -a to split command output (or quote to avoid splitting)"
+    },
+    {
+      "file": "actions/helm-deploy/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "1e2a12f11868035d",
+      "context": "34a990b6f4dbac76",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2145:error:14:91: Argument mixes string and array. Use * or separate argument"
+    },
+    {
+      "file": "actions/java-gradle-assess-code-quality/action.yaml",
+      "rule": "template-injection",
+      "fingerprint": "d39f5ebc63603d9c",
+      "context": "f5b32f1f5f0f6a7f",
+      "occurrence": 0,
+      "message": "\"github.head_ref\" is potentially untrusted. avoid using it directly in inline scripts. instead, pass it through an environment variable. see https://docs.github.com/en/actions/reference/security/secure-use#good-practices-for-mitigating-script-injection-attacks for more details"
+    },
+    {
+      "file": "actions/java-gradle-assess-code-quality/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "880b20fbbf02de00",
+      "context": "a858e3b88a0feb60",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2155:warning:1:8: Declare and assign separately to avoid masking return values"
+    },
+    {
+      "file": "actions/java-gradle-assess-code-quality/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "873f5e6adeb2ce19",
+      "context": "c0a776fc48249e5d",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2086:info:2:60: Double quote to prevent globbing and word splitting"
+    },
+    {
+      "file": "actions/java-gradle-build-jib/action.yaml",
+      "rule": "action-syntax",
+      "fingerprint": "4daab32ff1cf52ec",
+      "context": "a902489684f482c8",
+      "occurrence": 0,
+      "message": "\"type\" has no effect on the input \"platforms\" of an action, whose inputs are always strings. remove it or document the accepted values in \"description\""
+    },
+    {
+      "file": "actions/java-gradle-publish-plugin/action.yml",
+      "rule": "shellcheck",
+      "fingerprint": "880b20fbbf02de00",
+      "context": "a858e3b88a0feb60",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2155:warning:1:8: Declare and assign separately to avoid masking return values"
+    },
+    {
+      "file": "actions/java-gradle-publish-plugin/action.yml",
+      "rule": "shellcheck",
+      "fingerprint": "873f5e6adeb2ce19",
+      "context": "c0a776fc48249e5d",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2086:info:2:60: Double quote to prevent globbing and word splitting"
+    },
+    {
+      "file": "actions/java-gradle-publish/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "325f2d4a8614dd2d",
+      "context": "a858e3b88a0feb60",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2155:warning:2:8: Declare and assign separately to avoid masking return values"
+    },
+    {
+      "file": "actions/java-gradle-publish/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "c8f0de9e578ec536",
+      "context": "c0a776fc48249e5d",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2086:info:3:60: Double quote to prevent globbing and word splitting"
+    },
+    {
+      "file": "actions/java-gradle-publish/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "7e9c4ed44f656f9b",
+      "context": "d204edfb2ec0cfce",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2086:info:1:35: Double quote to prevent globbing and word splitting"
+    },
+    {
+      "file": "actions/java-gradle-publish/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "5f619d1c4f9859fd",
+      "context": "36e3a4b2226da2db",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2086:info:2:19: Double quote to prevent globbing and word splitting"
+    },
+    {
+      "file": "actions/java-gradle-publish/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "7bd0a890b8f93641",
+      "context": "e794722402596efc",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2086:info:7:16: Double quote to prevent globbing and word splitting"
+    },
+    {
+      "file": "actions/java-gradle-publish/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "82b718caa5b56024",
+      "context": "8c87c2ca6c0a31b1",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2086:info:8:15: Double quote to prevent globbing and word splitting"
+    },
+    {
+      "file": "actions/java-gradle-publish/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "880b20fbbf02de00",
+      "context": "a858e3b88a0feb60",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2155:warning:1:8: Declare and assign separately to avoid masking return values"
+    },
+    {
+      "file": "actions/java-gradle-publish/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "873f5e6adeb2ce19",
+      "context": "c0a776fc48249e5d",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2086:info:2:60: Double quote to prevent globbing and word splitting"
+    },
+    {
+      "file": "actions/java-maven-release/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "d7761b4890795c50",
+      "context": "126956dbb31d43da",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2016:info:1:56: Expressions don't expand in single quotes, use double quotes for that"
+    },
+    {
+      "file": "actions/python-poetry-bump-version/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "0bd194fd450a8a40",
+      "context": "f2eded1209f83270",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2086:info:1:44: Double quote to prevent globbing and word splitting"
+    },
+    {
+      "file": "actions/python-poetry-bump-version/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "c20359d1874f731a",
+      "context": "8415c47de4228683",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2046:warning:5:18: Quote this to prevent word splitting"
+    },
+    {
+      "file": "actions/python-poetry-bump-version/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "1a3985fd9dcaff12",
+      "context": "8415c47de4228683",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2086:info:5:42: Double quote to prevent globbing and word splitting"
+    },
+    {
+      "file": "actions/python-poetry-bump-version/action.yaml",
+      "rule": "shellcheck",
+      "fingerprint": "04e74445d91930bf",
+      "context": "94f883aa225f651e",
+      "occurrence": 0,
+      "message": "shellcheck reported issue in this script: SC2086:info:9:44: Double quote to prevent globbing and word splitting"
+    }
+  ]
+}

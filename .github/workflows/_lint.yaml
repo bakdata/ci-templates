@@ -4,11 +4,17 @@ on:
   pull_request:
 
 jobs:
-  actionlint:
-    name: actionlint
+  jactionlint:
+    name: jactionlint
     runs-on: ubuntu-24.04
     steps:
-      - name: Lint actions and workflows
-        uses: bakdata/ci-templates/actions/action-lint@1.49.0
+      - name: Check out repository
+        uses: bakdata/ci-templates/actions/checkout@1.82.2
+
+      - name: Install jactionlint
+        uses: jdx/mise-action@v5
         with:
-          action-lint-version: "v1.7.11"
+          version: "2026.10.5"
+          install_args: "jactionlint shellcheck"
+
+      - run: jactionlint
