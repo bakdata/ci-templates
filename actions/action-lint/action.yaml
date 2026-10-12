@@ -8,9 +8,9 @@ inputs:
   action-lint-version:
     description: "The action lint repository version to use."
     required: false
-    default: "v1.7.11"
+    default: "v2.1.0"
   additional-flags:
-    description: "Additional flags for actionlint command"
+    description: "Additional flags for jactionlint command"
     required: false
     default: ""
 runs:
@@ -21,14 +21,14 @@ runs:
       with:
         ref: "${{ inputs.ref }}"
 
-    - name: Download "actionlint-matcher.json"
+    - name: Download "jactionlint-matcher.json"
       run: |
-        wget https://raw.githubusercontent.com/rhysd/actionlint/${{ inputs.action-lint-version }}/.github/actionlint-matcher.json
-        echo "::add-matcher::actionlint-matcher.json"
+        wget https://raw.githubusercontent.com/jdx/jactionlint/${{ inputs.action-lint-version }}/.github/jactionlint-matcher.json
+        echo "::add-matcher::jactionlint-matcher.json"
       shell: bash
 
     - name: Check workflow files
       run: |
-        bash <(curl https://raw.githubusercontent.com/rhysd/actionlint/${{ inputs.action-lint-version }}/scripts/download-actionlint.bash)
-        ./actionlint -color ${{ inputs.additional-flags }}
+        bash <(curl https://raw.githubusercontent.com/jdx/jactionlint/${{ inputs.action-lint-version }}/scripts/download-jactionlint.bash)
+        ./jactionlint -color ${{ inputs.additional-flags }}
       shell: bash

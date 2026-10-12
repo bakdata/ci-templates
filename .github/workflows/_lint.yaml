@@ -4,11 +4,11 @@ on:
   pull_request:
 
 jobs:
-  actionlint:
-    name: actionlint
+  jactionlint:
+    name: jactionlint
     runs-on: ubuntu-24.04
     steps:
       - name: Lint actions and workflows
-        uses: bakdata/ci-templates/actions/action-lint@1.49.0
-        with:
-          action-lint-version: "v1.7.11"
+        uses: bakdata/ci-templates/actions/action-lint@jactionlint # TODO
+        # with:
+        #   action-lint-version: "v1.7.11"

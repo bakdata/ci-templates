@@ -16,11 +16,11 @@ steps:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT               | TYPE   | REQUIRED | DEFAULT     | DESCRIPTION                                |
-| ------------------- | ------ | -------- | ----------- | ------------------------------------------ |
-| action-lint-version | string | false    | `"v1.7.11"` | The action lint repository version to use. |
-| additional-flags    | string | false    |             | Additional flags for actionlint command    |
-| ref                 | string | false    |             | The ref name to checkout the repository.   |
+| INPUT               | TYPE   | REQUIRED | DEFAULT    | DESCRIPTION                                |
+| ------------------- | ------ | -------- | ---------- | ------------------------------------------ |
+| action-lint-version | string | false    | `"v2.1.0"` | The action lint repository version to use. |
+| additional-flags    | string | false    |            | Additional flags for jactionlint command   |
+| ref                 | string | false    |            | The ref name to checkout the repository.   |
 
 <!-- AUTO-DOC-INPUT:END -->
 
