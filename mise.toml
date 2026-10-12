@@ -1,6 +1,7 @@
 [tools]
 pre-commit = "4.6.2"
 auto-doc = "3.6.0"
+jactionlint = "2.1.0"
 
 [hooks]
 postinstall = "pre-commit install"

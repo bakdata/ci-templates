@@ -32,8 +32,10 @@ repos:
         require_serial: true
         files: 'docs.*\.md$'
 
-  - repo: https://github.com/jdx/jactionlint
-    rev: v2.1.0
+  - repo: local
     hooks:
       - id: jactionlint
-        always_run: true
+        name: jactionlint
+        language: system
+        entry: jactionlint
+        pass_filenames: false

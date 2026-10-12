@@ -21,14 +21,13 @@ runs:
       with:
         ref: "${{ inputs.ref }}"
 
-    - name: Download "jactionlint-matcher.json"
-      run: |
-        wget https://raw.githubusercontent.com/jdx/jactionlint/${{ inputs.action-lint-version }}/.github/jactionlint-matcher.json
-        echo "::add-matcher::jactionlint-matcher.json"
-      shell: bash
+    - name: Install mise tools
+      uses: jdx/mise-action@v5
+      with:
+        version: "2026.10.5"
 
     - name: Check workflow files
       run: |
         bash <(curl https://raw.githubusercontent.com/jdx/jactionlint/${{ inputs.action-lint-version }}/scripts/download-jactionlint.bash)
-        ./jactionlint ${{ inputs.additional-flags }}
+        ./jactionlint -f github ${{ inputs.additional-flags }}
       shell: bash
