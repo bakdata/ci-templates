@@ -52,7 +52,7 @@ runs:
       working-directory: ${{ inputs.working-directory }}
 
     - name: Push image
-      uses: bakdata/ci-templates/actions/docker-push@1.30.0
+      uses: $/actions/docker-push
       with:
         docker-registry: ${{ inputs.docker-registry }}
         image-namespace: ${{ inputs.image-namespace }}

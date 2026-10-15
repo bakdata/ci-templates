@@ -12,3 +12,4 @@ jobs:
         uses: bakdata/ci-templates/actions/action-lint@1.49.0
         with:
           action-lint-version: "v1.7.11"
+          additional-flags: -ignore '^reusable workflow call "\$/' -ignore '^specifying action "\$/' #FIXME https://github.com/rhysd/actionlint/issues/711
