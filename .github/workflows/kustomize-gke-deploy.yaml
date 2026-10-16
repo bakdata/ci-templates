@@ -53,10 +53,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout repository
-        uses: bakdata/ci-templates/actions/checkout@1.81.1
+        uses: $/actions/checkout
 
       - name: Setup credentials
-        uses: bakdata/ci-templates/actions/setup-credentials@1.40.0
+        uses: $/actions/setup-credentials
         with:
           gke-service-account: ${{ secrets.gke-service-account }}
           gke-project: ${{ secrets.gke-project }}
@@ -65,13 +65,13 @@ jobs:
           gcloud-sdk-version: ${{ inputs.gcloud-sdk-version }}
 
       - name: Setup environment
-        uses: bakdata/ci-templates/actions/helm-setup@1.81.1
+        uses: $/actions/helm-setup
         with:
           kubectl-version: ${{ inputs.kubectl-version }}
           helm-version: ${{ inputs.helm-version }}
 
       - name: Deploy Kustomize
-        uses: bakdata/ci-templates/actions/kustomize-deploy@v1.20.0
+        uses: $/actions/kustomize-deploy
         with:
           kustomization-path: ${{ inputs.kustomization-path }}
           timeout: ${{ inputs.timeout }}
