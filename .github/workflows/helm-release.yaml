@@ -140,7 +140,7 @@ jobs:
         working-directory: ${{ inputs.charts-dir }}/${{ inputs.artifact-dir }}
 
       - name: Create artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ${{ inputs.charts-dir }}/${{ inputs.artifact-dir }}
 
