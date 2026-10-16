@@ -37,9 +37,3 @@ repos:
     hooks:
       - id: actionlint
         always_run: true
-        #FIXME https://github.com/rhysd/actionlint/issues/711
-        args:
-          - -ignore
-          - '^reusable workflow call "\$/'
-          - -ignore
-          - '^specifying action "\$/'
