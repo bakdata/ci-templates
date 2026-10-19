@@ -11,7 +11,6 @@ inputs:
     description: "Architectures for the created image (comma separated)"
     required: false
     default: "linux/amd64,linux/arm64"
-    type: string
   repository:
     description: "The repository to push the image to"
     required: false
