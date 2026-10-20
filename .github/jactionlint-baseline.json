@@ -98,14 +98,6 @@
       "message": "shellcheck reported issue in this script: SC2086:info:2:60: Double quote to prevent globbing and word splitting"
     },
     {
-      "file": "actions/java-gradle-build-jib/action.yaml",
-      "rule": "action-syntax",
-      "fingerprint": "4daab32ff1cf52ec",
-      "context": "a902489684f482c8",
-      "occurrence": 0,
-      "message": "\"type\" has no effect on the input \"platforms\" of an action, whose inputs are always strings. remove it or document the accepted values in \"description\""
-    },
-    {
       "file": "actions/java-gradle-publish-plugin/action.yml",
       "rule": "shellcheck",
       "fingerprint": "880b20fbbf02de00",
