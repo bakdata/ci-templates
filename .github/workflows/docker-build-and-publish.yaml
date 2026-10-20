@@ -91,9 +91,10 @@ jobs:
           username: "${{ secrets.docker-user }}"
           password: "${{ secrets.docker-password }}"
 
-      - uses: $/actions/extra-step/docker-build-and-publish # jactionlint ignore=invalid-local-action
+      - uses: ./.github/actions/extra-step/docker-build-and-publish # jactionlint ignore=invalid-local-action,local-action-checkout
         # Add your extra step in your repo under .github/actions/extra-step/docker-build-and-publish/action.yaml ,
         # e.g. to free up runner disk space or to install system packages
+        # this is only active if the extra step exists, otherwise it is skipped
         if: ${{ hashFiles('.github/actions/extra-step/docker-build-and-publish/action.yaml') != '' }}
 
       - name: Set up Docker Buildx
