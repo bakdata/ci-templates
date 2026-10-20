@@ -17,4 +17,5 @@ jobs:
           version: "2026.10.5"
           install_args: "jactionlint shellcheck"
 
-      - run: jactionlint --format=github
+      - name: jactionlint
+        run: jactionlint --pyflakes= --format=github
