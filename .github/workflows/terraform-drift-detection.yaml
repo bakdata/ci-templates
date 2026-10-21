@@ -70,7 +70,7 @@ jobs:
           service_account: ${{ env.TF_DRIFT_DETECTION_SERVICE_ACCOUNT }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: ${{ inputs.terraform-version }}
           terraform_wrapper: false
