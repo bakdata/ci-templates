@@ -32,8 +32,10 @@ repos:
         require_serial: true
         files: 'docs.*\.md$'
 
-  - repo: https://github.com/rhysd/actionlint/
-    rev: v1.7.10
+  - repo: local
     hooks:
-      - id: actionlint
-        always_run: true
+      - id: jactionlint
+        name: jactionlint
+        language: system
+        entry: jactionlint
+        pass_filenames: false
