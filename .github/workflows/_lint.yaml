@@ -8,7 +8,9 @@ jobs:
     name: actionlint
     runs-on: ubuntu-24.04
     steps:
+      - uses: actions/checkout@v7
+
       - name: Lint actions and workflows
-        uses: bakdata/ci-templates/actions/action-lint@1.49.0
+        uses: ./actions/action-lint
         with:
           action-lint-version: "v1.7.11"
