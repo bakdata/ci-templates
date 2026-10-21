@@ -21,12 +21,10 @@ on:
       uv-version:
         description: "The uv version to be installed. Overrides `version-file`."
         required: false
-        default: ""
         type: string
       python-version:
         description: "Python version for setting up uv. Overrides `version-file`."
         required: false
-        default: ""
         type: string
       changelog:
         description: "Create changelog for release."
@@ -41,7 +39,6 @@ on:
       changelog-config:
         description: "Changelog config path."
         required: false
-        default: ""
         type: string
       working-directory:
         description: "Working directory containing `.bumpversion.cfg`. (Default is .)"
