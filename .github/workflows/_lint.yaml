@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
-        uses: bakdata/ci-templates/actions/checkout@1.82.2
+        uses: actions/checkout@v7
 
       - name: Install jactionlint
         uses: jdx/mise-action@v5
