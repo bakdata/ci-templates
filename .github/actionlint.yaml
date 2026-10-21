@@ -1,6 +1,0 @@
-paths:
-  .github/workflows/**/*.{yml,yaml}:
-    #FIXME https://github.com/rhysd/actionlint/issues/711
-    ignore:
-      - '^reusable workflow call "\$/'
-      - '^specifying action "\$/'

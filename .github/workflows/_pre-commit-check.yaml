@@ -10,16 +10,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
-      - name: Installation
-        run: |
-          pip install pre-commit
-          wget https://github.com/tj-actions/auto-doc/releases/download/v3.4.0/auto-doc_3.4.0_Linux_x86_64.tar.gz
-          tar -xf auto-doc_3.4.0_Linux_x86_64.tar.gz
-        working-directory: .
+      - name: Install jactionlint
+        uses: jdx/mise-action@v5
+        with:
+          version: "2026.10.5"
 
       - name: Run pre-commit
-        run: |
-          pre-commit run --all-files
+        run: pre-commit run --all-files
         env:
-          DOC_CMD: "./auto-doc"
-        working-directory: .
+          SKIP: jactionlint  # runs as separate workflow for native GitHub output
