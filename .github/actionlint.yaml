@@ -4,3 +4,8 @@ paths:
     ignore:
       - '^reusable workflow call "\$/'
       - '^specifying action "\$/'
+
+#FIXME https://github.com/rhysd/actionlint/issues/682
+self-hosted-runner:
+  labels:
+    - ubuntu-26.04
