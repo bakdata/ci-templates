@@ -4,13 +4,18 @@ on:
   pull_request:
 
 jobs:
-  actionlint:
-    name: actionlint
+  jactionlint:
+    name: jactionlint
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v7
+      - name: Check out repository
+        uses: actions/checkout@v7
 
-      - name: Lint actions and workflows
-        uses: ./actions/action-lint
+      - name: Install jactionlint
+        uses: jdx/mise-action@v5
         with:
-          action-lint-version: "v1.7.11"
+          version: "2026.10.5"
+          install_args: "jactionlint shellcheck"
+
+      - name: jactionlint
+        run: jactionlint --pyflakes= --format=github
