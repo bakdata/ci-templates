@@ -8,6 +8,7 @@ workflow.
 ## Prerequisites
 
 Your Python project needs to be set up with uv and contain a `pyproject.toml` file to use this workflow.
+By default, the uv and Python versions are read from a `.tool-versions` file in the repository root (e.g. `uv 0.13.4` and `python 3.14`), which is also read by [mise](https://mise.jdx.dev). Alternatively, set `version-file`, `uv-version` and `python-version` explicitly.
 
 ## Dependencies
 
@@ -34,8 +35,9 @@ jobs:
     with:
       release-type: patch # (Required)
       ref: my-awesome-ref # (Optional) if not set the ${{ github.event.repository.default_branch }} will fill the value. In this case the changes will be pushed to my-awesome-ref
-      python-version: 3.11 # (Optional) Default value is 3.13. In this case uv is installed with Python 3.11
-      uv-version: "0.5.11" # (Optional) Default value is 0.6.13. In this case uv version 0.5.11 is installed
+      version-file: .tool-versions # (Optional) Default value is `.tool-versions`. The `uv` and `python` entries of this file select the versions to install
+      python-version: 3.11 # (Optional) Overrides the Python version from `version-file`. In this case uv is installed with Python 3.11
+      uv-version: "0.5.11" # (Optional) Overrides the uv version from `version-file`. In this case uv version 0.5.11 is installed
       working-directory: "./my-awesome-python-project" # (Optional) Default value is the root directory of your repository. In this case all the files to the given path are published
       changelog: false # (Optional) Default to true.
       changelog-config: ./my-changelog-config.json # (Optional) Set only if changelog is set to true. More information about it here https://github.com/bakdata/ci-templates/tree/main/actions/changelog-generate
@@ -57,16 +59,17 @@ jobs:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT             | TYPE    | REQUIRED | DEFAULT          | DESCRIPTION                                                     |
-| ----------------- | ------- | -------- | ---------------- | --------------------------------------------------------------- |
-| bump-dev          | boolean | false    | `false`          | Bump to the next dev version after release.                     |
-| changelog         | boolean | false    | `true`           | Create changelog for release.                                   |
-| changelog-config  | string  | false    |                  | Changelog config path.                                          |
-| changelog-file    | string  | false    | `"CHANGELOG.md"` | Path to the changelog file in the GitHub repository             |
-| python-version    | string  | false    | `"3.13"`         | The Python version for setting up uv. (Default is 3.13)         |
-| release-type      | string  | true     |                  | Scope of the release (major, minor or patch).                   |
-| uv-version        | string  | false    | `"0.6.13"`       | The uv version to be installed. (Default is 0.6.13)             |
-| working-directory | string  | false    | `"."`            | Working directory containing `.bumpversion.cfg`. (Default is .) |
+| INPUT             | TYPE    | REQUIRED | DEFAULT            | DESCRIPTION                                                     |
+| ----------------- | ------- | -------- | ------------------ | --------------------------------------------------------------- |
+| bump-dev          | boolean | false    | `false`            | Bump to the next dev version after release.                     |
+| changelog         | boolean | false    | `true`             | Create changelog for release.                                   |
+| changelog-config  | string  | false    |                    | Changelog config path.                                          |
+| changelog-file    | string  | false    | `"CHANGELOG.md"`   | Path to the changelog file in the GitHub repository             |
+| python-version    | string  | false    |                    | Python version for setting up uv. Overrides `version-file`.     |
+| release-type      | string  | true     |                    | Scope of the release (major, minor or patch).                   |
+| uv-version        | string  | false    |                    | The uv version to be installed. Overrides `version-file`.       |
+| version-file      | string  | false    | `".tool-versions"` | File to read the uv and Python versions from.                   |
+| working-directory | string  | false    | `"."`              | Working directory containing `.bumpversion.cfg`. (Default is .) |
 
 <!-- AUTO-DOC-INPUT:END -->
 

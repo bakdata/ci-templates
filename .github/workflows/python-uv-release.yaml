@@ -13,15 +13,18 @@ on:
         required: false
         default: false
         type: boolean
-      uv-version:
-        description: "The uv version to be installed. (Default is 0.6.13)"
+      version-file:
+        description: "File to read the uv and Python versions from."
         required: false
-        default: "0.6.13"
+        default: ".tool-versions"
+        type: string
+      uv-version:
+        description: "The uv version to be installed. Overrides `version-file`."
+        required: false
         type: string
       python-version:
-        description: "The Python version for setting up uv. (Default is 3.13)"
+        description: "Python version for setting up uv. Overrides `version-file`."
         required: false
-        default: "3.13"
         type: string
       changelog:
         description: "Create changelog for release."
@@ -36,7 +39,6 @@ on:
       changelog-config:
         description: "Changelog config path."
         required: false
-        default: ""
         type: string
       working-directory:
         description: "Working directory containing `.bumpversion.cfg`. (Default is .)"
@@ -81,8 +83,9 @@ jobs:
           fetch-depth: 0 # required for changelog generation
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
         with:
+          version-file: ${{ inputs.version-file }}
           python-version: ${{ inputs.python-version }}
           version: ${{ inputs.uv-version }}
 
