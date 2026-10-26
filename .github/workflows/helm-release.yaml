@@ -106,7 +106,7 @@ jobs:
 
       - name: Find previous package versions
         id: packages
-        uses: mikefarah/yq@v4.28.1
+        uses: mikefarah/yq@v4.54.1
         if: ${{ ! inputs.skip-download }}
         with:
           cmd: yq '.entries.[] | map(.urls.[]) | join(",")' ${{ inputs.charts-dir }}/index.yaml
