@@ -40,6 +40,10 @@ on:
         description: "Changelog config path."
         required: false
         type: string
+      changelog-env:
+        description: "Environment variables for the changelog generation, one `KEY=VALUE` per line."
+        required: false
+        type: string
       working-directory:
         description: "Working directory containing `.bumpversion.cfg`. (Default is .)"
         required: false
@@ -125,6 +129,7 @@ jobs:
         if: ${{ inputs.changelog }}
         with:
           github-token: ${{ secrets.github-token }}
+          env: ${{ inputs.changelog-env }}
           additional-cliff-args: --unreleased --tag ${{ steps.bump-version-release.outputs.release-version }}
 
       - name: Create changelog
@@ -133,6 +138,7 @@ jobs:
         with:
           github-token: ${{ secrets.github-token }}
           changelog-file: ${{ inputs.changelog-file }}
+          env: ${{ inputs.changelog-env }}
           additional-cliff-args: --tag ${{ steps.bump-version-release.outputs.release-version }}
 
       - name: Commit and push changes including .bumpversion.cfg file
