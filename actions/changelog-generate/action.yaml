@@ -30,6 +30,10 @@ inputs:
     description: "Path to local git cliff config"
     required: false
     default: "cliff.toml"
+  env:
+    description: "Environment variables for git-cliff, one `KEY=VALUE` per line. Can be read in the changelog template with `get_env`."
+    required: false
+    default: ""
 
 outputs:
   changelog:
@@ -55,6 +59,12 @@ runs:
           cp $DEFAULT_PATH tmp_cliff.toml
         fi
       shell: bash
+    - name: Export environment variables
+      if: ${{ inputs.env != '' }}
+      run: printf '%s\n' "$CLIFF_ENV" >> "$GITHUB_ENV"
+      shell: bash
+      env:
+        CLIFF_ENV: ${{ inputs.env }}
     - name: Generate a changelog
       uses: orhun/git-cliff-action@v4.5.1
       id: git-cliff

@@ -86,15 +86,16 @@ steps:
 
 <!-- AUTO-DOC-INPUT:START - Do not remove or modify this section -->
 
-| INPUT                 | TYPE   | REQUIRED | DEFAULT        | DESCRIPTION                                         |
-| --------------------- | ------ | -------- | -------------- | --------------------------------------------------- |
-| additional-cliff-args | string | false    |                | Additional arguments to the git-cliff binary        |
-| changelog-file        | string | false    |                | Path to the changelog file in the GitHub repository |
-| checkout              | string | false    | `"false"`      | Whether to checkout the repository or not.          |
-| clean                 | string | false    | `"false"`      | Clean the repository before running the action.     |
-| config-path           | string | false    | `"cliff.toml"` | Path to local git cliff config                      |
-| github-token          | string | true     |                | The GitHub token for committing the changes.        |
-| verbose               | string | false    | `"false"`      | Run git-cliff in verbose mdoe                       |
+| INPUT                 | TYPE   | REQUIRED | DEFAULT        | DESCRIPTION                                                                                                          |
+| --------------------- | ------ | -------- | -------------- | -------------------------------------------------------------------------------------------------------------------- |
+| additional-cliff-args | string | false    |                | Additional arguments to the git-cliff binary                                                                         |
+| changelog-file        | string | false    |                | Path to the changelog file in the GitHub repository                                                                  |
+| checkout              | string | false    | `"false"`      | Whether to checkout the repository or not.                                                                           |
+| clean                 | string | false    | `"false"`      | Clean the repository before running the action.                                                                      |
+| config-path           | string | false    | `"cliff.toml"` | Path to local git cliff config                                                                                       |
+| env                   | string | false    |                | Environment variables for git-cliff, one `KEY=VALUE` per line. Can be read in the changelog template with `get_env`. |
+| github-token          | string | true     |                | The GitHub token for committing the changes.                                                                         |
+| verbose               | string | false    | `"false"`      | Run git-cliff in verbose mdoe                                                                                        |
 
 <!-- AUTO-DOC-INPUT:END -->
 

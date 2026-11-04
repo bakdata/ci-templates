@@ -8,7 +8,7 @@ runs:
       shell: bash
       env:
         PR_TITLE: ${{ github.event.pull_request.title }}
-        CC_REGEX: '^(([Dd]raft:)[[:space:]]+)?(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([[:alnum:]._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)'
+        CC_REGEX: '^(([Dd]raft:)[[:space:]]+)?(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9._-]+\))?(!)?: ([[:alnum:]])+([[:space:][:print:]]*)'
       run: |
         if [[ -z "${PR_TITLE:-}" ]]; then
           echo "ERROR: PR title is empty. This action must run on pull_request events."
@@ -24,6 +24,7 @@ runs:
           echo "    type(scope): description"
           echo "    type(scope)!: description"
           echo "    Draft: type(scope)!: description"
+          echo "The type and scope must be lowercase."
           echo "Examples:"
           echo "    fix: correct spelling mistake in welcome email"
           echo "    feat(api): add user login endpoint"

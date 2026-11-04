@@ -70,7 +70,7 @@ jobs:
           service_account: ${{ env.TF_DRIFT_DETECTION_SERVICE_ACCOUNT }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: ${{ inputs.terraform-version }}
           terraform_wrapper: false
@@ -170,7 +170,7 @@ jobs:
 
       - name: Send Slack Notification
         if: steps.plan.outputs.exit_code == '2' && env.TF_DRIFT_DETECTION_SLACK_WEBHOOK_URL != ''
-        uses: slackapi/slack-github-action@v2.1.1
+        uses: slackapi/slack-github-action@v4.0.0
         with:
           webhook: ${{ env.TF_DRIFT_DETECTION_SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
