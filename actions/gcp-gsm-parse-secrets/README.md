@@ -1,1 +1,0 @@
-../../docs/actions/gcp-gsm-parse-secrets/README.md
