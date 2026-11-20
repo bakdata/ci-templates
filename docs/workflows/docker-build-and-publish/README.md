@@ -40,6 +40,8 @@ jobs:
     secrets:
       docker-user: "${{ secrets.DOCKER_USER }}"
       docker-password: "${{ secrets.DOCKER_PWD }}"
+      docker-build-secrets: |
+        github_token=${{ github.token }}
       github-token: ${{ secrets.GH_TOKEN }}
 ```
 
@@ -77,9 +79,10 @@ No outputs.
 
 <!-- AUTO-DOC-SECRETS:START - Do not remove or modify this section -->
 
-| SECRET          | REQUIRED | DESCRIPTION                             |
-| --------------- | -------- | --------------------------------------- |
-| docker-password | true     | Password for the Docker registry login. |
-| docker-user     | true     | Username for the Docker registry login. |
+| SECRET               | REQUIRED | DESCRIPTION                                                                                                                    |
+| -------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| docker-build-secrets | false    | List of secrets to expose to the build, e.g. `github_token=...` (see https://docs.docker.com/build/ci/github-actions/secrets/) |
+| docker-password      | true     | Password for the Docker registry login.                                                                                        |
+| docker-user          | true     | Username for the Docker registry login.                                                                                        |
 
 <!-- AUTO-DOC-SECRETS:END -->

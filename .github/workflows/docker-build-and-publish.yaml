@@ -67,6 +67,9 @@ on:
       docker-password:
         description: "Password for the Docker registry login."
         required: true
+      docker-build-secrets:
+        description: "List of secrets to expose to the build, e.g. `github_token=...` (see https://docs.docker.com/build/ci/github-actions/secrets/)"
+        required: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-docker-${{ inputs.image-name }}-${{ inputs.image-tag-flavor }}
@@ -145,6 +148,7 @@ jobs:
           context: ${{ inputs.docker-context }}
           file: ${{ inputs.dockerfile-path }}
           build-args: ${{ steps.args.outputs.build-args }}
+          secrets: ${{ secrets.docker-build-secrets }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
